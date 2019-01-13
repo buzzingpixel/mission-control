@@ -1,0 +1,14 @@
+{% extends 'layouts/LayoutMaster.twig' %}
+
+{% block content %}
+    <form
+        method="post"
+        accept-charset="UTF-8"
+    >
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="logIn">
+        <input type="email" name="email">
+        <input type="password" name="password">
+        <input type="submit">
+    </form>
+{% endblock %}

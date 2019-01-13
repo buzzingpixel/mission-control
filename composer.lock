@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3b0fc3b888194611312b3a5ee49415f",
+    "content-hash": "cd1a8ccb853dbabd23f620d028d4d5f5",
     "packages": [
         {
             "name": "atlas/cli",
@@ -594,16 +594,16 @@
         },
         {
             "name": "buzzingpixel/corbomite-http",
-            "version": "1.0.5",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-http.git",
-                "reference": "8eb65966a32c33420f50cc2f4a656f3189e827a3"
+                "reference": "bc1f1ecb4aff0ac833f4fa41e5189ef715828377"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-http/zipball/8eb65966a32c33420f50cc2f4a656f3189e827a3",
-                "reference": "8eb65966a32c33420f50cc2f4a656f3189e827a3",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-http/zipball/bc1f1ecb4aff0ac833f4fa41e5189ef715828377",
+                "reference": "bc1f1ecb4aff0ac833f4fa41e5189ef715828377",
                 "shasum": ""
             },
             "require": {
@@ -643,7 +643,7 @@
             ],
             "description": "Corbomite HTTP",
             "homepage": "https://buzzingpixel.com/",
-            "time": "2019-01-12T23:56:26+00:00"
+            "time": "2019-01-13T05:55:15+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-migrations",

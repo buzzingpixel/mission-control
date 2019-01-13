@@ -1,4 +1,8 @@
 <?php
 declare(strict_types=1);
 
-return [];
+use src\app\http\actions\LogInAction;
+
+return [
+    'logIn' => ['class' => LogInAction::class]
+];
