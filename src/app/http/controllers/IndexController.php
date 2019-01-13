@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
+use Throwable;
 use corbomite\user\UserApi;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
@@ -23,6 +24,9 @@ class IndexController
         $this->userApi = $userApi;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function __invoke(): ResponseInterface
     {
         $response = $this->response->withHeader('Content-Type', 'text/html');

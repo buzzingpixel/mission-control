@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd1a8ccb853dbabd23f620d028d4d5f5",
+    "content-hash": "0ddf23ee7f01bfb9695270678abe7008",
     "packages": [
         {
             "name": "atlas/cli",
@@ -372,21 +372,22 @@
         },
         {
             "name": "buzzingpixel/cookie-api",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/cookie-api.git",
-                "reference": "daede461f8b39c91e4702d542e0052237844f888"
+                "reference": "054729d15282724c41fb1032046524a1cd9140a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/cookie-api/zipball/daede461f8b39c91e4702d542e0052237844f888",
-                "reference": "daede461f8b39c91e4702d542e0052237844f888",
+                "url": "https://api.github.com/repos/buzzingpixel/cookie-api/zipball/054729d15282724c41fb1032046524a1cd9140a7",
+                "reference": "054729d15282724c41fb1032046524a1cd9140a7",
                 "shasum": ""
             },
             "require": {
                 "buzzingpixel/corbomite-di": "^1.0",
                 "ext-json": "*",
+                "ext-sodium": "*",
                 "php": ">=7.1"
             },
             "require-dev": {
@@ -417,7 +418,7 @@
                 }
             ],
             "description": "Cookie API",
-            "time": "2019-01-02T00:20:02+00:00"
+            "time": "2019-01-13T21:58:11+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-cli",

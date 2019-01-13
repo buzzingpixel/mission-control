@@ -20,7 +20,7 @@
         "buzzingpixel/twig-truncate": "^1.0",
         "buzzingpixel/twig-getenv": "^1.0",
         "buzzingpixel/twig-filetime": "^1.0",
-        "buzzingpixel/cookie-api": "^1.0.1",
+        "buzzingpixel/cookie-api": "^1.1.0",
         "buzzingpixel/corbomite-db": "^1.0",
         "buzzingpixel/corbomite-migrations": "^1.0.1",
         "buzzingpixel/corbomite-queue": "^1.0",
