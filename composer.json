@@ -1,0 +1,97 @@
+{
+    "name": "buzzingpixel/mission-control",
+    "description": "Mission Control Project",
+    "license": "Unlicensed",
+    "homepage": "https://buzzingpixel.com/",
+    "type": "project",
+    "require": {
+        "php": ">=7.2",
+        "vlucas/phpdotenv": "^2.5",
+        "buzzingpixel/corbomite-di": "^1.0.1",
+        "buzzingpixel/corbomite-cli": "^1.0.4",
+        "relay/relay": "2.x@dev",
+        "buzzingpixel/corbomite-http": "^1.0.5",
+        "buzzingpixel/corbomite-twig": "^1.0.4",
+        "buzzingpixel/twig-switch": "^1.0.1",
+        "buzzingpixel/twig-widont": "^1.0.1",
+        "buzzingpixel/twig-smartypants": "^1.0",
+        "buzzingpixel/twig-ucfirst": "^1.0",
+        "timostamm/text-truncation": "dev-master",
+        "buzzingpixel/twig-truncate": "^1.0",
+        "buzzingpixel/twig-getenv": "^1.0",
+        "buzzingpixel/twig-filetime": "^1.0",
+        "buzzingpixel/cookie-api": "^1.0.1",
+        "buzzingpixel/corbomite-db": "^1.0",
+        "buzzingpixel/corbomite-migrations": "^1.0.1",
+        "buzzingpixel/corbomite-queue": "^1.0",
+        "buzzingpixel/corbomite-schedule": "^1.0.2",
+        "buzzingpixel/corbomite-user": "^1.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "phpunit/phpunit": "^7.2",
+        "squizlabs/php_codesniffer": "^3.4",
+        "phpmd/phpmd": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "diConfigFilePath": "src/config/di/_collector.php",
+        "httpRouteConfigFilePath": "src/config/http/routes.php",
+        "httpActionConfigFilePath": "src/config/http/actionParams.php",
+        "scheduleConfigFilePath": "src/config/scheduleConfig.php",
+        "twigGlobalsFilePath": "src/config/http/globals.php",
+        "twigTemplatesDirectories": {
+            "": "src/app/http/views"
+        }
+    },
+    "scripts": {
+        "run-docker":  [
+            "docker-compose up -d"
+        ],
+        "stop-docker":  [
+            "docker-compose down"
+        ],
+        "queue-run":  [
+            "docker exec -i --user root php-mission-control bash -c \"php /app/app queue/run\""
+        ],
+        "queue-watch":  [
+            "@run-docker",
+            "docker exec -i --user root php-mission-control bash -c \"/app/queueRunner.sh\""
+        ],
+        "kill-queue-watch":  [
+            "docker kill php-mission-control",
+            "@run-docker"
+        ],
+        "run-schedule":  [
+            "docker exec -i --user root php-mission-control bash -c \"php /app/app schedule/run\""
+        ],
+        "npm-install": [
+            "npm install",
+            "docker-compose up -d",
+            "docker exec -i --user root --workdir /app node-mission-control bash -c \"npm install\""
+        ],
+        "fab": [
+            "@run-docker",
+            "@kill-fab",
+            "docker start node-mission-control",
+            "docker exec -i --user root --workdir /app node-mission-control bash -c \"npm run fab \""
+        ],
+        "kill-fab":  [
+            "docker kill node-mission-control"
+        ],
+        "test":  [
+            "docker exec -i --user root --workdir /app php-mission-control bash -c \"vendor/bin/phpunit\""
+        ],
+        "post-create-project-cmd": [
+            "@php -r \"copy('.env.example', '.env');\"",
+            "@composer dump-autoload -o"
+        ]
+    }
+}

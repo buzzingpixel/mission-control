@@ -1,0 +1,97 @@
+{% set noIndex = noIndex|default(false) %}
+{% set metaTitle = metaTitle|default(false) %}
+{% set metaDescription = metaDescription|default(false) %}
+{% set showCanonical = showCanonical|default(true) %}
+{% set ogType = ogType|default('website') %}
+{% set twitterCardType = twitterCardType|default('summary') %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    {# Check if we should disable indexing on this page #}
+    {% if getenv('ENVIRONMENT') != 'prod' or noIndex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+
+    {# Reporting for duty #}
+    <title>{% if metaTitle %}{{ metaTitle }} | {% endif %}{{ siteName }}</title>
+
+    {% if metaDescription %}
+        <meta name="description" content="{{ metaDescription }}">
+    {% endif %}
+
+    {# Technical browser configuration stuff #}
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# TODO: Set up icons #}
+    {# <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196">
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128">
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" /> #}
+
+    {# OG Metadata #}
+    <meta property="og:type" content="{{ ogType }}">
+    <meta property="og:site_name" content="{{ siteName }}">
+    <meta property="og:title" content="{{ metaTitle|default(siteName) }}" itemprop="name">
+    {% if metaDescription %}
+        <meta property="og:description" content="{{ metaDescription }}">
+    {% endif %}
+    {# TODO: Set up default share image #}
+    <meta property="og:image" content="{{ shareImage|default('/share.png') }}" itemprop="image">
+    {{ block('ogData') ?? '' }}
+
+    {# Twitter card data #}
+    <meta name="twitter:card" content="{{ twitterCardType|default('summary') }}">
+    {% if siteTwitterHandle %}
+        <meta name="twitter:site" content="@{{ socialMedia.twitterHandle }}">
+    {% endif %}
+    <meta name="twitter:title" content="{{ metaTitle|default(siteName) }}">
+    {% if metaDescription %}
+        <meta property="twitter:description" content="{{ metaDescription }}">
+    {% endif %}
+    <meta property="twitter:image" content="{{ shareImage|default('/share.png') }}">
+    {{ block('twitterData') ?? '' }}
+
+    {# Include custom styles #}
+    <link rel="stylesheet" href="/assets/css/style.min{% if staticAssetCacheTime %}.{{ staticAssetCacheTime }}{% endif %}.css{% if not staticAssetCacheTime %}?v={{ fileTime('/assets/css/style.min.css') }}{% endif %}">
+
+    {# Get any queued up scripts and styles for head #}
+    {{ block('head') ?? '' }}
+</head>
+<body>
+{# Get any queued up body items #}
+{{ block('beginBody') ?? '' }}
+
+{# Get the content #}
+{{ block('layoutContent') ?? '' }}
+
+{# Include jQuery #}
+<script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+{# Include minified JS #}
+<script async src="/assets/js/script.min{% if staticAssetCacheTime %}.{{ staticAssetCacheTime }}{% endif %}.js{% if not staticAssetCacheTime %}?v={{ fileTime('/assets/css/script.min.js') }}{% endif %}"></script>
+
+{# Get any queued up body items #}
+{{ block('endBody') ?? '' }}
+
+{# TODO: set up analytics and tracking script for project #}
+{# {% if getenv('ENVIRONMENT') == 'prod' %}
+{% endif %} #}
+</body>
+</html>

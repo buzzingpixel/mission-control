@@ -1,0 +1,8 @@
+{
+    "proxy": "http://mission-control.test",
+    "watch": [
+        "config/**",
+        "src/**"
+    ],
+    "watchUsesPolling": true
+}

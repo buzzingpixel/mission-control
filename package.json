@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "fab": "node fab.js"
+  },
+  "name": "fcsc",
+  "version": "1.0.0",
+  "description": "fcsc",
+  "homepage": "https://site.com",
+  "bugs": "https://site.com/issues",
+  "license": "UNLICENSED",
+  "author": "Dubose Web Group",
+  "dependencies": {
+    "fab-build-next": "^1.5.1",
+    "fab.assets": "^1.2.1",
+    "fab.controller": "^1.2.1",
+    "fab.model": "^1.2.1",
+    "fab.url": "^1.2.2",
+    "fabcss.forms-and-buttons": "^1.3.0",
+    "fabcss.lists": "^1.3.0",
+    "fabcss.reset": "^1.3.0",
+    "fabcss.typography": "^1.3.0",
+    "fabmixins": "^2.3.0",
+    "jquery": "^3.3.1"
+  }
+}

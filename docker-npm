@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cmd="npm "${@};
+
+docker exec -it --user root --workdir /app node-mission-control bash -c "${cmd}"

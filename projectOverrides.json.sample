@@ -1,0 +1,5 @@
+{
+    "about-this-file": "Duplicate the sample and name it projectOverrides.json. Be sure this file is gitignored. Place any local overrides from project.json here",
+    "about-watchUsesPolling": "Some environments running through docker won't trigger file events. If your environment works without polling, it's slightly faster and more efficient so you are encouraged to experiment with disabling polling.",
+    "watchUsesPolling": false
+}

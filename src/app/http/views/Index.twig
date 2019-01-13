@@ -1,0 +1,64 @@
+{% extends 'layouts/LayoutMaster.twig' %}
+
+{% block content %}
+    {# {% set cookie = makeCookie('TestCookie', 'Test Value') %}
+    {% do saveCookie(cookie) %} #}
+
+    {# {% set cookie = retrieveCookie('TestCookie') %}
+    {{ dump(cookie.value) }} #}
+
+    Hello World
+
+    <br><br>
+
+    someVar: {{ someVar }}
+
+    <br><br>
+
+    Dev Mode: {% if devMode %}true{% else %}false{% endif %}
+
+    <br><br>
+    <br><br>
+
+    {% switch someVar %}
+        {% case 'someVal' %}
+            test someVal
+        {% case 'otherVal' %}
+            test otherVal
+        {% default %}
+            test default
+    {% endswitch %}
+
+    <br><br>
+    <br><br>
+
+    {% filter widont|smartypants %}
+        <p>Lorem ipsum dolor sit amet, consectetur's adipisicing elit. Aliquam "cumque dolorem" enim error facere fuga hic magni nulla quaerat, quas, quidem ratione repellat voluptatem. Alias aperiam beatae consectetur qui sequi!</p>
+    {% endfilter %}
+
+    <br><br>
+    <br><br>
+
+    {% filter ucfirst %}this <-- should be upper case first letter{% endfilter %}
+
+    <br><br>
+    <br><br>
+
+    {% filter truncate(30) %}
+        lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam cumque dolorem enim error facere fuga hic magni nulla quaerat, quas, quidem ratione repellat voluptatem. Alias aperiam beatae consectetur qui sequi!
+    {% endfilter %}
+
+    {# {% do throwHttpError() %} #}
+
+    <br><br>
+    <br><br>
+
+    ENV variable `DEV_MODE`: {{ getenv('DEV_MODE') }}
+
+    <br><br>
+    <br><br>
+
+    Filetime: /app: {{ fileTime('/app') }}<br>
+    Filetime: /index.php: {{ fileTime('/index.php') }}<br>
+    Filetime: /noop: {{ fileTime('/noop') }}
+{% endblock %}
