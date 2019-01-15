@@ -1,6 +1,11 @@
 {% extends 'layouts/LayoutMaster.twig' %}
 
 {% block content %}
+    {% if dataStore().storeItem('LogInAction.hasError') %}
+        <div class="ErrorBanner">
+            There was an error logging you in!
+        </div>
+    {% endif %}
     <form
         method="post"
         accept-charset="UTF-8"

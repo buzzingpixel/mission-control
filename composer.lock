@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ddf23ee7f01bfb9695270678abe7008",
+    "content-hash": "1367deedd9a62ccb020cdc8ad698516d",
     "packages": [
         {
             "name": "atlas/cli",
@@ -594,6 +594,62 @@
             "time": "2019-01-11T22:13:36+00:00"
         },
         {
+            "name": "buzzingpixel/corbomite-flash-data",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/corbomite-flash-data.git",
+                "reference": "cea489bb186aebb641bbeba1363989e5e0a507f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-flash-data/zipball/cea489bb186aebb641bbeba1363989e5e0a507f3",
+                "reference": "cea489bb186aebb641bbeba1363989e5e0a507f3",
+                "shasum": ""
+            },
+            "require": {
+                "buzzingpixel/cookie-api": "^1.1",
+                "buzzingpixel/corbomite-db": "^1.0",
+                "buzzingpixel/corbomite-di": "^1.0",
+                "buzzingpixel/corbomite-migrations": "^1.0",
+                "ext-json": "*",
+                "php": ">=7.1",
+                "ramsey/uuid": "^3.8"
+            },
+            "require-dev": {
+                "buzzingpixel/corbomite-schedule": "^1.0",
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7.5",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4",
+                "twig/twig": "^2.6"
+            },
+            "type": "library",
+            "extra": {
+                "diConfigFilePath": "src/diConfig.php",
+                "cliActionConfigFilePath": "src/actionConfig.php",
+                "scheduleConfigFilePath": "src/scheduleConfig.php",
+                "twigExtensions": [
+                    "corbomite\\flashdata\\twigextensions\\FlashDataTwigExtension"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "corbomite\\flashdata\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "Corbomite Flash Data",
+            "time": "2019-01-14T23:18:18+00:00"
+        },
+        {
             "name": "buzzingpixel/corbomite-http",
             "version": "1.0.7",
             "source": {
@@ -843,38 +899,47 @@
         },
         {
             "name": "buzzingpixel/corbomite-user",
-            "version": "1.0.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-user.git",
-                "reference": "e39b7b504b6d1b3b4d5eae1c67096a3a1a65ea99"
+                "reference": "1b43a29d4e92a13ea2c180f29d12f4779add1a20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-user/zipball/e39b7b504b6d1b3b4d5eae1c67096a3a1a65ea99",
-                "reference": "e39b7b504b6d1b3b4d5eae1c67096a3a1a65ea99",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-user/zipball/1b43a29d4e92a13ea2c180f29d12f4779add1a20",
+                "reference": "1b43a29d4e92a13ea2c180f29d12f4779add1a20",
                 "shasum": ""
             },
             "require": {
-                "buzzingpixel/cookie-api": "^1.0",
+                "buzzingpixel/cookie-api": "^1.1",
                 "buzzingpixel/corbomite-db": "^1.0",
                 "buzzingpixel/corbomite-di": "^1.0",
+                "buzzingpixel/corbomite-flash-data": "^1.0.1",
                 "buzzingpixel/corbomite-migrations": "^1.0",
+                "buzzingpixel/request-data-store": "^1.0.1",
+                "ext-json": "*",
                 "php": ">=7.1",
-                "ramsey/uuid": "^3.8"
+                "ramsey/uuid": "^3.8",
+                "zendframework/zend-diactoros": "^1.8"
             },
             "require-dev": {
                 "buzzingpixel/corbomite-schedule": "^1.0.1",
                 "phpmd/phpmd": "^2.6",
                 "phpunit/phpunit": "^7.5",
                 "roave/security-advisories": "dev-master",
-                "squizlabs/php_codesniffer": "^3.4"
+                "squizlabs/php_codesniffer": "^3.4",
+                "twig/twig": "^2.6"
             },
             "type": "library",
             "extra": {
                 "diConfigFilePath": "src/diConfig.php",
                 "cliActionConfigFilePath": "src/cliActionConfig.php",
-                "scheduleConfigFilePath": "src/scheduleConfig.php"
+                "scheduleConfigFilePath": "src/scheduleConfig.php",
+                "httpActionConfigFilePath": "src/httpActionConfig.php",
+                "twigExtensions": [
+                    "corbomite\\user\\twigextensions\\UserTwigExtension"
+                ]
             },
             "autoload": {
                 "psr-4": {
@@ -890,7 +955,55 @@
                 }
             ],
             "description": "Corbomite User",
-            "time": "2019-01-11T21:23:07+00:00"
+            "time": "2019-01-15T02:38:48+00:00"
+        },
+        {
+            "name": "buzzingpixel/request-data-store",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/request-data-store.git",
+                "reference": "e461159c5de8ec1c1e2319d1a8025a6fc4e002f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/request-data-store/zipball/e461159c5de8ec1c1e2319d1a8025a6fc4e002f6",
+                "reference": "e461159c5de8ec1c1e2319d1a8025a6fc4e002f6",
+                "shasum": ""
+            },
+            "require": {
+                "buzzingpixel/corbomite-di": "^1.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7.5",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4",
+                "twig/twig": "^2.6"
+            },
+            "type": "library",
+            "extra": {
+                "diConfigFilePath": "src/diConfig.php",
+                "twigExtensions": [
+                    "corbomite\\requestdatastore\\DataStoreTwigExtension"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "corbomite\\requestdatastore\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "Request Data Store",
+            "time": "2019-01-14T22:37:19+00:00"
         },
         {
             "name": "buzzingpixel/twig-filetime",
@@ -3466,16 +3579,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.6.0",
+            "version": "v2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1"
+                "reference": "7d7342c8a4059fefb9b8d07db0cc14007021f9b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a11dd39f5b6589e14f0ff3b36675d06047c589b1",
-                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7d7342c8a4059fefb9b8d07db0cc14007021f9b7",
+                "reference": "7d7342c8a4059fefb9b8d07db0cc14007021f9b7",
                 "shasum": ""
             },
             "require": {
@@ -3529,7 +3642,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-12-16T10:36:48+00:00"
+            "time": "2019-01-14T15:00:48+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -1,6 +1,9 @@
 {% extends 'layouts/LayoutMaster.twig' %}
 
 {% block content %}
+    {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+        Logged in successfully!<br><br>
+    {% endif %}
     {# {% set cookie = makeCookie('TestCookie', 'Test Value') %}
     {% do saveCookie(cookie) %} #}
 
