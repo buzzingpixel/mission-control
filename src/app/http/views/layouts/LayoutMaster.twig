@@ -2,6 +2,9 @@
 
 {% block layoutContent %}
     {% include 'partials/SiteHeader.twig' %}
+    {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+        Logged in successfully!<br><br>
+    {% endif %}
     <main class="SiteMain">
         <div class="SiteMain__Inner">
             {{ block('content') ?? '' }}

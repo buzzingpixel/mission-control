@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\twig\TwigEnvironment;
-use src\app\http\controllers\IndexController;
 use src\app\http\services\RequireLoginService;
 
 return [
-    IndexController::class => function () {
-        return new IndexController(
-            new Response(),
+    RequireLoginService::class => function () {
+        return new RequireLoginService(
             Di::get(TwigEnvironment::class),
-            Di::get(RequireLoginService::class)
+            Di::get(UserApi::class),
+            new Response()
         );
     },
 ];
