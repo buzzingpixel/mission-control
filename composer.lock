@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a88a28694cf91806dee3c00d43803da",
+    "content-hash": "0ce6f7df3462294f88359e9f64d48c92",
     "packages": [
         {
             "name": "atlas/cli",
@@ -372,16 +372,16 @@
         },
         {
             "name": "buzzingpixel/cookie-api",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/cookie-api.git",
-                "reference": "054729d15282724c41fb1032046524a1cd9140a7"
+                "reference": "afd1556155e8ea424ea7ad67777367af3918c433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/cookie-api/zipball/054729d15282724c41fb1032046524a1cd9140a7",
-                "reference": "054729d15282724c41fb1032046524a1cd9140a7",
+                "url": "https://api.github.com/repos/buzzingpixel/cookie-api/zipball/afd1556155e8ea424ea7ad67777367af3918c433",
+                "reference": "afd1556155e8ea424ea7ad67777367af3918c433",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +418,7 @@
                 }
             ],
             "description": "Cookie API",
-            "time": "2019-01-13T21:58:11+00:00"
+            "time": "2019-01-15T06:41:08+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-cli",
@@ -595,20 +595,20 @@
         },
         {
             "name": "buzzingpixel/corbomite-flash-data",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-flash-data.git",
-                "reference": "cea489bb186aebb641bbeba1363989e5e0a507f3"
+                "reference": "8e2c212269369c4c342f0293a544089b0f877ac1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-flash-data/zipball/cea489bb186aebb641bbeba1363989e5e0a507f3",
-                "reference": "cea489bb186aebb641bbeba1363989e5e0a507f3",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-flash-data/zipball/8e2c212269369c4c342f0293a544089b0f877ac1",
+                "reference": "8e2c212269369c4c342f0293a544089b0f877ac1",
                 "shasum": ""
             },
             "require": {
-                "buzzingpixel/cookie-api": "^1.1",
+                "buzzingpixel/cookie-api": "^1.1.1",
                 "buzzingpixel/corbomite-db": "^1.0",
                 "buzzingpixel/corbomite-di": "^1.0",
                 "buzzingpixel/corbomite-migrations": "^1.0",
@@ -647,7 +647,7 @@
                 }
             ],
             "description": "Corbomite Flash Data",
-            "time": "2019-01-14T23:18:18+00:00"
+            "time": "2019-01-15T06:45:57+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-http",
@@ -4681,12 +4681,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "65a944c93d642973f79f97b1830463beb46b8f79"
+                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/65a944c93d642973f79f97b1830463beb46b8f79",
-                "reference": "65a944c93d642973f79f97b1830463beb46b8f79",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d0f41598a2af18496fe7f21533af576e713e12ce",
+                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce",
                 "shasum": ""
             },
             "conflict": {
@@ -4763,6 +4763,7 @@
                 "pagarme/pagarme-php": ">=0,<3",
                 "paragonie/random_compat": "<2",
                 "paypal/merchant-sdk-php": "<3.12",
+                "pear/archive_tar": "<1.4.4",
                 "phpmailer/phpmailer": ">=5,<5.2.27|>=6,<6.0.6",
                 "phpoffice/phpexcel": "<=1.8.1",
                 "phpoffice/phpspreadsheet": "<=1.5",
@@ -4817,7 +4818,7 @@
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "tecnickcom/tcpdf": "<6.2.22",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
@@ -4875,7 +4876,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-01-11T12:28:42+00:00"
+            "time": "2019-01-15T04:15:58+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
