@@ -1,8 +1,8 @@
-.LoginForm {
+.CenteredPage {
     height: 100%;
 }
 
-.LoginForm:before {
+.CenteredPage:before {
     background-image: url(/assets/img/earth-gradient-to-lightest-gray.jpg);
     background-position: center bottom;
     background-repeat: no-repeat;
@@ -16,7 +16,7 @@
     z-index: 1;
 }
 
-.LoginForm__Inner {
+.CenteredPage__Inner {
     margin: 0 auto;
     max-width: 350px;
     position: absolute;
@@ -27,19 +27,20 @@
     z-index: 2;
 }
 
-.LoginForm__ErrorBanner {
-    margin-bottom: 20px;
-}
-
-.LoginForm__Heading {
+.CenteredPage__Heading,
+.CenteredPage__Content {
     text-align: center;
 }
 
-.LoginForm__SubmitButton {
+.CenteredPage__ErrorBanner {
+    margin-bottom: 20px;
+}
+
+.CenteredPage__SubmitButton {
     width: 100%;
 }
 
-.LoginForm__ForgotPassword {
+.CenteredPage__Small {
     font-size: 13px;
     margin-top: 16px;
     text-align: center;

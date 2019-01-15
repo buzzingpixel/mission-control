@@ -3,18 +3,18 @@
 {% set metaTitle = 'Log In' %}
 
 {% block layoutContent %}
-    <div class="LoginForm">
-        <div class="LoginForm__Inner">
+    <div class="CenteredPage">
+        <div class="CenteredPage__Inner">
             {% if dataStore().storeItem('LogInAction.hasError') %}
-                <div class="LoginForm__ErrorBanner Alert Alert--Centered Alert--Danger">
+                <div class="CenteredPage__ErrorBanner Alert Alert--Centered Alert--Danger">
                     There was an error logging you in!
                 </div>
             {% endif %}
-            <h1 class="LoginForm__Heading">Mission Control</h1>
+            <h1 class="CenteredPage__Heading">Mission Control</h1>
             <form
                 method="post"
                 accept-charset="UTF-8"
-                class="LoginForm__Form"
+                class="CenteredPage__Form"
             >
                 {{ getCsrfInput() }}
                 <input type="hidden" name="action" value="logIn">
@@ -27,9 +27,9 @@
                     <input type="password" name="password" class="input">
                 </fieldset>
                 <fieldset class="fieldset">
-                    <input type="submit" class="button LoginForm__SubmitButton" value="Log In">
+                    <input type="submit" class="button CenteredPage__SubmitButton" value="Log In">
                 </fieldset>
-                <div class="LoginForm__ForgotPassword">
+                <div class="CenteredPage__Small">
                     <a href="/iforgot">Forgot your password?</a>
                 </div>
             </form>
