@@ -66,6 +66,17 @@ class UserTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'user_data' => [
+            'name' => 'user_data',
+            'type' => 'text',
+            'size' => 65535,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'added_at' => [
             'name' => 'added_at',
             'type' => 'datetime',
@@ -95,6 +106,7 @@ class UserTable extends Table
         'guid',
         'email_address',
         'password_hash',
+        'user_data',
         'added_at',
         'added_at_time_zone',
     ];
@@ -104,6 +116,7 @@ class UserTable extends Table
         'guid' => null,
         'email_address' => null,
         'password_hash' => null,
+        'user_data' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
     ];
