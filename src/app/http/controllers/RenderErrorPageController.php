@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
-use Twig\Environment;
+use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 
 class RenderErrorPageController
@@ -13,7 +13,7 @@ class RenderErrorPageController
     private $response;
 
     public function __construct(
-        Environment $twig,
+        TwigEnvironment $twig,
         ResponseInterface $response
     ) {
         $this->twig = $twig;
@@ -29,7 +29,7 @@ class RenderErrorPageController
             ->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
-            $this->twig->render('ServerError.twig', [
+            $this->twig->renderAndMinify('ServerError.twig', [
                 'statusCode' => $statusCode,
             ])
         );

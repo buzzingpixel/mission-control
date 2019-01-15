@@ -36,7 +36,7 @@ class IndexController
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
-            $this->twigEnvironment->render('Index.twig')
+            $this->twigEnvironment->renderAndMinify('Index.twig')
         );
 
         return $response;
