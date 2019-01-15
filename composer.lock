@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1367deedd9a62ccb020cdc8ad698516d",
+    "content-hash": "61a8441f289736584ada5f6388d194cc",
     "packages": [
         {
             "name": "atlas/cli",

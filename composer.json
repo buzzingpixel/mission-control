@@ -44,6 +44,7 @@
         "optimize-autoloader": true
     },
     "extra": {
+        "cliActionConfigFilePath": "src/config/cliActionConfig.php",
         "diConfigFilePath": "src/config/di/_collector.php",
         "httpRouteConfigFilePath": "src/config/http/routes.php",
         "httpActionConfigFilePath": "src/config/http/actionParams.php",
