@@ -6,6 +6,7 @@ declare(strict_types=1);
 use corbomite\di\Di;
 use corbomite\cli\Kernel as CliKernel;
 use corbomite\http\Kernel as HttpKernel;
+use src\app\http\middlewares\ErrorPagesMiddleware;
 
 define('APP_BASE_PATH', __DIR__);
 define('APP_VENDOR_PATH', APP_BASE_PATH . '/vendor');
@@ -26,5 +27,5 @@ if (PHP_SAPI === 'cli') {
 }
 
 /** @noinspection PhpUnhandledExceptionInspection */
-Di::get(HttpKernel::class)();
+Di::get(HttpKernel::class)(ErrorPagesMiddleware::class);
 exit();
