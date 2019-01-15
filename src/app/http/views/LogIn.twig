@@ -1,19 +1,38 @@
-{% extends 'layouts/LayoutMaster.twig' %}
+{% extends 'layouts/LayoutHtmlWrapper.twig' %}
 
-{% block content %}
-    {% if dataStore().storeItem('LogInAction.hasError') %}
-        <div class="ErrorBanner">
-            There was an error logging you in!
+{% set metaTitle = 'Log In' %}
+
+{% block layoutContent %}
+    <div class="LoginForm">
+        <div class="LoginForm__Inner">
+            <h1 class="title">Mission Control</h1>
+            {% if dataStore().storeItem('LogInAction.hasError') %}
+                <div class="LoginForm__ErrorBanner">
+                    There was an error logging you in!
+                </div>
+            {% endif %}
+            <form
+                method="post"
+                accept-charset="UTF-8"
+                class="LoginForm__Form"
+            >
+                {{ getCsrfInput() }}
+                <input type="hidden" name="action" value="logIn">
+                <fieldset class="fieldset">
+                    <label for="email" class="label">Email Address</label>
+                    <input type="email" name="email" id="email" class="input">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <label for="email" class="label">Password</label>
+                    <input type="password" name="password" class="input">
+                </fieldset>
+                <fieldset class="fieldset">
+                    <input type="submit" class="button" value="Log In">
+                </fieldset>
+                <a href="/iforgot" class="LoginForm__ForgotPassword">
+                    Forgot your password?
+                </a>
+            </form>
         </div>
-    {% endif %}
-    <form
-        method="post"
-        accept-charset="UTF-8"
-    >
-        {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="logIn">
-        <input type="email" name="email">
-        <input type="password" name="password">
-        <input type="submit">
-    </form>
+    </div>
 {% endblock %}
