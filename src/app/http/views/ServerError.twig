@@ -1,1 +1,20 @@
-server error
+{% extends 'layouts/LayoutHtmlWrapper.twig' %}
+
+{% set metaTitle = statusCode == 404 ? 'Page Not Found' : 'Internal Server Error' %}
+
+{% block layoutContent %}
+    <div class="CenteredPage">
+        <div class="CenteredPage__Inner">
+            <h1 class="CenteredPage__Heading">
+                {{ metaTitle|smartypants }}
+            </h1>
+            <div class="CenteredPage__Content">
+                {% if statusCode == 404 %}
+                    The requested page could not be found
+                {% else %}
+                    The server encountered an error processing this request
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
