@@ -3,6 +3,7 @@
 COUNTER=1;
 
 while true; do
+    rm -rf /app/cache/twig/*;
     chmod -R 0777 /app/cache;
     chmod -R 0777 /var/lib/mysql;
     echo ${COUNTER} > /app/dev/null/tmp;
