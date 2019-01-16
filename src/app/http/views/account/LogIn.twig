@@ -10,6 +10,11 @@
                     There was an error logging you in!
                 </div>
             {% endif %}
+            {% if flashDataApi().getFlashData().getStoreItem('ResetPasswordAction').dataItem('success') ?? false %}
+                <div class="CenteredPage__ErrorBanner Alert Alert--Centered Alert--Success">
+                    Your password was reset successfully! You can now log in with your new password.
+                </div>
+            {% endif %}
             <h1 class="CenteredPage__Heading">Mission Control</h1>
             <form
                 method="post"
