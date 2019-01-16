@@ -1,2 +1,8 @@
-SiteHeader
+SiteHeader<br>
+{% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+    <div class="Alert Alert--Centered Alert--Success">
+        Logged In Successfully!
+    </div>
+{% endif %}
+<a href="/?action=logout" class="button">Log Out</a>
 {#{{ dump(userApi().fetchCurrentUser().userDataItem('admin')) }}#}

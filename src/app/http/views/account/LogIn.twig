@@ -15,6 +15,11 @@
                     Your password was reset successfully! You can now log in with your new password.
                 </div>
             {% endif %}
+            {% if flashDataApi().getFlashData().getStoreItem('LogOutAction').dataItem('success') ?? false %}
+                <div class="CenteredPage__ErrorBanner Alert Alert--Centered Alert--Success">
+                    You have been logged out.
+                </div>
+            {% endif %}
             <h1 class="CenteredPage__Heading">Mission Control</h1>
             <form
                 method="post"
