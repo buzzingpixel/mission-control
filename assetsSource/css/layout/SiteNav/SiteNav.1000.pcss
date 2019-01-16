@@ -1,0 +1,47 @@
+.SiteNav {
+    box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.15);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    text-align: left;
+    top: 0;
+    width: 250px;
+}
+
+.SiteNav__Inner {
+    height: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+    padding: 0;
+
+    /* Make sure iOS uses scrolling */
+    -webkit-overflow-scrolling: touch;
+
+    -ms-overflow-style: none;
+}
+
+.SiteNav__Inner::-webkit-scrollbar {
+    display: none;
+}
+
+.SiteNav__SiteTitle {
+    float: none;
+    padding: 20px 20px 0;
+}
+
+.SiteNav__MobileActivator {
+    display: none;
+}
+
+.SiteNav__MenuItemsHolder {
+    display: block;
+    height: auto;
+    opacity: 1;
+    overflow: initial;
+    padding-top: 0;
+    position: relative;
+}
+
+.SiteNav__MenuItemsHolder:before {
+    display: none;
+}
