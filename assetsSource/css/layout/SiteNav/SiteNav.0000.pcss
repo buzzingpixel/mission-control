@@ -1,0 +1,153 @@
+.SiteNav {
+    background-color: var(--DarkerBlue);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+    height: 64px;
+    position: relative;
+    text-align: center;
+    z-index: 999;
+}
+
+.SiteNav__Inner {
+    height: 64px;
+    padding: 14px;
+}
+
+.SiteNav__SiteTitle {
+    color: var(--Lightest);
+    float: left;
+    margin: 0;
+    position: relative;
+    z-index: 999;
+}
+
+.SiteNav__MobileActivator {
+    color: var(--Lightest);
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    outline: none;
+    position: absolute;
+    right: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    top: 13px;
+    z-index: 999;
+}
+
+.SiteNav__MobileActivator:hover,
+.SiteNav__MobileActivator:focus {
+    color: var(--Lightest);
+    outline: none;
+    text-decoration: none;
+}
+
+.SiteNav__MobileActivator--IsActive {
+    color: var(--Lightest);
+    position: fixed;
+}
+
+.SiteNav__MobileActivator--IsActive:hover,
+.SiteNav__MobileActivator--IsActive:focus {
+    color: var(--Lightest);
+}
+
+.SiteNav__MobileActivatorDescription,
+.SiteNav__MobileActivatorInner {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.SiteNav__MobileActivatorInner {
+    height: 40px;
+    padding-top: 9px;
+    width: 44px;
+}
+
+.SiteNav__MobileActivatorInner:before,
+.SiteNav__MobileActivatorInnerInner, /* names are hard */
+.SiteNav__MobileActivatorInner:after {
+    background-color: var(--Lightest);
+    border-radius: 2px;
+    content: ' ';
+    display: block;
+    height: 4px;
+    margin-left: auto;
+    margin-right: 0;
+    position: relative;
+    transition: all .2s;
+    width: 38px;
+}
+
+.SiteNav__MobileActivatorInnerInner {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInner:before,
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInnerInner,
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInner:after {
+    background-color: var(--Lightest);
+}
+
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInnerInner {
+    opacity: 0;
+}
+
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInner:before {
+    top: 8px;
+    transform: rotate(-45deg);
+}
+
+.SiteNav__MobileActivator--IsActive .SiteNav__MobileActivatorInner:after {
+    bottom: 9px;
+    transform: rotate(45deg);
+}
+
+.SiteNav__MenuItemsHolder {
+    background-color: var(--DarkerBlue);
+    display: none;
+    height: 100%;
+    opacity: 0;
+    overflow: scroll;
+    overflow-x: hidden;
+    padding-top: 80px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: opacity .2s;
+    width: 100%;
+    z-index: 997;
+
+    /* Make sure iOS uses scrolling */
+    -webkit-overflow-scrolling: touch;
+
+    -ms-overflow-style: none;
+}
+
+.SiteNav__MenuItemsHolder:before {
+    background: linear-gradient(
+            to bottom,
+            rgba(var(--DarkerBlue), 1) 30%,
+            rgba(var(--DarkerBlue), 0) 100%
+    );
+    content: ' ';
+    display: block;
+    height: 80px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 998;
+}
+
+.SiteNav__MenuItemsHolder::-webkit-scrollbar {
+    display: none;
+}
+
+.SiteNav__MenuItemsHolder--IsPreActive {
+    display: block;
+}
+
+.SiteNav__MenuItemsHolder--IsActive {
+    opacity: 1;
+}
