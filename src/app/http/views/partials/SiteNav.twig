@@ -28,30 +28,70 @@
         >
             <div class="SiteNav__UpperMessage">
                 Logged In As {{ userApi.fetchCurrentUser.emailAddress }}<br>
-                <a href="/?action=logout" class="button button--colored SiteNav__LogOutButton">Log Out</a>
+                <a
+                    href="/?action=logout"
+                    class="button button--colored SiteNav__LogOutButton"
+                >
+                    Log Out
+                </a>
             </div>
             <ul class="SiteNav__List">
                 <li class="SiteNav__ListItem">
-                    <a href="/" class="SiteNav__Link{% if not segment1 %} SiteNav__Link--IsActive{% endif %}">Projects</a>
+                    <a
+                        href="/projects"
+                        class="SiteNav__Link{% if not segment1 or segment1 == 'projects' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Projects
+                    </a>
                 </li>
                 <li class="SiteNav__ListItem">
-                    <a href="/monitored-urls" class="SiteNav__Link{% if segment1 == 'monitored-urls' %} SiteNav__Link--IsActive{% endif %}">Monitored URLs</a>
+                    <a
+                        href="/monitored-urls"
+                        class="SiteNav__Link{% if segment1 == 'monitored-urls' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Monitored URLs
+                    </a>
                 </li>
                 <li class="SiteNav__ListItem">
-                    <a href="/pings" class="SiteNav__Link{% if segment1 == 'pings' %} SiteNav__Link--IsActive{% endif %}">Pings</a>
+                    <a
+                        href="/pings"
+                        class="SiteNav__Link{% if segment1 == 'pings' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Pings
+                    </a>
                 </li>
                 <li class="SiteNav__ListItem">
-                    <a href="/servers" class="SiteNav__Link{% if segment1 == 'servers' %} SiteNav__Link--IsActive{% endif %}">Servers</a>
+                    <a
+                        href="/servers"
+                        class="SiteNav__Link{% if segment1 == 'servers' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Servers
+                    </a>
                 </li>
                 <li class="SiteNav__ListItem">
-                    <a href="/reminders" class="SiteNav__Link{% if segment1 == 'reminders' %} SiteNav__Link--IsActive{% endif %}">Reminders</a>
+                    <a
+                        href="/reminders"
+                        class="SiteNav__Link{% if segment1 == 'reminders' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Reminders
+                    </a>
                 </li>
                 {% if userApi.fetchCurrentUser.userDataItem('admin') %}
                     <li class="SiteNav__ListItem">
-                        <a href="/admins" class="SiteNav__Link{% if segment1 == 'admins' %} SiteNav__Link--IsActive{% endif %}">Admins</a>
+                        <a
+                            href="/admins"
+                            class="SiteNav__Link{% if segment1 == 'admins' %} SiteNav__Link--IsActive{% endif %}"
+                        >
+                            Admins
+                        </a>
                     </li>
                     <li class="SiteNav__ListItem">
-                        <a href="/notifications" class="SiteNav__Link{% if segment1 == 'notifications' %} SiteNav__Link--IsActive{% endif %}">Notifications</a>
+                        <a
+                            href="/notifications"
+                            class="SiteNav__Link{% if segment1 == 'notifications' %} SiteNav__Link--IsActive{% endif %}"
+                        >
+                            Notifications
+                        </a>
                     </li>
                 {% endif %}
             </ul>

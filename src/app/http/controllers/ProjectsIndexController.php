@@ -8,7 +8,7 @@ use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
 
-class IndexController
+class ProjectsIndexController
 {
     private $response;
     private $twigEnvironment;
