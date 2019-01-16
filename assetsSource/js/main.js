@@ -14,7 +14,24 @@ function runMain(F, W) {
         return;
     }
 
-    console.log('main');
+    var GlobalModelConstructor = F.model.make({
+        menuBreakPoint: 'int',
+        windowWidth: 'int'
+    });
+
+    F.GlobalModel = new GlobalModelConstructor({
+        menuBreakPoint: 1000
+    });
+
+    F.GlobalModel.set('windowWidth', W.innerWidth);
+
+    $(W).on('resize.GlobalModel', function() {
+        F.GlobalModel.set('windowWidth', W.innerWidth);
+    });
+
+    F.controller.construct('MobileMenu', {
+        el: 'body'
+    });
 }
 
 runMain(window.FAB, window);
