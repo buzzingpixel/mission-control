@@ -6,6 +6,7 @@ namespace src\app\http\controllers;
 use Throwable;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 
@@ -28,7 +29,7 @@ class ForgotPasswordController
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->userApi->fetchCurrentUser()) {
             throw new Http404Exception();
@@ -37,7 +38,12 @@ class ForgotPasswordController
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
-            $this->twigEnvironment->renderAndMinify('ForgotPassword.twig')
+            $this->twigEnvironment->renderAndMinify(
+                'ForgotPassword.twig',
+                [
+                    'emailSent' => $request->getUri()->getPath() === '/iforgot/check-email'
+                ]
+            )
         );
 
         return $response;
