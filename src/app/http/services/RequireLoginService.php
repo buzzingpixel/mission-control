@@ -43,7 +43,9 @@ class RequireLoginService
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        $response->getBody()->write($this->twig->render('LogIn.twig'));
+        $response->getBody()->write(
+            $this->twig->renderAndMinify('account/LogIn.twig')
+        );
 
         return $response;
     }

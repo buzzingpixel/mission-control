@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 
-class ForgotPasswordController
+class PasswordResetController
 {
     private $userApi;
     private $response;
@@ -31,7 +31,11 @@ class ForgotPasswordController
      */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->userApi->fetchCurrentUser()) {
+        $token = $request->getAttribute('token');
+
+        if ($this->userApi->fetchCurrentUser() ||
+            ! $user = $this->userApi->getUserByPasswordResetToken($token)
+        ) {
             throw new Http404Exception();
         }
 
@@ -39,9 +43,10 @@ class ForgotPasswordController
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify(
-                'account/ForgotPassword.twig',
+                'account/ResetPassword.twig',
                 [
-                    'emailSent' => $request->getUri()->getPath() === '/iforgot/check-email'
+                    'user' => $user,
+                    'token' => $token,
                 ]
             )
         );
