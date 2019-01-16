@@ -1,0 +1,58 @@
+{% extends 'layouts/LayoutMaster.twig' %}
+
+{% set formAction = formAction|default(false) %}
+{% set actionParam = actionParam|default(false) %}
+{% set formTitle = formTitle|default(false) %}
+{% set formSubTitle = formSubTitle|default(false) %}
+{% set inputs = inputs|default([]) %}
+{% set submitText = submitText|default('Submit') %}
+
+{# @var \corbomite\requestdatastore\DataStoreInterface dataStore #}
+{% set dataStore = dataStore() %}
+
+{#{% do dataStore.storeItem('FormSubmission.inputErrors', {
+    title: [
+        'This input is required'
+    ]
+}) %}#}
+
+{#{% do dataStore.storeItem('FormSubmission.inputValues', {
+    title: 'ASDF'
+}) %}#}
+
+{% set inputErrors = dataStore.storeItem('FormSubmission.inputErrors') ?? [] %}
+{% set inputValues = dataStore.storeItem('FormSubmission.inputValues') ?? [] %}
+
+{% block content %}
+    <form
+        {% if formAction %}
+        action="{{ formAction }}"
+        {% endif %}
+        method="post"
+        accept-charset="UTF-8"
+        class="StandardForm"
+    >
+        {{ getCsrfInput() }}
+        {% if actionParam %}
+            <input type="hidden" name="action" value="{{ actionParam }}">
+        {% endif %}
+        {% if formTitle %}
+            <h1 class="StandardForm__Title">{{ formTitle|smartypants }}</h1>
+        {% endif %}
+        {% if formSubTitle %}
+            <h2 class="StandardForm__SubTitle heading heading--level-6">
+                {{ formSubTitle|smartypants }}
+            </h2>
+        {% endif %}
+        {% for input in inputs %}
+            {% include 'forms/inputTemplates/' ~ input.template|ucfirst ~ '.twig' with input %}
+        {% endfor %}
+        <fieldset class="fieldset StandardForm__Fieldset">
+            <input
+                type="submit"
+                class="button StandardForm__Button"
+                value="{{ submitText }}"
+            >
+        </fieldset>
+    </form>
+{% endblock %}

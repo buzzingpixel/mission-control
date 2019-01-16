@@ -1,0 +1,13 @@
+{% set type = type|default('text') %}
+
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <input
+            type="{{ type }}"
+            name="{{ name }}"
+            value="{{ value }}"
+            id="{{ name }}"
+            class="input StandardForm__TextInput{% if thisInputHasErrors %} StandardForm__TextInput--HasError{% endif %}"
+        >
+    {% endblock %}
+{% endembed %}

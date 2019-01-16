@@ -1,0 +1,17 @@
+{# @var string token #}
+{# @var \corbomite\user\models\UserModel user #}
+
+{% extends 'layouts/LayoutHtmlWrapper.twig' %}
+
+{% set metaTitle = 'Log In' %}
+
+{% block layoutContent %}
+    <div class="CenteredPage">
+        <div class="CenteredPage__Inner">
+            <h1 class="CenteredPage__Heading">Permission Denied</h1>
+            <div class="CenteredPage__ErrorBanner Alert Alert--Centered Alert--Danger">
+                You are not authorized to access this area.
+            </div>
+        </div>
+    </div>
+{% endblock %}

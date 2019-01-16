@@ -1,0 +1,12 @@
+{% set rows = rows|default('6') %}
+
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <textarea
+            rows="{{ rows }}"
+            name="{{ name }}"
+            id="{{ name }}"
+            class="textarea StandardForm__TextArea {% if thisInputHasErrors %} StandardForm__TextInput--HasError{% endif %}"
+        >{{ value }}</textarea>
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,24 @@
+{% set name = name|default('TODO') %}
+{% set label = label|default(name) %}
+
+{% set thisInputErrors = inputErrors[name] ?? [] %}
+{% set thisInputHasErrors = thisInputErrors|length > 0 %}
+
+{% set value = inputValues[name]|default(value|default('')) %}
+
+<fieldset class="fieldset StandardForm__Fieldset">
+    <label
+        for="{{ name }}"
+        class="label StandardForm__Label"
+    >
+        {{ label }}
+        {% if thisInputHasErrors %}
+            <span class="StandardForm__LabelErrors">
+                {% for error in thisInputErrors %}
+                    <br>{{ error|smartypants }}
+                {% endfor %}
+            </span>
+        {% endif %}
+    </label>
+    {{ block('input') ?? '' }}
+</fieldset>

@@ -35,7 +35,7 @@ class LogOutAction
 
         $this->userApi->logCurrentUserOut();
 
-        $flashDataModel =$this->flashDataApi->makeFlashDataModel([
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
             'name' => 'LogOutAction'
         ]);
 
