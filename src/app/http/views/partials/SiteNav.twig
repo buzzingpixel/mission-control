@@ -1,0 +1,55 @@
+{# @var \corbomite\user\interfaces\UserApiInterface userApi #}
+{% set userApi = userApi() %}
+
+<nav class="SiteNav">
+    <div class="SiteNav__Inner">
+        <div class="SiteNav__SiteTitle">Mission Control</div>
+        <a
+            href="#0"
+            class="SiteNav__MobileActivator JS-MobileMenuActivator"
+            data-active-class="SiteNav__MobileActivator--IsActive"
+        >
+            <span class="SiteNav__MobileActivatorDescription">
+                Menu
+            </span>
+            <span class="SiteNav__MobileActivatorInner">
+                <span class="SiteNav__MobileActivatorInnerInner"></span>
+            </span>
+        </a>
+        <div
+            class="SiteNav__MenuItemsHolder JS-MobileNav"
+            data-pre-active-class="SiteNav__MenuItemsHolder--IsPreActive"
+            data-active-class="SiteNav__MenuItemsHolder--IsActive"
+        >
+            <div class="SiteNav__UpperMessage">
+                Logged In As {{ userApi.fetchCurrentUser.emailAddress }}<br>
+                <a href="/?action=logout" class="button SiteNav__LogOutButton">Log Out</a>
+            </div>
+            <ul class="SiteNav__List">
+                <li class="SiteNav__ListItem">
+                    <a href="/" class="SiteNav__Link">Projects</a>
+                </li>
+                <li class="SiteNav__ListItem">
+                    <a href="/monitored-urls" class="SiteNav__Link">Monitored URLs</a>
+                </li>
+                <li class="SiteNav__ListItem">
+                    <a href="/pings" class="SiteNav__Link">Pings</a>
+                </li>
+                <li class="SiteNav__ListItem">
+                    <a href="/servers" class="SiteNav__Link">Servers</a>
+                </li>
+                <li class="SiteNav__ListItem">
+                    <a href="/reminders" class="SiteNav__Link">Reminders</a>
+                </li>
+                {% if userApi.fetchCurrentUser.userDataItem('admin') %}
+                    <li class="SiteNav__ListItem">
+                        <a href="/admins" class="SiteNav__Link">Admins</a>
+                    </li>
+                    <li class="SiteNav__ListItem">
+                        <a href="/notifications" class="SiteNav__Link">Notifications</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

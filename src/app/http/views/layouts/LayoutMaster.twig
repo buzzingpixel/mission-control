@@ -1,11 +1,15 @@
 {% extends 'layouts/LayoutHtmlWrapper.twig' %}
 
 {% block layoutContent %}
-    {% include 'partials/SiteHeader.twig' %}
+    {% include 'partials/SiteNav.twig' %}
     <main class="SiteMain">
+        {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+            <div class="Alert Alert--Centered Alert--Success">
+                Logged In Successfully!
+            </div>
+        {% endif %}
         <div class="SiteMain__Inner">
             {{ block('content') ?? '' }}
         </div>
     </main>
-    {% include 'partials/SiteFooter.twig' %}
 {% endblock %}
