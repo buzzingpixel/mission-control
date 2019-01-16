@@ -3,12 +3,12 @@
 {% block layoutContent %}
     {% include 'partials/SiteNav.twig' %}
     <main class="SiteMain">
-        {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
-            <div class="Alert Alert--Centered Alert--Success">
-                Logged In Successfully!
-            </div>
-        {% endif %}
         <div class="SiteMain__Inner">
+            {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+                <div class="Alert Alert--Centered Alert--Success Alert--HasMarginBottom">
+                    Logged In Successfully!
+                </div>
+            {% endif %}
             {{ block('content') ?? '' }}
         </div>
     </main>
