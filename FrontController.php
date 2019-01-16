@@ -20,6 +20,14 @@ if (file_exists(APP_BASE_PATH . '/.env')) {
     (new Dotenv\Dotenv(APP_BASE_PATH))->load();
 }
 
+if (! getenv('SITE_URL')) {
+    $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+    $protocol = $secure ? 'https://' : 'http://';
+    putenv('SITE_URL=' . $protocol . $_SERVER['HTTP_HOST']);
+}
+
+putenv('SITE_URL=' . rtrim(getenv('SITE_URL'), '/'));
+
 if (PHP_SAPI === 'cli') {
     /** @noinspection PhpUnhandledExceptionInspection */
     Di::get(CliKernel::class)($argv);
