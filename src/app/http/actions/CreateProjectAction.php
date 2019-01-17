@@ -89,7 +89,12 @@ class CreateProjectAction
             'name' => 'Message'
         ]);
 
-        $flashDataModel->dataItem('success', true);
+        $flashDataModel->dataItem('type', 'Success');
+
+        $flashDataModel->dataItem(
+            'content',
+            'Project "' . $model->title() . '" created successfully'
+        );
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->flashDataApi->setFlashData($flashDataModel);

@@ -1,13 +1,27 @@
 {% extends 'layouts/LayoutHtmlWrapper.twig' %}
 
+{# @var \corbomite\flashdata\interfaces\FlashDataApiInterface flashDataApi #}
+{% set flashDataApi = flashDataApi() %}
+
+{# @var \corbomite\flashdata\interfaces\FlashDataModelInterface LogInAction #}
+{% set LogInAction = flashDataApi.getFlashData.getStoreItem('LogInAction') %}
+
+{# @var \corbomite\flashdata\interfaces\FlashDataModelInterface Message #}
+{% set Message = flashDataApi.getFlashData.storeItem('Message') %}
+
 {% block layoutContent %}
     {% include 'partials/SiteNav.twig' %}
     <main class="SiteMain">
         <div class="SiteMain__Inner">
             {% include 'components/Breadcrumbs.twig' %}
-            {% if flashDataApi().getFlashData().getStoreItem('LogInAction').dataItem('success') ?? false %}
+            {% if LogInAction.dataItem('success') ?? false %}
                 <div class="Alert Alert--Centered Alert--Success Alert--HasMarginBottom">
                     Logged In Successfully!
+                </div>
+            {% endif %}
+            {% if Message.dataItem('content') ?? false %}
+                <div class="Alert Alert--Centered Alert--{{ Message.dataItem('type') ?? '' }} Alert--HasMarginBottom">
+                    {{ Message.dataItem('content')|smartypants }}
                 </div>
             {% endif %}
             {{ block('content') ?? '' }}
