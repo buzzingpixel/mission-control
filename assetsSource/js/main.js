@@ -16,7 +16,8 @@ function runMain(F, W) {
 
     var GlobalModelConstructor = F.model.make({
         menuBreakPoint: 'int',
-        windowWidth: 'int'
+        windowWidth: 'int',
+        filterHasRun: 'int'
     });
 
     F.GlobalModel = new GlobalModelConstructor({
@@ -38,6 +39,12 @@ function runMain(F, W) {
             el: this
         });
     });
+
+    $('.JS-Filterable').each(function() {
+        F.controller.construct('Filterable', {
+            el: this
+        });
+    })
 }
 
 runMain(window.FAB, window);

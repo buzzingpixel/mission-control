@@ -16,7 +16,7 @@
         {% endif %}
         method="post"
         accept-charset="UTF-8"
-        class="TableList"
+        class="TableList JS-Filterable"
     >
         {{ getCsrfInput() }}
         {% if actionParam %}
@@ -34,6 +34,13 @@
                     </a>
                 {% endfor %}
             </div>
+        </div>
+        <div class="TableList__Filter">
+            <input
+                type="search"
+                placeholder="Filter Results"
+                class="input TableList__FilterInput JS-Filterable__FilterInput"
+            >
         </div>
         {% set cols = 1 %}
         <table class="Table JS-TableSelects">
@@ -56,10 +63,10 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="Table__Body">
+            <tbody class="Table__Body JS-Filterable__ItemsContainer">
                 {% for row in table.rows %}
                     <tr
-                        class="Table__Row JS-TableSelects__SelectRow"
+                        class="Table__Row JS-TableSelects__SelectRow JS-Filterable__Items"
                         data-selected-class="Table__Row--IsSelected"
                     >
                         {% for col in table.headings %}

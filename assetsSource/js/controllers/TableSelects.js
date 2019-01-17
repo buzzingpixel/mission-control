@@ -12,6 +12,14 @@ function runTableSelects(F) {
     }
 
     F.controller.make('TableSelects', {
+        init: function () {
+            var self = this;
+
+            F.GlobalModel.onChange('filterHasRun', function() {
+                self.setAllTo(false);
+            })
+        },
+
         events: {
             'click .JS-TableSelects__All': function(e) {
                 var self = this;
