@@ -33,24 +33,27 @@
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
                     {% for heading in table.headings %}
-                        <th class="Table__HeadingCol">
+                        <th class="Table__HeadingCol{% if loop.first %} Table__HeadingCol--IsFirst{% endif %}">
                             {{ heading|smartypants }}
                         </th>
                     {% endfor %}
-                    <th class="Table__HeadingCol Table__HeadingCol--IsSelector">
+                    <th class="Table__HeadingCol Table__HeadingCol--IsLast Table__HeadingCol--IsSelector">
                         <input type="checkbox">
                     </th>
                 </tr>
             </thead>
             <tbody class="Table__Body">
                 {% for row in table.rows %}
-                    <tr class="Table__Row">
+                    <tr
+                        class="Table__Row"
+                        data-selected-class="Table__Row--IsSelected"
+                    >
                         {% for col in table.headings %}
-                            <td class="Table__Column">
+                            <td class="Table__Column{% if loop.first %} Table__Column--IsFirst{% endif %}">
                                 {{ row.cols[col]|smartypants }}
                             </td>
                         {% endfor %}
-                        <td class="Table__Column">
+                        <td class="Table__Column Table__Column--IsLast Table__Column--IsSelector">
                             <input
                                 type="checkbox"
                                 name="{{ table.inputsName }}"
@@ -66,8 +69,8 @@
                         colspan="{{ table.headings|length + 1 }}"
                         class="Table__FooterCol"
                     >
-                        <fieldset class="fieldset Table__Fieldset">
-                            <select name="bulk_action" class="select select--inline">
+                        <div class="fieldset Table__Fieldset">
+                            <select name="bulk_action" class="select select--inline Table__BulkSelect">
                                 <option value="">-- Select an Action --</option>
                                 {% for action, actionTitle in actions %}
                                     <option value="{{ action }}">
@@ -75,14 +78,14 @@
                                     </option>
                                 {% endfor %}
                             </select>
-                        </fieldset>
-                        <fieldset class="fieldset Table__Fieldset">
+                        </div>
+                        <div class="fieldset Table__Fieldset">
                             <input
                                 type="submit"
                                 class="button Table__Button"
                                 value="{{ submitText }}"
                             >
-                        </fieldset>
+                        </div>
                     </td>
                 </tr>
             </tfoot>

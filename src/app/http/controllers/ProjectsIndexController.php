@@ -69,6 +69,33 @@ class ProjectsIndexController
                                 'Added' => '1/2/18 2018',
                             ],
                         ],
+                        [
+                            'inputValue' => '456',
+                            'cols' => [
+                                'Title' => 'Test',
+                                'Slug' => 'Slug Test',
+                                'Description' => 'Description Test',
+                                'Added' => '1/2/18 2018',
+                            ],
+                        ],
+                        [
+                            'inputValue' => '456',
+                            'cols' => [
+                                'Title' => 'Test',
+                                'Slug' => 'Slug Test',
+                                'Description' => 'Description Test',
+                                'Added' => '1/2/18 2018',
+                            ],
+                        ],
+                        [
+                            'inputValue' => '456',
+                            'cols' => [
+                                'Title' => 'Test',
+                                'Slug' => 'Slug Test',
+                                'Description' => 'Description Test',
+                                'Added' => '1/2/18 2018',
+                            ],
+                        ],
                     ],
                 ],
             ])
