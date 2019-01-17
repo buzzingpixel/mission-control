@@ -42,6 +42,7 @@ class ProjectsIndexController
                 'actions' => [
                     'delete' => 'Delete Selected',
                 ],
+                'actionColButtonContent' => 'View Project',
                 'table' => [
                     'inputsName' => 'projects[]',
                     'headings' => [
@@ -53,6 +54,7 @@ class ProjectsIndexController
                     'rows' => [
                         [
                             'inputValue' => '123',
+                            'actionButtonLink' => '/thing',
                             'cols' => [
                                 'Title' => 'Test',
                                 'Slug' => 'Slug Test',
@@ -62,6 +64,7 @@ class ProjectsIndexController
                         ],
                         [
                             'inputValue' => '456',
+                            'actionButtonLink' => '/asdf',
                             'cols' => [
                                 'Title' => 'Test',
                                 'Slug' => 'Slug Test',
@@ -71,6 +74,7 @@ class ProjectsIndexController
                         ],
                         [
                             'inputValue' => '456',
+                            'actionButtonLink' => '/asdf',
                             'cols' => [
                                 'Title' => 'Test',
                                 'Slug' => 'Slug Test',
@@ -80,6 +84,7 @@ class ProjectsIndexController
                         ],
                         [
                             'inputValue' => '456',
+                            'actionButtonLink' => '/asdf',
                             'cols' => [
                                 'Title' => 'Test',
                                 'Slug' => 'Slug Test',
@@ -89,6 +94,7 @@ class ProjectsIndexController
                         ],
                         [
                             'inputValue' => '456',
+                            'actionButtonLink' => '/asdf',
                             'cols' => [
                                 'Title' => 'Test',
                                 'Slug' => 'Slug Test',

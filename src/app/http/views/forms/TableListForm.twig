@@ -7,6 +7,7 @@
 {% set table = table|default([]) %}
 {% set submitText = submitText|default('Submit') %}
 {% set actions = actions|default([]) %}
+{% set actionColButtonContent = actionColButtonContent|default('') %}
 
 {% block content %}
     <form
@@ -29,14 +30,22 @@
                 {{ subTitle|smartypants }}
             </h2>
         {% endif %}
+        {% set cols = 1 %}
         <table class="Table">
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
                     {% for heading in table.headings %}
+                        {% set cols = cols + 1 %}
                         <th class="Table__HeadingCol{% if loop.first %} Table__HeadingCol--IsFirst{% endif %}">
                             {{ heading|smartypants }}
                         </th>
                     {% endfor %}
+                    {% if actionColButtonContent %}
+                        {% set cols = cols + 1 %}
+                        <th class="Table__HeadingCol">
+                            Action
+                        </th>
+                    {% endif %}
                     <th class="Table__HeadingCol Table__HeadingCol--IsLast Table__HeadingCol--IsSelector">
                         <input type="checkbox">
                     </th>
@@ -53,6 +62,13 @@
                                 {{ row.cols[col]|smartypants }}
                             </td>
                         {% endfor %}
+                        {% if actionColButtonContent %}
+                            <td class="Table__Column">
+                                <a href="{{ row.actionButtonLink ?? '#' }}" class="button button--outlined">
+                                    {{ actionColButtonContent|smartypants }}
+                                </a>
+                            </td>
+                        {% endif %}
                         <td class="Table__Column Table__Column--IsLast Table__Column--IsSelector">
                             <input
                                 type="checkbox"
@@ -66,7 +82,7 @@
             <tfoot class="Table__Footer">
                 <tr class="Table__FooterRow">
                     <td
-                        colspan="{{ table.headings|length + 1 }}"
+                        colspan="{{ cols }}"
                         class="Table__FooterCol"
                     >
                         <div class="fieldset Table__Fieldset">
