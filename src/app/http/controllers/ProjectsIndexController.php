@@ -36,7 +36,42 @@ class ProjectsIndexController
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
-            $this->twigEnvironment->renderAndMinify('Index.twig')
+            $this->twigEnvironment->renderAndMinify('forms/TableListForm.twig', [
+                'actionParam' => 'projectListActions',
+                'title' => 'Projects',
+                'actions' => [
+                    'delete' => 'Delete Selected',
+                ],
+                'table' => [
+                    'inputsName' => 'projects[]',
+                    'headings' => [
+                        'Title',
+                        'Slug',
+                        'Description',
+                        'Added'
+                    ],
+                    'rows' => [
+                        [
+                            'inputValue' => '123',
+                            'cols' => [
+                                'Title' => 'Test',
+                                'Slug' => 'Slug Test',
+                                'Description' => 'Description Test',
+                                'Added' => '1/2/18 2018',
+                            ],
+                        ],
+                        [
+                            'inputValue' => '456',
+                            'cols' => [
+                                'Title' => 'Test',
+                                'Slug' => 'Slug Test',
+                                'Description' => 'Description Test',
+                                'Added' => '1/2/18 2018',
+                            ],
+                        ],
+                    ],
+                ],
+            ])
         );
 
         return $response;

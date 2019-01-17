@@ -1,0 +1,91 @@
+{% extends 'layouts/LayoutMaster.twig' %}
+
+{% set formAction = formAction|default(false) %}
+{% set actionParam = actionParam|default(false) %}
+{% set title = title|default(false) %}
+{% set subTitle = subTitle|default(false) %}
+{% set table = table|default([]) %}
+{% set submitText = submitText|default('Submit') %}
+{% set actions = actions|default([]) %}
+
+{% block content %}
+    <form
+        {% if formAction %}
+        action="{{ formAction }}"
+        {% endif %}
+        method="post"
+        accept-charset="UTF-8"
+        class="TableList"
+    >
+        {{ getCsrfInput() }}
+        {% if actionParam %}
+            <input type="hidden" name="action" value="{{ actionParam }}">
+        {% endif %}
+        {% if title %}
+            <h1 class="TableList__Title">{{ title|smartypants }}</h1>
+        {% endif %}
+        {% if subTitle %}
+            <h2 class="TableList__SubTitle heading heading--level-6">
+                {{ subTitle|smartypants }}
+            </h2>
+        {% endif %}
+        <table class="Table">
+            <thead class="Table__Heading">
+                <tr class="Table__HeadingRow">
+                    {% for heading in table.headings %}
+                        <th class="Table__HeadingCol">
+                            {{ heading|smartypants }}
+                        </th>
+                    {% endfor %}
+                    <th class="Table__HeadingCol Table__HeadingCol--IsSelector">
+                        <input type="checkbox">
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="Table__Body">
+                {% for row in table.rows %}
+                    <tr class="Table__Row">
+                        {% for col in table.headings %}
+                            <td class="Table__Column">
+                                {{ row.cols[col]|smartypants }}
+                            </td>
+                        {% endfor %}
+                        <td class="Table__Column">
+                            <input
+                                type="checkbox"
+                                name="{{ table.inputsName }}"
+                                value="{{ row.inputValue }}"
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="Table__Footer">
+                <tr class="Table__FooterRow">
+                    <td
+                        colspan="{{ table.headings|length + 1 }}"
+                        class="Table__FooterCol"
+                    >
+                        <fieldset class="fieldset Table__Fieldset">
+                            <select name="bulk_action" class="select select--inline">
+                                <option value="">-- Select an Action --</option>
+                                {% for action, actionTitle in actions %}
+                                    <option value="{{ action }}">
+                                        {{ actionTitle|smartypants }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </fieldset>
+                        <fieldset class="fieldset Table__Fieldset">
+                            <input
+                                type="submit"
+                                class="button Table__Button"
+                                value="{{ submitText }}"
+                            >
+                        </fieldset>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+{% endblock %}
