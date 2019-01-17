@@ -55,5 +55,5 @@ interface ProjectModelInterface
      * @param DateTime|null $addedAt
      * @return DateTime
      */
-    public function addedAt(?DateTime $addedAt): DateTime;
+    public function addedAt(?DateTime $addedAt = null): DateTime;
 }

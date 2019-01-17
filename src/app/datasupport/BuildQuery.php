@@ -48,15 +48,27 @@ class BuildQuery implements BuildQueryInterface
             }
 
             if (! $firstWhere) {
-                $query->orWhere('(');
+                $query->catWhere(' ' . $where['operator'] . ' (');
             }
 
-            foreach ($where as $col => $val) {
-                // TODO: check for array and do an WHERE IN statement
-                $query->catWhere($col, $val);
+            $firstInnerWhere = true;
+
+            foreach ($where['wheres'] as $val) {
+                if (! $firstInnerWhere) {
+                    $query->catWhere(' ' . $val['operator'] . ' ');
+                }
+
+                $query->catWhere(
+                    $val['col'] . ' ' . $val['comparison'] . ' ',
+                    $val['val']
+                );
+
+                $firstInnerWhere = false;
             }
 
             $query->catWhere(')');
+
+            $firstWhere = false;
         }
 
         return $query;

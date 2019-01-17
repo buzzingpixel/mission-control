@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace src\app\projects\interfaces;
 
+use src\app\projects\exceptions\ProjectNameNotUniqueException;
+use src\app\projects\exceptions\InvalidProjectModelException;
+
 interface ProjectsApiInterface
 {
     /**
@@ -13,11 +16,13 @@ interface ProjectsApiInterface
     public function createProjectModel(array $props = []): ProjectModelInterface;
 
     /**
-     * Saves a project (creating if necesary)
+     * Saves a project (creating if necessary)
      * @param ProjectModelInterface $projectModel
      * @return mixed
+     * @throws InvalidProjectModelException
+     * @throws ProjectNameNotUniqueException
      */
-    public function saveProject(ProjectModelInterface $projectModel);
+    public function saveProject(ProjectModelInterface $model);
 
     /**
      * Archives a project

@@ -11,6 +11,7 @@ use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
 class CreateProjectAction
 {
@@ -57,8 +58,8 @@ class CreateProjectAction
             throw new Http404Exception();
         }
 
-        $title = $this->requestHelper->post('title');
-        $description = $this->requestHelper->post('description');
+        $title = trim($this->requestHelper->post('title'));
+        $description = trim($this->requestHelper->post('description'));
 
         $store = [
             'inputErrors' => [],
@@ -76,7 +77,13 @@ class CreateProjectAction
 
         $model = $this->projectsApi->createProjectModel($store['inputValues']);
 
-        $this->projectsApi->saveProject($model);
+        try {
+            $this->projectsApi->saveProject($model);
+        } catch (ProjectNameNotUniqueException $e) {
+            $store['inputErrors']['title'][] = 'Title must be unique';
+            $this->dataStore->storeItem('FormSubmission', $store);
+            return null;
+        }
 
         $flashDataModel = $this->flashDataApi->makeFlashDataModel([
             'name' => 'Message'

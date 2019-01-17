@@ -57,7 +57,7 @@ class ProjectModel implements ProjectModelInterface
 
     private $addedAt;
 
-    public function addedAt(?DateTime $addedAt): DateTime
+    public function addedAt(?DateTime $addedAt = null): DateTime
     {
         return $this->addedAt = $addedAt !== null ? $addedAt : $this->addedAt;
     }

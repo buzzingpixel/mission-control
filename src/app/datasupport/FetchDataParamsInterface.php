@@ -38,19 +38,40 @@ interface FetchDataParamsInterface
     public function addOrder(string $col, string $dir = 'desc');
 
     /**
-     * Returns where params. Sets value if incoming argument is set.
-     * The array should be formatted as (each key in the top array represents OR):
+     * Returns where params.
+     * The array should be formatted as:
      * [
      *     [
-     *         'col_name >' => 'some_val',
-     *         'col_name <' => 'some_val',
-     *         'col_name =' => 'some_val',
-     *         'col_name !=' => 'some_val',
-     *     ]
+     *         'wheres' => [
+     *             [
+     *                 'col' => 'guid',
+     *                 'val' => '',
+     *                 'comparison' => '!=',
+     *                 'operator' => 'AND',
+     *             ],
+     *         ],
+     *     ],
+     *     [
+     *         'operator' => 'AND',
+     *         'wheres' => [
+     *             [
+     *                 'col' => 'title',
+     *                 'val' => 'This is a test',
+     *                 'comparison' => '=',
+     *                 'operator' => 'AND',
+     *             ],
+     *             [
+     *                 'col' => 'slug',
+     *                 'val' => 'this-is-a-test',
+     *                 'comparison' => '=',
+     *                 'operator' => 'OR',
+     *             ],
+     *         ],
+     *     ],
      * ]
      * @return array
      */
-    public function where(?array $where = null): array;
+    public function where(): array;
 
     /**
      * Adds a where param
@@ -60,5 +81,12 @@ interface FetchDataParamsInterface
      * @param bool $or
      * @return mixed
      */
-    public function addWhere(string $col, $val, string $operator = '=', bool $or = false);
+    public function addWhere(string $col, $val, string $comparison = '=', bool $or = false);
+
+    /**
+     * Starts a new where group
+     * @param bool $or
+     * @return mixed
+     */
+    public function addWhereGroup(bool $or = true);
 }
