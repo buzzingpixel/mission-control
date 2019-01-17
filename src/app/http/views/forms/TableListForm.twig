@@ -2,12 +2,12 @@
 
 {% set formAction = formAction|default(false) %}
 {% set actionParam = actionParam|default(false) %}
-{% set title = title|default(false) %}
-{% set subTitle = subTitle|default(false) %}
+{% set title = title|default('') %}
 {% set table = table|default([]) %}
 {% set submitText = submitText|default('Submit') %}
 {% set actions = actions|default([]) %}
 {% set actionColButtonContent = actionColButtonContent|default('') %}
+{% set tableControlButtons = tableControlButtons|default([]) %}
 
 {% block content %}
     <form
@@ -22,14 +22,19 @@
         {% if actionParam %}
             <input type="hidden" name="action" value="{{ actionParam }}">
         {% endif %}
-        {% if title %}
+        <div class="TableList__Controls">
             <h1 class="TableList__Title">{{ title|smartypants }}</h1>
-        {% endif %}
-        {% if subTitle %}
-            <h2 class="TableList__SubTitle heading heading--level-6">
-                {{ subTitle|smartypants }}
-            </h2>
-        {% endif %}
+            <div class="TableList__ControlsButtons">
+                {% for button in tableControlButtons %}
+                    <a
+                        href="{{ button.href }}"
+                        class="button TableList__ControlsButton"
+                    >
+                        {{ button.content|smartypants }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
         {% set cols = 1 %}
         <table class="Table JS-TableSelects">
             <thead class="Table__Heading">

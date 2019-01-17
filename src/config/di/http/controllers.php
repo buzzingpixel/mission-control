@@ -37,6 +37,7 @@ return [
     },
     ProjectsIndexController::class => function () {
         return new ProjectsIndexController(
+            Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
