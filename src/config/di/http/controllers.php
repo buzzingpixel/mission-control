@@ -4,6 +4,7 @@ declare(strict_types=1);
 use corbomite\di\Di;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
+use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\CreateProjectController;
@@ -40,6 +41,7 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },

@@ -9,6 +9,7 @@ use src\app\datasupport\BuildQuery;
 use corbomite\db\Factory as OrmFactory;
 use src\app\datasupport\FetchDataParamsFactory;
 use src\app\projects\services\SaveProjectService;
+use src\app\projects\services\FetchProjectsService;
 
 return [
     ProjectsApi::class => function () {
@@ -21,6 +22,11 @@ return [
             new UuidFactory(),
             Di::get(BuildQuery::class),
             new FetchDataParamsFactory()
+        );
+    },
+    FetchProjectsService::class => function () {
+        return new FetchProjectsService(
+            Di::get(BuildQuery::class)
         );
     },
 ];
