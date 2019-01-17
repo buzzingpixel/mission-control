@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
 
-class CreateProjectsController
+class CreateProjectController
 {
     private $userApi;
     private $response;

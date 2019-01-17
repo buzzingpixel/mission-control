@@ -10,11 +10,11 @@ declare(strict_types=1);
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ForgotPasswordController;
-use src\app\http\controllers\CreateProjectsController;
+use src\app\http\controllers\CreateProjectController;
 
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects', ProjectsIndexController::class);
-$routeCollector->addRoute(['GET', 'POST'], '/projects/create', CreateProjectsController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/projects/create', CreateProjectController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

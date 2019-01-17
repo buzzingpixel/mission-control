@@ -6,11 +6,11 @@ use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\twig\TwigEnvironment;
 use src\app\http\services\RequireLoginService;
-use src\app\http\controllers\CreateProjectsController;
+use src\app\http\controllers\CreateProjectController;
 
 return [
-    CreateProjectsController::class => function () {
-        return new CreateProjectsController(
+    CreateProjectController::class => function () {
+        return new CreateProjectController(
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
