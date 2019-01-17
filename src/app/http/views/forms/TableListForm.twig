@@ -31,7 +31,7 @@
             </h2>
         {% endif %}
         {% set cols = 1 %}
-        <table class="Table">
+        <table class="Table JS-TableSelects">
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
                     {% for heading in table.headings %}
@@ -47,14 +47,14 @@
                         </th>
                     {% endif %}
                     <th class="Table__HeadingCol Table__HeadingCol--IsLast Table__HeadingCol--IsSelector">
-                        <input type="checkbox">
+                        <input type="checkbox" class="JS-TableSelects__All">
                     </th>
                 </tr>
             </thead>
             <tbody class="Table__Body">
                 {% for row in table.rows %}
                     <tr
-                        class="Table__Row"
+                        class="Table__Row JS-TableSelects__SelectRow"
                         data-selected-class="Table__Row--IsSelected"
                     >
                         {% for col in table.headings %}
@@ -64,7 +64,7 @@
                         {% endfor %}
                         {% if actionColButtonContent %}
                             <td class="Table__Column">
-                                <a href="{{ row.actionButtonLink ?? '#' }}" class="button button--outlined">
+                                <a href="{{ row.actionButtonLink ?? '#' }}" class="button button--outlined JS-TableSelects__SelectEscape">
                                     {{ actionColButtonContent|smartypants }}
                                 </a>
                             </td>
@@ -74,6 +74,7 @@
                                 type="checkbox"
                                 name="{{ table.inputsName }}"
                                 value="{{ row.inputValue }}"
+                                class="JS-TableSelects__ItemSelector JS-TableSelects__SelectEscape"
                             >
                         </td>
                     </tr>

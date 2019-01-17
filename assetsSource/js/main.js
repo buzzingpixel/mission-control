@@ -32,6 +32,12 @@ function runMain(F, W) {
     F.controller.construct('MobileMenu', {
         el: 'body'
     });
+
+    $('.JS-TableSelects').each(function() {
+        F.controller.construct('TableSelects', {
+            el: this
+        });
+    });
 }
 
 runMain(window.FAB, window);
