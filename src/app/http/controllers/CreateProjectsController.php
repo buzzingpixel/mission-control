@@ -49,9 +49,17 @@ class CreateProjectsController
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('forms/StandardForm.twig', [
+                'breadCrumbs' => [
+                    [
+                        'href' => '/projects',
+                        'content' => 'Projects'
+                    ],
+                    [
+                        'content' => 'Create'
+                    ]
+                ],
                 'actionParam' => 'createProject',
                 'formTitle' => 'Create New Project',
-                // 'formSubTitle' => 'This is a test',
                 'inputs' => [
                     [
                         'template' => 'Text',

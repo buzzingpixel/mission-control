@@ -1,0 +1,40 @@
+{% set breadCrumbs = breadCrumbs ?? [] %}
+{% set breadCrumbs = breadCrumbs is iterable ? breadCrumbs : [] %}
+
+{#
+{% set breadCrumbs = [
+    {
+        href: '/',
+        content: 'Home',
+    },
+    {
+        href: '/residents',
+        content: 'Resident Services',
+    },
+    {
+        content: 'Recreation',
+    },
+] %}
+#}
+
+{% if breadCrumbs|length %}
+    <ul class="BreadCrumbs">
+        {% for crumb in breadCrumbs %}
+            {% set href = loop.last ? null : (crumb['href'] ?? '#') %}
+            {% set content = crumb['content'] ?? '' %}
+            <li class="BreadCrumbs__Item{% if loop.last %} BreadCrumbs__Item--IsActive{% endif %}">
+                {% if loop.last %}
+                <span class="BreadCrumbs__ItemInner BreadCrumbs__ItemInner--IsActive">
+                {% else %}
+                <a href="{{ href }}" class="BreadCrumbs__ItemInner">
+                {% endif %}
+                    {{ content|smartypants }}
+                {% if not loop.last %}
+                </a>
+                {% else %}
+                </span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
