@@ -57,43 +57,6 @@
         }
     },
     "scripts": {
-        "run-docker":  [
-            "docker-compose up -d"
-        ],
-        "stop-docker":  [
-            "docker-compose down"
-        ],
-        "queue-run":  [
-            "docker exec -i --user root php-mission-control bash -c \"php /app/app queue/run\""
-        ],
-        "queue-watch":  [
-            "@run-docker",
-            "docker exec -i --user root php-mission-control bash -c \"/app/queueRunner.sh\""
-        ],
-        "kill-queue-watch":  [
-            "docker kill php-mission-control",
-            "@run-docker"
-        ],
-        "run-schedule":  [
-            "docker exec -i --user root php-mission-control bash -c \"php /app/app schedule/run\""
-        ],
-        "npm-install": [
-            "npm install",
-            "docker-compose up -d",
-            "docker exec -i --user root --workdir /app node-mission-control bash -c \"npm install\""
-        ],
-        "fab": [
-            "@run-docker",
-            "@kill-fab",
-            "docker start node-mission-control",
-            "docker exec -i --user root --workdir /app node-mission-control bash -c \"npm run fab \""
-        ],
-        "kill-fab":  [
-            "docker kill node-mission-control"
-        ],
-        "test":  [
-            "docker exec -i --user root --workdir /app php-mission-control bash -c \"vendor/bin/phpunit\""
-        ],
         "post-create-project-cmd": [
             "@php -r \"copy('.env.example', '.env');\"",
             "@composer dump-autoload -o"

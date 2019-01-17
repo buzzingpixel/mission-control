@@ -6,4 +6,5 @@ else
     ENV="$(tr [A-Z] [a-z] <<< "${1}")";
 fi
 
+docker-compose up -d
 docker exec -it --user root ${ENV}-mission-control bash
