@@ -13,7 +13,7 @@ use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\CreateProjectController;
 
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);
-$routeCollector->addRoute(['GET', 'POST'], '/projects', ProjectsIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/projects[/{archives:archives}]', ProjectsIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects/create', CreateProjectController::class);
 
 // Password Reset routes

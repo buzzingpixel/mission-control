@@ -6,8 +6,9 @@ namespace src\app\http\controllers;
 use Throwable;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
-use corbomite\user\interfaces\UserApiInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
+use corbomite\user\interfaces\UserApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 
 class ProjectsIndexController
@@ -35,25 +36,37 @@ class ProjectsIndexController
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         if ($requireLogin = $this->requireLoginService->requireLogin()) {
             return $requireLogin;
         }
 
+        $archivesPage = $request->getAttribute('archives') === 'archives';
+
+        $isAdmin = $this->userApi->fetchCurrentUser()->userDataItem('admin');
+
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $tableControlButtons = [];
 
-        if ($this->userApi->fetchCurrentUser()->userDataItem('admin')) {
+        if (! $archivesPage) {
+            $tableControlButtons[] = [
+                'href' => '/projects/archives',
+                'content' => 'View Archives',
+            ];
+        }
+
+        if ($isAdmin) {
             $tableControlButtons[] = [
                 'href' => '/projects/create',
-                'content' => 'Create Project'
+                'content' => 'Create Project',
             ];
         }
 
         $params = $this->projectsApi->createFetchDataParams();
         $params->addOrder('title', 'asc');
+        $params->addWhere('is_active', $archivesPage ? '0' : '1');
         $rows = [];
         foreach ($this->projectsApi->fetchProjects($params) as $model) {
             $rows[] = [
@@ -68,15 +81,35 @@ class ProjectsIndexController
             ];
         }
 
+        $actions = [];
+
+        if ($isAdmin) {
+            if ($archivesPage) {
+                $actions['unArchive'] = 'Un-Archive Selected';
+            }
+
+            if (! $archivesPage) {
+                $actions['archive'] = 'Archive Selected';
+            }
+
+            $actions['delete'] = 'Delete Selected';
+        }
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('forms/TableListForm.twig', [
+                'breadCrumbs' => $archivesPage ? [
+                    [
+                        'href' => '/projects',
+                        'content' => 'Projects'
+                    ],
+                    [
+                        'content' => 'Viewing Archives'
+                    ]
+                ] : [],
                 'actionParam' => 'projectListActions',
-                'title' => 'Projects',
+                'title' => $archivesPage ? 'Archived Projects' : 'Projects',
                 'tableControlButtons' => $tableControlButtons,
-                'actions' => [
-                    'archive' => 'Archive Selected',
-                    'delete' => 'Delete Selected',
-                ],
+                'actions' => $actions,
                 'actionColButtonContent' => 'View Project',
                 'table' => [
                     'inputsName' => 'projects[]',

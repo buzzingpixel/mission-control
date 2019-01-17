@@ -64,6 +64,13 @@
                 </tr>
             </thead>
             <tbody class="Table__Body JS-Filterable__ItemsContainer">
+                {% if table.rows|length < 1 %}
+                    <tr class="Table__Row Table__Row--IsNoResultsRow">
+                        <td colspan="{{ cols }}" class="Table__Column Table__Column--IsFirst">
+                            No results found
+                        </td>
+                    </tr>
+                {% endif %}
                 {% for row in table.rows %}
                     <tr
                         class="Table__Row JS-TableSelects__SelectRow JS-Filterable__Items"
@@ -92,32 +99,31 @@
                     </tr>
                 {% endfor %}
             </tbody>
-            <tfoot class="Table__Footer">
-                <tr class="Table__FooterRow">
-                    <td
-                        colspan="{{ cols }}"
-                        class="Table__FooterCol"
-                    >
-                        <div class="fieldset Table__Fieldset">
-                            <select name="bulk_action" class="select select--inline Table__BulkSelect">
-                                <option value="">-- Select an Action --</option>
-                                {% for action, actionTitle in actions %}
-                                    <option value="{{ action }}">
-                                        {{ actionTitle|smartypants }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="fieldset Table__Fieldset">
-                            <input
-                                type="submit"
-                                class="button Table__Button"
-                                value="{{ submitText }}"
-                            >
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
+            {% if actions|length > 0 and table.rows|length > 0 %}
+                <tfoot class="Table__Footer">
+                    <tr class="Table__FooterRow">
+                        <td colspan="{{ cols }}" class="Table__FooterCol">
+                            <div class="fieldset Table__Fieldset">
+                                <select name="bulk_action" class="select select--inline Table__BulkSelect">
+                                    <option value="">-- Select an Action --</option>
+                                    {% for action, actionTitle in actions %}
+                                        <option value="{{ action }}">
+                                            {{ actionTitle|smartypants }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="fieldset Table__Fieldset">
+                                <input
+                                    type="submit"
+                                    class="button Table__Button"
+                                    value="{{ submitText }}"
+                                >
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            {% endif %}
         </table>
     </form>
 {% endblock %}
