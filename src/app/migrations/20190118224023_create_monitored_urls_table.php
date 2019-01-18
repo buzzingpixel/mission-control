@@ -9,16 +9,20 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateProjectsTable extends AbstractMigration
+class CreateMonitoredUrlsTable extends AbstractMigration
 {
     public function change()
     {
-        $this->table('projects')
+        $this->table('monitored_urls')
             ->addColumn('guid', 'string')
             ->addColumn('is_active', 'boolean', ['default' => '1'])
             ->addColumn('title', 'string')
             ->addColumn('slug', 'string')
-            ->addColumn('description', 'string')
+            ->addColumn('url', 'string')
+            ->addColumn('pending_error', 'boolean', ['default' => '0'])
+            ->addColumn('has_error', 'boolean', ['default' => '0'])
+            ->addColumn('checked_at', 'datetime')
+            ->addColumn('checked_at_time_zone', 'string')
             ->addColumn('added_at', 'datetime')
             ->addColumn('added_at_time_zone', 'string')
             ->create();
