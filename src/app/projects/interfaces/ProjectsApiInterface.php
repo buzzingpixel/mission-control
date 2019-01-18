@@ -36,7 +36,7 @@ interface ProjectsApiInterface
      * @param ProjectModelInterface $projectModel
      * @return mixed
      */
-    public function archiveProject(ProjectModelInterface $projectModel);
+    public function archiveProject(ProjectModelInterface $model);
 
     /**
      * Deletes a project

@@ -7,22 +7,13 @@ use src\app\projects\ProjectsApi;
 use corbomite\events\interfaces\EventInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 
-class ProjectAfterSaveEvent implements EventInterface
+class ProjectAfterArchiveEvent implements EventInterface
 {
-    private $wasNew;
     private $projectModel;
 
-    public function __construct(
-        ProjectModelInterface $projectModel,
-        bool $wasNew = false
-    ) {
-        $this->wasNew = $wasNew;
-        $this->projectModel = $projectModel;
-    }
-
-    public function wasNew(): bool
+    public function __construct(ProjectModelInterface $projectModel)
     {
-        return $this->wasNew;
+        $this->projectModel = $projectModel;
     }
 
     public function projectModel(): ProjectModelInterface
@@ -37,7 +28,7 @@ class ProjectAfterSaveEvent implements EventInterface
 
     public function name(): string
     {
-        return 'ProjectAfterSave';
+        return 'ProjectAfterArchive';
     }
 
     private $stop = false;

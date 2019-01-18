@@ -9,6 +9,7 @@ use src\app\datasupport\FetchDataParamsFactory;
 use src\app\projects\services\SaveProjectService;
 use src\app\datasupport\FetchDataParamsInterface;
 use src\app\projects\services\FetchProjectsService;
+use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\projects\exceptions\InvalidProjectModelException;
@@ -40,9 +41,11 @@ class ProjectsApi implements ProjectsApiInterface
         $this->di->getFromDefinition(SaveProjectService::class)->save($model);
     }
 
-    public function archiveProject(ProjectModelInterface $projectModel)
+    public function archiveProject(ProjectModelInterface $model)
     {
-        // TODO: Implement method call to a service
+        $this->di->getFromDefinition(ArchiveProjectService::class)->archive(
+            $model
+        );
     }
 
     public function deleteProject(ProjectModelInterface $projectModel)
