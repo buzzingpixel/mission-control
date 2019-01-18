@@ -49,6 +49,7 @@ class CreateProjectController
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('forms/StandardForm.twig', [
+                'metaTitle' => 'Create Project',
                 'breadCrumbs' => [
                     [
                         'href' => '/projects',

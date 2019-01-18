@@ -97,6 +97,7 @@ class ProjectsIndexController
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('forms/TableListForm.twig', [
+                'metaTitle' => $archivesPage ? 'Project Archives' : 'Projects',
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/projects',
