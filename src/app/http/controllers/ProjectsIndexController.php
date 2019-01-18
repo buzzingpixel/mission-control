@@ -137,6 +137,9 @@ class ProjectsIndexController
                                 'Description',
                                 'Added'
                             ],
+                            'widths' => [
+                                'Description' => '30%',
+                            ],
                             'rows' => $rows,
                         ],
                     ]

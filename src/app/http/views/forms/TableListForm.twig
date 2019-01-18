@@ -47,8 +47,14 @@
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
                     {% for heading in table.headings %}
+                        {% set width = table['widths'][heading] ?? null %}
                         {% set cols = cols + 1 %}
-                        <th class="Table__HeadingCol{% if loop.first %} Table__HeadingCol--IsFirst{% endif %}">
+                        <th
+                            class="Table__HeadingCol{% if loop.first %} Table__HeadingCol--IsFirst{% endif %}"
+                            {% if width %}
+                            width="{{ width }}"
+                            {% endif %}
+                        >
                             {{ heading|smartypants }}
                         </th>
                     {% endfor %}
