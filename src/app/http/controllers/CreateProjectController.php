@@ -48,7 +48,7 @@ class CreateProjectController
         }
 
         $response->getBody()->write(
-            $this->twigEnvironment->renderAndMinify('forms/StandardForm.twig', [
+            $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Create Project',
                 'breadCrumbs' => [
                     [
@@ -59,20 +59,25 @@ class CreateProjectController
                         'content' => 'Create'
                     ]
                 ],
-                'actionParam' => 'createProject',
-                'formTitle' => 'Create New Project',
-                'inputs' => [
+                'title' => 'Create New Project',
+                'includes' => [
                     [
-                        'template' => 'Text',
-                        'type' => 'text',
-                        'name' => 'title',
-                        'label' => 'Title',
-                    ],
+                        'template' => 'forms/StandardForm.twig',
+                        'actionParam' => 'createProject',
+                        'inputs' => [
+                            [
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'title',
+                                'label' => 'Title',
+                            ],
 
-                    [
-                        'template' => 'TextArea',
-                        'name' => 'description',
-                        'label' => 'Description',
+                            [
+                                'template' => 'TextArea',
+                                'name' => 'description',
+                                'label' => 'Description',
+                            ]
+                        ],
                     ]
                 ],
             ])

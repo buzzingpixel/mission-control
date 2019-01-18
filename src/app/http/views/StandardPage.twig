@@ -3,6 +3,7 @@
 {% set title = title|default('') %}
 {% set subTitle = subTitle|default('') %}
 {% set pageControlButtons = pageControlButtons|default([]) %}
+{% set includes = includes|default([]) %}
 
 {% block content %}
     <div class="StandardPage">
@@ -24,6 +25,11 @@
                         </a>
                     {% endfor %}
                 </div>
+            </div>
+            <div class="StandardPage__InnerLayoutsAndComponents">
+                {% for params in includes %}
+                    {% include params['template'] with params only %}
+                {% endfor %}
             </div>
         </div>
     </div>

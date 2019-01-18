@@ -1,5 +1,3 @@
-{% extends 'layouts/LayoutMaster.twig' %}
-
 {% set formAction = formAction|default(false) %}
 {% set actionParam = actionParam|default(false) %}
 {% set formTitle = formTitle|default(false) %}
@@ -37,7 +35,7 @@
             <input type="hidden" name="action" value="{{ actionParam }}">
         {% endif %}
         {% if formTitle %}
-            <h1 class="StandardForm__Title">{{ formTitle|smartypants }}</h1>
+            <h2 class="StandardForm__Title">{{ formTitle|smartypants }}</h2>
         {% endif %}
         {% if formSubTitle %}
             <h2 class="StandardForm__SubTitle heading heading--level-6">

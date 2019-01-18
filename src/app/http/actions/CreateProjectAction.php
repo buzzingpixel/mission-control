@@ -98,7 +98,7 @@ class CreateProjectAction
 
         $response = $this->response->withHeader(
             'Location',
-            '/projects/' . $model->slug()
+            '/projects/view' . $model->slug()
         );
 
         $response = $response->withStatus(303);

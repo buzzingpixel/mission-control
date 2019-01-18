@@ -48,17 +48,17 @@ class ProjectsIndexController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        $tableControlButtons = [];
+        $pageControlButtons = [];
 
         if (! $archivesPage) {
-            $tableControlButtons[] = [
+            $pageControlButtons[] = [
                 'href' => '/projects/archives',
                 'content' => 'View Archives',
             ];
         }
 
         if ($isAdmin) {
-            $tableControlButtons[] = [
+            $pageControlButtons[] = [
                 'href' => '/projects/create',
                 'content' => 'Create Project',
             ];
@@ -96,7 +96,7 @@ class ProjectsIndexController
         }
 
         $response->getBody()->write(
-            $this->twigEnvironment->renderAndMinify('forms/TableListForm.twig', [
+            $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => $archivesPage ? 'Project Archives' : 'Projects',
                 'breadCrumbs' => $archivesPage ? [
                     [
@@ -107,20 +107,39 @@ class ProjectsIndexController
                         'content' => 'Viewing Archives'
                     ]
                 ] : [],
-                'actionParam' => 'projectListActions',
                 'title' => $archivesPage ? 'Archived Projects' : 'Projects',
-                'tableControlButtons' => $tableControlButtons,
-                'actions' => $actions,
-                'actionColButtonContent' => 'View Project',
-                'table' => [
-                    'inputsName' => 'projects[]',
-                    'headings' => [
-                        'Title',
-                        'Slug',
-                        'Description',
-                        'Added'
-                    ],
-                    'rows' => $rows,
+                'pageControlButtons' => $pageControlButtons,
+                'includes' => [
+                    [
+                        'template' => 'forms/TableListForm.twig',
+                        'actionParam' => 'projectListActions',
+                        'actions' => $actions,
+                        'actionColButtonContent' => 'View&nbsp;Project',
+                        'inputs' => [
+                            [
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'title',
+                                'label' => 'Title',
+                            ],
+
+                            [
+                                'template' => 'TextArea',
+                                'name' => 'description',
+                                'label' => 'Description',
+                            ]
+                        ],
+                        'table' => [
+                            'inputsName' => 'projects[]',
+                            'headings' => [
+                                'Title',
+                                'Slug',
+                                'Description',
+                                'Added'
+                            ],
+                            'rows' => $rows,
+                        ],
+                    ]
                 ],
             ])
         );

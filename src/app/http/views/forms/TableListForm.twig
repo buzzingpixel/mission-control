@@ -1,8 +1,6 @@
-{% extends 'layouts/LayoutMaster.twig' %}
-
 {% set formAction = formAction|default(false) %}
 {% set actionParam = actionParam|default(false) %}
-{% set title = title|default('') %}
+{% set formTitle = formTitle|default('') %}
 {% set table = table|default([]) %}
 {% set submitText = submitText|default('Submit') %}
 {% set actions = actions|default([]) %}
@@ -22,19 +20,21 @@
         {% if actionParam %}
             <input type="hidden" name="action" value="{{ actionParam }}">
         {% endif %}
-        <div class="TableList__Controls">
-            <h1 class="TableList__Title">{{ title|smartypants }}</h1>
-            <div class="TableList__ControlsButtons">
-                {% for button in tableControlButtons %}
-                    <a
-                        href="{{ button.href }}"
-                        class="button TableList__ControlsButton"
-                    >
-                        {{ button.content|smartypants }}
-                    </a>
-                {% endfor %}
+        {% if formTitle or tableControlButtons|length %}
+            <div class="TableList__Controls">
+                <h2 class="TableList__Title">{{ formTitle|smartypants }}</h2>
+                <div class="TableList__ControlsButtons">
+                    {% for button in tableControlButtons %}
+                        <a
+                            href="{{ button.href }}"
+                            class="button TableList__ControlsButton"
+                        >
+                            {{ button.content|smartypants }}
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endif %}
         <div class="TableList__Filter">
             <input
                 type="search"
