@@ -1,0 +1,30 @@
+{% extends 'layouts/LayoutMaster.twig' %}
+
+{% set title = title|default('') %}
+{% set subTitle = subTitle|default('') %}
+{% set pageControlButtons = pageControlButtons|default([]) %}
+
+{% block content %}
+    <div class="StandardPage">
+        <div class="StandardPage__Inner">
+            <div class="StandardPage__Controls">
+                <h1 class="StandardPage__Title">
+                    {{ title|smartypants }}
+                    {% if subTitle %}
+                        <span class="StandardPage__TitleSub">{{ subTitle|smartypants }}</span>
+                    {% endif %}
+                </h1>
+                <div class="StandardPage__ControlsButtons">
+                    {% for button in pageControlButtons %}
+                        <a
+                            href="{{ button.href }}"
+                            class="button StandardPage__ControlsButton"
+                        >
+                            {{ button.content|smartypants }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
