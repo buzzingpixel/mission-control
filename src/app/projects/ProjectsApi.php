@@ -8,11 +8,13 @@ use src\app\projects\models\ProjectModel;
 use src\app\datasupport\FetchDataParamsFactory;
 use src\app\projects\services\SaveProjectService;
 use src\app\datasupport\FetchDataParamsInterface;
+use src\app\projects\services\DeleteProjectService;
 use src\app\projects\services\FetchProjectsService;
 use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\projects\exceptions\InvalidProjectModelException;
+use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
 class ProjectsApi implements ProjectsApiInterface
 {
@@ -35,22 +37,27 @@ class ProjectsApi implements ProjectsApiInterface
 
     /**
      * @throws InvalidProjectModelException
+     * @throws ProjectNameNotUniqueException
      */
     public function saveProject(ProjectModelInterface $model)
     {
-        $this->di->getFromDefinition(SaveProjectService::class)->save($model);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(SaveProjectService::class);
+        $service->save($model);
     }
 
     public function archiveProject(ProjectModelInterface $model)
     {
-        $this->di->getFromDefinition(ArchiveProjectService::class)->archive(
-            $model
-        );
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(ArchiveProjectService::class);
+        $service->archive($model);
     }
 
-    public function deleteProject(ProjectModelInterface $projectModel)
+    public function deleteProject(ProjectModelInterface $model)
     {
-        // TODO: Implement method call to a service
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(DeleteProjectService::class);
+        $service->delete($model);
     }
 
     public function fetchProject(FetchDataParamsInterface $params): ?ProjectModelInterface
@@ -63,8 +70,8 @@ class ProjectsApi implements ProjectsApiInterface
      */
     public function fetchProjects(FetchDataParamsInterface $params): array
     {
-        return $this->di->getFromDefinition(FetchProjectsService::class)->fetch(
-            $params
-        );
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(FetchProjectsService::class);
+        return $service->fetch($params);
     }
 }

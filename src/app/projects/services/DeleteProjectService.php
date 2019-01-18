@@ -9,11 +9,11 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
 use src\app\datasupport\BuildQueryInterface;
 use src\app\datasupport\FetchDataParamsFactory;
-use src\app\projects\events\ProjectAfterArchiveEvent;
-use src\app\projects\events\ProjectBeforeArchiveEvent;
+use src\app\projects\events\ProjectAfterDeleteEvent;
+use src\app\projects\events\ProjectBeforeDeleteEvent;
 use src\app\projects\interfaces\ProjectModelInterface;
 
-class ArchiveProjectService
+class DeleteProjectService
 {
     private $buildQuery;
     private $ormFactory;
@@ -34,12 +34,12 @@ class ArchiveProjectService
 
     public function __invoke(ProjectModelInterface $model): void
     {
-        $this->archive($model);
+        $this->delete($model);
     }
 
-    public function archive(ProjectModelInterface $model): void
+    public function delete(ProjectModelInterface $model): void
     {
-        $beforeEvent = new ProjectBeforeArchiveEvent($model);
+        $beforeEvent = new ProjectBeforeDeleteEvent($model);
 
         $this->eventDispatcher->dispatch(
             $beforeEvent->provider(),
@@ -47,13 +47,9 @@ class ArchiveProjectService
             $beforeEvent
         );
 
-        $record = $this->fetchRecord($model);
+        $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $record->is_active = 0;
-
-        $this->ormFactory->makeOrm()->persist($record);
-
-        $afterEvent = new ProjectAfterArchiveEvent($model);
+        $afterEvent = new ProjectAfterDeleteEvent($model);
 
         $this->eventDispatcher->dispatch(
             $afterEvent->provider(),

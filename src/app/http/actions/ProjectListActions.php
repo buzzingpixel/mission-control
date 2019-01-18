@@ -87,9 +87,11 @@ class ProjectListActions
 
         $flashDataModel->dataItem('type', 'Success');
 
+        $singularPlural = \count($projects) > 1 ? 'Projects' : 'Project';
+
         $flashDataModel->dataItem(
             'content',
-            'Projects "' . $verb . '" successfully'
+            $singularPlural . ' ' . $verb . ' successfully'
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */

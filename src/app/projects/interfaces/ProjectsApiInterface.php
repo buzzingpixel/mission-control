@@ -43,7 +43,7 @@ interface ProjectsApiInterface
      * @param ProjectModelInterface $projectModel
      * @return mixed
      */
-    public function deleteProject(ProjectModelInterface $projectModel);
+    public function deleteProject(ProjectModelInterface $model);
 
     /**
      * Fetches project based on params
