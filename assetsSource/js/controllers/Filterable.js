@@ -52,6 +52,11 @@ function runFilterable(F) {
                     'activeSearchString',
                     e.currentTarget.value.toLowerCase()
                 );
+            },
+            'keydown .JS-Filterable__FilterInput': function(e) {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                }
             }
         },
 
