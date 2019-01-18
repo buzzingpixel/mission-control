@@ -7,15 +7,15 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
-namespace src\app\projects\exceptions;
+namespace src\app\monitoredurls\exceptions;
 
 use Exception;
 use Throwable;
 
-class ProjectNameNotUniqueException extends Exception
+class InvalidMonitoredUrlModelException extends Exception
 {
     public function __construct(
-        string $message = 'The project name is not unique',
+        string $message = 'The monitored url model is not valid',
         int $code = 500,
         Throwable $previous = null
     ) {

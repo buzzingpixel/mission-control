@@ -25,7 +25,6 @@ interface ProjectsApiInterface
     /**
      * Saves a project (creating if necessary)
      * @param ProjectModelInterface $projectModel
-     * @return mixed
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
@@ -61,6 +60,7 @@ interface ProjectsApiInterface
 
     /**
      * Fetches projects based on param
+     * @param FetchDataParamsInterface $params
      * @return ProjectModelInterface[]
      */
     public function fetchProjects(FetchDataParamsInterface $params): array;
