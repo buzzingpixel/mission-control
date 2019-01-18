@@ -10,6 +10,7 @@ use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use corbomite\requestdatastore\DataStore;
 use buzzingpixel\corbomitemailer\EmailApi;
+use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
@@ -30,6 +31,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(FlashDataApi::class)
+        );
+    },
+    ProjectListActions::class => function () {
+        return new ProjectListActions(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ProjectsApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
         );
     },
     ResetPasswordAction::class => function () {

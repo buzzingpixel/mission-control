@@ -6,46 +6,47 @@ namespace src\app\http\actions;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\exceptions\Http500Exception;
 use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
-use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
-class CreateProjectAction
+class ProjectListActions
 {
     private $userApi;
     private $response;
-    private $dataStore;
     private $projectsApi;
     private $flashDataApi;
     private $requestHelper;
 
+    private $projectGuids = [];
+
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
-        DataStoreInterface $dataStore,
         ProjectsApiInterface $projectsApi,
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
-        $this->dataStore = $dataStore;
         $this->projectsApi = $projectsApi;
         $this->flashDataApi = $flashDataApi;
         $this->requestHelper = $requestHelper;
+
+        $this->projectGuids = $this->requestHelper->post('projects');
     }
 
     /**
      * @throws Http404Exception
+     * @throws Http500Exception
      */
     public function __invoke(): ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'Create Project Action requires post request'
+                'Project List Actions requires post request'
             );
         }
 
@@ -55,31 +56,29 @@ class CreateProjectAction
             throw new Http404Exception();
         }
 
-        $title = trim($this->requestHelper->post('title'));
-        $description = trim($this->requestHelper->post('description'));
-
-        $store = [
-            'inputErrors' => [],
-            'inputValues' => compact('title', 'description'),
-        ];
-
-        if (! $title) {
-            $store['inputErrors']['title'][] = 'This field is required';
+        if (! $this->projectGuids) {
+            throw new Http500Exception('No projects specified');
         }
 
-        if ($store['inputErrors']) {
-            $this->dataStore->storeItem('FormSubmission', $store);
-            return null;
-        }
+        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams->addWhere('guid', $this->projectGuids);
+        $projects = $this->projectsApi->fetchProjects($fetchParams);
 
-        $model = $this->projectsApi->createProjectModel($store['inputValues']);
+        $verb = '';
 
-        try {
-            $this->projectsApi->saveProject($model);
-        } catch (ProjectNameNotUniqueException $e) {
-            $store['inputErrors']['title'][] = 'Title must be unique';
-            $this->dataStore->storeItem('FormSubmission', $store);
-            return null;
+        foreach ($projects as $project) {
+            switch ($this->requestHelper->post('bulk_action')) {
+                case 'archive':
+                    $verb = 'archived';
+                    $this->projectsApi->archiveProject($project);
+                    break;
+                case 'delete':
+                    $verb = 'deleted';
+                    $this->projectsApi->deleteProject($project);
+                    break;
+                default:
+                    throw new Http500Exception('Invalid bulk action');
+            }
         }
 
         $flashDataModel = $this->flashDataApi->makeFlashDataModel([
@@ -90,16 +89,13 @@ class CreateProjectAction
 
         $flashDataModel->dataItem(
             'content',
-            'Project "' . $model->title() . '" created successfully'
+            'Projects "' . $verb . '" successfully'
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->flashDataApi->setFlashData($flashDataModel);
 
-        $response = $this->response->withHeader(
-            'Location',
-            '/projects/' . $model->slug()
-        );
+        $response = $this->response->withHeader('Location', '/projects');
 
         $response = $response->withStatus(303);
 
