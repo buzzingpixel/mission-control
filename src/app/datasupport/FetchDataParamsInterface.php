@@ -76,8 +76,10 @@ interface FetchDataParamsInterface
     /**
      * Adds a where param
      * @param string $col
-     * @param mixed $val
-     * @param string $operator
+     * @param string|int|float|null|array $val Array should produce WHERE col IN query
+     * @param string $operator Any MySQL comparison operator. If val is array,
+     *                         builder should convert != into NOT IN, otherwise
+     *                         do IN
      * @param bool $or
      * @return mixed
      */

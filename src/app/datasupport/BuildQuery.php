@@ -58,6 +58,13 @@ class BuildQuery implements BuildQueryInterface
                     $query->catWhere(' ' . $val['operator'] . ' ');
                 }
 
+                if (\is_array($val['val'])) {
+                    $val['comparison'] = $val['comparison'] === '!=' ||
+                    $val['comparison'] === 'NOT IN' ?
+                        'NOT IN' :
+                        'IN';
+                }
+
                 $query->catWhere(
                     $val['col'] . ' ' . $val['comparison'] . ' ',
                     $val['val']
