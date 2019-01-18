@@ -6,10 +6,13 @@ namespace src\app\projects\services;
 use Cocur\Slugify\Slugify;
 use Ramsey\Uuid\UuidFactory;
 use src\app\data\Project\Project;
+use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
 use src\app\datasupport\BuildQueryInterface;
 use src\app\datasupport\FetchDataParamsFactory;
+use src\app\projects\events\ProjectAfterSaveEvent;
+use src\app\projects\events\ProjectBeforeSaveEvent;
 use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\projects\exceptions\InvalidProjectModelException;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
@@ -20,6 +23,7 @@ class SaveProjectService
     private $ormFactory;
     private $buildQuery;
     private $uuidFactory;
+    private $eventDispatcher;
     private $fetchDataParamsFactory;
 
     public function __construct(
@@ -27,12 +31,14 @@ class SaveProjectService
         OrmFactory $ormFactory,
         UuidFactory $uuidFactory,
         BuildQueryInterface $buildQuery,
+        EventDispatcher $eventDispatcher,
         FetchDataParamsFactory $fetchDataParamsFactory
     ) {
         $this->slugify = $slugify;
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
         $this->uuidFactory = $uuidFactory;
+        $this->eventDispatcher = $eventDispatcher;
         $this->fetchDataParamsFactory = $fetchDataParamsFactory;
     }
 
@@ -70,11 +76,44 @@ class SaveProjectService
         }
 
         if (! $model->guid()) {
+            $beforeEvent = new ProjectBeforeSaveEvent($model, true);
+
+            $this->eventDispatcher->dispatch(
+                $beforeEvent->provider(),
+                $beforeEvent->name(),
+                $beforeEvent
+            );
+
             $this->saveNewProject($model);
+
+            $afterEvent = new ProjectAfterSaveEvent($model, true);
+
+            $this->eventDispatcher->dispatch(
+                $afterEvent->provider(),
+                $afterEvent->name(),
+                $afterEvent
+            );
+
             return;
         }
 
+        $beforeEvent = new ProjectBeforeSaveEvent($model);
+
+        $this->eventDispatcher->dispatch(
+            $beforeEvent->provider(),
+            $beforeEvent->name(),
+            $beforeEvent
+        );
+
         $this->saveExistingProject($model);
+
+        $afterEvent = new ProjectAfterSaveEvent($model);
+
+        $this->eventDispatcher->dispatch(
+            $afterEvent->provider(),
+            $afterEvent->name(),
+            $afterEvent
+        );
     }
 
     private function saveNewProject(ProjectModelInterface $model)

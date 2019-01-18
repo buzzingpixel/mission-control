@@ -6,6 +6,7 @@ use Cocur\Slugify\Slugify;
 use Ramsey\Uuid\UuidFactory;
 use src\app\projects\ProjectsApi;
 use src\app\datasupport\BuildQuery;
+use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use src\app\datasupport\FetchDataParamsFactory;
 use src\app\projects\services\SaveProjectService;
@@ -21,6 +22,7 @@ return [
             new OrmFactory(),
             new UuidFactory(),
             Di::get(BuildQuery::class),
+            Di::get(EventDispatcher::class),
             new FetchDataParamsFactory()
         );
     },

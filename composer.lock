@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c124721cee7e4ffc9c362d50c3fa615",
+    "content-hash": "7c006ec23239448ec939d5381079ce61",
     "packages": [
         {
             "name": "atlas/cli",
@@ -592,6 +592,52 @@
             "description": "Corbomite DI",
             "homepage": "https://buzzingpixel.com/",
             "time": "2019-01-11T22:13:36+00:00"
+        },
+        {
+            "name": "buzzingpixel/corbomite-events",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/corbomite-events.git",
+                "reference": "71531aa67a64d615e6626506df1580de3468d428"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-events/zipball/71531aa67a64d615e6626506df1580de3468d428",
+                "reference": "71531aa67a64d615e6626506df1580de3468d428",
+                "shasum": ""
+            },
+            "require": {
+                "buzzingpixel/corbomite-config-collector": "^1.0",
+                "buzzingpixel/corbomite-di": "^1.0",
+                "buzzingpixel/request-data-store": "^1.0.1",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7.5",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "extra": {
+                "diConfigFilePath": "src/diConfig.php"
+            },
+            "autoload": {
+                "psr-4": {
+                    "corbomite\\events\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "Corbomite Events",
+            "time": "2019-01-18T06:15:09+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-flash-data",
