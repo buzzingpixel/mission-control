@@ -13,12 +13,17 @@ use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\ForgotPasswordController;
+use src\app\http\controllers\MonitoredUrlIndexController;
 
+// Projects
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects[/{archives:archives}]', ProjectsIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects/create', CreateProjectController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects/view/{slug}', ViewProjectController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/projects/edit/{slug}', EditProjectController::class);
+
+// Monitored URLS
+$routeCollector->addRoute(['GET', 'POST'], '/monitored-urls[/{archives:archives}]', MonitoredUrlIndexController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

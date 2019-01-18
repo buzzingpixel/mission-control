@@ -9,13 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
-use src\app\projects\interfaces\ProjectsApiInterface;
 
-class ProjectsIndexController
+class MonitoredUrlIndexController
 {
     private $userApi;
     private $response;
-    private $projectsApi;
     private $twigEnvironment;
     private $requireLoginService;
 
@@ -23,12 +21,10 @@ class ProjectsIndexController
         UserApiInterface $userApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
-        ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
-        $this->projectsApi = $projectsApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
@@ -52,34 +48,19 @@ class ProjectsIndexController
 
         if (! $archivesPage) {
             $pageControlButtons[] = [
-                'href' => '/projects/archives',
+                'href' => '/monitored-urls/archives',
                 'content' => 'View Archives',
             ];
         }
 
         if ($isAdmin) {
             $pageControlButtons[] = [
-                'href' => '/projects/create',
-                'content' => 'Create Project',
+                'href' => '/monitored-urls/create',
+                'content' => 'Create Monitored URL',
             ];
         }
 
-        $params = $this->projectsApi->createFetchDataParams();
-        $params->addOrder('title', 'asc');
-        $params->addWhere('is_active', $archivesPage ? '0' : '1');
         $rows = [];
-        foreach ($this->projectsApi->fetchProjects($params) as $model) {
-            $rows[] = [
-                'inputValue' => $model->guid(),
-                'actionButtonLink' => '/projects/view/' . $model->slug(),
-                'cols' => [
-                    'Title' => $model->title(),
-                    'Slug' => $model->slug(),
-                    'Description' => $model->description(),
-                    'Added' => $model->addedAt()->format('n/j/Y'),
-                ],
-            ];
-        }
 
         $actions = [];
 
@@ -97,34 +78,35 @@ class ProjectsIndexController
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
-                'metaTitle' => $archivesPage ? 'Project Archives' : 'Projects',
+                'metaTitle' => $archivesPage ?
+                    'Monitored URL Archives' :
+                    'Monitored URLs',
                 'breadCrumbs' => $archivesPage ? [
                     [
-                        'href' => '/projects',
-                        'content' => 'Projects'
+                        'href' => '/monitored-urls',
+                        'content' => 'Monitored URLs'
                     ],
                     [
                         'content' => 'Viewing Archives'
                     ]
                 ] : [],
-                'title' => $archivesPage ? 'Archived Projects' : 'Projects',
+                'title' => $archivesPage ?
+                    'Monitored URL Archives' :
+                    'Monitored URLs',
                 'pageControlButtons' => $pageControlButtons,
                 'includes' => [
                     [
                         'template' => 'forms/TableListForm.twig',
-                        'actionParam' => 'projectListActions',
+                        'actionParam' => 'monitoredUrlListActions',
                         'actions' => $actions,
-                        'actionColButtonContent' => 'View&nbsp;Project',
+                        'actionColButtonContent' => 'View&nbsp;URL',
                         'table' => [
-                            'inputsName' => 'projects[]',
+                            'inputsName' => 'monitored_urls[]',
                             'headings' => [
                                 'Title',
-                                'Slug',
-                                'Description',
-                                'Added'
-                            ],
-                            'widths' => [
-                                'Description' => '30%',
+                                'URL',
+                                'Status',
+                                'Checked At'
                             ],
                             'rows' => $rows,
                         ],
