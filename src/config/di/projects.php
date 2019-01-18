@@ -13,6 +13,7 @@ use src\app\projects\services\SaveProjectService;
 use src\app\projects\services\DeleteProjectService;
 use src\app\projects\services\FetchProjectsService;
 use src\app\projects\services\ArchiveProjectService;
+use src\app\projects\services\UnArchiveProjectService;
 
 return [
     ProjectsApi::class => function () {
@@ -44,6 +45,14 @@ return [
             new Slugify(),
             new OrmFactory(),
             new UuidFactory(),
+            Di::get(BuildQuery::class),
+            Di::get(EventDispatcher::class),
+            new FetchDataParamsFactory()
+        );
+    },
+    UnArchiveProjectService::class => function () {
+        return new UnArchiveProjectService(
+            new OrmFactory(),
             Di::get(BuildQuery::class),
             Di::get(EventDispatcher::class),
             new FetchDataParamsFactory()

@@ -13,6 +13,7 @@ use src\app\projects\services\FetchProjectsService;
 use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
+use src\app\projects\services\UnArchiveProjectService;
 use src\app\projects\exceptions\InvalidProjectModelException;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
@@ -51,6 +52,13 @@ class ProjectsApi implements ProjectsApiInterface
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(ArchiveProjectService::class);
         $service->archive($model);
+    }
+
+    public function unArchiveProject(ProjectModelInterface $model)
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(UnArchiveProjectService::class);
+        $service->unArchive($model);
     }
 
     public function deleteProject(ProjectModelInterface $model)

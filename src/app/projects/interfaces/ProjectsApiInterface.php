@@ -39,6 +39,13 @@ interface ProjectsApiInterface
     public function archiveProject(ProjectModelInterface $model);
 
     /**
+     * Un-archives a project
+     * @param ProjectModelInterface $projectModel
+     * @return mixed
+     */
+    public function unArchiveProject(ProjectModelInterface $model);
+
+    /**
      * Deletes a project
      * @param ProjectModelInterface $projectModel
      * @return mixed

@@ -76,6 +76,10 @@ class ProjectListActions
                     $verb = 'deleted';
                     $this->projectsApi->deleteProject($project);
                     break;
+                case 'unArchive':
+                    $verb = 'un-archived';
+                    $this->projectsApi->unArchiveProject($project);
+                    break;
                 default:
                     throw new Http500Exception('Invalid bulk action');
             }
