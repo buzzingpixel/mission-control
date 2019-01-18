@@ -7,6 +7,7 @@ use Zend\Diactoros\Response;
 use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
 use src\app\http\services\RequireLoginService;
+use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\PasswordResetController;
@@ -20,6 +21,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    EditProjectController::class => function () {
+        return new EditProjectController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },

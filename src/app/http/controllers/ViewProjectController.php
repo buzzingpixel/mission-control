@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use corbomite\http\exceptions\Http404Exception;
 use Throwable;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 
