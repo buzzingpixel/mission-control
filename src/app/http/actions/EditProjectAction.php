@@ -13,7 +13,7 @@ use src\app\projects\interfaces\ProjectsApiInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
-class CreateProjectAction
+class EditProjectAction
 {
     private $userApi;
     private $response;
@@ -45,13 +45,21 @@ class CreateProjectAction
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'Create Project Action requires post request'
+                'Edit Project Action requires post request'
             );
         }
 
         $user = $this->userApi->fetchCurrentUser();
 
         if (! $user || ! $user->userDataItem('admin')) {
+            throw new Http404Exception();
+        }
+
+        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams->addWhere('guid', $this->requestHelper->post('guid'));
+        $model = $this->projectsApi->fetchProject($fetchParams);
+
+        if (! $model) {
             throw new Http404Exception();
         }
 
@@ -72,7 +80,8 @@ class CreateProjectAction
             return null;
         }
 
-        $model = $this->projectsApi->createProjectModel($store['inputValues']);
+        $model->title($title);
+        $model->description($description);
 
         try {
             $this->projectsApi->saveProject($model);
@@ -90,7 +99,7 @@ class CreateProjectAction
 
         $flashDataModel->dataItem(
             'content',
-            'Project "' . $model->title() . '" created successfully'
+            'Project "' . $model->title() . '" saved successfully'
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */
