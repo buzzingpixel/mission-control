@@ -83,8 +83,17 @@
                         data-selected-class="Table__Row--IsSelected"
                     >
                         {% for col in table.headings %}
-                            <td class="Table__Column{% if loop.first %} Table__Column--IsFirst{% endif %}">
-                                {{ row.cols[col]|smartypants }}
+                            {% set styled = row['colorStyledCols'][col] ?? false %}
+                            <td
+                                class="Table__Column{% if loop.first %} Table__Column--IsFirst{% endif %}"
+                            >
+                                {% if styled %}
+                                <span class="StyledTag StyledTag--{{ styled }}">
+                                {% endif %}
+                                    {{ row.cols[col]|smartypants }}
+                                {% if styled %}
+                                </span>
+                                {% endif %}
                             </td>
                         {% endfor %}
                         {% if actionColButtonContent %}

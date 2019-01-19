@@ -79,8 +79,13 @@ class MonitoredUrlIndexController
                     'URL' => $model->url(),
                     'Status' => $model->hasError() ? 'Down' :
                         $model->pendingError() ? 'Pending Down' :
-                        'Up',
+                            'Up',
                     'Checked At' => $model->addedAt()->format('n/j/Y'),
+                ],
+                'colorStyledCols' => [
+                    'Status' => $model->hasError() ? 'Error' :
+                        $model->pendingError() ? 'Caution' :
+                            'Good',
                 ],
             ];
         }
@@ -122,7 +127,7 @@ class MonitoredUrlIndexController
                         'template' => 'forms/TableListForm.twig',
                         'actionParam' => 'monitoredUrlListActions',
                         'actions' => $actions,
-                        'actionColButtonContent' => 'View&nbsp;URL',
+                        'actionColButtonContent' => 'View&nbsp;URL&nbsp;Details',
                         'table' => [
                             'inputsName' => 'monitored_urls[]',
                             'headings' => [
