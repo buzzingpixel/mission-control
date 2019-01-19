@@ -9,23 +9,27 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 
 class MonitoredUrlIndexController
 {
     private $userApi;
     private $response;
     private $twigEnvironment;
+    private $monitoredUrlsApi;
     private $requireLoginService;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
-        RequireLoginService $requireLoginService
+        RequireLoginService $requireLoginService,
+        MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
         $this->twigEnvironment = $twigEnvironment;
+        $this->monitoredUrlsApi = $monitoredUrlsApi;
         $this->requireLoginService = $requireLoginService;
     }
 
@@ -60,7 +64,26 @@ class MonitoredUrlIndexController
             ];
         }
 
+        $params = $this->monitoredUrlsApi->createFetchDataParams();
+        $params->addOrder('title', 'asc');
+        $params->addWhere('is_active', $archivesPage ? '0' : '1');
+
         $rows = [];
+
+        foreach ($this->monitoredUrlsApi->fetchAll($params) as $model) {
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/monitored-urls/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                    'URL' => $model->url(),
+                    'Status' => $model->hasError() ? 'Down' :
+                        $model->pendingError() ? 'Pending Down' :
+                        'Up',
+                    'Checked At' => $model->addedAt()->format('n/j/Y'),
+                ],
+            ];
+        }
 
         $actions = [];
 

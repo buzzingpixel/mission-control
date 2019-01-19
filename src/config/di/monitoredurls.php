@@ -10,10 +10,14 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\datasupport\FetchDataParamsFactory;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
+use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 
 return [
     MonitoredUrlsApi::class => function () {
         return new MonitoredUrlsApi(new Di());
+    },
+    FetchMonitoredUrlsService::class => function () {
+        return new FetchMonitoredUrlsService(Di::get(BuildQuery::class));
     },
     SaveMonitoredUrlService::class => function () {
         return new SaveMonitoredUrlService(

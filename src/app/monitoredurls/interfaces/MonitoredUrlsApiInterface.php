@@ -54,7 +54,9 @@ interface MonitoredUrlsApiInterface
      * @param FetchDataParamsInterface $params
      * @return MonitoredUrlModelInterface|null
      */
-    public function fetchOne(FetchDataParamsInterface $params): ?MonitoredUrlModelInterface;
+    public function fetchOne(
+        FetchDataParamsInterface $params
+    ): ?MonitoredUrlModelInterface;
 
     /**
      * Fetches all Monitored URL models based on params

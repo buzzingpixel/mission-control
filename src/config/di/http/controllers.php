@@ -6,6 +6,7 @@ use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
+use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
@@ -56,7 +57,8 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
-            Di::get(RequireLoginService::class)
+            Di::get(RequireLoginService::class),
+            Di::get(MonitoredUrlsApi::class)
         );
     },
     PasswordResetController::class => function () {
