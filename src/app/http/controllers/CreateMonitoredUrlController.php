@@ -83,7 +83,7 @@ class CreateMonitoredUrlController
                             ],
                             [
                                 'template' => 'Select',
-                                'name' => 'project',
+                                'name' => 'project_guid',
                                 'label' => 'Project',
                                 'options' => $this->projectsApi->fetchAsSelectArray(),
                             ]

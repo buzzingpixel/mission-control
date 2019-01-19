@@ -5,6 +5,7 @@ namespace src\app\monitoredurls\interfaces;
 
 use src\app\datasupport\FetchDataParamsInterface;
 use src\app\monitoredurls\exceptions\InvalidMonitoredUrlModelException;
+use src\app\monitoredurls\exceptions\MonitoredUrlNameNotUniqueException;
 
 interface MonitoredUrlsApiInterface
 {
@@ -25,6 +26,7 @@ interface MonitoredUrlsApiInterface
      * Saves a monitored URL
      * @param MonitoredUrlModelInterface $model
      * @throws InvalidMonitoredUrlModelException
+     * @throws MonitoredUrlNameNotUniqueException
      */
     public function save(MonitoredUrlModelInterface $model);
 

@@ -72,4 +72,11 @@ interface MonitoredUrlModelInterface
      * @return DateTime
      */
     public function addedAt(?DateTime $val = null): DateTime;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set.
+     * @param string|null $val
+     * @return string
+     */
+    public function projectGuid(?string $val = null): string;
 }

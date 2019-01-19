@@ -6,6 +6,7 @@ use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\ResetPasswordAction;
+use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
@@ -14,5 +15,6 @@ return [
     'createProject' => ['class' => CreateProjectAction::class],
     'resetPassword' => ['class' => ResetPasswordAction::class],
     'projectListActions' => ['class' => ProjectListActions::class],
+    'createMonitoredUrl' => ['class' => CreateMonitoredUrlAction::class],
     'sendPasswordResetEmail' => ['class' => SendPasswordResetEmailAction::class],
 ];

@@ -15,7 +15,9 @@
             <option value="">-- select an option --</option>
             {% endif %}
             {% for val, option in options %}
-                <option value="{{ val }}">{{ option }}</option>
+                <option value="{{ val }}"{% if value == val %} selected{% endif %}>
+                    {{ option }}
+                </option>
             {% endfor %}
         </select>
     {% endblock %}

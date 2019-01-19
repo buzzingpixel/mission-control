@@ -77,4 +77,11 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
     {
         return $this->addedAt = $val !== null ? $val : $this->addedAt;
     }
+
+    private $projectGuid;
+
+    public function projectGuid(?string $val = null): string
+    {
+        return $this->projectGuid = $val !== null ? $val : $this->projectGuid;
+    }
 }
