@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
+use DateTimeZone;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -71,6 +72,9 @@ class ProjectsIndexController
         $rows = [];
 
         foreach ($this->projectsApi->fetchAll($params) as $model) {
+            $model->addedAt()->setTimezone(new DateTimeZone(
+                date_default_timezone_get()
+            ));
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/projects/view/' . $model->slug(),

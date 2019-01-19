@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
+use DateTimeZone;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -71,6 +72,12 @@ class MonitoredUrlIndexController
         $rows = [];
 
         foreach ($this->monitoredUrlsApi->fetchAll($params) as $model) {
+            $model->checkedAt()->setTimezone(new DateTimeZone(
+                date_default_timezone_get()
+            ));
+            $model->addedAt()->setTimezone(new DateTimeZone(
+                date_default_timezone_get()
+            ));
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/monitored-urls/view/' . $model->slug(),
@@ -80,7 +87,7 @@ class MonitoredUrlIndexController
                     'Status' => $model->hasError() ? 'Down' :
                         $model->pendingError() ? 'Pending Down' :
                             'Up',
-                    'Checked At' => $model->addedAt()->format('n/j/Y'),
+                    'Checked At' => $model->checkedAt()->format('n/j/Y g:i a'),
                 ],
                 'colLinks' => [
                     'URL' => $model->url(),
