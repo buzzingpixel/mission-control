@@ -6,8 +6,10 @@ use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
+use src\app\utilities\TimeZoneListUtility;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\services\RequireLoginService;
+use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\CreateProjectController;
@@ -19,6 +21,15 @@ use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 
 return [
+    AccountController::class => function () {
+        return new AccountController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class),
+            Di::get(TimeZoneListUtility::class)
+        );
+    },
     CreateMonitoredUrlController::class => function () {
         return new CreateMonitoredUrlController(
             Di::get(UserApi::class),

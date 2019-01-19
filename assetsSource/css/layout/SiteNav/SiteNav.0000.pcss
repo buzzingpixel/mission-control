@@ -7,6 +7,16 @@
     z-index: 999;
 }
 
+.SiteNav a {
+    color: var(--Lightest);
+}
+
+.SiteNav a:hover,
+.SiteNav a:focus,
+.SiteNav a:active {
+    color: var(--LightOrange);
+}
+
 .SiteNav__Inner {
     height: 64px;
     padding: 14px;
@@ -35,7 +45,11 @@
 }
 
 .SiteNav__MobileActivator:hover,
-.SiteNav__MobileActivator:focus {
+a.SiteNav__MobileActivator:hover,
+a.SiteNav__MobileActivator:active,
+.SiteNav__MobileActivator:focus,
+a.SiteNav__MobileActivator:focus,
+a.SiteNav__MobileActivator:active {
     color: var(--Lightest);
     outline: none;
     text-decoration: none;
@@ -47,7 +61,11 @@
 }
 
 .SiteNav__MobileActivator--IsActive:hover,
-.SiteNav__MobileActivator--IsActive:focus {
+a.SiteNav__MobileActivator--IsActive:hover,
+a.SiteNav__MobileActivator--IsActive:active,
+.SiteNav__MobileActivator--IsActive:focus,
+a.SiteNav__MobileActivator--IsActive:focus,
+a.SiteNav__MobileActivator--IsActive:active {
     color: var(--Lightest);
 }
 
@@ -104,7 +122,7 @@
 }
 
 .SiteNav__MenuItemsHolder {
-    background-color: rgba(var(--DarkerBlue), 0.85);
+    background-color: rgba(var(--DarkerBlue), 0.96);
     display: none;
     height: 100%;
     opacity: 0;
@@ -162,6 +180,15 @@
     margin-top: 14px;
 }
 
+.SiteNav__LogOutButton:hover,
+a.SiteNav__LogOutButton:hover,
+.SiteNav__LogOutButton:active,
+a.SiteNav__LogOutButton:active,
+.SiteNav__LogOutButton:focus,
+a.SiteNav__LogOutButton:focus {
+    color: var(--Lightest);
+}
+
 .SiteNav__List {
     list-style: none;
     margin: 0;
@@ -176,7 +203,19 @@
 }
 
 .SiteNav__Link:hover,
-.SiteNav__Link--IsActive {
+a.SiteNav__Link:hover,
+.SiteNav__Link:focus,
+a.SiteNav__Link:focus,
+.SiteNav__Link:active,
+a.SiteNav__Link:active,
+.SiteNav__Link--IsActive,
+a.SiteNav__Link--IsActive,
+.SiteNav__Link--IsActive:hover,
+a.SiteNav__Link--IsActive:hover,
+.SiteNav__Link--IsActive:focus,
+a.SiteNav__Link--IsActive:focus,
+.SiteNav__Link--IsActive:active,
+a.SiteNav__Link--IsActive:active {
     background-color: rgba(var(--LighterBlue), 0.5);
     color: var(--Lightest);
     text-decoration: none;

@@ -1,5 +1,7 @@
 {% set options = options|default([]) %}
 {% set multiple = multiple|default(false) %}
+{% set includeEmpty = includeEmpty|default(true) %}
+{% set includeEmptyContent= includeEmptyContent|default('-- select an option --') %}
 
 {% embed 'forms/inputTemplates/_fieldset.twig' %}
     {% block input %}
@@ -12,7 +14,9 @@
             {% endif %}
         >
             {% if not multiple %}
-            <option value="">-- select an option --</option>
+                {% if includeEmpty %}
+                    <option value="">{{ includeEmptyContent }}</option>
+                {% endif %}
             {% endif %}
             {% for val, option in options %}
                 <option value="{{ val }}"{% if value == val %} selected{% endif %}>

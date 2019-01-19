@@ -27,7 +27,7 @@
             data-active-class="SiteNav__MenuItemsHolder--IsActive"
         >
             <div class="SiteNav__UpperMessage">
-                Logged In As {{ userApi.fetchCurrentUser.emailAddress }}<br>
+                Logged In As <a href="/account">{{ userApi.fetchCurrentUser.emailAddress }}</a><br>
                 <a
                     href="/?action=logout"
                     class="button button--colored SiteNav__LogOutButton"

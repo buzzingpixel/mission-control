@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 /** @var FastRoute\RouteCollector $routeCollector */
 
+use src\app\http\controllers\AccountController;
+use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
-use \src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
+
+// Monitored URLS
+$routeCollector->addRoute(['GET', 'POST'], '/account', AccountController::class);
 
 // Projects
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);
