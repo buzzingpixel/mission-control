@@ -4,6 +4,7 @@
 {% set subTitle = subTitle|default('') %}
 {% set pageControlButtons = pageControlButtons|default([]) %}
 {% set includes = includes|default([]) %}
+{% set tags = tags|default([]) %}
 
 {% block content %}
     <div class="StandardPage">
@@ -13,6 +14,15 @@
                     {{ title|smartypants }}
                     {% if subTitle %}
                         <span class="StandardPage__TitleSub">{{ subTitle|smartypants }}</span>
+                    {% endif %}
+                    {% if tags|length %}
+                        <span class="StandardPage__Tags">
+                            {% for tag in tags %}
+                                <span class="StyledTag StyledTag--{{ tag.style }}">
+                                    {{ tag.content|smartypants }}
+                                </span>
+                            {% endfor %}
+                        </span>
                     {% endif %}
                 </h1>
                 <div class="StandardPage__ControlsButtons">
