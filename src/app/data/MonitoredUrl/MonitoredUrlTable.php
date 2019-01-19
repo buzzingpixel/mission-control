@@ -44,6 +44,17 @@ class MonitoredUrlTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'project_guid' => [
+            'name' => 'project_guid',
+            'type' => 'varchar',
+            'size' => 255,
+            'scale' => null,
+            'notnull' => true,
+            'default' => null,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'is_active' => [
             'name' => 'is_active',
             'type' => 'tinyint',
@@ -159,6 +170,7 @@ class MonitoredUrlTable extends Table
     const COLUMN_NAMES = [
         'id',
         'guid',
+        'project_guid',
         'is_active',
         'title',
         'slug',
@@ -174,6 +186,7 @@ class MonitoredUrlTable extends Table
     const COLUMN_DEFAULTS = [
         'id' => null,
         'guid' => null,
+        'project_guid' => null,
         'is_active' => '1',
         'title' => null,
         'slug' => null,

@@ -9,6 +9,7 @@ namespace src\app\data\MonitoredUrl;
 /**
  * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
+ * @property mixed $project_guid varchar(255) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL

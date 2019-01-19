@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\monitoredurls\interfaces;
 
 use DateTime;
+use src\app\projects\interfaces\ProjectModelInterface;
 
 interface MonitoredUrlModelInterface
 {
@@ -19,6 +20,13 @@ interface MonitoredUrlModelInterface
      * @return string
      */
     public function guid(?string $val = null): string;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set.
+     * @param string|null $val
+     * @return string
+     */
+    public function projectGuid(?string $val = null): string;
 
     /**
      * Returns the value. Sets value if incoming argument is set
@@ -72,11 +80,4 @@ interface MonitoredUrlModelInterface
      * @return DateTime
      */
     public function addedAt(?DateTime $val = null): DateTime;
-
-    /**
-     * Returns the value. Sets value if incoming argument is set.
-     * @param string|null $val
-     * @return string
-     */
-    public function projectGuid(?string $val = null): string;
 }

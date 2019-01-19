@@ -15,6 +15,7 @@ class CreateMonitoredUrlsTable extends AbstractMigration
     {
         $this->table('monitored_urls')
             ->addColumn('guid', 'string')
+            ->addColumn('project_guid', 'string')
             ->addColumn('is_active', 'boolean', ['default' => '1'])
             ->addColumn('title', 'string')
             ->addColumn('slug', 'string')

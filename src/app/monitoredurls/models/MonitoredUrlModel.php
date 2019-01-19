@@ -5,6 +5,7 @@ namespace src\app\monitoredurls\models;
 
 use DateTime;
 use DateTimeZone;
+use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
 class MonitoredUrlModel implements MonitoredUrlModelInterface
@@ -27,6 +28,13 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
     public function guid(?string $val = null): string
     {
         return $this->guid = $val !== null ? $val : $this->guid;
+    }
+
+    private $projectGuid;
+
+    public function projectGuid(?string $val = null): string
+    {
+        return $this->projectGuid = $val !== null ? $val : $this->projectGuid;
     }
 
     private $isActive = true;
@@ -76,12 +84,5 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
     public function addedAt(?DateTime $val = null): DateTime
     {
         return $this->addedAt = $val !== null ? $val : $this->addedAt;
-    }
-
-    private $projectGuid;
-
-    public function projectGuid(?string $val = null): string
-    {
-        return $this->projectGuid = $val !== null ? $val : $this->projectGuid;
     }
 }
