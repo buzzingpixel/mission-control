@@ -9,6 +9,7 @@ use src\app\datasupport\FetchDataParamsInterface;
 use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
+use src\app\monitoredurls\services\ArchiveMonitoredUrlService;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
@@ -40,7 +41,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function archive(MonitoredUrlModelInterface $model)
     {
-        // TODO: Implement service method to execute this interface method
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(ArchiveMonitoredUrlService::class);
+        $service->archive($model);
     }
 
     public function unArchive(MonitoredUrlModelInterface $model)
