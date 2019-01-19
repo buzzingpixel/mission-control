@@ -82,6 +82,9 @@ class MonitoredUrlIndexController
                             'Up',
                     'Checked At' => $model->addedAt()->format('n/j/Y'),
                 ],
+                'colLinks' => [
+                    'URL' => $model->url(),
+                ],
                 'colorStyledCols' => [
                     'Status' => $model->hasError() ? 'Error' :
                         $model->pendingError() ? 'Caution' :

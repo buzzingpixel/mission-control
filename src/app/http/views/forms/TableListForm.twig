@@ -83,16 +83,23 @@
                         data-selected-class="Table__Row--IsSelected"
                     >
                         {% for col in table.headings %}
+                            {% set link = row['colLinks'][col] ?? false %}
                             {% set styled = row['colorStyledCols'][col] ?? false %}
                             <td
                                 class="Table__Column{% if loop.first %} Table__Column--IsFirst{% endif %}"
                             >
+                                {% if link %}
+                                <a href="{{ link }}" target="_blank" class="JS-TableSelects__SelectEscape">
+                                {% endif %}
                                 {% if styled %}
                                 <span class="StyledTag StyledTag--{{ styled }}">
                                 {% endif %}
                                     {{ row.cols[col]|smartypants }}
                                 {% if styled %}
                                 </span>
+                                {% endif %}
+                                {% if link %}
+                                </a>
                                 {% endif %}
                             </td>
                         {% endfor %}
