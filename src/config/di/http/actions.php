@@ -17,6 +17,7 @@ use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
+use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
@@ -39,6 +40,16 @@ return [
             Di::get(ProjectsApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
+        );
+    },
+    EditMonitoredUrlAction::class => function () {
+        return new EditMonitoredUrlAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class),
+            Di::get(MonitoredUrlsApi::class)
         );
     },
     EditProjectAction::class => function () {

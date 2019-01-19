@@ -55,7 +55,7 @@ class SaveMonitoredUrlService
      * @throws InvalidMonitoredUrlModelException
      * @throws MonitoredUrlNameNotUniqueException
      */
-    public function save(MonitoredUrlModelInterface $model)
+    public function save(MonitoredUrlModelInterface $model): void
     {
         if (! $model->title() || ! $model->url()) {
             throw new InvalidMonitoredUrlModelException();
@@ -116,7 +116,7 @@ class SaveMonitoredUrlService
         );
     }
 
-    private function saveNewProject(MonitoredUrlModelInterface $model)
+    private function saveNewProject(MonitoredUrlModelInterface $model): void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -128,7 +128,7 @@ class SaveMonitoredUrlService
         $this->finalSave($model, $record);
     }
 
-    private function saveExistingProject(MonitoredUrlModelInterface $model)
+    private function saveExistingProject(MonitoredUrlModelInterface $model): void
     {
         $fetchModel = $this->fetchDataParamsFactory->make();
         $fetchModel->limit(1);
@@ -136,14 +136,14 @@ class SaveMonitoredUrlService
 
         $this->finalSave(
             $model,
-            $this->buildQuery->build(Project::class, $fetchModel)->fetchRecord()
+            $this->buildQuery->build(MonitoredUrl::class, $fetchModel)->fetchRecord()
         );
     }
 
     private function finalSave(
         MonitoredUrlModelInterface $model,
         MonitoredUrlRecord $record
-    ) {
+    ): void {
         $record->project_guid = $model->projectGuid();
         $record->is_active = $model->isActive();
         $record->title = $model->title();
