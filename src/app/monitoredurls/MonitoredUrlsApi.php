@@ -12,6 +12,7 @@ use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 use src\app\monitoredurls\services\ArchiveMonitoredUrlService;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 
 class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 {
@@ -48,7 +49,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function unArchive(MonitoredUrlModelInterface $model)
     {
-        // TODO: Implement service method to execute this interface method
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(UnArchiveMonitoredUrlService::class);
+        $service->unArchive($model);
     }
 
     public function delete(MonitoredUrlModelInterface $model)

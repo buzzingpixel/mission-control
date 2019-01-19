@@ -12,6 +12,7 @@ use src\app\datasupport\FetchDataParamsFactory;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 use src\app\monitoredurls\services\ArchiveMonitoredUrlService;
+use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 
 return [
     MonitoredUrlsApi::class => function () {
@@ -33,6 +34,14 @@ return [
             new Slugify(),
             new OrmFactory(),
             new UuidFactory(),
+            Di::get(BuildQuery::class),
+            Di::get(EventDispatcher::class),
+            new FetchDataParamsFactory()
+        );
+    },
+    UnArchiveMonitoredUrlService::class => function () {
+        return new UnArchiveMonitoredUrlService(
+            new OrmFactory(),
             Di::get(BuildQuery::class),
             Di::get(EventDispatcher::class),
             new FetchDataParamsFactory()
