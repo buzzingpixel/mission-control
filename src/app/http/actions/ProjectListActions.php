@@ -62,7 +62,7 @@ class ProjectListActions
 
         $fetchParams = $this->projectsApi->createFetchDataParams();
         $fetchParams->addWhere('guid', $this->projectGuids);
-        $projects = $this->projectsApi->fetchProjects($fetchParams);
+        $projects = $this->projectsApi->fetchAll($fetchParams);
 
         $verb = '';
 
@@ -70,15 +70,15 @@ class ProjectListActions
             switch ($this->requestHelper->post('bulk_action')) {
                 case 'archive':
                     $verb = 'archived';
-                    $this->projectsApi->archiveProject($project);
+                    $this->projectsApi->archive($project);
                     break;
                 case 'delete':
                     $verb = 'deleted';
-                    $this->projectsApi->deleteProject($project);
+                    $this->projectsApi->delete($project);
                     break;
                 case 'unArchive':
                     $verb = 'un-archived';
-                    $this->projectsApi->unArchiveProject($project);
+                    $this->projectsApi->unArchive($project);
                     break;
                 default:
                     throw new Http500Exception('Invalid bulk action');

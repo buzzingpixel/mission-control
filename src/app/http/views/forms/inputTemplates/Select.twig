@@ -1,0 +1,22 @@
+{% set options = options|default([]) %}
+{% set multiple = multiple|default(false) %}
+
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <select
+            name="{{ name }}"
+            id="{{ name }}"
+            class="select StandardForm__Select"
+            {% if multiple %}
+            multiple
+            {% endif %}
+        >
+            {% if not multiple %}
+            <option value=""></option>
+            {% endif %}
+            {% for val, option in options %}
+                <option value="{{ val }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+    {% endblock %}
+{% endembed %}

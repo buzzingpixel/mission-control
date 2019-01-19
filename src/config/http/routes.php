@@ -14,6 +14,7 @@ use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\MonitoredUrlIndexController;
+use src\app\http\controllers\CreateMonitoredUrlController;
 
 // Projects
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);
@@ -24,6 +25,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/projects/edit/{slug}', EditProjectC
 
 // Monitored URLS
 $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls[/{archives:archives}]', MonitoredUrlIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/create', CreateMonitoredUrlController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

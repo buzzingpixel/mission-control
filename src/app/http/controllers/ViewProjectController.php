@@ -45,7 +45,7 @@ class ViewProjectController
 
         $fetchParams = $this->projectsApi->createFetchDataParams();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
-        $model = $this->projectsApi->fetchProject($fetchParams);
+        $model = $this->projectsApi->fetchOne($fetchParams);
 
         if (! $model) {
             throw new Http404Exception(

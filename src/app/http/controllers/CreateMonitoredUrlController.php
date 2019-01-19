@@ -6,13 +6,11 @@ namespace src\app\http\controllers;
 use Throwable;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
-use corbomite\http\exceptions\Http404Exception;
 use src\app\projects\interfaces\ProjectsApiInterface;
 
-class EditProjectController
+class CreateMonitoredUrlController
 {
     private $userApi;
     private $response;
@@ -37,7 +35,7 @@ class EditProjectController
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(): ResponseInterface
     {
         if ($requireLogin = $this->requireLoginService->requireLogin()) {
             return $requireLogin;
@@ -53,56 +51,41 @@ class EditProjectController
             return $response;
         }
 
-        $fetchParams = $this->projectsApi->createFetchDataParams();
-        $fetchParams->addWhere('slug', $request->getAttribute('slug'));
-        $model = $this->projectsApi->fetchOne($fetchParams);
-
-        if (! $model) {
-            throw new Http404Exception(
-                'Project with slug "' . $request->getAttribute('slug') . '" not found'
-            );
-        }
-
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
-                'metaTitle' => 'Edit Project: ' . $model->title(),
+                'metaTitle' => 'Create Monitored URL',
                 'breadCrumbs' => [
                     [
-                        'href' => '/projects',
-                        'content' => 'Projects'
+                        'href' => '/monitored-urls',
+                        'content' => 'Monitored URLs'
                     ],
                     [
-                        'href' => '/projects/view/' . $model->slug(),
-                        'content' => 'View'
-                    ],
-                    [
-                        'content' => 'Edit'
+                        'content' => 'Create'
                     ]
                 ],
-                'title' => 'Edit Project: ' . $model->title(),
+                'title' => 'Create New Monitored URL',
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
-                        'actionParam' => 'editProject',
+                        'actionParam' => 'createMonitoredUrl',
                         'inputs' => [
-                            [
-                                'template' => 'Hidden',
-                                'type' => 'hidden',
-                                'name' => 'guid',
-                                'value' => $model->guid(),
-                            ],
                             [
                                 'template' => 'Text',
                                 'type' => 'text',
                                 'name' => 'title',
                                 'label' => 'Title',
-                                'value' => $model->title(),
                             ],
                             [
-                                'template' => 'TextArea',
-                                'name' => 'description',
-                                'label' => 'Description',
-                                'value' => $model->description(),
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'url',
+                                'label' => 'URL',
+                            ],
+                            [
+                                'template' => 'Select',
+                                'name' => 'project',
+                                'label' => 'Project',
+                                'options' => $this->projectsApi->fetchAsSelectArray(),
                             ]
                         ],
                     ]

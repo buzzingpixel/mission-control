@@ -26,7 +26,7 @@ class ProjectsApi implements ProjectsApiInterface
         $this->di = $di;
     }
 
-    public function createProjectModel(array $props = []): ProjectModelInterface
+    public function createModel(array $props = []): ProjectModelInterface
     {
         return new ProjectModel($props);
     }
@@ -40,46 +40,71 @@ class ProjectsApi implements ProjectsApiInterface
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
-    public function saveProject(ProjectModelInterface $model)
+    public function save(ProjectModelInterface $model)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(SaveProjectService::class);
         $service->save($model);
     }
 
-    public function archiveProject(ProjectModelInterface $model)
+    public function archive(ProjectModelInterface $model)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(ArchiveProjectService::class);
         $service->archive($model);
     }
 
-    public function unArchiveProject(ProjectModelInterface $model)
+    public function unArchive(ProjectModelInterface $model)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(UnArchiveProjectService::class);
         $service->unArchive($model);
     }
 
-    public function deleteProject(ProjectModelInterface $model)
+    public function delete(ProjectModelInterface $model)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(DeleteProjectService::class);
         $service->delete($model);
     }
 
-    public function fetchProject(FetchDataParamsInterface $params): ?ProjectModelInterface
-    {
-        return $this->fetchProjects($params)[0] ?? null;
+    public function fetchOne(
+        ?FetchDataParamsInterface $params = null
+    ): ?ProjectModelInterface {
+        return $this->fetchAll($params)[0] ?? null;
     }
 
     /**
      * @return ProjectModelInterface[]
      */
-    public function fetchProjects(FetchDataParamsInterface $params): array
-    {
+    public function fetchAll(
+        ?FetchDataParamsInterface $params = null
+    ): array {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(FetchProjectsService::class);
-        return $service->fetch($params);
+
+        if (! $params) {
+            $params = $this->createFetchDataParams();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        return $service->fetch($params ?? $this->createFetchDataParams());
+    }
+
+    public function fetchAsSelectArray(
+        ?FetchDataParamsInterface $params = null,
+        $keyIsSlug = false
+    ): array {
+        $projects = $this->fetchAll($params);
+
+        $items = [];
+
+        foreach ($projects as $project) {
+            $key = $keyIsSlug ? $project->slug() : $project->guid();
+            $items[$key] = $project->title();
+        }
+
+        return $items;
     }
 }

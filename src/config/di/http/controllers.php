@@ -15,8 +15,18 @@ use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RenderErrorPageController;
 use src\app\http\controllers\MonitoredUrlIndexController;
+use src\app\http\controllers\CreateMonitoredUrlController;
 
 return [
+    CreateMonitoredUrlController::class => function () {
+        return new CreateMonitoredUrlController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
     CreateProjectController::class => function () {
         return new CreateProjectController(
             Di::get(UserApi::class),

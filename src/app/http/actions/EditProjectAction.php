@@ -57,7 +57,7 @@ class EditProjectAction
 
         $fetchParams = $this->projectsApi->createFetchDataParams();
         $fetchParams->addWhere('guid', $this->requestHelper->post('guid'));
-        $model = $this->projectsApi->fetchProject($fetchParams);
+        $model = $this->projectsApi->fetchOne($fetchParams);
 
         if (! $model) {
             throw new Http404Exception();
@@ -84,7 +84,7 @@ class EditProjectAction
         $model->description($description);
 
         try {
-            $this->projectsApi->saveProject($model);
+            $this->projectsApi->save($model);
         } catch (ProjectNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);

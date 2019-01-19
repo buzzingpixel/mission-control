@@ -67,8 +67,10 @@ class ProjectsIndexController
         $params = $this->projectsApi->createFetchDataParams();
         $params->addOrder('title', 'asc');
         $params->addWhere('is_active', $archivesPage ? '0' : '1');
+
         $rows = [];
-        foreach ($this->projectsApi->fetchProjects($params) as $model) {
+
+        foreach ($this->projectsApi->fetchAll() as $model) {
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/projects/view/' . $model->slug(),

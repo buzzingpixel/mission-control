@@ -72,10 +72,10 @@ class CreateProjectAction
             return null;
         }
 
-        $model = $this->projectsApi->createProjectModel($store['inputValues']);
+        $model = $this->projectsApi->createModel($store['inputValues']);
 
         try {
-            $this->projectsApi->saveProject($model);
+            $this->projectsApi->save($model);
         } catch (ProjectNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
