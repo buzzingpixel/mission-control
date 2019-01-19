@@ -80,27 +80,41 @@ class MonitoredUrlIndexController
             $model->checkedAt()->setTimezone(new DateTimeZone(
                 $user->userDataItem('timezone') ?: date_default_timezone_get()
             ));
+
             $model->addedAt()->setTimezone(new DateTimeZone(
                 $user->userDataItem('timezone') ?: date_default_timezone_get()
             ));
+
+            $status = '--';
+            $styledStatus = 'Inactive';
+
+            if ($model->isActive()) {
+                $status = 'Up';
+                $styledStatus = 'Good';
+
+                if ($model->hasError()) {
+                    $status = 'Down';
+                    $styledStatus = 'Error';
+                } elseif ($model->pendingError()) {
+                    $status = 'Pending Down';
+                    $styledStatus = 'Caution';
+                }
+            }
+
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/monitored-urls/view/' . $model->slug(),
                 'cols' => [
                     'Title' => $model->title(),
                     'URL' => $model->url(),
-                    'Status' => $model->hasError() ? 'Down' :
-                        $model->pendingError() ? 'Pending Down' :
-                            'Up',
+                    'Status' => $status,
                     'Checked At' => $model->checkedAt()->format('n/j/Y g:i a'),
                 ],
                 'colLinks' => [
                     'URL' => $model->url(),
                 ],
                 'colorStyledCols' => [
-                    'Status' => $model->hasError() ? 'Error' :
-                        $model->pendingError() ? 'Caution' :
-                            'Good',
+                    'Status' => $styledStatus,
                 ],
             ];
         }
