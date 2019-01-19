@@ -51,8 +51,6 @@ function runSelect(F) {
         initReal: function() {
             var self = this;
 
-            console.log(self.el);
-
             new window.Choices(self.el, {
                 searchResultLimit: 8,
                 shouldSort: false
