@@ -139,7 +139,7 @@ class MonitoredUrlIndexController
                         'actions' => $actions,
                         'actionColButtonContent' => 'View&nbsp;URL&nbsp;Details',
                         'table' => [
-                            'inputsName' => 'monitored_urls[]',
+                            'inputsName' => 'guids[]',
                             'headings' => [
                                 'Title',
                                 'URL',
