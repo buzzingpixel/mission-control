@@ -104,7 +104,7 @@ services:
       - cache-data:/app/cache
       - vendor-data:/vendor-volume
       - db-data:/var/lib/mysql
-    command: bash -c "/app/scripts/devUtilityScript.sh"
+    command: bash -c "chmod +x /app/scripts/devUtilityScript.sh && /app/scripts/devUtilityScript.sh"
     networks:
       common:
 
