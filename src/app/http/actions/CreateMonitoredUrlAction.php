@@ -68,8 +68,8 @@ class CreateMonitoredUrlAction
             $store['inputErrors']['title'][] = 'This field is required';
         }
 
-        if (! $url) {
-            $store['inputErrors']['url'][] = 'This field is required';
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            $store['inputErrors']['url'][] = 'A valid URL is required';
         }
 
         if ($store['inputErrors']) {
