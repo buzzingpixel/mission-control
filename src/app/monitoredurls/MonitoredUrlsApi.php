@@ -7,6 +7,7 @@ use corbomite\di\Di;
 use src\app\datasupport\FetchDataParamsFactory;
 use src\app\datasupport\FetchDataParamsInterface;
 use src\app\monitoredurls\models\MonitoredUrlModel;
+use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
@@ -31,7 +32,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function save(MonitoredUrlModelInterface $model)
     {
-        // TODO: Implement service method to execute this interface method
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(SaveMonitoredUrlService::class);
+        $service->save($model);
     }
 
     public function archive(MonitoredUrlModelInterface $model)

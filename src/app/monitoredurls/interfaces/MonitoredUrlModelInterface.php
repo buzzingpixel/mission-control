@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace src\app\monitoredurls\interfaces;
 
 use DateTime;
-use src\app\projects\interfaces\ProjectModelInterface;
 
 interface MonitoredUrlModelInterface
 {
@@ -62,6 +61,13 @@ interface MonitoredUrlModelInterface
      * @return bool
      */
     public function pendingError(?bool $val = null): bool;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     * @param bool|null $val
+     * @return bool
+     */
+    public function hasError(?bool $val = null): bool;
 
     /**
      * Returns the value. Sets value if incoming argument is set.

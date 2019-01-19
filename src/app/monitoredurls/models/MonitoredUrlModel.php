@@ -5,7 +5,6 @@ namespace src\app\monitoredurls\models;
 
 use DateTime;
 use DateTimeZone;
-use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
 class MonitoredUrlModel implements MonitoredUrlModelInterface
@@ -65,11 +64,18 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
         return $this->url = $val !== null ? $val : $this->url;
     }
 
-    private $pendingError = true;
+    private $pendingError = false;
 
     public function pendingError(?bool $val = null): bool
     {
         return $this->pendingError = $val !== null ? $val : $this->pendingError;
+    }
+
+    private $hasError = false;
+
+    public function hasError(?bool $val = null): bool
+    {
+        return $this->hasError = $val !== null ? $val : $this->hasError;
     }
 
     private $checkedAt;
