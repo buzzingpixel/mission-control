@@ -8,6 +8,7 @@ use src\app\datasupport\FetchDataParamsFactory;
 use src\app\datasupport\FetchDataParamsInterface;
 use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
+use src\app\monitoredurls\services\DeleteMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 use src\app\monitoredurls\services\ArchiveMonitoredUrlService;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
@@ -56,7 +57,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function delete(MonitoredUrlModelInterface $model)
     {
-        // TODO: Implement service method to execute this interface method
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(DeleteMonitoredUrlService::class);
+        $service->delete($model);
     }
 
     public function fetchOne(
