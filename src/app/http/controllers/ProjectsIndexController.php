@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
+use Exception;
 use Throwable;
 use DateTimeZone;
 use corbomite\twig\TwigEnvironment;
@@ -45,7 +46,11 @@ class ProjectsIndexController
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        $isAdmin = $this->userApi->fetchCurrentUser()->userDataItem('admin');
+        if (! $user = $this->userApi->fetchCurrentUser()) {
+            throw new Exception('An unknown error occurred');
+        }
+
+        $isAdmin = $user->userDataItem('admin');
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
@@ -73,7 +78,7 @@ class ProjectsIndexController
 
         foreach ($this->projectsApi->fetchAll($params) as $model) {
             $model->addedAt()->setTimezone(new DateTimeZone(
-                date_default_timezone_get()
+                $user->userDataItem('timezone') ?: date_default_timezone_get()
             ));
             $rows[] = [
                 'inputValue' => $model->guid(),

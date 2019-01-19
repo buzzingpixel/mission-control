@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
+use Exception;
 use Throwable;
 use DateTimeZone;
 use corbomite\twig\TwigEnvironment;
@@ -45,7 +46,11 @@ class MonitoredUrlIndexController
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        $isAdmin = $this->userApi->fetchCurrentUser()->userDataItem('admin');
+        if (! $user = $this->userApi->fetchCurrentUser()) {
+            throw new Exception('An unknown error occurred');
+        }
+
+        $isAdmin = $user->userDataItem('admin');
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
@@ -73,10 +78,10 @@ class MonitoredUrlIndexController
 
         foreach ($this->monitoredUrlsApi->fetchAll($params) as $model) {
             $model->checkedAt()->setTimezone(new DateTimeZone(
-                date_default_timezone_get()
+                $user->userDataItem('timezone') ?: date_default_timezone_get()
             ));
             $model->addedAt()->setTimezone(new DateTimeZone(
-                date_default_timezone_get()
+                $user->userDataItem('timezone') ?: date_default_timezone_get()
             ));
             $rows[] = [
                 'inputValue' => $model->guid(),
