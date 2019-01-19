@@ -17,6 +17,7 @@ use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RenderErrorPageController;
+use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
@@ -46,6 +47,16 @@ return [
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
+        );
+    },
+    EditMonitoredUrlController::class => function () {
+        return new EditMonitoredUrlController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class),
+            Di::get(MonitoredUrlsApi::class)
         );
     },
     EditProjectController::class => function () {
