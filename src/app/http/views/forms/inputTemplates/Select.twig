@@ -6,13 +6,13 @@
         <select
             name="{{ name }}"
             id="{{ name }}"
-            class="select StandardForm__Select"
+            class="select JS-Select StandardForm__Select"
             {% if multiple %}
             multiple
             {% endif %}
         >
             {% if not multiple %}
-            <option value=""></option>
+            <option value="">-- select an option --</option>
             {% endif %}
             {% for val, option in options %}
                 <option value="{{ val }}">{{ option }}</option>

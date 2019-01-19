@@ -12,12 +12,12 @@ function runTableSelects(F) {
     }
 
     F.controller.make('TableSelects', {
-        init: function () {
+        init: function() {
             var self = this;
 
             F.GlobalModel.onChange('filterHasRun', function() {
                 self.setAllTo(false);
-            })
+            });
         },
 
         events: {

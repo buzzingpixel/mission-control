@@ -4,5 +4,11 @@
         "config/**",
         "src/**"
     ],
+    "libSync": [
+        "assetsSource/fonts",
+        "assetsSource/img",
+        "assetsSource/lib",
+        "node_modules/choices.js/public/assets"
+    ],
     "watchUsesPolling": true
 }

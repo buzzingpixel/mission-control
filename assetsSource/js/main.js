@@ -17,7 +17,9 @@ function runMain(F, W) {
     var GlobalModelConstructor = F.model.make({
         menuBreakPoint: 'int',
         windowWidth: 'int',
-        filterHasRun: 'int'
+        filterHasRun: 'int',
+        selectIsLoading: 'bool',
+        selectHasLoaded: 'bool'
     });
 
     F.GlobalModel = new GlobalModelConstructor({
@@ -44,7 +46,13 @@ function runMain(F, W) {
         F.controller.construct('Filterable', {
             el: this
         });
-    })
+    });
+
+    $('.JS-Select').each(function() {
+        F.controller.construct('Select', {
+            el: this
+        });
+    });
 }
 
 runMain(window.FAB, window);
