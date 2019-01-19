@@ -70,7 +70,7 @@ class ProjectsIndexController
 
         $rows = [];
 
-        foreach ($this->projectsApi->fetchAll() as $model) {
+        foreach ($this->projectsApi->fetchAll($params) as $model) {
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/projects/view/' . $model->slug(),
