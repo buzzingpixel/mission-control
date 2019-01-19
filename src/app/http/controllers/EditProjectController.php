@@ -63,22 +63,38 @@ class EditProjectController
             );
         }
 
+        $notification = false;
+
+        $breadCrumbs = [
+            [
+                'href' => '/projects',
+                'content' => 'Projects',
+            ],
+        ];
+
+        if (! $model->isActive()) {
+            $notification = 'This project is archived';
+
+            $breadCrumbs[] = [
+                'href' => '/projects/archives',
+                'content' => 'Archives',
+            ];
+        }
+
+        $breadCrumbs[] = [
+            'href' => '/projects/view/' . $model->slug(),
+            'content' => 'View',
+        ];
+
+        $breadCrumbs[] = [
+            'content' => 'Edit'
+        ];
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
+                'notification' => $notification,
                 'metaTitle' => 'Edit Project: ' . $model->title(),
-                'breadCrumbs' => [
-                    [
-                        'href' => '/projects',
-                        'content' => 'Projects'
-                    ],
-                    [
-                        'href' => '/projects/view/' . $model->slug(),
-                        'content' => 'View'
-                    ],
-                    [
-                        'content' => 'Edit'
-                    ]
-                ],
+                'breadCrumbs' => $breadCrumbs,
                 'title' => 'Edit Project: ' . $model->title(),
                 'includes' => [
                     [

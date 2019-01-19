@@ -66,18 +66,33 @@ class ViewProjectController
             ];
         }
 
+        $notification = false;
+
+        $breadCrumbs = [
+            [
+                'href' => '/projects',
+                'content' => 'Projects',
+            ],
+        ];
+
+        if (! $model->isActive()) {
+            $notification = 'This project is archived';
+
+            $breadCrumbs[] = [
+                'href' => '/projects/archives',
+                'content' => 'Archives',
+            ];
+        }
+
+        $breadCrumbs[] = [
+            'content' => 'Viewing Project',
+        ];
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
+                'notification' => $notification,
                 'metaTitle' => $model->title(),
-                'breadCrumbs' => [
-                    [
-                        'href' => '/projects',
-                        'content' => 'Projects'
-                    ],
-                    [
-                        'content' => 'Viewing Project'
-                    ]
-                ],
+                'breadCrumbs' => $breadCrumbs,
                 'title' => $model->title(),
                 'subTitle' => $model->description(),
                 'pageControlButtons' => $pageControlButtons,

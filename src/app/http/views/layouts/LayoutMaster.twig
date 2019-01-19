@@ -9,6 +9,8 @@
 {# @var \corbomite\flashdata\interfaces\FlashDataModelInterface Message #}
 {% set Message = flashDataApi.getFlashData.storeItem('Message') %}
 
+{% set notification = notification|default(false) %}
+
 {% block layoutContent %}
     {% include 'partials/SiteNav.twig' %}
     <main class="SiteMain">
@@ -22,6 +24,15 @@
             {% if Message.dataItem('content') ?? false %}
                 <div class="Alert Alert--Centered Alert--{{ Message.dataItem('type') ?? '' }} Alert--HasMarginBottom">
                     {{ Message.dataItem('content')|smartypants }}
+                </div>
+            {% endif %}
+            {% if notification %}
+                {% set message = notification is iterable ? notification['content'] : notification %}
+                {% set centered = notification['centered'] ?? true %}
+                {% set alertType = notification['alertType'] ?? 'Info' %}
+
+                <div class="Alert{% if centered %} Alert--Centered{% endif %} Alert--{{ alertType }} Alert--HasMarginBottom">
+                    {{ message|smartypants }}
                 </div>
             {% endif %}
             {{ block('content') ?? '' }}
