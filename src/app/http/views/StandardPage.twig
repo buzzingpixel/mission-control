@@ -5,11 +5,12 @@
 {% set pageControlButtons = pageControlButtons|default([]) %}
 {% set includes = includes|default([]) %}
 {% set tags = tags|default([]) %}
+{% set controlsHasBorderBottom = controlsHasBorderBottom|default(false) %}
 
 {% block content %}
     <div class="StandardPage">
         <div class="StandardPage__Inner">
-            <div class="StandardPage__Controls">
+            <div class="StandardPage__Controls{% if controlsHasBorderBottom %} StandardPage__Controls--HasBorderBottom{% endif %}">
                 <h1 class="StandardPage__Title">
                     {{ title|smartypants }}
                     {% if subTitle %}
@@ -38,7 +39,9 @@
             </div>
             <div class="StandardPage__InnerLayoutsAndComponents">
                 {% for params in includes %}
-                    {% include params['template'] with params only %}
+                    <div class="StandardPage__InnerLayoutsAndComponentsItem">
+                        {% include params['template'] with params only %}
+                    </div>
                 {% endfor %}
             </div>
         </div>

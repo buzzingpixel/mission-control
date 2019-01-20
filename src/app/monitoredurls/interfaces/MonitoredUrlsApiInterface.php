@@ -55,7 +55,7 @@ interface MonitoredUrlsApiInterface
      * @return MonitoredUrlModelInterface|null
      */
     public function fetchOne(
-        FetchDataParamsInterface $params
+        ?FetchDataParamsInterface $params = null
     ): ?MonitoredUrlModelInterface;
 
     /**
@@ -63,5 +63,5 @@ interface MonitoredUrlsApiInterface
      * @param FetchDataParamsInterface $params
      * @return MonitoredUrlModelInterface[]
      */
-    public function fetchAll(FetchDataParamsInterface $params): array;
+    public function fetchAll(?FetchDataParamsInterface $params = null): array;
 }

@@ -63,15 +63,22 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
     }
 
     public function fetchOne(
-        FetchDataParamsInterface $params
+        ?FetchDataParamsInterface $params = null
     ): ?MonitoredUrlModelInterface {
         return $this->fetchAll($params)[0] ?? null;
     }
 
-    public function fetchAll(FetchDataParamsInterface $params): array
+    public function fetchAll(?FetchDataParamsInterface $params = null): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(FetchMonitoredUrlsService::class);
+
+        if (! $params) {
+            $params = $this->createFetchDataParams();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
         return $service->fetch($params);
     }
 }
