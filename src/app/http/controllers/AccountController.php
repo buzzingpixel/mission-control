@@ -42,9 +42,7 @@ class AccountController
             return $requireLogin;
         }
 
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user) {
+        if (! $user = $this->userApi->fetchCurrentUser()) {
             throw new LogicException('Unknown Error');
         }
 

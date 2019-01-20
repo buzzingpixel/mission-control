@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Exception;
 use Throwable;
 use DateTimeZone;
+use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +47,7 @@ class MonitoredUrlIndexController
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
         if (! $user = $this->userApi->fetchCurrentUser()) {
-            throw new Exception('An unknown error occurred');
+            throw new LogicException('An unknown error occurred');
         }
 
         $isAdmin = $user->userDataItem('admin');

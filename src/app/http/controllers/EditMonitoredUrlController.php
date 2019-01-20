@@ -56,7 +56,9 @@ class EditMonitoredUrlController
 
         if (! $user->userDataItem('admin')) {
             $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify('account/Unauthorized.twig')
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
             );
 
             return $response;

@@ -40,28 +40,28 @@ class ProjectsApi implements ProjectsApiInterface
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
-    public function save(ProjectModelInterface $model)
+    public function save(ProjectModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(SaveProjectService::class);
         $service->save($model);
     }
 
-    public function archive(ProjectModelInterface $model)
+    public function archive(ProjectModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(ArchiveProjectService::class);
         $service->archive($model);
     }
 
-    public function unArchive(ProjectModelInterface $model)
+    public function unArchive(ProjectModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(UnArchiveProjectService::class);
         $service->unArchive($model);
     }
 
-    public function delete(ProjectModelInterface $model)
+    public function delete(ProjectModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(DeleteProjectService::class);

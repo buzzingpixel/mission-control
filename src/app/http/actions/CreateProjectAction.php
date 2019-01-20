@@ -75,6 +75,7 @@ class CreateProjectAction
         $model = $this->projectsApi->createModel($store['inputValues']);
 
         try {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->projectsApi->save($model);
         } catch (ProjectNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';

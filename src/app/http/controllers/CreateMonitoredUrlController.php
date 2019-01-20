@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
+use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
@@ -41,11 +42,17 @@ class CreateMonitoredUrlController
             return $requireLogin;
         }
 
+        if (! $user = $this->userApi->fetchCurrentUser()) {
+            throw new LogicException('Unknown Error');
+        }
+
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        if (! $this->userApi->fetchCurrentUser()->userDataItem('admin')) {
+        if (! $user->userDataItem('admin')) {
             $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify('account/Unauthorized.twig')
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
             );
 
             return $response;
@@ -85,7 +92,8 @@ class CreateMonitoredUrlController
                                 'template' => 'Select',
                                 'name' => 'project_guid',
                                 'label' => 'Project',
-                                'options' => $this->projectsApi->fetchAsSelectArray(),
+                                'options' => $this->projectsApi
+                                    ->fetchAsSelectArray(),
                             ],
                         ],
                     ]

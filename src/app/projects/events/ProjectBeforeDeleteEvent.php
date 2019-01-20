@@ -35,6 +35,6 @@ class ProjectBeforeDeleteEvent implements EventInterface
 
     public function stopPropagation(?bool $stop = null): bool
     {
-        return $this->stop = $stop !== null ? $stop : $this->stop;
+        return $this->stop = $stop ?? $this->stop;
     }
 }

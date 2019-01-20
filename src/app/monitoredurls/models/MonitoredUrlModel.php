@@ -26,69 +26,69 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
 
     public function guid(?string $val = null): string
     {
-        return $this->guid = $val !== null ? $val : $this->guid;
+        return $this->guid = $val ?? $this->guid;
     }
 
-    private $projectGuid;
+    private $projectGuid = '';
 
     public function projectGuid(?string $val = null): string
     {
-        return $this->projectGuid = $val !== null ? $val : $this->projectGuid;
+        return $this->projectGuid = $val ?? $this->projectGuid;
     }
 
     private $isActive = true;
 
     public function isActive(?bool $val = null): bool
     {
-        return $this->isActive = $val !== null ? $val : $this->isActive;
+        return $this->isActive = $val ?? $this->isActive;
     }
 
     private $title = '';
 
     public function title(?string $val = null): string
     {
-        return $this->title = $val !== null ? $val : $this->title;
+        return $this->title = $val ?? $this->title;
     }
 
     private $slug = '';
 
     public function slug(?string $val = null): string
     {
-        return $this->slug = $val !== null ? $val : $this->slug;
+        return $this->slug = $val ?? $this->slug;
     }
 
     private $url = '';
 
     public function url(?string $val = null): string
     {
-        return $this->url = $val !== null ? $val : $this->url;
+        return $this->url = $val ?? $this->url;
     }
 
     private $pendingError = false;
 
     public function pendingError(?bool $val = null): bool
     {
-        return $this->pendingError = $val !== null ? $val : $this->pendingError;
+        return $this->pendingError = $val ?? $this->pendingError;
     }
 
     private $hasError = false;
 
     public function hasError(?bool $val = null): bool
     {
-        return $this->hasError = $val !== null ? $val : $this->hasError;
+        return $this->hasError = $val ?? $this->hasError;
     }
 
     private $checkedAt;
 
     public function checkedAt(?DateTime $val = null): DateTime
     {
-        return $this->checkedAt = $val !== null ? $val : $this->checkedAt;
+        return $this->checkedAt = $val ?? $this->checkedAt;
     }
 
     private $addedAt;
 
     public function addedAt(?DateTime $val = null): DateTime
     {
-        return $this->addedAt = $val !== null ? $val : $this->addedAt;
+        return $this->addedAt = $val ?? $this->addedAt;
     }
 }

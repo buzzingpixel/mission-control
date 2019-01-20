@@ -55,7 +55,7 @@ class SaveProjectService
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
-    public function save(ProjectModelInterface $model)
+    public function save(ProjectModelInterface $model): void
     {
         if (! $model->title()) {
             throw new InvalidProjectModelException();
@@ -116,7 +116,7 @@ class SaveProjectService
         );
     }
 
-    private function saveNewProject(ProjectModelInterface $model)
+    private function saveNewProject(ProjectModelInterface $model): void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -128,7 +128,7 @@ class SaveProjectService
         $this->finalSave($model, $record);
     }
 
-    private function saveExistingProject(ProjectModelInterface $model)
+    private function saveExistingProject(ProjectModelInterface $model): void
     {
         $fetchModel = $this->fetchDataParamsFactory->make();
         $fetchModel->limit(1);
@@ -140,7 +140,7 @@ class SaveProjectService
         );
     }
 
-    private function finalSave(ProjectModelInterface $model, ProjectRecord $record)
+    private function finalSave(ProjectModelInterface $model, ProjectRecord $record): void
     {
         $record->is_active = $model->isActive();
         $record->title = $model->title();

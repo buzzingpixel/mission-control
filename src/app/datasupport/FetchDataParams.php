@@ -9,24 +9,24 @@ class FetchDataParams implements FetchDataParamsInterface
 
     public function limit(?int $limit = null): int
     {
-        return $this->limit = $limit !== null ? $limit : $this->limit;
+        return $this->limit = $limit ?? $this->limit;
     }
 
     private $offset = 0;
 
     public function offset(?int $offset = null): int
     {
-        return $this->offset = $offset !== null ? $offset : $this->offset;
+        return $this->offset = $offset ?? $this->offset;
     }
 
     private $order = [];
 
     public function order(?array $order = null): array
     {
-        return $this->order = $order !== null ? $order : $this->order;
+        return $this->order = $order ?? $this->order;
     }
 
-    public function addOrder(string $col, string $dir = 'desc')
+    public function addOrder(string $col, string $dir = 'desc'): void
     {
         $dir = $dir === 'desc' ? 'desc' : 'asc';
         $this->order[$col] = $dir;

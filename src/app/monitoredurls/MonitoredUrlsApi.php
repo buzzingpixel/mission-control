@@ -34,21 +34,21 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
         return (new FetchDataParamsFactory())->make();
     }
 
-    public function save(MonitoredUrlModelInterface $model)
+    public function save(MonitoredUrlModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(SaveMonitoredUrlService::class);
         $service->save($model);
     }
 
-    public function archive(MonitoredUrlModelInterface $model)
+    public function archive(MonitoredUrlModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(ArchiveMonitoredUrlService::class);
         $service->archive($model);
     }
 
-    public function unArchive(MonitoredUrlModelInterface $model)
+    public function unArchive(MonitoredUrlModelInterface $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(UnArchiveMonitoredUrlService::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
+use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,6 +44,10 @@ class ViewProjectController
             return $requireLogin;
         }
 
+        if (! $user = $this->userApi->fetchCurrentUser()) {
+            throw new LogicException('Unknown Error');
+        }
+
         $fetchParams = $this->projectsApi->createFetchDataParams();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
         $model = $this->projectsApi->fetchOne($fetchParams);
@@ -53,7 +58,7 @@ class ViewProjectController
             );
         }
 
-        $isAdmin = $this->userApi->fetchCurrentUser()->userDataItem('admin');
+        $isAdmin = $user->userDataItem('admin');
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
