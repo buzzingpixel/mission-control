@@ -7,32 +7,32 @@ use Throwable;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\exceptions\Http500Exception;
 use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use corbomite\user\exceptions\UserExistsException;
 use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 
-class CreateUserAction
+class AdminUserActions
 {
     private $userApi;
     private $response;
-    private $dataStore;
     private $flashDataApi;
     private $requestHelper;
+
+    private $guids = [];
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
-        DataStoreInterface $dataStore,
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
-        $this->dataStore = $dataStore;
         $this->flashDataApi = $flashDataApi;
         $this->requestHelper = $requestHelper;
+
+        $this->guids = $this->requestHelper->post('guids');
     }
 
     /**
@@ -42,7 +42,7 @@ class CreateUserAction
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'Create User Action requires post request'
+                'Create Project Action requires post request'
             );
         }
 
@@ -52,39 +52,35 @@ class CreateUserAction
             throw new Http404Exception();
         }
 
-        $email = trim($this->requestHelper->getPost('email'));
-        $admin = trim($this->requestHelper->getPost('admin') ?: '');
-
-        $store = [
-            'inputErrors' => [],
-            'inputValues' => compact('email', 'admin'),
-        ];
-
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $store['inputErrors']['email'][] = 'A valid email address is required';
+        if (! $this->guids) {
+            throw new Http500Exception('No projects specified');
         }
 
-        if ($store['inputErrors']) {
-            $this->dataStore->storeItem('FormSubmission', $store);
-            return null;
-        }
+        $queryModel = $this->userApi->makeQueryModel();
+        $queryModel->addWhere('guid', $this->guids);
+        $users = $this->userApi->fetchAll($queryModel);
 
-        try {
-            $this->userApi->registerUser($email, bin2hex(random_bytes(32)));
-        } catch (UserExistsException $e) {
-            $store['inputErrors']['email'][] = 'Email must be unique';
-            $this->dataStore->storeItem('FormSubmission', $store);
-            return null;
-        }
+        $verb = '';
 
-        if ($admin === 'true') {
-            if (!  $newUser = $this->userApi->fetchUser($email)) {
-                throw new LogicException('An unknown error occurred');
+        foreach ($users as $userModel) {
+            switch ($this->requestHelper->post('bulk_action')) {
+                case 'promote':
+                    $verb = 'promoted';
+                    $userModel->setExtendedProperty('is_admin', 1);
+                    $this->userApi->saveUser($userModel);
+                    break;
+                case 'demote':
+                    $verb = 'demoted';
+                    $userModel->setExtendedProperty('is_admin', 0);
+                    $this->userApi->saveUser($userModel);
+                    break;
+                case 'delete':
+                    $verb = 'deleted';
+                    $this->userApi->deleteUser($userModel);
+                    break;
+                default:
+                    throw new Http500Exception('Invalid bulk action');
             }
-
-            $newUser->setExtendedProperty('is_admin', 1);
-
-            $this->userApi->saveUser($newUser);
         }
 
         $flashDataModel = $this->flashDataApi->makeFlashDataModel([
@@ -93,7 +89,12 @@ class CreateUserAction
 
         $flashDataModel->dataItem('type', 'Success');
 
-        $flashDataModel->dataItem('content', 'User created successfully');
+        $singularPlural = \count($users) > 1 ? 'Users' : 'User';
+
+        $flashDataModel->dataItem(
+            'content',
+            $singularPlural . ' ' . $verb . ' successfully'
+        );
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->flashDataApi->setFlashData($flashDataModel);

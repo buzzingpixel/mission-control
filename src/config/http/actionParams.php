@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use src\app\http\actions\LogOutAction;
+use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreateUserAction;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\ProjectListActions;
@@ -14,9 +15,10 @@ use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
-    'createUser' => ['class' => CreateUserAction::class],
     'logout' => ['class' => LogOutAction::class],
+    'createUser' => ['class' => CreateUserAction::class],
     'editProject' => ['class' => EditProjectAction::class],
+    'adminUserActions' => ['class' => AdminUserActions::class],
     'createProject' => ['class' => CreateProjectAction::class],
     'resetPassword' => ['class' => ResetPasswordAction::class],
     'updateAccount' => ['class' => UpdateAccountAction::class],

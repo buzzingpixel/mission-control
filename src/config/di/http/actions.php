@@ -9,6 +9,7 @@ use corbomite\http\RequestHelper;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use corbomite\requestdatastore\DataStore;
+use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
@@ -23,6 +24,14 @@ use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
+    AdminUserActions::class => function () {
+        return new AdminUserActions(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
     CreateMonitoredUrlAction::class => function () {
         return new CreateMonitoredUrlAction(
             Di::get(UserApi::class),
