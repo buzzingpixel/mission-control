@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 /** @var FastRoute\RouteCollector $routeCollector */
 
+use src\app\http\controllers\AdminController;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
@@ -34,6 +35,9 @@ $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls[/{archives:archives}
 $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/create', CreateMonitoredUrlController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/view/{slug}', ViewMonitoredUrlController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/edit/{slug}', EditMonitoredUrlController::class);
+
+// Admin
+$routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

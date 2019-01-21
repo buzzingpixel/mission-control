@@ -8,6 +8,7 @@ use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
 use src\app\utilities\TimeZoneListUtility;
 use src\app\monitoredurls\MonitoredUrlsApi;
+use src\app\http\controllers\AdminController;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditProjectController;
@@ -30,6 +31,14 @@ return [
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class),
             Di::get(TimeZoneListUtility::class)
+        );
+    },
+    AdminController::class => function () {
+        return new AdminController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
         );
     },
     CreateMonitoredUrlController::class => function () {
