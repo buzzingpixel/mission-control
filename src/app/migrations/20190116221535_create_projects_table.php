@@ -11,7 +11,7 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateProjectsTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $this->table('projects')
             ->addColumn('guid', 'string')

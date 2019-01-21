@@ -11,7 +11,7 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateMonitoredUrlsTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $this->table('monitored_urls')
             ->addColumn('guid', 'string')

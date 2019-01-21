@@ -110,6 +110,17 @@ class UserTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'is_admin' => [
+            'name' => 'is_admin',
+            'type' => 'tinyint',
+            'size' => 3,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => '0',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
     ];
 
     const COLUMN_NAMES = [
@@ -121,6 +132,7 @@ class UserTable extends Table
         'added_at',
         'added_at_time_zone',
         'timezone',
+        'is_admin',
     ];
 
     const COLUMN_DEFAULTS = [
@@ -132,6 +144,7 @@ class UserTable extends Table
         'added_at' => null,
         'added_at_time_zone' => null,
         'timezone' => 'NULL',
+        'is_admin' => '0',
     ];
 
     const PRIMARY_KEY = [
