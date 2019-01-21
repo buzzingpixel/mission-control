@@ -9,6 +9,7 @@ use corbomite\http\RequestHelper;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use corbomite\requestdatastore\DataStore;
+use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
@@ -38,6 +39,15 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ProjectsApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    CreateUserAction::class => function () {
+        return new CreateUserAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );

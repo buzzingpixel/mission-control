@@ -56,7 +56,7 @@ class CreateUserController
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
-                        'actionParam' => 'createMonitoredUrl',
+                        'actionParam' => 'createUser',
                         'inputs' => [
                             [
                                 'template' => 'Text',
