@@ -49,11 +49,64 @@ class AdminController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
+        $rows = [];
+
+        $queryModel = $this->userApi->makeQueryModel();
+        $queryModel->addOrder('email_address', 'asc');
+        $queryModel->addWhere('guid', $user->guid(), '!=');
+
+        foreach ($this->userApi->fetchAll($queryModel) as $userModel) {
+            $userIsAdmin = $userModel->getExtendedProperty('is_admin') === 1;
+            $styledStatus = 'Inactive';
+
+            if ($userIsAdmin) {
+                $styledStatus = 'Good';
+            }
+
+            $rows[] = [
+                'inputValue' => $userModel->guid(),
+                'cols' => [
+                    'Email' => $userModel->emailAddress(),
+                    'Timezone' => $userModel->getExtendedProperty('timezone') ?: date_default_timezone_get(),
+                    'Admin' => $userIsAdmin ? 'Yes' : 'No',
+                ],
+                'colorStyledCols' => [
+                    'Admin' => $styledStatus,
+                ],
+            ];
+        }
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Admin',
                 'title' => 'Admin',
-                'includes' => [],
+                'subTitle' => 'Your user account is not shown',
+                'pageControlButtons' => [
+                    [
+                        'href' => '/admin/create-user',
+                        'content' => 'Create User',
+                    ]
+                ],
+                'includes' => [
+                    [
+                        'template' => 'forms/TableListForm.twig',
+                        'actionParam' => 'adminUserActions',
+                        'actions' => [
+                            'promote' => 'Promote Selected to Admin',
+                            'demote' => 'Demote Selected from Admin',
+                            'delete' => 'Delete Selected',
+                        ],
+                        'table' => [
+                            'inputsName' => 'guids[]',
+                            'headings' => [
+                                'Email',
+                                'Timezone',
+                                'Admin'
+                            ],
+                            'rows' => $rows,
+                        ],
+                    ]
+                ],
             ])
         );
 
