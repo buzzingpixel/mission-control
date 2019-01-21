@@ -52,7 +52,7 @@ class MonitoredUrlActions
 
         $user = $this->userApi->fetchCurrentUser();
 
-        if (! $user || ! $user->userDataItem('admin')) {
+        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
             throw new Http404Exception();
         }
 

@@ -73,7 +73,7 @@ class ViewProjectController
             );
         }
 
-        $this->isAdmin = $isAdmin = $user->userDataItem('admin');
+        $this->isAdmin = $isAdmin = $user->getExtendedProperty('is_admin') === 1;
 
         $this->userTimeZone = $user->getExtendedProperty('timezone') ?:
             date_default_timezone_get();

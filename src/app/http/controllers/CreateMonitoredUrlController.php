@@ -48,7 +48,7 @@ class CreateMonitoredUrlController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        if (! $user->userDataItem('admin')) {
+        if ($user->getExtendedProperty('is_admin') !== 1) {
             $response->getBody()->write(
                 $this->twigEnvironment->renderAndMinify(
                     'account/Unauthorized.twig'

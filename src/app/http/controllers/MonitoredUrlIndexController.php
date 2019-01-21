@@ -50,7 +50,7 @@ class MonitoredUrlIndexController
             throw new LogicException('An unknown error occurred');
         }
 
-        $isAdmin = $user->userDataItem('admin');
+        $isAdmin = $user->getExtendedProperty('is_admin') === 1;
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 

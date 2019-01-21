@@ -76,7 +76,7 @@
                         Reminders
                     </a>
                 </li>
-                {% if userApi.fetchCurrentUser.userDataItem('admin') %}
+                {% if userApi.fetchCurrentUser.getExtendedProperty('is_admin') == 1 %}
                     <li class="SiteNav__ListItem">
                         <a
                             href="/admins"

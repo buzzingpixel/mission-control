@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\cli\actions;
 
+use LogicException;
 use corbomite\cli\services\CliQuestionService;
 use corbomite\user\interfaces\UserApiInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,9 +30,11 @@ class PromoteUserToAdminAction
             '<fg=cyan>Email address: </>'
         );
 
-        $user = $this->userApi->fetchUser($emailAddress);
+        if (! $user = $this->userApi->fetchUser($emailAddress)) {
+            throw new LogicException('User not found');
+        }
 
-        $user->userDataItem('admin', true);
+        $user->setExtendedProperty('is_admin', 1);
 
         $this->userApi->saveUser($user);
 

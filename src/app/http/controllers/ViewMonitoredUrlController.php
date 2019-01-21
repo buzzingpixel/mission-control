@@ -58,7 +58,7 @@ class ViewMonitoredUrlController
             throw new LogicException('Unknown Error');
         }
 
-        $isAdmin = $user->userDataItem('admin');
+        $isAdmin = $user->getExtendedProperty('is_admin') === 1;
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
