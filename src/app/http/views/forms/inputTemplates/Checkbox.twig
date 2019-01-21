@@ -7,20 +7,21 @@
 {% set value = inputValues[name]|default(value|default('')) %}
 
 <fieldset class="fieldset StandardForm__Fieldset StandardForm__Fieldset--ForCheckbox">
-    <input
-        type="checkbox"
-        name="{{ name }}"
-        value="true"
-        id="{{ name }}"
-        class="checkbox StandardForm__Checkbox{% if thisInputHasErrors %} StandardForm__Checkbox--HasError{% endif %}"
-        {% if value == 'true' %}
-        checked
-        {% endif %}
-    >
     <label
         for="{{ name }}"
         class="label StandardForm__Label StandardForm__Label--ForCheckbox"
     >
         {{ label }}
+        <input
+            type="checkbox"
+            name="{{ name }}"
+            value="true"
+            id="{{ name }}"
+            class="checkbox StandardForm__Checkbox{% if thisInputHasErrors %} StandardForm__Checkbox--HasError{% endif %}"
+            {% if value == 'true' %}
+            checked
+            {% endif %}
+        >
+        <span class="StandardForm__CheckMark"></span>
     </label>
 </fieldset>
