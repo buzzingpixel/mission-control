@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace src\app\monitoredurls;
 
 use corbomite\di\Di;
-use src\app\datasupport\FetchDataParamsFactory;
-use src\app\datasupport\FetchDataParamsInterface;
+use corbomite\db\Factory as DbFactory;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\DeleteMonitoredUrlService;
@@ -18,10 +18,12 @@ use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 {
     private $di;
+    private $dbFactory;
 
-    public function __construct(Di $di)
+    public function __construct(Di $di, DbFactory $dbFactory)
     {
         $this->di = $di;
+        $this->dbFactory = $dbFactory;
     }
 
     public function createModel(array $props = []): MonitoredUrlModelInterface
@@ -29,9 +31,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
         return new MonitoredUrlModel($props);
     }
 
-    public function createFetchDataParams(): FetchDataParamsInterface
+    public function makeQueryModel(): QueryModelInterface
     {
-        return (new FetchDataParamsFactory())->make();
+        return $this->dbFactory->makeQueryModel();
     }
 
     public function save(MonitoredUrlModelInterface $model): void
@@ -63,18 +65,18 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
     }
 
     public function fetchOne(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): ?MonitoredUrlModelInterface {
         return $this->fetchAll($params)[0] ?? null;
     }
 
-    public function fetchAll(?FetchDataParamsInterface $params = null): array
+    public function fetchAll(?QueryModelInterface $params = null): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(FetchMonitoredUrlsService::class);
 
         if (! $params) {
-            $params = $this->createFetchDataParams();
+            $params = $this->makeQueryModel();
             $params->addWhere('is_active', '1');
             $params->addOrder('title', 'asc');
         }

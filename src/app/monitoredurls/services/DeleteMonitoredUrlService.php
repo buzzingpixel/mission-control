@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace src\app\monitoredurls\services;
 
 use corbomite\events\EventDispatcher;
+use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\MonitoredUrl\MonitoredUrl;
-use src\app\datasupport\BuildQueryInterface;
-use src\app\datasupport\FetchDataParamsFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\MonitoredUrl\MonitoredUrlRecord;
 use src\app\monitoredurls\events\MonitoredUrlAfterDeleteEvent;
 use src\app\monitoredurls\events\MonitoredUrlBeforeDeleteEvent;
@@ -18,18 +18,18 @@ class DeleteMonitoredUrlService
     private $buildQuery;
     private $ormFactory;
     private $eventDispatcher;
-    private $fetchDataParamsFactory;
+    private $dbFactory;
 
     public function __construct(
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher,
-        FetchDataParamsFactory $fetchDataParamsFactory
+        DbFactory $dbFactory
     ) {
         $this->buildQuery = $buildQuery;
         $this->ormFactory = $ormFactory;
         $this->eventDispatcher = $eventDispatcher;
-        $this->fetchDataParamsFactory = $fetchDataParamsFactory;
+        $this->dbFactory = $dbFactory;
     }
 
     public function __invoke(MonitoredUrlModelInterface $model): void
@@ -60,7 +60,7 @@ class DeleteMonitoredUrlService
 
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord
     {
-        $params = $this->fetchDataParamsFactory->make();
+        $params = $this->dbFactory->makeQueryModel();
         $params->addWhere('guid', $model->guid());
         return $this->buildQuery->build(MonitoredUrl::class, $params)->fetchRecord();
     }

@@ -70,7 +70,7 @@ class MonitoredUrlIndexController
             ];
         }
 
-        $params = $this->monitoredUrlsApi->createFetchDataParams();
+        $params = $this->monitoredUrlsApi->makeQueryModel();
         $params->addOrder('title', 'asc');
         $params->addWhere('is_active', $archivesPage ? '0' : '1');
 

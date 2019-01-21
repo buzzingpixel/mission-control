@@ -64,7 +64,7 @@ class EditMonitoredUrlController
             return $response;
         }
 
-        $fetchParams = $this->monitoredUrlsApi->createFetchDataParams();
+        $fetchParams = $this->monitoredUrlsApi->makeQueryModel();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
         $model = $this->monitoredUrlsApi->fetchOne($fetchParams);
 

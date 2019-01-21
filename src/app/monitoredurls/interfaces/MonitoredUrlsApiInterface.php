@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\monitoredurls\interfaces;
 
-use src\app\datasupport\FetchDataParamsInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\monitoredurls\exceptions\InvalidMonitoredUrlModelException;
 use src\app\monitoredurls\exceptions\MonitoredUrlNameNotUniqueException;
 
@@ -18,9 +18,9 @@ interface MonitoredUrlsApiInterface
 
     /**
      * Creates a Fetch Data Params instance
-     * @return FetchDataParamsInterface
+     * @return QueryModelInterface
      */
-    public function createFetchDataParams(): FetchDataParamsInterface;
+    public function makeQueryModel(): QueryModelInterface;
 
     /**
      * Saves a monitored URL
@@ -51,17 +51,17 @@ interface MonitoredUrlsApiInterface
 
     /**
      * Fetches one Monitored URL model result based on params
-     * @param FetchDataParamsInterface $params
+     * @param QueryModelInterface $params
      * @return MonitoredUrlModelInterface|null
      */
     public function fetchOne(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): ?MonitoredUrlModelInterface;
 
     /**
      * Fetches all Monitored URL models based on params
-     * @param FetchDataParamsInterface $params
+     * @param QueryModelInterface $params
      * @return MonitoredUrlModelInterface[]
      */
-    public function fetchAll(?FetchDataParamsInterface $params = null): array;
+    public function fetchAll(?QueryModelInterface $params = null): array;
 }

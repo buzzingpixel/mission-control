@@ -6,9 +6,9 @@ namespace src\app\monitoredurls\services;
 use DateTime;
 use DateTimeZone;
 use src\app\data\MonitoredUrl\MonitoredUrl;
-use src\app\datasupport\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
+use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\MonitoredUrl\MonitoredUrlRecord;
-use src\app\datasupport\FetchDataParamsInterface;
 use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
@@ -25,7 +25,7 @@ class FetchMonitoredUrlsService
     /**
      * @return MonitoredUrlModelInterface[]
      */
-    public function __invoke(FetchDataParamsInterface $params): array
+    public function __invoke(QueryModelInterface $params): array
     {
         return $this->fetch($params);
     }
@@ -33,7 +33,7 @@ class FetchMonitoredUrlsService
     /**
      * @return MonitoredUrlModelInterface[]
      */
-    public function fetch(FetchDataParamsInterface $params): array
+    public function fetch(QueryModelInterface $params): array
     {
         $models = [];
 

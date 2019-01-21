@@ -60,7 +60,7 @@ class MonitoredUrlActions
             throw new Http500Exception('No monitored URLs specified');
         }
 
-        $fetchParams = $this->monitredUrlsApi->createFetchDataParams();
+        $fetchParams = $this->monitredUrlsApi->makeQueryModel();
         $fetchParams->addWhere('guid', $this->guids);
         $models = $this->monitredUrlsApi->fetchAll($fetchParams);
 
