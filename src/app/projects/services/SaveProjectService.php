@@ -7,10 +7,10 @@ use Cocur\Slugify\Slugify;
 use Ramsey\Uuid\UuidFactory;
 use src\app\data\Project\Project;
 use corbomite\events\EventDispatcher;
+use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
-use src\app\datasupport\BuildQueryInterface;
-use src\app\datasupport\FetchDataParamsFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\projects\events\ProjectAfterSaveEvent;
 use src\app\projects\events\ProjectBeforeSaveEvent;
 use src\app\projects\interfaces\ProjectModelInterface;
@@ -24,7 +24,7 @@ class SaveProjectService
     private $buildQuery;
     private $uuidFactory;
     private $eventDispatcher;
-    private $fetchDataParamsFactory;
+    private $dbFactory;
 
     public function __construct(
         Slugify $slugify,
@@ -32,14 +32,14 @@ class SaveProjectService
         UuidFactory $uuidFactory,
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher,
-        FetchDataParamsFactory $fetchDataParamsFactory
+        DbFactory $dbFactory
     ) {
         $this->slugify = $slugify;
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
         $this->uuidFactory = $uuidFactory;
         $this->eventDispatcher = $eventDispatcher;
-        $this->fetchDataParamsFactory = $fetchDataParamsFactory;
+        $this->dbFactory = $dbFactory;
     }
 
     /**
@@ -63,7 +63,7 @@ class SaveProjectService
 
         $model->slug($this->slugify->slugify($model->title()));
 
-        $fetchModel = $this->fetchDataParamsFactory->make();
+        $fetchModel = $this->dbFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->guid(), '!=');
         $fetchModel->addWhereGroup(false);
@@ -130,7 +130,7 @@ class SaveProjectService
 
     private function saveExistingProject(ProjectModelInterface $model): void
     {
-        $fetchModel = $this->fetchDataParamsFactory->make();
+        $fetchModel = $this->dbFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->guid());
 

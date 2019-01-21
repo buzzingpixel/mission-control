@@ -60,7 +60,7 @@ class ProjectListActions
             throw new Http500Exception('No projects specified');
         }
 
-        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams = $this->projectsApi->makeQueryModel();
         $fetchParams->addWhere('guid', $this->projectGuids);
         $projects = $this->projectsApi->fetchAll($fetchParams);
 

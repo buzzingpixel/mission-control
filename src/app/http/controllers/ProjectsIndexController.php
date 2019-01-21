@@ -70,7 +70,7 @@ class ProjectsIndexController
             ];
         }
 
-        $params = $this->projectsApi->createFetchDataParams();
+        $params = $this->projectsApi->makeQueryModel();
         $params->addOrder('title', 'asc');
         $params->addWhere('is_active', $archivesPage ? '0' : '1');
 

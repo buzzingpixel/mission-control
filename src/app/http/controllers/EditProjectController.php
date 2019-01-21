@@ -58,7 +58,7 @@ class EditProjectController
             return $response;
         }
 
-        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams = $this->projectsApi->makeQueryModel();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
         $model = $this->projectsApi->fetchOne($fetchParams);
 

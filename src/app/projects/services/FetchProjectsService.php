@@ -8,8 +8,8 @@ use DateTimeZone;
 use src\app\data\Project\Project;
 use src\app\data\Project\ProjectRecord;
 use src\app\projects\models\ProjectModel;
-use src\app\datasupport\BuildQueryInterface;
-use src\app\datasupport\FetchDataParamsInterface;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 
 class FetchProjectsService
@@ -25,7 +25,7 @@ class FetchProjectsService
     /**
      * @return ProjectModelInterface[]
      */
-    public function __invoke(FetchDataParamsInterface $params): array
+    public function __invoke(QueryModelInterface $params): array
     {
         return $this->fetch($params);
     }
@@ -33,7 +33,7 @@ class FetchProjectsService
     /**
      * @return ProjectModelInterface[]
      */
-    public function fetch(FetchDataParamsInterface $params): array
+    public function fetch(QueryModelInterface $params): array
     {
         $models = [];
 

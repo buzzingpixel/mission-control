@@ -55,7 +55,7 @@ class EditProjectAction
             throw new Http404Exception();
         }
 
-        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams = $this->projectsApi->makeQueryModel();
         $fetchParams->addWhere('guid', $this->requestHelper->post('guid'));
         $model = $this->projectsApi->fetchOne($fetchParams);
 

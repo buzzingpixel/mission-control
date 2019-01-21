@@ -19,7 +19,7 @@ class AdminUserActions
     private $flashDataApi;
     private $requestHelper;
 
-    private $guids = [];
+    private $guids;
 
     public function __construct(
         UserApiInterface $userApi,

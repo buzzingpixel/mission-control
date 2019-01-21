@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\projects\interfaces;
 
-use src\app\datasupport\FetchDataParamsInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\projects\exceptions\InvalidProjectModelException;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
@@ -18,9 +18,9 @@ interface ProjectsApiInterface
 
     /**
      * Creates a Fetch Data Params instance
-     * @return FetchDataParamsInterface
+     * @return QueryModelInterface
      */
-    public function createFetchDataParams(): FetchDataParamsInterface;
+    public function makeQueryModel(): QueryModelInterface;
 
     /**
      * Saves a project (creating if necessary)
@@ -53,25 +53,25 @@ interface ProjectsApiInterface
 
     /**
      * Fetches project based on params
-     * @param FetchDataParamsInterface $params
+     * @param QueryModelInterface $params
      * @return ProjectModelInterface|null
      */
     public function fetchOne(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): ?ProjectModelInterface;
 
     /**
      * Fetches projects based on param
-     * @param FetchDataParamsInterface|null $params
+     * @param QueryModelInterface|null $params
      * @return ProjectModelInterface[]
      */
     public function fetchAll(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): array;
 
     /**
      * Fetch projects as select array
-     * @param FetchDataParamsInterface|null $params
+     * @param QueryModelInterface|null $params
      * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
      * @return array [
      *     'project-slug' => 'Project Name',
@@ -79,7 +79,7 @@ interface ProjectsApiInterface
      * ]
      */
     public function fetchAsSelectArray(
-        ?FetchDataParamsInterface $params = null,
+        ?QueryModelInterface $params = null,
         $keyIsSlug = false
     ): array;
 }

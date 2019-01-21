@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace src\app\projects;
 
 use corbomite\di\Di;
+use corbomite\db\Factory as DbFactory;
 use src\app\projects\models\ProjectModel;
-use src\app\datasupport\FetchDataParamsFactory;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\projects\services\SaveProjectService;
-use src\app\datasupport\FetchDataParamsInterface;
 use src\app\projects\services\DeleteProjectService;
 use src\app\projects\services\FetchProjectsService;
 use src\app\projects\services\ArchiveProjectService;
@@ -20,10 +20,12 @@ use src\app\projects\exceptions\ProjectNameNotUniqueException;
 class ProjectsApi implements ProjectsApiInterface
 {
     private $di;
+    private $dbFactory;
 
-    public function __construct(Di $di)
+    public function __construct(Di $di, DbFactory $dbFactory)
     {
         $this->di = $di;
+        $this->dbFactory = $dbFactory;
     }
 
     public function createModel(array $props = []): ProjectModelInterface
@@ -31,9 +33,9 @@ class ProjectsApi implements ProjectsApiInterface
         return new ProjectModel($props);
     }
 
-    public function createFetchDataParams(): FetchDataParamsInterface
+    public function makeQueryModel(): QueryModelInterface
     {
-        return (new FetchDataParamsFactory())->make();
+        return $this->dbFactory->makeQueryModel();
     }
 
     /**
@@ -69,7 +71,7 @@ class ProjectsApi implements ProjectsApiInterface
     }
 
     public function fetchOne(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): ?ProjectModelInterface {
         return $this->fetchAll($params)[0] ?? null;
     }
@@ -78,22 +80,22 @@ class ProjectsApi implements ProjectsApiInterface
      * @return ProjectModelInterface[]
      */
     public function fetchAll(
-        ?FetchDataParamsInterface $params = null
+        ?QueryModelInterface $params = null
     ): array {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->getFromDefinition(FetchProjectsService::class);
 
         if (! $params) {
-            $params = $this->createFetchDataParams();
+            $params = $this->makeQueryModel();
             $params->addWhere('is_active', '1');
             $params->addOrder('title', 'asc');
         }
 
-        return $service->fetch($params ?? $this->createFetchDataParams());
+        return $service->fetch($params);
     }
 
     public function fetchAsSelectArray(
-        ?FetchDataParamsInterface $params = null,
+        ?QueryModelInterface $params = null,
         $keyIsSlug = false
     ): array {
         $projects = $this->fetchAll($params);

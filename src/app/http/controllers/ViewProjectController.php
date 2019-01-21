@@ -63,7 +63,7 @@ class ViewProjectController
             throw new LogicException('Unknown Error');
         }
 
-        $fetchParams = $this->projectsApi->createFetchDataParams();
+        $fetchParams = $this->projectsApi->makeQueryModel();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
         $this->projectModel = $model = $this->projectsApi->fetchOne($fetchParams);
 
