@@ -9,7 +9,6 @@ use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\db\services\BuildQueryService;
-use src\app\datasupport\FetchDataParamsFactory;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\DeleteMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
