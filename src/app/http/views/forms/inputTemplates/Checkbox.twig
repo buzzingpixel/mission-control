@@ -1,0 +1,26 @@
+{% set name = name|default('TODO') %}
+{% set label = label|default(name) %}
+
+{% set thisInputErrors = inputErrors[name] ?? [] %}
+{% set thisInputHasErrors = thisInputErrors|length > 0 %}
+
+{% set value = inputValues[name]|default(value|default('')) %}
+
+<fieldset class="fieldset StandardForm__Fieldset StandardForm__Fieldset--ForCheckbox">
+    <input
+        type="checkbox"
+        name="{{ name }}"
+        value="true"
+        id="{{ name }}"
+        class="checkbox StandardForm__Checkbox{% if thisInputHasErrors %} StandardForm__Checkbox--HasError{% endif %}"
+        {% if value == 'true' %}
+        checked
+        {% endif %}
+    >
+    <label
+        for="{{ name }}"
+        class="label StandardForm__Label StandardForm__Label--ForCheckbox"
+    >
+        {{ label }}
+    </label>
+</fieldset>

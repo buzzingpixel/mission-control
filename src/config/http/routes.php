@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use src\app\http\controllers\AdminController;
 use src\app\http\controllers\AccountController;
+use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ProjectsIndexController;
@@ -38,6 +39,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/edit/{slug}', EditMo
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/admin/create-user', CreateUserController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

@@ -11,6 +11,7 @@ use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\controllers\AdminController;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\AccountController;
+use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\CreateProjectController;
@@ -52,6 +53,14 @@ return [
     },
     CreateProjectController::class => function () {
         return new CreateProjectController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    CreateUserController::class => function () {
+        return new CreateUserController(
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
