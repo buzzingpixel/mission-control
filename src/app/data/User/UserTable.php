@@ -99,6 +99,17 @@ class UserTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'timezone' => [
+            'name' => 'timezone',
+            'type' => 'varchar',
+            'size' => 255,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
     ];
 
     const COLUMN_NAMES = [
@@ -109,6 +120,7 @@ class UserTable extends Table
         'user_data',
         'added_at',
         'added_at_time_zone',
+        'timezone',
     ];
 
     const COLUMN_DEFAULTS = [
@@ -119,6 +131,7 @@ class UserTable extends Table
         'user_data' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
+        'timezone' => 'NULL',
     ];
 
     const PRIMARY_KEY = [

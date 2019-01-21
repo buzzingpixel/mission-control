@@ -16,6 +16,7 @@ use Atlas\Table\Row;
  * @property mixed $user_data text(65535)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
+ * @property mixed $timezone varchar(255)
  */
 class UserRow extends Row
 {
@@ -27,5 +28,6 @@ class UserRow extends Row
         'user_data' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
+        'timezone' => 'NULL',
     ];
 }
