@@ -75,7 +75,7 @@ class ViewProjectController
 
         $this->isAdmin = $isAdmin = $user->userDataItem('admin');
 
-        $this->userTimeZone = $user->userDataItem('timezone') ?:
+        $this->userTimeZone = $user->getExtendedProperty('timezone') ?:
             date_default_timezone_get();
 
         $response = $this->response->withHeader('Content-Type', 'text/html');

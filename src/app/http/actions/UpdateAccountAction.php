@@ -79,7 +79,7 @@ class UpdateAccountAction
 
         $user->emailAddress($email);
 
-        $user->userDataItem('timezone', $timezone);
+        $user->setExtendedProperty('timezone', $timezone);
 
         try {
             $this->userApi->saveUser($user);

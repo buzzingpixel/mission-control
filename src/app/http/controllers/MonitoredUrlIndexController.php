@@ -76,14 +76,13 @@ class MonitoredUrlIndexController
 
         $rows = [];
 
-        foreach ($this->monitoredUrlsApi->fetchAll($params) as $model) {
-            $model->checkedAt()->setTimezone(new DateTimeZone(
-                $user->userDataItem('timezone') ?: date_default_timezone_get()
-            ));
+        $userTimeZone = $user->getExtendedProperty('timezone') ?:
+            date_default_timezone_get();
 
-            $model->addedAt()->setTimezone(new DateTimeZone(
-                $user->userDataItem('timezone') ?: date_default_timezone_get()
-            ));
+        foreach ($this->monitoredUrlsApi->fetchAll($params) as $model) {
+            $model->checkedAt()->setTimezone(new DateTimeZone($userTimeZone));
+
+            $model->addedAt()->setTimezone(new DateTimeZone($userTimeZone));
 
             $status = '--';
             $styledStatus = 'Inactive';

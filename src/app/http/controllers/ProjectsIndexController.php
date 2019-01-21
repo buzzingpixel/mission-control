@@ -78,8 +78,10 @@ class ProjectsIndexController
 
         foreach ($this->projectsApi->fetchAll($params) as $model) {
             $model->addedAt()->setTimezone(new DateTimeZone(
-                $user->userDataItem('timezone') ?: date_default_timezone_get()
+                $user->getExtendedProperty('timezone') ?:
+                    date_default_timezone_get()
             ));
+
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/projects/view/' . $model->slug(),

@@ -77,7 +77,7 @@ class AccountController
                                     $defaultTzContent .
                                     ')',
                                 'options' => $tzs,
-                                'value' => $user->userDataItem('timezone'),
+                                'value' => $user->getExtendedProperty('timezone'),
                             ]
                         ],
                     ]
