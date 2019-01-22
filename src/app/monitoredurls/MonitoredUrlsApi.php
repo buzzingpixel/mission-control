@@ -108,7 +108,7 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
         if (! $params) {
             $params = $this->makeQueryModel();
             $params->limit(50);
-            $params->addOrder('event_at', 'desc');
+            $params->addOrder('event_at');
         }
 
         return $service->fetch($params);

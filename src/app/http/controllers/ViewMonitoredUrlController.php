@@ -109,6 +109,35 @@ class ViewMonitoredUrlController
             }
         }
 
+        $rows = [];
+
+        $params = $this->monitoredUrlsApi->makeQueryModel();
+        $params->limit(50);
+        $params->addOrder('event_at');
+
+        foreach ($this->monitoredUrlsApi->fetchIncidents($params) as $incident) {
+            $incident->eventAt()->setTimezone(new \DateTimeZone(
+                $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
+            ));
+
+            $styledType = strtolower($incident->eventType()) === 'down' ?
+                'Error' :
+                'Good';
+
+            $rows[] = [
+                'inputValue' => 'null',
+                'cols' => [
+                    'Type' => $incident->eventType(),
+                    'Status Code' => $incident->statusCode(),
+                    'Message' => $incident->message(),
+                    'Date' => $incident->eventAt()->format('n/j/Y g:i a'),
+                ],
+                'colorStyledCols' => [
+                    'Type' => $styledType,
+                ],
+            ];
+        }
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'tags' => [[
@@ -121,6 +150,21 @@ class ViewMonitoredUrlController
                 'title' => $model->title(),
                 'subTitle' => $model->url(),
                 'pageControlButtons' => $pageControlButtons,
+                'includes' => [
+                    [
+                        'template' => 'forms/TableListForm.twig',
+                        'table' => [
+                            'inputsName' => 'null',
+                            'headings' => [
+                                'Type',
+                                'Status Code',
+                                'Message',
+                                'Date',
+                            ],
+                            'rows' => $rows,
+                        ],
+                    ]
+                ],
             ])
         );
 
