@@ -9,6 +9,8 @@ use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\db\services\BuildQueryService;
+use src\app\monitoredurls\services\SaveIncidentService;
+use src\app\monitoredurls\services\FetchIncidentsService;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\DeleteMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
@@ -38,9 +40,23 @@ return [
             new DbFactory()
         );
     },
+    FetchIncidentsService::class => function () {
+        return new FetchIncidentsService(
+            Di::get(BuildQueryService::class)
+        );
+    },
     FetchMonitoredUrlsService::class => function () {
         return new FetchMonitoredUrlsService(
             Di::get(BuildQueryService::class)
+        );
+    },
+    SaveIncidentService::class => function () {
+        return new SaveIncidentService(
+            new OrmFactory(),
+            new UuidFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class),
+            new DbFactory()
         );
     },
     SaveMonitoredUrlService::class => function () {

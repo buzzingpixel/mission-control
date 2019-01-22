@@ -5,19 +5,19 @@ namespace src\app\monitoredurls\events;
 
 use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\events\interfaces\EventInterface;
-use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
 
-class MonitoredUrlAfterSaveEvent implements EventInterface
+class MonitoredUrlIncidentAfterSaveEvent implements EventInterface
 {
     private $wasNew;
-    private $monitoredUrlModel;
+    private $monitoredUrlIncidentModel;
 
     public function __construct(
-        MonitoredUrlModelInterface $monitoredUrlModel,
+        MonitoredUrlIncidentModelInterface $monitoredUrlModel,
         bool $wasNew = false
     ) {
         $this->wasNew = $wasNew;
-        $this->monitoredUrlModel = $monitoredUrlModel;
+        $this->monitoredUrlIncidentModel = $monitoredUrlModel;
     }
 
     public function wasNew(): bool
@@ -25,9 +25,9 @@ class MonitoredUrlAfterSaveEvent implements EventInterface
         return $this->wasNew;
     }
 
-    public function monitoredUrlModel(): MonitoredUrlModelInterface
+    public function monitoredUrlModel(): MonitoredUrlIncidentModelInterface
     {
-        return $this->monitoredUrlModel;
+        return $this->monitoredUrlIncidentModel;
     }
 
     public function provider(): string
@@ -37,7 +37,7 @@ class MonitoredUrlAfterSaveEvent implements EventInterface
 
     public function name(): string
     {
-        return 'MonitoredUrlAfterSave';
+        return 'MonitoredUrlIncidentAfterSave';
     }
 
     private $stop = false;

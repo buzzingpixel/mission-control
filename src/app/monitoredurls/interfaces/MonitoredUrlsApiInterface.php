@@ -17,6 +17,13 @@ interface MonitoredUrlsApiInterface
     public function createModel(array $props = []): MonitoredUrlModelInterface;
 
     /**
+     * Creates a Monitored URL Incident Model
+     * @param array $props
+     * @return MonitoredUrlIncidentModelInterface
+     */
+    public function createIncidentModel(array $props = []): MonitoredUrlIncidentModelInterface;
+
+    /**
      * Creates a Fetch Data Params instance
      * @return QueryModelInterface
      */
@@ -64,4 +71,17 @@ interface MonitoredUrlsApiInterface
      * @return MonitoredUrlModelInterface[]
      */
     public function fetchAll(?QueryModelInterface $params = null): array;
+
+    /**
+     * Adds an incident
+     * @param MonitoredUrlIncidentModelInterface $model
+     * @return mixed
+     */
+    public function saveIncident(MonitoredUrlIncidentModelInterface $model);
+
+    /**
+     * Fetches events based on params
+     * @return MonitoredUrlIncidentModelInterface[]
+     */
+    public function fetchIncidents(?QueryModelInterface $params = null): array;
 }
