@@ -39,13 +39,9 @@ class ArchiveProjectService
 
     public function archive(ProjectModelInterface $model): void
     {
-        $beforeEvent = new ProjectBeforeArchiveEvent($model);
+        $before = new ProjectBeforeArchiveEvent($model);
 
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
 
         $record = $this->fetchRecord($model);
 
