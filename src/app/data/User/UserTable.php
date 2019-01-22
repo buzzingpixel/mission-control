@@ -22,17 +22,6 @@ class UserTable extends Table
     const NAME = 'users';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class UserTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'email_address' => [
@@ -124,7 +113,6 @@ class UserTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'email_address',
         'password_hash',
@@ -136,7 +124,6 @@ class UserTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'email_address' => null,
         'password_hash' => null,
@@ -148,10 +135,10 @@ class UserTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

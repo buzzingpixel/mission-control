@@ -22,17 +22,6 @@ class MonitoredUrlIncidentTable extends Table
     const NAME = 'monitored_url_incidents';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class MonitoredUrlIncidentTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'monitored_url_guid' => [
@@ -113,7 +102,6 @@ class MonitoredUrlIncidentTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'monitored_url_guid',
         'event_type',
@@ -124,7 +112,6 @@ class MonitoredUrlIncidentTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'monitored_url_guid' => null,
         'event_type' => null,
@@ -135,10 +122,10 @@ class MonitoredUrlIncidentTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

@@ -11,9 +11,14 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateFlashDataTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
-        $this->table('flash_data')
+        $this->table('flash_data', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('name', 'text', ['null' => true])
             ->addColumn('data', 'text', ['null' => true])

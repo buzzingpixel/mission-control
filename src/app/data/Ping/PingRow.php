@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace src\app\data\MonitoredUrl;
+namespace src\app\data\Ping;
 
 use Atlas\Table\Row;
 
@@ -14,15 +14,16 @@ use Atlas\Table\Row;
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
- * @property mixed $url varchar(255) NOT NULL
  * @property mixed $pending_error tinyint(3,0) NOT NULL
  * @property mixed $has_error tinyint(3,0) NOT NULL
- * @property mixed $checked_at datetime NOT NULL
- * @property mixed $checked_at_time_zone varchar(255) NOT NULL
+ * @property mixed $expect_every bigint(20,0) unsigned NOT NULL
+ * @property mixed $warn_after bigint(20,0) unsigned NOT NULL
+ * @property mixed $last_ping_at datetime NOT NULL
+ * @property mixed $last_ping_at_time_zone varchar(255) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */
-class MonitoredUrlRow extends Row
+class PingRow extends Row
 {
     protected $cols = [
         'guid' => null,
@@ -30,11 +31,12 @@ class MonitoredUrlRow extends Row
         'is_active' => '1',
         'title' => null,
         'slug' => null,
-        'url' => null,
         'pending_error' => '0',
         'has_error' => '0',
-        'checked_at' => null,
-        'checked_at_time_zone' => null,
+        'expect_every' => null,
+        'warn_after' => null,
+        'last_ping_at' => null,
+        'last_ping_at_time_zone' => null,
         'added_at' => null,
         'added_at_time_zone' => null,
     ];

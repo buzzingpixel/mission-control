@@ -13,7 +13,12 @@ class CreateActionQueueBatchTable extends AbstractMigration
 {
     public function change(): void
     {
-        $this->table('action_queue_batch')
+        $this->table('action_queue_batch', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('name', 'string')
             ->addColumn('title', 'string')

@@ -9,7 +9,6 @@ namespace src\app\data\ScheduleTracking;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $is_running tinyint(3,0) NOT NULL
  * @property mixed $last_run_start_at datetime
@@ -20,7 +19,6 @@ use Atlas\Table\Row;
 class ScheduleTrackingRow extends Row
 {
     protected $cols = [
-        'id' => null,
         'guid' => null,
         'is_running' => '0',
         'last_run_start_at' => 'NULL',

@@ -13,7 +13,12 @@ class CreatePingsTable extends AbstractMigration
 {
     public function change(): void
     {
-        $this->table('pings')
+        $this->table('pings', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('project_guid', 'string')
             ->addColumn('is_active', 'boolean', ['default' => '1'])

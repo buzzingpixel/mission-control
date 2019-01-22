@@ -9,7 +9,6 @@ namespace src\app\data\UserPasswordResetToken;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $user_guid text(65535) NOT NULL
  * @property mixed $added_at datetime NOT NULL
@@ -18,7 +17,6 @@ use Atlas\Table\Row;
 class UserPasswordResetTokenRow extends Row
 {
     protected $cols = [
-        'id' => null,
         'guid' => null,
         'user_guid' => null,
         'added_at' => null,

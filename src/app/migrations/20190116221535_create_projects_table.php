@@ -13,7 +13,12 @@ class CreateProjectsTable extends AbstractMigration
 {
     public function change(): void
     {
-        $this->table('projects')
+        $this->table('projects', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('is_active', 'boolean', ['default' => '1'])
             ->addColumn('title', 'string')

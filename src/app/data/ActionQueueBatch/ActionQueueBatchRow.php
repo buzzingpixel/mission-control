@@ -9,7 +9,6 @@ namespace src\app\data\ActionQueueBatch;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $name varchar(255) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
@@ -26,7 +25,6 @@ use Atlas\Table\Row;
 class ActionQueueBatchRow extends Row
 {
     protected $cols = [
-        'id' => null,
         'guid' => null,
         'name' => null,
         'title' => null,

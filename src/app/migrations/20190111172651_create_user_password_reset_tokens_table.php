@@ -11,9 +11,14 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateUserPasswordResetTokensTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
-        $this->table('user_password_reset_tokens')
+        $this->table('user_password_reset_tokens', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('user_guid', 'text')
             ->addColumn('added_at', 'datetime')

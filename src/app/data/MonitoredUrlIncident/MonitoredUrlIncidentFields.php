@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace src\app\data\MonitoredUrlIncident;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $monitored_url_guid varchar(255) NOT NULL
  * @property mixed $event_type varchar(255) NOT NULL

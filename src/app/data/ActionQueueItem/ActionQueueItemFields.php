@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace src\app\data\ActionQueueItem;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $order_to_run int(10,0) NOT NULL
  * @property mixed $action_queue_batch_guid varchar(255) NOT NULL

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace src\app\data\ScheduleTracking;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $is_running tinyint(3,0) NOT NULL
  * @property mixed $last_run_start_at datetime

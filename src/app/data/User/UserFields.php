@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace src\app\data\User;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $email_address text(65535) NOT NULL
  * @property mixed $password_hash varchar(255) NOT NULL

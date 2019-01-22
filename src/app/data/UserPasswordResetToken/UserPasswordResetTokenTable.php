@@ -22,17 +22,6 @@ class UserPasswordResetTokenTable extends Table
     const NAME = 'user_password_reset_tokens';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class UserPasswordResetTokenTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'user_guid' => [
@@ -80,7 +69,6 @@ class UserPasswordResetTokenTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'user_guid',
         'added_at',
@@ -88,7 +76,6 @@ class UserPasswordResetTokenTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'user_guid' => null,
         'added_at' => null,
@@ -96,10 +83,10 @@ class UserPasswordResetTokenTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

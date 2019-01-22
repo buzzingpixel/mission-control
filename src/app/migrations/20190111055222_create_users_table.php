@@ -11,9 +11,14 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateUsersTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
-        $this->table('users')
+        $this->table('users', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('email_address', 'text')
             ->addColumn('password_hash', 'string')

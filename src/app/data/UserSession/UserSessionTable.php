@@ -22,17 +22,6 @@ class UserSessionTable extends Table
     const NAME = 'user_sessions';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class UserSessionTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'user_guid' => [
@@ -102,7 +91,6 @@ class UserSessionTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'user_guid',
         'added_at',
@@ -112,7 +100,6 @@ class UserSessionTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'user_guid' => null,
         'added_at' => null,
@@ -122,10 +109,10 @@ class UserSessionTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

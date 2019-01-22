@@ -22,17 +22,6 @@ class FlashDatumTable extends Table
     const NAME = 'flash_data';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class FlashDatumTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'name' => [
@@ -91,7 +80,6 @@ class FlashDatumTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'name',
         'data',
@@ -100,7 +88,6 @@ class FlashDatumTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'name' => 'NULL',
         'data' => 'NULL',
@@ -109,10 +96,10 @@ class FlashDatumTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

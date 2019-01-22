@@ -9,7 +9,6 @@ namespace src\app\data\FlashDatum;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $name text(65535)
  * @property mixed $data text(65535)
@@ -19,7 +18,6 @@ use Atlas\Table\Row;
 class FlashDatumRow extends Row
 {
     protected $cols = [
-        'id' => null,
         'guid' => null,
         'name' => 'NULL',
         'data' => 'NULL',

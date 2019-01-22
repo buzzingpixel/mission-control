@@ -11,9 +11,14 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateActionQueueItemsTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
-        $this->table('action_queue_items')
+        $this->table('action_queue_items', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('order_to_run', 'integer')
             ->addColumn('action_queue_batch_guid', 'string')

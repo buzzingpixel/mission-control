@@ -22,17 +22,6 @@ class ActionQueueItemTable extends Table
     const NAME = 'action_queue_items';
 
     const COLUMNS = [
-        'id' => [
-            'name' => 'id',
-            'type' => 'int',
-            'size' => 10,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => true,
-            'primary' => true,
-            'options' => null,
-        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -41,7 +30,7 @@ class ActionQueueItemTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'order_to_run' => [
@@ -135,7 +124,6 @@ class ActionQueueItemTable extends Table
     ];
 
     const COLUMN_NAMES = [
-        'id',
         'guid',
         'order_to_run',
         'action_queue_batch_guid',
@@ -148,7 +136,6 @@ class ActionQueueItemTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
-        'id' => null,
         'guid' => null,
         'order_to_run' => null,
         'action_queue_batch_guid' => null,
@@ -161,10 +148,10 @@ class ActionQueueItemTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'id',
+        'guid',
     ];
 
-    const AUTOINC_COLUMN = 'id';
+    const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 }

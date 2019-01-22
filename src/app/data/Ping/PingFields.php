@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace src\app\data\MonitoredUrl;
+namespace src\app\data\Ping;
 
 /**
  * @property mixed $guid varchar(255) NOT NULL
@@ -12,14 +12,15 @@ namespace src\app\data\MonitoredUrl;
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
- * @property mixed $url varchar(255) NOT NULL
  * @property mixed $pending_error tinyint(3,0) NOT NULL
  * @property mixed $has_error tinyint(3,0) NOT NULL
- * @property mixed $checked_at datetime NOT NULL
- * @property mixed $checked_at_time_zone varchar(255) NOT NULL
+ * @property mixed $expect_every bigint(20,0) unsigned NOT NULL
+ * @property mixed $warn_after bigint(20,0) unsigned NOT NULL
+ * @property mixed $last_ping_at datetime NOT NULL
+ * @property mixed $last_ping_at_time_zone varchar(255) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */
-trait MonitoredUrlFields
+trait PingFields
 {
 }

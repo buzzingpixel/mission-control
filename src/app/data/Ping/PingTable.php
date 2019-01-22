@@ -4,22 +4,22 @@
  */
 declare(strict_types=1);
 
-namespace src\app\data\MonitoredUrl;
+namespace src\app\data\Ping;
 
 use Atlas\Table\Table;
 
 /**
- * @method MonitoredUrlRow|null fetchRow($primaryVal)
- * @method MonitoredUrlRow[] fetchRows(array $primaryVals)
- * @method MonitoredUrlTableSelect select(array $whereEquals = [])
- * @method MonitoredUrlRow newRow(array $cols = [])
- * @method MonitoredUrlRow newSelectedRow(array $cols)
+ * @method PingRow|null fetchRow($primaryVal)
+ * @method PingRow[] fetchRows(array $primaryVals)
+ * @method PingTableSelect select(array $whereEquals = [])
+ * @method PingRow newRow(array $cols = [])
+ * @method PingRow newSelectedRow(array $cols)
  */
-class MonitoredUrlTable extends Table
+class PingTable extends Table
 {
     const DRIVER = 'mysql';
 
-    const NAME = 'monitored_urls';
+    const NAME = 'pings';
 
     const COLUMNS = [
         'guid' => [
@@ -77,17 +77,6 @@ class MonitoredUrlTable extends Table
             'primary' => false,
             'options' => null,
         ],
-        'url' => [
-            'name' => 'url',
-            'type' => 'varchar',
-            'size' => 255,
-            'scale' => null,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
         'pending_error' => [
             'name' => 'pending_error',
             'type' => 'tinyint',
@@ -110,8 +99,30 @@ class MonitoredUrlTable extends Table
             'primary' => false,
             'options' => null,
         ],
-        'checked_at' => [
-            'name' => 'checked_at',
+        'expect_every' => [
+            'name' => 'expect_every',
+            'type' => 'bigint unsigned',
+            'size' => 20,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => null,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
+        'warn_after' => [
+            'name' => 'warn_after',
+            'type' => 'bigint unsigned',
+            'size' => 20,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => null,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
+        'last_ping_at' => [
+            'name' => 'last_ping_at',
             'type' => 'datetime',
             'size' => null,
             'scale' => null,
@@ -121,8 +132,8 @@ class MonitoredUrlTable extends Table
             'primary' => false,
             'options' => null,
         ],
-        'checked_at_time_zone' => [
-            'name' => 'checked_at_time_zone',
+        'last_ping_at_time_zone' => [
+            'name' => 'last_ping_at_time_zone',
             'type' => 'varchar',
             'size' => 255,
             'scale' => null,
@@ -162,11 +173,12 @@ class MonitoredUrlTable extends Table
         'is_active',
         'title',
         'slug',
-        'url',
         'pending_error',
         'has_error',
-        'checked_at',
-        'checked_at_time_zone',
+        'expect_every',
+        'warn_after',
+        'last_ping_at',
+        'last_ping_at_time_zone',
         'added_at',
         'added_at_time_zone',
     ];
@@ -177,11 +189,12 @@ class MonitoredUrlTable extends Table
         'is_active' => '1',
         'title' => null,
         'slug' => null,
-        'url' => null,
         'pending_error' => '0',
         'has_error' => '0',
-        'checked_at' => null,
-        'checked_at_time_zone' => null,
+        'expect_every' => null,
+        'warn_after' => null,
+        'last_ping_at' => null,
+        'last_ping_at_time_zone' => null,
         'added_at' => null,
         'added_at_time_zone' => null,
     ];

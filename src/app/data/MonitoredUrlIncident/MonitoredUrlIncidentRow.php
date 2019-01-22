@@ -9,7 +9,6 @@ namespace src\app\data\MonitoredUrlIncident;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $id int(10,0) NOT NULL
  * @property mixed $guid varchar(255) NOT NULL
  * @property mixed $monitored_url_guid varchar(255) NOT NULL
  * @property mixed $event_type varchar(255) NOT NULL
@@ -21,7 +20,6 @@ use Atlas\Table\Row;
 class MonitoredUrlIncidentRow extends Row
 {
     protected $cols = [
-        'id' => null,
         'guid' => null,
         'monitored_url_guid' => null,
         'event_type' => null,

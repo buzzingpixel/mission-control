@@ -11,9 +11,14 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateUserSessionsTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
-        $this->table('user_sessions')
+        $this->table('user_sessions', [
+                'id' => false,
+                'primary_key' => [
+                    'guid'
+                ]
+            ])
             ->addColumn('guid', 'string')
             ->addColumn('user_guid', 'text')
             ->addColumn('added_at', 'datetime')
