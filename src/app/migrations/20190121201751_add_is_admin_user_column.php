@@ -15,7 +15,7 @@ class AddIsAdminUserColumn extends AbstractMigration
     {
         $table = $this->table('users');
 
-        $table->addColumn('is_admin', 'boolean', ['default' => '0']);
+        $table->addColumn('is_admin', 'boolean', ['default' => 0]);
 
         $table->save();
     }

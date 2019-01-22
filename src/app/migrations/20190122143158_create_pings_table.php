@@ -19,19 +19,52 @@ class CreatePingsTable extends AbstractMigration
                     'guid'
                 ]
             ])
-            ->addColumn('guid', 'string')
-            ->addColumn('project_guid', 'string')
-            ->addColumn('is_active', 'boolean', ['default' => '1'])
-            ->addColumn('title', 'string')
-            ->addColumn('slug', 'string')
-            ->addColumn('pending_error', 'boolean', ['default' => '0'])
-            ->addColumn('has_error', 'boolean', ['default' => '0'])
-            ->addColumn('expect_every', 'biginteger', ['signed' => false])
-            ->addColumn('warn_after', 'biginteger', ['signed' => false])
-            ->addColumn('last_ping_at', 'datetime')
-            ->addColumn('last_ping_at_time_zone', 'string')
-            ->addColumn('added_at', 'datetime')
-            ->addColumn('added_at_time_zone', 'string')
+            ->addColumn('guid', 'binary', [
+                'limit' => 16,
+                'comment' => 'UUID generated in code and stored as binary',
+            ])
+            ->addColumn('project_guid', 'binary', [
+                'limit' => 16,
+                'comment' => 'Associated project UUID stored as binary',
+            ])
+            ->addColumn('is_active', 'boolean', [
+                'default' => 1,
+                'comment' => 'Determines whether the project is active or archived',
+            ])
+            ->addColumn('title', 'string', [
+                'comment' => 'The project title',
+            ])
+            ->addColumn('slug', 'string', [
+                'comment' => 'The project slug (code should ensure uniqueness)',
+            ])
+            ->addColumn('pending_error', 'boolean', [
+                'default' => 0,
+                'comment' => 'Set if a checkin is overdue',
+            ])
+            ->addColumn('has_error', 'boolean', [
+                'default' => 0,
+                'comment' => 'Set if a checkin is over and past the warn_after setting',
+            ])
+            ->addColumn('expect_every', 'biginteger', [
+                'signed' => false,
+                'comment' => 'Time in minutes to expect the checkin',
+            ])
+            ->addColumn('warn_after', 'biginteger', [
+                'signed' => false,
+                'comment' => 'Time in minutes to warn after overdue',
+            ])
+            ->addColumn('last_ping_at', 'datetime', [
+                'comment' => 'The datetime representation of when the checkin last happened',
+            ])
+            ->addColumn('last_ping_at_time_zone', 'string', [
+                'comment' => 'The timezone last_ping_at was set with',
+            ])
+            ->addColumn('added_at', 'datetime', [
+                'comment' => 'The datetime representation of when the ping was added',
+            ])
+            ->addColumn('added_at_time_zone', 'string', [
+                'comment' => 'The timezone added_at was set with',
+            ])
             ->create();
     }
 }

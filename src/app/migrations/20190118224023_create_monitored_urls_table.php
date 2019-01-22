@@ -41,11 +41,11 @@ class CreateMonitoredUrlsTable extends AbstractMigration
                 'comment' => 'Url to monitor',
             ])
             ->addColumn('pending_error', 'boolean', [
-                'default' => '0',
+                'default' => 0,
                 'comment' => 'If an error was detected on check for the first time, status will be pending',
             ])
             ->addColumn('has_error', 'boolean', [
-                'default' => '0',
+                'default' => 0,
                 'comment' => 'If an error is detected a second time after pending, monitored URL has an error',
             ])
             ->addColumn('checked_at', 'datetime', [
