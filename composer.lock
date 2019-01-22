@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9610f38589e29797203cdf277c0cfc6",
+    "content-hash": "cd38cbc1f96fce042f107ae396af6f15",
     "packages": [
         {
             "name": "atlas/cli",
@@ -851,20 +851,20 @@
         },
         {
             "name": "buzzingpixel/corbomite-queue",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-queue.git",
-                "reference": "ea5ed8215e09497ab204226683e86734dfa02fb8"
+                "reference": "fa272e13d85cdec0032e84313dacb03cbf222f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/ea5ed8215e09497ab204226683e86734dfa02fb8",
-                "reference": "ea5ed8215e09497ab204226683e86734dfa02fb8",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/fa272e13d85cdec0032e84313dacb03cbf222f54",
+                "reference": "fa272e13d85cdec0032e84313dacb03cbf222f54",
                 "shasum": ""
             },
             "require": {
-                "buzzingpixel/corbomite-db": "^1.0.2",
+                "buzzingpixel/corbomite-db": "^1.1",
                 "buzzingpixel/corbomite-di": "^1.0",
                 "buzzingpixel/corbomite-migrations": "^1.0",
                 "ext-json": "*",
@@ -896,7 +896,7 @@
                 }
             ],
             "description": "Corbomite queue",
-            "time": "2019-01-10T23:35:34+00:00"
+            "time": "2019-01-22T02:58:57+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-schedule",

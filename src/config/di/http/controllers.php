@@ -4,6 +4,7 @@ declare(strict_types=1);
 use corbomite\di\Di;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
+use corbomite\queue\QueueApi;
 use src\app\projects\ProjectsApi;
 use corbomite\twig\TwigEnvironment;
 use src\app\utilities\TimeZoneListUtility;
@@ -38,6 +39,7 @@ return [
         return new AdminController(
             Di::get(UserApi::class),
             new Response(),
+            Di::get(QueueApi::class),
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
         );

@@ -10,22 +10,26 @@ use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
+use corbomite\queue\interfaces\QueueApiInterface;
 
 class AdminController
 {
     private $userApi;
     private $response;
+    private $queueApi;
     private $twigEnvironment;
     private $requireLoginService;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
+        QueueApiInterface $queueApi,
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
+        $this->queueApi = $queueApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
@@ -76,11 +80,45 @@ class AdminController
             ];
         }
 
+        $queueRows = [];
+
+        foreach ($this->queueApi->fetchAllBatches() as $batch) {
+            $batch->addedAt()->setTimezone(new \DateTimeZone(
+                $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
+            ));
+
+            $queueRows[] = [
+                'inputValue' => 'null',
+                'cols' => [
+                    'Title' => $batch->title(),
+                    'Percent Complete' => $batch->percentComplete(),
+                    'Added At' => $batch->addedAt()->format('n/j/Y g:i:s a'),
+                ],
+            ];
+        }
+
+        // $queueApi = $this->queueApi;
+        //
+        // $batchModel = $queueApi->makeActionQueueBatchModel();
+        // $itemModel1 = $queueApi->makeActionQueueItemModel();
+        // $itemModel2 = $queueApi->makeActionQueueItemModel();
+        //
+        // $itemModel1->class(\corbomite\queue\Noop::class);
+        //
+        // $itemModel2->class(\corbomite\queue\Noop::class);
+        // $itemModel2->method('noop');
+        //
+        // $batchModel->name('test_name');
+        // $batchModel->title('Test Name');
+        // $batchModel->addItem($itemModel1);
+        // $batchModel->addItem($itemModel2);
+        //
+        // $queueApi->addToQueue($batchModel);
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Admin',
                 'title' => 'Admin',
-                'subTitle' => 'Your user account is not shown',
                 'pageControlButtons' => [
                     [
                         'href' => '/admin/create-user',
@@ -90,6 +128,7 @@ class AdminController
                 'includes' => [
                     [
                         'template' => 'forms/TableListForm.twig',
+                        'formTitle' => 'Users',
                         'actionParam' => 'adminUserActions',
                         'actions' => [
                             'promote' => 'Promote Selected to Admin',
@@ -105,7 +144,22 @@ class AdminController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
+
+                    [
+                        'template' => 'forms/TableListForm.twig',
+                        'formTitle' => 'Process in Queue',
+                        'actionParam' => 'null',
+                        'table' => [
+                            'inputsName' => 'null',
+                            'headings' => [
+                                'Title',
+                                'Percent Complete',
+                                'Added At'
+                            ],
+                            'rows' => $queueRows,
+                        ],
+                    ],
                 ],
             ])
         );
