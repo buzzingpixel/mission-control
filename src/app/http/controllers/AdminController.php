@@ -148,7 +148,7 @@ class AdminController
 
                     [
                         'template' => 'forms/TableListForm.twig',
-                        'formTitle' => 'Process in Queue',
+                        'formTitle' => 'Batches Waiting in Queue',
                         'actionParam' => 'null',
                         'table' => [
                             'inputsName' => 'null',

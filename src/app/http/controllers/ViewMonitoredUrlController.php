@@ -111,11 +111,12 @@ class ViewMonitoredUrlController
 
         $rows = [];
 
-        $params = $this->monitoredUrlsApi->makeQueryModel();
-        $params->limit(50);
-        $params->addOrder('event_at');
+        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
+        $queryModel->limit(50);
+        $queryModel->addWhere('monitored_url_guid', $model->guid());
+        $queryModel->addOrder('event_at');
 
-        foreach ($this->monitoredUrlsApi->fetchIncidents($params) as $incident) {
+        foreach ($this->monitoredUrlsApi->fetchIncidents($queryModel) as $incident) {
             $incident->eventAt()->setTimezone(new \DateTimeZone(
                 $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
             ));
