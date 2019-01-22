@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a28ab4ed530a1994a77eebee5883ece9",
+    "content-hash": "3deb51eb7870d97a2723316e5a38e6d3",
     "packages": [
         {
             "name": "atlas/cli",
@@ -641,16 +641,16 @@
         },
         {
             "name": "buzzingpixel/corbomite-flash-data",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-flash-data.git",
-                "reference": "8e2c212269369c4c342f0293a544089b0f877ac1"
+                "reference": "b0b6810d01c191353129511b16c462e702da985e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-flash-data/zipball/8e2c212269369c4c342f0293a544089b0f877ac1",
-                "reference": "8e2c212269369c4c342f0293a544089b0f877ac1",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-flash-data/zipball/b0b6810d01c191353129511b16c462e702da985e",
+                "reference": "b0b6810d01c191353129511b16c462e702da985e",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +693,7 @@
                 }
             ],
             "description": "Corbomite Flash Data",
-            "time": "2019-01-15T06:45:57+00:00"
+            "time": "2019-01-22T15:31:52+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-http",
@@ -851,16 +851,16 @@
         },
         {
             "name": "buzzingpixel/corbomite-queue",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-queue.git",
-                "reference": "fa272e13d85cdec0032e84313dacb03cbf222f54"
+                "reference": "6b590c3bd334a59aed92ce392f842dd8ee8182b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/fa272e13d85cdec0032e84313dacb03cbf222f54",
-                "reference": "fa272e13d85cdec0032e84313dacb03cbf222f54",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/6b590c3bd334a59aed92ce392f842dd8ee8182b2",
+                "reference": "6b590c3bd334a59aed92ce392f842dd8ee8182b2",
                 "shasum": ""
             },
             "require": {
@@ -896,20 +896,20 @@
                 }
             ],
             "description": "Corbomite queue",
-            "time": "2019-01-22T02:58:57+00:00"
+            "time": "2019-01-22T15:06:07+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-schedule",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-schedule.git",
-                "reference": "237178e944fb544adeb4d810381d1d2ee9bb2fd9"
+                "reference": "a0c7bea6659dc3f5a6de5f98e831c7d6b8b8f91b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-schedule/zipball/237178e944fb544adeb4d810381d1d2ee9bb2fd9",
-                "reference": "237178e944fb544adeb4d810381d1d2ee9bb2fd9",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-schedule/zipball/a0c7bea6659dc3f5a6de5f98e831c7d6b8b8f91b",
+                "reference": "a0c7bea6659dc3f5a6de5f98e831c7d6b8b8f91b",
                 "shasum": ""
             },
             "require": {
@@ -944,7 +944,7 @@
                 }
             ],
             "description": "Corbomite Schedule",
-            "time": "2019-01-11T22:43:18+00:00"
+            "time": "2019-01-22T15:45:53+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-twig",
@@ -1000,16 +1000,16 @@
         },
         {
             "name": "buzzingpixel/corbomite-user",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-user.git",
-                "reference": "bbf71d1145301c0763df4df2ffab2f32a054e847"
+                "reference": "065a970c48949ca4e6bb04dc5d8ee380bb01bcba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-user/zipball/bbf71d1145301c0763df4df2ffab2f32a054e847",
-                "reference": "bbf71d1145301c0763df4df2ffab2f32a054e847",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-user/zipball/065a970c48949ca4e6bb04dc5d8ee380bb01bcba",
+                "reference": "065a970c48949ca4e6bb04dc5d8ee380bb01bcba",
                 "shasum": ""
             },
             "require": {
@@ -1058,7 +1058,7 @@
                 }
             ],
             "description": "Corbomite User",
-            "time": "2019-01-21T22:59:36+00:00"
+            "time": "2019-01-22T15:12:02+00:00"
         },
         {
             "name": "buzzingpixel/minify",
