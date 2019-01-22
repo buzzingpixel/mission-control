@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use corbomite\di\Di;
 use Cocur\Slugify\Slugify;
-use Ramsey\Uuid\UuidFactory;
 use src\app\projects\ProjectsApi;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as DbFactory;
@@ -47,7 +46,6 @@ return [
         return new SaveProjectService(
             new Slugify(),
             new OrmFactory(),
-            new UuidFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class),
             new DbFactory()

@@ -40,7 +40,7 @@ class FetchProjectsService
         foreach ($this->fetchResults($params) as $record) {
             $model = new ProjectModel();
 
-            $model->guid($record->guid);
+            $model->setGuidAsBytes($record->guid);
             $model->isActive($record->is_active === 1 || $record->is_active === '1');
             $model->title($record->title);
             $model->slug($record->slug);

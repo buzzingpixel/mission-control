@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\projects;
 
 use corbomite\di\Di;
+use corbomite\db\models\UuidModel;
 use corbomite\db\Factory as DbFactory;
 use src\app\projects\models\ProjectModel;
 use corbomite\db\interfaces\QueryModelInterface;
@@ -31,6 +32,11 @@ class ProjectsApi implements ProjectsApiInterface
     public function createModel(array $props = []): ProjectModelInterface
     {
         return new ProjectModel($props);
+    }
+
+    public function uuidToBytes(string $string): string
+    {
+        return (new UuidModel($string))->toBytes();
     }
 
     public function makeQueryModel(): QueryModelInterface

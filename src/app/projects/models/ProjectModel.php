@@ -6,10 +6,13 @@ namespace src\app\projects\models;
 use DateTime;
 use DateTimeZone;
 
+use corbomite\db\traits\UuidTrait;
 use src\app\projects\interfaces\ProjectModelInterface;
 
 class ProjectModel implements ProjectModelInterface
 {
+    use UuidTrait;
+
     public function __construct(array $props = [])
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -18,13 +21,6 @@ class ProjectModel implements ProjectModelInterface
         foreach ($props as $k => $v) {
             $this->{$k}($v);
         }
-    }
-
-    private $guid = '';
-
-    public function guid(?string $guid = null): string
-    {
-        return $this->guid = $guid ?? $this->guid;
     }
 
     private $isActive = true;

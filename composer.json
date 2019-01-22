@@ -21,7 +21,7 @@
         "buzzingpixel/twig-getenv": "^1.0",
         "buzzingpixel/twig-filetime": "^1.0",
         "buzzingpixel/cookie-api": "^1.1.1",
-        "buzzingpixel/corbomite-db": "^1.1",
+        "buzzingpixel/corbomite-db": "^1.2.1",
         "buzzingpixel/corbomite-migrations": "^1.0.1",
         "buzzingpixel/corbomite-queue": "^1.1.1",
         "buzzingpixel/corbomite-schedule": "^1.0.3",

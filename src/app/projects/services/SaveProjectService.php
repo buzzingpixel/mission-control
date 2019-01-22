@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace src\app\projects\services;
 
 use Cocur\Slugify\Slugify;
-use Ramsey\Uuid\UuidFactory;
 use src\app\data\Project\Project;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as DbFactory;
@@ -22,14 +21,12 @@ class SaveProjectService
     private $slugify;
     private $ormFactory;
     private $buildQuery;
-    private $uuidFactory;
     private $eventDispatcher;
     private $dbFactory;
 
     public function __construct(
         Slugify $slugify,
         OrmFactory $ormFactory,
-        UuidFactory $uuidFactory,
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher,
         DbFactory $dbFactory
@@ -37,7 +34,6 @@ class SaveProjectService
         $this->slugify = $slugify;
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
-        $this->uuidFactory = $uuidFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->dbFactory = $dbFactory;
     }
@@ -65,7 +61,7 @@ class SaveProjectService
 
         $fetchModel = $this->dbFactory->makeQueryModel();
         $fetchModel->limit(1);
-        $fetchModel->addWhere('guid', $model->guid(), '!=');
+        $fetchModel->addWhere('guid', $model->getGuidAsBytes(), '!=');
         $fetchModel->addWhereGroup(false);
         $fetchModel->addWhere('title', $model->title());
         $fetchModel->addWhere('slug', $model->slug(), '=', true);
@@ -75,7 +71,12 @@ class SaveProjectService
             throw new ProjectNameNotUniqueException();
         }
 
-        if (! $model->guid()) {
+        $fetchModel = $this->dbFactory->makeQueryModel();
+        $fetchModel->limit(1);
+        $fetchModel->addWhere('guid', $model->getGuidAsBytes());
+        $existingRecord = $this->buildQuery->build(Project::class, $fetchModel)->fetchRecord();
+
+        if (! $existingRecord) {
             $beforeEvent = new ProjectBeforeSaveEvent($model, true);
 
             $this->eventDispatcher->dispatch(
@@ -105,7 +106,7 @@ class SaveProjectService
             $beforeEvent
         );
 
-        $this->saveExistingProject($model);
+        $this->saveExistingProject($model, $existingRecord);
 
         $afterEvent = new ProjectAfterSaveEvent($model);
 
@@ -123,21 +124,20 @@ class SaveProjectService
         $record = $orm->newRecord(Project::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $record->guid = $this->uuidFactory->uuid4()->toString();
+        $record->guid = $model->getGuidAsBytes();
 
         $this->finalSave($model, $record);
     }
 
-    private function saveExistingProject(ProjectModelInterface $model): void
-    {
+    private function saveExistingProject(
+        ProjectModelInterface $model,
+        ProjectRecord $record
+    ): void {
         $fetchModel = $this->dbFactory->makeQueryModel();
         $fetchModel->limit(1);
-        $fetchModel->addWhere('guid', $model->guid());
+        $fetchModel->addWhere('guid', $model->getGuidAsBytes());
 
-        $this->finalSave(
-            $model,
-            $this->buildQuery->build(Project::class, $fetchModel)->fetchRecord()
-        );
+        $this->finalSave($model, $record);
     }
 
     private function finalSave(ProjectModelInterface $model, ProjectRecord $record): void

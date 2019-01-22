@@ -35,7 +35,13 @@ class ProjectListActions
         $this->flashDataApi = $flashDataApi;
         $this->requestHelper = $requestHelper;
 
-        $this->projectGuids = $this->requestHelper->post('projects');
+        $guids = $this->requestHelper->post('projects');
+
+        if ($guids) {
+            foreach ($guids as $guid) {
+                $this->projectGuids[] = $this->projectsApi->uuidToBytes($guid);
+            }
+        }
     }
 
     /**
