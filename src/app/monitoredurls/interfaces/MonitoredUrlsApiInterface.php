@@ -17,6 +17,13 @@ interface MonitoredUrlsApiInterface
     public function createModel(array $props = []): MonitoredUrlModelInterface;
 
     /**
+     * Converts a UUID to bytes for database queries
+     * @param string $string
+     * @return string
+     */
+    public function uuidToBytes(string $string): string;
+
+    /**
      * Creates a Monitored URL Incident Model
      * @param array $props
      * @return MonitoredUrlIncidentModelInterface

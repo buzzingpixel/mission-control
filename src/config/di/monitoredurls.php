@@ -56,7 +56,6 @@ return [
     SaveIncidentService::class => function () {
         return new SaveIncidentService(
             new OrmFactory(),
-            new UuidFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class),
             new DbFactory()

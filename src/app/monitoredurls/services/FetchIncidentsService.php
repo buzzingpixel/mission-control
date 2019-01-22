@@ -40,8 +40,8 @@ class FetchIncidentsService
         foreach ($this->fetchResults($params) as $record) {
             $model = new MonitoredUrlIncidentModel();
 
-            $model->guid($record->guid);
-            $model->monitoredUrlGuid($record->monitored_url_guid);
+            $model->setGuidAsBytes($record->guid);
+            $model->setMonitoredUrlGuidAsBytes($record->monitored_url_guid);
             $model->eventType($record->event_type);
             $model->statusCode($record->status_code);
             $model->message($record->message);

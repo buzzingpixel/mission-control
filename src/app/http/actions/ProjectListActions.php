@@ -37,10 +37,12 @@ class ProjectListActions
 
         $guids = $this->requestHelper->post('projects');
 
-        if ($guids) {
-            foreach ($guids as $guid) {
-                $this->projectGuids[] = $this->projectsApi->uuidToBytes($guid);
-            }
+        if (! $guids) {
+            return;
+        }
+
+        foreach ($guids as $guid) {
+            $this->projectGuids[] = $this->projectsApi->uuidToBytes($guid);
         }
     }
 

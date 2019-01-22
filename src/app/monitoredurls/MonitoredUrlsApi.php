@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\monitoredurls;
 
 use corbomite\di\Di;
+use corbomite\db\models\UuidModel;
 use corbomite\db\Factory as DbFactory;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\monitoredurls\models\MonitoredUrlIncidentModel;
@@ -33,6 +34,11 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
     public function createModel(array $props = []): MonitoredUrlModelInterface
     {
         return new MonitoredUrlModel($props);
+    }
+
+    public function uuidToBytes(string $string): string
+    {
+        return (new UuidModel($string))->toBytes();
     }
 
     public function createIncidentModel(array $props = []): MonitoredUrlIncidentModelInterface

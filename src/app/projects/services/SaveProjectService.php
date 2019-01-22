@@ -106,7 +106,7 @@ class SaveProjectService
             $beforeEvent
         );
 
-        $this->saveExistingProject($model, $existingRecord);
+        $this->finalSave($model, $existingRecord);
 
         $afterEvent = new ProjectAfterSaveEvent($model);
 
@@ -123,19 +123,7 @@ class SaveProjectService
 
         $record = $orm->newRecord(Project::class);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $record->guid = $model->getGuidAsBytes();
-
-        $this->finalSave($model, $record);
-    }
-
-    private function saveExistingProject(
-        ProjectModelInterface $model,
-        ProjectRecord $record
-    ): void {
-        $fetchModel = $this->dbFactory->makeQueryModel();
-        $fetchModel->limit(1);
-        $fetchModel->addWhere('guid', $model->getGuidAsBytes());
 
         $this->finalSave($model, $record);
     }

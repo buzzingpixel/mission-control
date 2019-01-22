@@ -5,10 +5,15 @@ namespace src\app\monitoredurls\models;
 
 use DateTime;
 use DateTimeZone;
+use corbomite\db\traits\UuidTrait;
+use corbomite\db\models\UuidModel;
+use corbomite\db\interfaces\UuidModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
 
 class MonitoredUrlIncidentModel implements MonitoredUrlIncidentModelInterface
 {
+    use UuidTrait;
+
     public function __construct(array $props = [])
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -19,18 +24,39 @@ class MonitoredUrlIncidentModel implements MonitoredUrlIncidentModelInterface
         }
     }
 
-    private $guid = '';
+    /** @var UuidModelInterface */
+    private $monitoredUrlUuidModel;
 
-    public function guid(?string $val = null): string
+    public function monitoredUrlGuid(?string $guid = null): ?string
     {
-        return $this->guid = $val ?? $this->guid;
+        if ($guid !== null) {
+            $this->monitoredUrlUuidModel = new UuidModel($guid);
+        }
+
+        if (! $this->monitoredUrlUuidModel) {
+            return null;
+        }
+
+        return $this->monitoredUrlUuidModel->toString();
     }
 
-    private $monitoredUrlGuid = '';
-
-    public function monitoredUrlGuid(?string $val = null): string
+    public function monitoredUrlGuidAsModel(): ?UuidModelInterface
     {
-        return $this->monitoredUrlGuid = $val ?? $this->monitoredUrlGuid;
+        return $this->monitoredUrlUuidModel;
+    }
+
+    public function getMonitoredUrlGuidAsBytes(): ?string
+    {
+        if (! $this->monitoredUrlUuidModel) {
+            return null;
+        }
+
+        return $this->monitoredUrlUuidModel->toBytes();
+    }
+
+    public function setMonitoredUrlGuidAsBytes(string $bytes): void
+    {
+        $this->monitoredUrlUuidModel = UuidModel::fromBytes($bytes);
     }
 
     private $eventType = '';

@@ -35,7 +35,15 @@ class MonitoredUrlActions
         $this->requestHelper = $requestHelper;
         $this->monitredUrlsApi = $monitredUrlsApi;
 
-        $this->guids = $this->requestHelper->post('guids');
+        $guids = $this->requestHelper->post('guids');
+
+        if (! $guids) {
+            return;
+        }
+
+        foreach ($guids as $guid) {
+            $this->guids[] = $this->monitredUrlsApi->uuidToBytes($guid);
+        }
     }
 
     /**

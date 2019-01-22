@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace src\app\monitoredurls\services;
 
-use Ramsey\Uuid\UuidFactory;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
@@ -19,20 +18,17 @@ class SaveIncidentService
 {
     private $ormFactory;
     private $buildQuery;
-    private $uuidFactory;
     private $eventDispatcher;
     private $dbFactory;
 
     public function __construct(
         OrmFactory $ormFactory,
-        UuidFactory $uuidFactory,
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher,
         DbFactory $dbFactory
     ) {
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
-        $this->uuidFactory = $uuidFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->dbFactory = $dbFactory;
     }
@@ -56,7 +52,12 @@ class SaveIncidentService
             throw new InvalidMonitoredUrlIncidentModelException();
         }
 
-        if (! $model->guid()) {
+        $fetchModel = $this->dbFactory->makeQueryModel();
+        $fetchModel->limit(1);
+        $fetchModel->addWhere('guid', $model->getGuidAsBytes());
+        $existingRecord = $this->buildQuery->build(MonitoredUrlIncident::class, $fetchModel)->fetchRecord();
+
+        if (! $existingRecord) {
             $before = new MonitoredUrlIncidentBeforeSaveEvent($model, true);
 
             $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
@@ -74,7 +75,7 @@ class SaveIncidentService
 
         $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
 
-        $this->saveExisting($model);
+        $this->finalSave($model, $existingRecord);
 
         $after = new MonitoredUrlIncidentAfterSaveEvent($model, false);
 
@@ -87,29 +88,16 @@ class SaveIncidentService
 
         $record = $orm->newRecord(MonitoredUrlIncident::class);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $record->guid = $this->uuidFactory->uuid4()->toString();
+        $record->guid = $model->getGuidAsBytes();
 
         $this->finalSave($model, $record);
-    }
-
-    private function saveExisting(MonitoredUrlIncidentModelInterface $model): void
-    {
-        $params = $this->dbFactory->makeQueryModel();
-        $params->limit(1);
-        $params->addWhere('guid', $model->guid());
-
-        $this->finalSave(
-            $model,
-            $this->buildQuery->build(MonitoredUrlIncident::class, $params)->fetchRecord()
-        );
     }
 
     private function finalSave(
         MonitoredUrlIncidentModelInterface $model,
         MonitoredUrlIncidentRecord $record
     ): void {
-        $record->monitored_url_guid = $model->monitoredUrlGuid();
+        $record->monitored_url_guid = $model->getMonitoredUrlGuidAsBytes();
         $record->event_type = $model->eventType();
         $record->status_code = $model->statusCode();
         $record->message = $model->message();

@@ -5,10 +5,15 @@ namespace src\app\monitoredurls\models;
 
 use DateTime;
 use DateTimeZone;
+use corbomite\db\traits\UuidTrait;
+use corbomite\db\models\UuidModel;
+use corbomite\db\interfaces\UuidModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 
 class MonitoredUrlModel implements MonitoredUrlModelInterface
 {
+    use UuidTrait;
+
     public function __construct(array $props = [])
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -22,18 +27,39 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
         }
     }
 
-    private $guid = '';
+    /** @var UuidModelInterface */
+    private $projectUuidModel;
 
-    public function guid(?string $val = null): string
+    public function projectGuid(?string $guid = null): ?string
     {
-        return $this->guid = $val ?? $this->guid;
+        if ($guid !== null) {
+            $this->projectUuidModel = new UuidModel($guid);
+        }
+
+        if (! $this->projectUuidModel) {
+            return null;
+        }
+
+        return $this->projectUuidModel->toString();
     }
 
-    private $projectGuid = '';
-
-    public function projectGuid(?string $val = null): string
+    public function projectGuidAsModel(): ?UuidModelInterface
     {
-        return $this->projectGuid = $val ?? $this->projectGuid;
+        return $this->projectUuidModel;
+    }
+
+    public function getProjectGuidAsBytes(): ?string
+    {
+        if (! $this->projectUuidModel) {
+            return null;
+        }
+
+        return $this->projectUuidModel->toBytes();
+    }
+
+    public function setProjectGuidAsBytes(string $bytes): void
+    {
+        $this->projectUuidModel = UuidModel::fromBytes($bytes);
     }
 
     private $isActive = true;
