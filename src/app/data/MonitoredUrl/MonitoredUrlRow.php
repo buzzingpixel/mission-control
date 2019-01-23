@@ -10,7 +10,7 @@ use Atlas\Table\Row;
 
 /**
  * @property mixed $guid binary(16) NOT NULL
- * @property mixed $project_guid binary(16) NOT NULL
+ * @property mixed $project_guid binary(16)
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
@@ -26,7 +26,7 @@ class MonitoredUrlRow extends Row
 {
     protected $cols = [
         'guid' => null,
-        'project_guid' => null,
+        'project_guid' => 'NULL',
         'is_active' => 1,
         'title' => null,
         'slug' => null,

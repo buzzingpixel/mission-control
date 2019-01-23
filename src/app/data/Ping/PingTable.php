@@ -38,6 +38,17 @@ class PingTable extends Table
             'type' => 'binary',
             'size' => 16,
             'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
+        'ping_id' => [
+            'name' => 'ping_id',
+            'type' => 'varchar',
+            'size' => 16,
+            'scale' => null,
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
@@ -170,6 +181,7 @@ class PingTable extends Table
     const COLUMN_NAMES = [
         'guid',
         'project_guid',
+        'ping_id',
         'is_active',
         'title',
         'slug',
@@ -185,7 +197,8 @@ class PingTable extends Table
 
     const COLUMN_DEFAULTS = [
         'guid' => null,
-        'project_guid' => null,
+        'project_guid' => 'NULL',
+        'ping_id' => null,
         'is_active' => 1,
         'title' => null,
         'slug' => null,

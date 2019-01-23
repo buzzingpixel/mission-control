@@ -10,7 +10,8 @@ use Atlas\Table\Row;
 
 /**
  * @property mixed $guid binary(16) NOT NULL
- * @property mixed $project_guid binary(16) NOT NULL
+ * @property mixed $project_guid binary(16)
+ * @property mixed $ping_id varchar(16) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
@@ -27,7 +28,8 @@ class PingRow extends Row
 {
     protected $cols = [
         'guid' => null,
-        'project_guid' => null,
+        'project_guid' => 'NULL',
+        'ping_id' => null,
         'is_active' => 1,
         'title' => null,
         'slug' => null,

@@ -38,8 +38,8 @@ class MonitoredUrlTable extends Table
             'type' => 'binary',
             'size' => 16,
             'scale' => null,
-            'notnull' => true,
-            'default' => null,
+            'notnull' => false,
+            'default' => 'NULL',
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -173,7 +173,7 @@ class MonitoredUrlTable extends Table
 
     const COLUMN_DEFAULTS = [
         'guid' => null,
-        'project_guid' => null,
+        'project_guid' => 'NULL',
         'is_active' => 1,
         'title' => null,
         'slug' => null,
