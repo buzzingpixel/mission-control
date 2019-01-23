@@ -13,6 +13,7 @@ use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\controllers\AdminController;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\AccountController;
+use src\app\http\controllers\EditPingController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
@@ -97,6 +98,15 @@ return [
             Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class),
             Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    EditPingController::class => function () {
+        return new EditPingController(
+            Di::get(UserApi::class),
+            Di::get(PingApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
         );
     },
     EditProjectController::class => function () {
