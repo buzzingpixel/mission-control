@@ -10,6 +10,7 @@ use src\app\pings\services\SavePingService;
 use corbomite\db\services\BuildQueryService;
 use src\app\pings\services\FetchPingService;
 use src\app\pings\services\ArchivePingService;
+use src\app\pings\services\UnArchivePingService;
 
 return [
     PingApi::class => function () {
@@ -33,6 +34,13 @@ return [
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get('UuidFactoryWithOrderedTimeCodec'),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    UnArchivePingService::class => function () {
+        return new UnArchivePingService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
         );
     },

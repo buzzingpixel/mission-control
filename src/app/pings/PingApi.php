@@ -13,6 +13,7 @@ use src\app\pings\services\ArchivePingService;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pings\interfaces\PingModelInterface;
+use src\app\pings\services\UnArchivePingService;
 
 class PingApi implements PingApiInterface
 {
@@ -47,7 +48,9 @@ class PingApi implements PingApiInterface
 
     public function unArchive(PingModelInterface $model): void
     {
-        // TODO: Implement unArchive() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(UnArchivePingService::class);
+        $service->unArchive($model);
     }
 
     public function delete(PingModelInterface $model)
