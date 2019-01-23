@@ -9,10 +9,10 @@ namespace src\app\data\User;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
  * @property mixed $email_address text(65535) NOT NULL
  * @property mixed $password_hash varchar(255) NOT NULL
- * @property mixed $user_data text(65535)
+ * @property mixed $user_data text(65535) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  * @property mixed $timezone varchar(255)
@@ -24,10 +24,10 @@ class UserRow extends Row
         'guid' => null,
         'email_address' => null,
         'password_hash' => null,
-        'user_data' => 'NULL',
+        'user_data' => null,
         'added_at' => null,
         'added_at_time_zone' => null,
         'timezone' => 'NULL',
-        'is_admin' => '0',
+        'is_admin' => 0,
     ];
 }

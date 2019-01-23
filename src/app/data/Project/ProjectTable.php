@@ -24,8 +24,8 @@ class ProjectTable extends Table
     const COLUMNS = [
         'guid' => [
             'name' => 'guid',
-            'type' => 'varchar',
-            'size' => 255,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,
@@ -39,7 +39,7 @@ class ProjectTable extends Table
             'size' => 3,
             'scale' => 0,
             'notnull' => true,
-            'default' => '1',
+            'default' => 1,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -113,7 +113,7 @@ class ProjectTable extends Table
 
     const COLUMN_DEFAULTS = [
         'guid' => null,
-        'is_active' => '1',
+        'is_active' => 1,
         'title' => null,
         'slug' => null,
         'description' => null,

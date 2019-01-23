@@ -9,7 +9,7 @@ namespace src\app\data\Project;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
@@ -21,7 +21,7 @@ class ProjectRow extends Row
 {
     protected $cols = [
         'guid' => null,
-        'is_active' => '1',
+        'is_active' => 1,
         'title' => null,
         'slug' => null,
         'description' => null,

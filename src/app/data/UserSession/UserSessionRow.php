@@ -9,8 +9,8 @@ namespace src\app\data\UserSession;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
- * @property mixed $user_guid text(65535) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
+ * @property mixed $user_guid binary(16) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  * @property mixed $last_touched_at datetime NOT NULL

@@ -22,6 +22,17 @@ class ScheduleTrackingTable extends Table
     const NAME = 'schedule_tracking';
 
     const COLUMNS = [
+        'id' => [
+            'name' => 'id',
+            'type' => 'bigint unsigned',
+            'size' => 20,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => null,
+            'autoinc' => true,
+            'primary' => true,
+            'options' => null,
+        ],
         'guid' => [
             'name' => 'guid',
             'type' => 'varchar',
@@ -30,7 +41,7 @@ class ScheduleTrackingTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => true,
+            'primary' => false,
             'options' => null,
         ],
         'is_running' => [
@@ -39,7 +50,7 @@ class ScheduleTrackingTable extends Table
             'size' => 3,
             'scale' => 0,
             'notnull' => true,
-            'default' => '0',
+            'default' => 0,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -91,6 +102,7 @@ class ScheduleTrackingTable extends Table
     ];
 
     const COLUMN_NAMES = [
+        'id',
         'guid',
         'is_running',
         'last_run_start_at',
@@ -100,8 +112,9 @@ class ScheduleTrackingTable extends Table
     ];
 
     const COLUMN_DEFAULTS = [
+        'id' => null,
         'guid' => null,
-        'is_running' => '0',
+        'is_running' => 0,
         'last_run_start_at' => 'NULL',
         'last_run_start_at_time_zone' => 'NULL',
         'last_run_end_at' => 'NULL',
@@ -109,10 +122,10 @@ class ScheduleTrackingTable extends Table
     ];
 
     const PRIMARY_KEY = [
-        'guid',
+        'id',
     ];
 
-    const AUTOINC_COLUMN = null;
+    const AUTOINC_COLUMN = 'id';
 
     const AUTOINC_SEQUENCE = null;
 }

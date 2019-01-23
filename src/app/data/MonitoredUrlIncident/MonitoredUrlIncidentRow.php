@@ -9,8 +9,8 @@ namespace src\app\data\MonitoredUrlIncident;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
- * @property mixed $monitored_url_guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
+ * @property mixed $monitored_url_guid binary(16) NOT NULL
  * @property mixed $event_type varchar(255) NOT NULL
  * @property mixed $status_code varchar(255) NOT NULL
  * @property mixed $message text(65535) NOT NULL

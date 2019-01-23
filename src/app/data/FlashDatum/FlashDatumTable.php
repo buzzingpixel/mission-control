@@ -24,8 +24,8 @@ class FlashDatumTable extends Table
     const COLUMNS = [
         'guid' => [
             'name' => 'guid',
-            'type' => 'varchar',
-            'size' => 255,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,
@@ -60,8 +60,8 @@ class FlashDatumTable extends Table
             'type' => 'datetime',
             'size' => null,
             'scale' => null,
-            'notnull' => false,
-            'default' => 'NULL',
+            'notnull' => true,
+            'default' => null,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -71,8 +71,8 @@ class FlashDatumTable extends Table
             'type' => 'varchar',
             'size' => 255,
             'scale' => null,
-            'notnull' => false,
-            'default' => 'NULL',
+            'notnull' => true,
+            'default' => null,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -91,8 +91,8 @@ class FlashDatumTable extends Table
         'guid' => null,
         'name' => 'NULL',
         'data' => 'NULL',
-        'added_at' => 'NULL',
-        'added_at_time_zone' => 'NULL',
+        'added_at' => null,
+        'added_at_time_zone' => null,
     ];
 
     const PRIMARY_KEY = [

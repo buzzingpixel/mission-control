@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace src\app\data\User;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
  * @property mixed $email_address text(65535) NOT NULL
  * @property mixed $password_hash varchar(255) NOT NULL
- * @property mixed $user_data text(65535)
+ * @property mixed $user_data text(65535) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  * @property mixed $timezone varchar(255)

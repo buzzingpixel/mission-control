@@ -24,8 +24,8 @@ class UserPasswordResetTokenTable extends Table
     const COLUMNS = [
         'guid' => [
             'name' => 'guid',
-            'type' => 'varchar',
-            'size' => 255,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,
@@ -35,8 +35,8 @@ class UserPasswordResetTokenTable extends Table
         ],
         'user_guid' => [
             'name' => 'user_guid',
-            'type' => 'text',
-            'size' => 65535,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,

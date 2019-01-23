@@ -72,7 +72,7 @@ class MigrationTable extends Table
             'size' => 3,
             'scale' => 0,
             'notnull' => true,
-            'default' => '0',
+            'default' => 0,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -92,7 +92,7 @@ class MigrationTable extends Table
         'migration_name' => 'NULL',
         'start_time' => 'NULL',
         'end_time' => 'NULL',
-        'breakpoint' => '0',
+        'breakpoint' => 0,
     ];
 
     const PRIMARY_KEY = [

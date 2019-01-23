@@ -24,8 +24,8 @@ class MonitoredUrlIncidentTable extends Table
     const COLUMNS = [
         'guid' => [
             'name' => 'guid',
-            'type' => 'varchar',
-            'size' => 255,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,
@@ -35,8 +35,8 @@ class MonitoredUrlIncidentTable extends Table
         ],
         'monitored_url_guid' => [
             'name' => 'monitored_url_guid',
-            'type' => 'varchar',
-            'size' => 255,
+            'type' => 'binary',
+            'size' => 16,
             'scale' => null,
             'notnull' => true,
             'default' => null,

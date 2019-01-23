@@ -22,6 +22,6 @@ class MigrationRow extends Row
         'migration_name' => 'NULL',
         'start_time' => 'NULL',
         'end_time' => 'NULL',
-        'breakpoint' => '0',
+        'breakpoint' => 0,
     ];
 }

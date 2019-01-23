@@ -9,8 +9,8 @@ namespace src\app\data\MonitoredUrl;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
- * @property mixed $project_guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
+ * @property mixed $project_guid binary(16) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
@@ -27,12 +27,12 @@ class MonitoredUrlRow extends Row
     protected $cols = [
         'guid' => null,
         'project_guid' => null,
-        'is_active' => '1',
+        'is_active' => 1,
         'title' => null,
         'slug' => null,
         'url' => null,
-        'pending_error' => '0',
-        'has_error' => '0',
+        'pending_error' => 0,
+        'has_error' => 0,
         'checked_at' => null,
         'checked_at_time_zone' => null,
         'added_at' => null,

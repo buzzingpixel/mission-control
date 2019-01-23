@@ -9,8 +9,8 @@ namespace src\app\data\Ping;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
- * @property mixed $project_guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
+ * @property mixed $project_guid binary(16) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
@@ -28,11 +28,11 @@ class PingRow extends Row
     protected $cols = [
         'guid' => null,
         'project_guid' => null,
-        'is_active' => '1',
+        'is_active' => 1,
         'title' => null,
         'slug' => null,
-        'pending_error' => '0',
-        'has_error' => '0',
+        'pending_error' => 0,
+        'has_error' => 0,
         'expect_every' => null,
         'warn_after' => null,
         'last_ping_at' => null,

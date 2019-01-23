@@ -9,7 +9,7 @@ namespace src\app\data\ActionQueueBatch;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
  * @property mixed $name varchar(255) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $has_started tinyint(3,0) NOT NULL
@@ -28,10 +28,10 @@ class ActionQueueBatchRow extends Row
         'guid' => null,
         'name' => null,
         'title' => null,
-        'has_started' => '0',
-        'is_finished' => '0',
-        'finished_due_to_error' => '0',
-        'percent_complete' => '0',
+        'has_started' => 0,
+        'is_finished' => 0,
+        'finished_due_to_error' => 0,
+        'percent_complete' => 0.0,
         'added_at' => null,
         'added_at_time_zone' => null,
         'finished_at' => 'NULL',

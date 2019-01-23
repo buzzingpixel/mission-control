@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace src\app\data\MonitoredUrl;
 
 /**
- * @property mixed $guid varchar(255) NOT NULL
- * @property mixed $project_guid varchar(255) NOT NULL
+ * @property mixed $guid binary(16) NOT NULL
+ * @property mixed $project_guid binary(16) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
