@@ -106,7 +106,7 @@ class EditPingController
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
-                        'actionParam' => 'editMonitoredUrl',
+                        'actionParam' => 'editPing',
                         'inputs' => [
                             [
                                 'template' => 'Hidden',

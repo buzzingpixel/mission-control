@@ -9,6 +9,7 @@ use src\app\projects\ProjectsApi;
 use corbomite\http\RequestHelper;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
+use src\app\http\actions\EditPingAction;
 use corbomite\requestdatastore\DataStore;
 use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\AdminUserActions;
@@ -91,6 +92,16 @@ return [
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class),
             Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    EditPingAction::class => function () {
+        return new EditPingAction(
+            Di::get(UserApi::class),
+            Di::get(PingApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
         );
     },
     EditProjectAction::class => function () {
