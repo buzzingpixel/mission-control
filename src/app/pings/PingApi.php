@@ -9,6 +9,7 @@ use src\app\pings\services\SavePingService;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\pings\services\FetchPingService;
 use src\app\pings\interfaces\PingApiInterface;
+use src\app\pings\services\ArchivePingService;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pings\interfaces\PingModelInterface;
@@ -39,7 +40,9 @@ class PingApi implements PingApiInterface
 
     public function archive(PingModelInterface $model): void
     {
-        // TODO: Implement archive() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(ArchivePingService::class);
+        $service->archive($model);
     }
 
     public function unArchive(PingModelInterface $model): void

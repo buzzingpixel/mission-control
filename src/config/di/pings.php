@@ -9,10 +9,18 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\pings\services\SavePingService;
 use corbomite\db\services\BuildQueryService;
 use src\app\pings\services\FetchPingService;
+use src\app\pings\services\ArchivePingService;
 
 return [
     PingApi::class => function () {
         return new PingApi(new Di());
+    },
+    ArchivePingService::class => function () {
+        return new ArchivePingService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
     },
     FetchPingService::class => function () {
         return new FetchPingService(
