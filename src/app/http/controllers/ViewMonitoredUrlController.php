@@ -113,7 +113,7 @@ class ViewMonitoredUrlController
 
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
         $queryModel->limit(50);
-        $queryModel->addWhere('monitored_url_guid', $model->guid());
+        $queryModel->addWhere('monitored_url_guid', $model->getGuidAsBytes());
         $queryModel->addOrder('event_at');
 
         foreach ($this->monitoredUrlsApi->fetchIncidents($queryModel) as $incident) {

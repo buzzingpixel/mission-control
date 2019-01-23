@@ -19,12 +19,26 @@ class CreateUserSessionsTable extends AbstractMigration
                     'guid'
                 ]
             ])
-            ->addColumn('guid', 'string')
-            ->addColumn('user_guid', 'text')
-            ->addColumn('added_at', 'datetime')
-            ->addColumn('added_at_time_zone', 'string')
-            ->addColumn('last_touched_at', 'datetime')
-            ->addColumn('last_touched_at_time_zone', 'string')
+            ->addColumn('guid', 'binary', [
+                'limit' => 16,
+                'comment' => 'UUID generated in code and stored as binary',
+            ])
+            ->addColumn('user_guid', 'binary', [
+                'limit' => 16,
+                'comment' => 'Associated user UUID stored as binary',
+            ])
+            ->addColumn('added_at', 'datetime', [
+                'comment' => 'The datetime representation of when the session was added',
+            ])
+            ->addColumn('added_at_time_zone', 'string', [
+                'comment' => 'The timezone added_at was set with',
+            ])
+            ->addColumn('last_touched_at', 'datetime', [
+                'comment' => 'The datetime representation of when the session was last active',
+            ])
+            ->addColumn('last_touched_at_time_zone', 'string', [
+                'comment' => 'The timezone last_touched_at was set with',
+            ])
             ->create();
     }
 }

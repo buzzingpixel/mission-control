@@ -61,7 +61,7 @@ class DeleteProjectService
     private function fetchRecord(ProjectModelInterface $model): ProjectRecord
     {
         $params = $this->dbFactory->makeQueryModel();
-        $params->addWhere('guid', $model->guid());
+        $params->addWhere('guid', $model->getGuidAsBytes());
         return $this->buildQuery->build(Project::class, $params)->fetchRecord();
     }
 }

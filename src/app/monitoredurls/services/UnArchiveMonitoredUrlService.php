@@ -65,7 +65,7 @@ class UnArchiveMonitoredUrlService
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord
     {
         $params = $this->dbFactory->makeQueryModel();
-        $params->addWhere('guid', $model->guid());
+        $params->addWhere('guid', $model->getGuidAsBytes());
         return $this->buildQuery->build(MonitoredUrl::class, $params)->fetchRecord();
     }
 }

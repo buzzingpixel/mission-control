@@ -56,7 +56,9 @@ class EditProjectAction
         }
 
         $fetchParams = $this->projectsApi->makeQueryModel();
-        $fetchParams->addWhere('guid', $this->requestHelper->post('guid'));
+        $fetchParams->addWhere('guid', $this->projectsApi->uuidToBytes(
+            $this->requestHelper->post('guid')
+        ));
         $model = $this->projectsApi->fetchOne($fetchParams);
 
         if (! $model) {

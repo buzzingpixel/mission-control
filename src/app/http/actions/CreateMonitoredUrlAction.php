@@ -77,11 +77,14 @@ class CreateMonitoredUrlAction
             return null;
         }
 
-        $model = $this->monitoredUrlsApi->createModel([
-            'title' => $title,
-            'url' => $url,
-            'projectGuid' => $project_guid,
-        ]);
+        $model = $this->monitoredUrlsApi->createModel();
+
+        $model->title($title);
+        $model->url($url);
+
+        if ($project_guid) {
+            $model->projectGuid($project_guid);
+        }
 
         try {
             $this->monitoredUrlsApi->save($model);

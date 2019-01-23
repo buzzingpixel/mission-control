@@ -57,7 +57,7 @@ class AdminController
 
         $queryModel = $this->userApi->makeQueryModel();
         $queryModel->addOrder('email_address', 'asc');
-        $queryModel->addWhere('guid', $user->guid(), '!=');
+        $queryModel->addWhere('guid', $user->getGuidAsBytes(), '!=');
 
         foreach ($this->userApi->fetchAll($queryModel) as $userModel) {
             $userIsAdmin = $userModel->getExtendedProperty('is_admin') === 1;

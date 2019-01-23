@@ -130,7 +130,9 @@ class ViewProjectController
     private function getMonitoredUrls(): array
     {
         $params = $this->monitoredUrlsApi->makeQueryModel();
-        $params->addWhere('project_guid', $this->projectModel->guid());
+        $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
+            $this->projectModel->guid()
+        ));
         $params->addOrder('title', 'asc');
 
         if (! $monitoredUrlModels = $this->monitoredUrlsApi->fetchAll($params)) {

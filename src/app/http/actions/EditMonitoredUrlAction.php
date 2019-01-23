@@ -56,7 +56,9 @@ class EditMonitoredUrlAction
         }
 
         $fetchParams = $this->monitoredUrlsApi->makeQueryModel();
-        $fetchParams->addWhere('guid', $this->requestHelper->post('guid'));
+        $fetchParams->addWhere('guid', $this->monitoredUrlsApi->uuidToBytes(
+            $this->requestHelper->post('guid')
+        ));
         $model = $this->monitoredUrlsApi->fetchOne($fetchParams);
 
         if (! $model) {

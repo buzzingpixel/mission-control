@@ -22,7 +22,7 @@ class ProjectDeleteListener implements EventListenerInterface
         /** @var ProjectBeforeDeleteEvent $event */
 
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
-        $queryModel->addWhere('project_guid', $event->projectModel()->guid());
+        $queryModel->addWhere('project_guid', $event->projectModel()->getGuidAsBytes());
 
         foreach ($this->monitoredUrlsApi->fetchAll($queryModel) as $model) {
             $this->monitoredUrlsApi->delete($model);
