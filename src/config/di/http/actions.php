@@ -19,6 +19,7 @@ use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
+use src\app\http\actions\ChangePasswordAction;
 use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
@@ -28,6 +29,15 @@ return [
         return new AdminUserActions(
             Di::get(UserApi::class),
             new Response(),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    ChangePasswordAction::class => function () {
+        return new ChangePasswordAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );

@@ -10,6 +10,7 @@ use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
+use src\app\http\actions\ChangePasswordAction;
 use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
@@ -22,6 +23,7 @@ return [
     'createProject' => ['class' => CreateProjectAction::class],
     'resetPassword' => ['class' => ResetPasswordAction::class],
     'updateAccount' => ['class' => UpdateAccountAction::class],
+    'changePassword' => ['class' => ChangePasswordAction::class],
     'projectListActions' => ['class' => ProjectListActions::class],
     'editMonitoredUrl' => ['class' => EditMonitoredUrlAction::class],
     'createMonitoredUrl' => ['class' => CreateMonitoredUrlAction::class],
