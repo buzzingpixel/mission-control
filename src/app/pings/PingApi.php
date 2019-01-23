@@ -5,12 +5,13 @@ namespace src\app\pings;
 
 use corbomite\di\Di;
 use src\app\pings\models\PingModel;
+use src\app\pings\services\SavePingService;
 use src\app\support\traits\UuidToBytesTrait;
+use src\app\pings\services\FetchPingService;
 use src\app\pings\interfaces\PingApiInterface;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pings\interfaces\PingModelInterface;
-use src\app\pings\services\SavePingService;
 
 class PingApi implements PingApiInterface
 {
@@ -54,12 +55,20 @@ class PingApi implements PingApiInterface
     public function fetchOne(
         ?QueryModelInterface $params = null
     ): ?PingModelInterface {
-        // TODO: Implement fetchOne() method.
+        return $this->fetchAll($params)[0] ?? null;
     }
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        // TODO: Implement fetchAll() method.
-        return [];
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(FetchPingService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        return $service->fetch($params);
     }
 }
