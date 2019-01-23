@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use src\app\http\controllers\AdminController;
 use src\app\http\controllers\AccountController;
+use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
@@ -44,6 +45,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/edit/{slug}', EditMo
 // Pings
 $routeCollector->addRoute(['GET', 'POST'], '/pings[/{archives:archives}]', PingIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/pings/create', CreatePingController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/pings/view/{slug}', ViewPingController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);

@@ -1,0 +1,30 @@
+{% set keyValueTitle = keyValueTitle|default(false) %}
+{% set keyValueSubTitle = keyValueSubTitle|default(false) %}
+{% set keyValueItems = keyValueItems|default([]) %}
+
+<div class="KeyValue">
+    <div class="KeyValue__Inner">
+        {% if keyValueTitle or keyValueSubTitle %}
+            <div class="KeyValue__TitleArea">
+                {% if keyValueTitle %}
+                    <h2 class="KeyValue__Title">{{ keyValueTitle|smartypants }}</h2>
+                {% endif %}
+                {% if keyValueSubTitle %}
+                    <h2 class="KeyValue__SubTitle heading heading--level-6">
+                        {{ keyValueSubTitle|smartypants }}
+                    </h2>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if keyValueItems|length %}
+            <dl class="KeyValue__List">
+                {% for item in keyValueItems %}
+                    <div class="KeyValue__Item">
+                        <dt class="KeyValue__Key">{{ item.key|smartypants }}</dt>
+                        <dd class="KeyValue__Value">{{ item.value|smartypants }}</dd>
+                    </div>
+                {% endfor %}
+            </dl>
+        {% endif %}
+    </div>
+</div>
