@@ -57,5 +57,6 @@ class PingApi implements PingApiInterface
     public function fetchAll(?QueryModelInterface $params = null): array
     {
         // TODO: Implement fetchAll() method.
+        return [];
     }
 }

@@ -7,21 +7,21 @@ use DateTime;
 use DateTimeZone;
 
 use src\app\support\traits\ModelErrorsTrait;
+use src\app\support\traits\ModelAddedAtTrait;
 use src\app\support\traits\StandardModelTrait;
 use src\app\pings\interfaces\PingModelInterface;
 
 class PingModel implements PingModelInterface
 {
     use ModelErrorsTrait;
+    use ModelAddedAtTrait;
     use StandardModelTrait;
 
-    public function __construct()
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->addedAt = new DateTime('now', new DateTimeZone('UTC'));
+    private $pingId = '';
 
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->lastPingAt = new DateTime('now', new DateTimeZone('UTC'));
+    public function pingId(?string $val = null): string
+    {
+        return $this->pingId = $val ?? $this->pingId;
     }
 
     /** @var int|null */
@@ -40,17 +40,16 @@ class PingModel implements PingModelInterface
         return $this->warnAfter = $val ?? $this->warnAfter;
     }
 
+    /** @var DateTime|null */
     private $lastPingAt;
 
     public function lastPingAt(?DateTime $val = null): DateTime
     {
+        if (! $val && ! $this->addedAt) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->lastPingAt = new DateTime('now', new DateTimeZone('UTC'));
+        }
+
         return $this->lastPingAt = $val ?? $this->lastPingAt;
-    }
-
-    private $addedAt;
-
-    public function addedAt(?DateTime $val = null): DateTime
-    {
-        return $this->addedAt = $val ?? $this->addedAt;
     }
 }

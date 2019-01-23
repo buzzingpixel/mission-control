@@ -28,6 +28,10 @@ class CreatePingsTable extends AbstractMigration
                 'limit' => 16,
                 'comment' => 'Associated project UUID stored as binary',
             ])
+            ->addColumn('ping_id', 'string', [
+                'limit' => 16,
+                'comment' => 'The ping ID which will be used in URLs',
+            ])
             ->addColumn('is_active', 'boolean', [
                 'default' => 1,
                 'comment' => 'Determines whether the project is active or archived',

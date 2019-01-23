@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use src\app\pings\PingApi;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\queue\QueueApi;
@@ -12,6 +13,7 @@ use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\controllers\AdminController;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\AccountController;
+use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
@@ -117,6 +119,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class)
+        );
+    },
+    PingIndexController::class => function () {
+        return new PingIndexController(
+            Di::get(UserApi::class),
+            Di::get(PingApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
         );
     },
     ProjectsIndexController::class => function () {

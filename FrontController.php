@@ -20,6 +20,16 @@ if (file_exists(APP_BASE_PATH . '/.env')) {
     (new Dotenv\Dotenv(APP_BASE_PATH))->load();
 }
 
+if (getenv('DISABLE_CSRF') === 'true') {
+    define('CSRF_EXEMPT_SEGMENTS', [
+        '',
+        'account',
+        'projects',
+        'monitored-urls',
+        'pings',
+    ]);
+}
+
 if (! getenv('SITE_URL')) {
     $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
     $protocol = $secure ? 'https://' : 'http://';
