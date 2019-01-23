@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use src\app\pings\PingApi;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use src\app\projects\ProjectsApi;
@@ -9,6 +10,7 @@ use corbomite\http\RequestHelper;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use corbomite\requestdatastore\DataStore;
+use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
@@ -50,6 +52,16 @@ return [
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class),
             Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    CreatePingAction::class => function () {
+        return new CreatePingAction(
+            Di::get(UserApi::class),
+            Di::get(PingApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
         );
     },
     CreateProjectAction::class => function () {

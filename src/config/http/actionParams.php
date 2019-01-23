@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use src\app\http\actions\LogOutAction;
 use src\app\http\actions\AdminUserActions;
+use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\CreateUserAction;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\ProjectListActions;
@@ -17,6 +18,7 @@ use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
     'logout' => ['class' => LogOutAction::class],
+    'createPing' => ['class' => CreatePingAction::class],
     'createUser' => ['class' => CreateUserAction::class],
     'editProject' => ['class' => EditProjectAction::class],
     'adminUserActions' => ['class' => AdminUserActions::class],

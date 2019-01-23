@@ -5,37 +5,37 @@ namespace src\app\http\actions;
 
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
+use src\app\pings\interfaces\PingApiInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
+use src\app\pings\exceptions\PingNameNotUniqueException;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
-use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
-use src\app\monitoredurls\exceptions\MonitoredUrlNameNotUniqueException;
 
-class CreateMonitoredUrlAction
+class CreatePingAction
 {
     private $userApi;
+    private $pingApi;
     private $response;
     private $dataStore;
     private $flashDataApi;
     private $requestHelper;
-    private $monitoredUrlsApi;
 
     public function __construct(
         UserApiInterface $userApi,
+        PingApiInterface $pingApi,
         ResponseInterface $response,
         DataStoreInterface $dataStore,
         FlashDataApiInterface $flashDataApi,
-        RequestHelperInterface $requestHelper,
-        MonitoredUrlsApiInterface $monitoredUrlsApi
+        RequestHelperInterface $requestHelper
     ) {
         $this->userApi = $userApi;
+        $this->pingApi = $pingApi;
         $this->response = $response;
         $this->dataStore = $dataStore;
         $this->flashDataApi = $flashDataApi;
         $this->requestHelper = $requestHelper;
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
     }
 
     /**
@@ -45,7 +45,7 @@ class CreateMonitoredUrlAction
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'Create Monitored URL Action requires post request'
+                'Create Ping Action requires post request'
             );
         }
 
@@ -56,20 +56,28 @@ class CreateMonitoredUrlAction
         }
 
         $title = trim($this->requestHelper->post('title'));
-        $url = trim($this->requestHelper->post('url'));
-        $project_guid = trim($this->requestHelper->post('project_guid'));
+        $expectEvery = trim($this->requestHelper->post('expect_every'));
+        $warnAfter = trim($this->requestHelper->post('warn_after'));
 
         $store = [
             'inputErrors' => [],
-            'inputValues' => compact('title', 'url', 'project_guid'),
+            'inputValues' => [
+                'title' => $title,
+                'expect_every' => $expectEvery,
+                'warn_after' => $warnAfter,
+            ],
         ];
 
         if (! $title) {
             $store['inputErrors']['title'][] = 'This field is required';
         }
 
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            $store['inputErrors']['url'][] = 'A valid URL is required';
+        if (! ctype_digit($expectEvery)) {
+            $store['inputErrors']['expect_every'][] = 'Must be a whole number';
+        }
+
+        if (! ctype_digit($warnAfter)) {
+            $store['inputErrors']['warn_after'][] = 'Must be a whole number';
         }
 
         if ($store['inputErrors']) {
@@ -77,15 +85,15 @@ class CreateMonitoredUrlAction
             return null;
         }
 
-        $model = $this->monitoredUrlsApi->createModel();
+        $model = $this->pingApi->createModel();
 
         $model->title($title);
-        $model->url($url);
-        $model->projectGuid($project_guid);
+        $model->expectEvery((int) $expectEvery);
+        $model->warnAfter((int) $warnAfter);
 
         try {
-            $this->monitoredUrlsApi->save($model);
-        } catch (MonitoredUrlNameNotUniqueException $e) {
+            $this->pingApi->save($model);
+        } catch (PingNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
             return null;
@@ -99,7 +107,8 @@ class CreateMonitoredUrlAction
 
         $flashDataModel->dataItem(
             'content',
-            'Monitored URL "' . $model->title() . '" created successfully'
+            'Ping "' . $model->title() . '" created successfully. The Check In URL is ' .
+                getenv('SITE_URL') . '/pings/checkin/' . $model->pingId()
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -107,7 +116,7 @@ class CreateMonitoredUrlAction
 
         $response = $this->response->withHeader(
             'Location',
-            '/monitored-urls/view/' . $model->slug()
+            '/pings/view/' . $model->slug()
         );
 
         $response = $response->withStatus(303);
