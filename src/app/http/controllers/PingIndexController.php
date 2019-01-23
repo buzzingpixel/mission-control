@@ -100,7 +100,7 @@ class PingIndexController
 
             $rows[] = [
                 'inputValue' => $model->guid(),
-                'actionButtonLink' => '#',
+                'actionButtonLink' => '/pings/view/' . $model->slug(),
                 'cols' => [
                     'Title' => $model->title(),
                     'Status' => $status,
@@ -151,7 +151,7 @@ class PingIndexController
                         'template' => 'forms/TableListForm.twig',
                         'actionParam' => 'pingListActions',
                         'actions' => $actions,
-                        'actionColButtonContent' => 'Show&nbspPing&nbsp;URL',
+                        'actionColButtonContent' => 'View&nbsp;Ping&nbsp;Details',
                         'table' => [
                             'inputsName' => 'guids[]',
                             'headings' => [
