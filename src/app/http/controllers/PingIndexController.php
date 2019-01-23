@@ -86,7 +86,7 @@ class PingIndexController
             $styledStatus = 'Inactive';
 
             if ($model->isActive()) {
-                $status = 'Up';
+                $status = 'Active';
                 $styledStatus = 'Good';
 
                 if ($model->hasError()) {
@@ -151,7 +151,7 @@ class PingIndexController
                         'template' => 'forms/TableListForm.twig',
                         'actionParam' => 'pingListActions',
                         'actions' => $actions,
-                        'actionColButtonContent' => 'Show&nbspPing&nbsp:URL',
+                        'actionColButtonContent' => 'Show&nbspPing&nbsp;URL',
                         'table' => [
                             'inputsName' => 'guids[]',
                             'headings' => [
