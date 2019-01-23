@@ -12,6 +12,9 @@ use src\app\pings\services\FetchPingService;
 use src\app\pings\services\DeletePingService;
 use src\app\pings\services\ArchivePingService;
 use src\app\pings\services\UnArchivePingService;
+use src\app\pings\listeners\ProjectDeleteListener;
+use src\app\pings\listeners\ProjectArchiveListener;
+use src\app\pings\listeners\ProjectUnArchiveListener;
 
 return [
     PingApi::class => function () {
@@ -50,6 +53,21 @@ return [
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
+        );
+    },
+    ProjectArchiveListener::class => function () {
+        return new ProjectArchiveListener(
+            Di::get(PingApi::class)
+        );
+    },
+    ProjectDeleteListener::class => function () {
+        return new ProjectDeleteListener(
+            Di::get(PingApi::class)
+        );
+    },
+    ProjectUnArchiveListener::class => function () {
+        return new ProjectUnArchiveListener(
+            Di::get(PingApi::class)
         );
     },
 ];
