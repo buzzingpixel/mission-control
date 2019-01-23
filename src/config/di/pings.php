@@ -9,6 +9,7 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\pings\services\SavePingService;
 use corbomite\db\services\BuildQueryService;
 use src\app\pings\services\FetchPingService;
+use src\app\pings\services\DeletePingService;
 use src\app\pings\services\ArchivePingService;
 use src\app\pings\services\UnArchivePingService;
 
@@ -18,6 +19,13 @@ return [
     },
     ArchivePingService::class => function () {
         return new ArchivePingService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    DeletePingService::class => function () {
+        return new DeletePingService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)

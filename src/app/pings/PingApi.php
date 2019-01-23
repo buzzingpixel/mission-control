@@ -8,6 +8,7 @@ use src\app\pings\models\PingModel;
 use src\app\pings\services\SavePingService;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\pings\services\FetchPingService;
+use src\app\pings\services\DeletePingService;
 use src\app\pings\interfaces\PingApiInterface;
 use src\app\pings\services\ArchivePingService;
 use src\app\support\traits\MakeQueryModelTrait;
@@ -55,7 +56,9 @@ class PingApi implements PingApiInterface
 
     public function delete(PingModelInterface $model)
     {
-        // TODO: Implement delete() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(DeletePingService::class);
+        $service->delete($model);
     }
 
     public function fetchOne(
