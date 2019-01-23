@@ -5,11 +5,12 @@ declare(strict_types=1);
  * @see https://github.com/nikic/FastRoute
  */
 
-/** @var FastRoute\RouteCollector $routeCollector */
+/** @var \FastRoute\RouteCollector $routeCollector */
 
 use src\app\http\controllers\AdminController;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\PingIndexController;
+use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
@@ -42,6 +43,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/monitored-urls/edit/{slug}', EditMo
 
 // Pings
 $routeCollector->addRoute(['GET', 'POST'], '/pings[/{archives:archives}]', PingIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/pings/create', CreatePingController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);

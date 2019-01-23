@@ -14,6 +14,7 @@ use src\app\http\controllers\AdminController;
 use src\app\http\services\RequireLoginService;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\PingIndexController;
+use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
@@ -60,6 +61,14 @@ return [
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    CreatePingController::class => function () {
+        return new CreatePingController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
         );
     },
