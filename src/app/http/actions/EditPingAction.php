@@ -68,6 +68,7 @@ class EditPingAction
         $title = trim($this->requestHelper->post('title'));
         $expectEvery = trim($this->requestHelper->post('expect_every'));
         $warnAfter = trim($this->requestHelper->post('warn_after'));
+        $projectGuid = trim($this->requestHelper->post('project_guid'));
 
         $store = [
             'inputErrors' => [],
@@ -75,6 +76,7 @@ class EditPingAction
                 'title' => $title,
                 'expect_every' => $expectEvery,
                 'warn_after' => $warnAfter,
+                'project_guid' => $projectGuid,
             ],
         ];
 
@@ -98,6 +100,7 @@ class EditPingAction
         $model->title($title);
         $model->expectEvery((int) $expectEvery);
         $model->warnAfter((int) $warnAfter);
+        $model->projectGuid($projectGuid);
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */

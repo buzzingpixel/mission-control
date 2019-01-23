@@ -12,12 +12,14 @@ use src\app\http\services\RequireLoginService;
 use src\app\pings\interfaces\PingApiInterface;
 use corbomite\user\interfaces\UserApiInterface;
 use corbomite\http\exceptions\Http404Exception;
+use src\app\projects\interfaces\ProjectsApiInterface;
 
 class EditPingController
 {
     private $userApi;
     private $pingApi;
     private $response;
+    private $projectsApi;
     private $twigEnvironment;
     private $requireLoginService;
 
@@ -26,11 +28,13 @@ class EditPingController
         PingApiInterface $pingApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
+        ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->pingApi = $pingApi;
         $this->response = $response;
+        $this->projectsApi = $projectsApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
@@ -134,6 +138,13 @@ class EditPingController
                                 'name' => 'warn_after',
                                 'label' => 'Warn After (minutes)',
                                 'value' => $model->warnAfter(),
+                            ],
+                            [
+                                'template' => 'Select',
+                                'name' => 'project_guid',
+                                'label' => 'Project',
+                                'options' => $this->projectsApi->fetchAsSelectArray(),
+                                'value' => $model->projectGuid(),
                             ],
                         ],
                     ]

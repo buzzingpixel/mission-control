@@ -58,6 +58,7 @@ class CreatePingAction
         $title = trim($this->requestHelper->post('title'));
         $expectEvery = trim($this->requestHelper->post('expect_every'));
         $warnAfter = trim($this->requestHelper->post('warn_after'));
+        $projectGuid = trim($this->requestHelper->post('project_guid'));
 
         $store = [
             'inputErrors' => [],
@@ -65,6 +66,7 @@ class CreatePingAction
                 'title' => $title,
                 'expect_every' => $expectEvery,
                 'warn_after' => $warnAfter,
+                'project_guid' => $projectGuid,
             ],
         ];
 
@@ -90,6 +92,7 @@ class CreatePingAction
         $model->title($title);
         $model->expectEvery((int) $expectEvery);
         $model->warnAfter((int) $warnAfter);
+        $model->projectGuid($projectGuid);
 
         try {
             $this->pingApi->save($model);

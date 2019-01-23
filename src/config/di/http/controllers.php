@@ -71,6 +71,7 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },
@@ -106,6 +107,7 @@ return [
             Di::get(PingApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },
