@@ -10,6 +10,7 @@ use corbomite\http\RequestHelper;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use src\app\http\actions\EditPingAction;
+use src\app\http\actions\PingListActions;
 use corbomite\requestdatastore\DataStore;
 use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\AdminUserActions;
@@ -128,6 +129,15 @@ return [
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class),
             Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    PingListActions::class => function () {
+        return new PingListActions(
+            Di::get(UserApi::class),
+            Di::get(PingApi::class),
+            new Response(),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
         );
     },
     ProjectListActions::class => function () {

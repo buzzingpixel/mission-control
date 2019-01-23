@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use src\app\http\actions\LogOutAction;
 use src\app\http\actions\EditPingAction;
+use src\app\http\actions\PingListActions;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\CreateUserAction;
@@ -18,11 +19,12 @@ use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
-    'editPing' => ['class' => EditPingAction::class],
     'logout' => ['class' => LogOutAction::class],
+    'editPing' => ['class' => EditPingAction::class],
     'createPing' => ['class' => CreatePingAction::class],
     'createUser' => ['class' => CreateUserAction::class],
     'editProject' => ['class' => EditProjectAction::class],
+    'pingListActions' => ['class' => PingListActions::class],
     'adminUserActions' => ['class' => AdminUserActions::class],
     'createProject' => ['class' => CreateProjectAction::class],
     'resetPassword' => ['class' => ResetPasswordAction::class],
