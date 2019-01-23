@@ -15,14 +15,16 @@ use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
+use src\app\http\controllers\ChangePasswordController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 
-// Monitored URLS
+// Account
 $routeCollector->addRoute(['GET', 'POST'], '/account', AccountController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/account/change-password', ChangePasswordController::class);
 
 // Projects
 $routeCollector->addRoute(['GET', 'POST'], '/', ProjectsIndexController::class);

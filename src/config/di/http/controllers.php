@@ -18,6 +18,7 @@ use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
+use src\app\http\controllers\ChangePasswordController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RenderErrorPageController;
 use src\app\http\controllers\EditMonitoredUrlController;
@@ -40,6 +41,13 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(QueueApi::class),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    ChangePasswordController::class => function () {
+        return new ChangePasswordController(
+            new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
         );

@@ -57,6 +57,12 @@ class AccountController
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Your Account',
                 'title' => 'Your Account',
+                'pageControlButtons' => [
+                    [
+                        'href' => '/account/change-password',
+                        'content' => 'Change Password',
+                    ]
+                ],
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',

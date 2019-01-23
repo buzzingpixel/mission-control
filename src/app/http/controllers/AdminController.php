@@ -97,24 +97,6 @@ class AdminController
             ];
         }
 
-        // $queueApi = $this->queueApi;
-        //
-        // $batchModel = $queueApi->makeActionQueueBatchModel();
-        // $itemModel1 = $queueApi->makeActionQueueItemModel();
-        // $itemModel2 = $queueApi->makeActionQueueItemModel();
-        //
-        // $itemModel1->class(\corbomite\queue\Noop::class);
-        //
-        // $itemModel2->class(\corbomite\queue\Noop::class);
-        // $itemModel2->method('noop');
-        //
-        // $batchModel->name('test_name');
-        // $batchModel->title('Test Name');
-        // $batchModel->addItem($itemModel1);
-        // $batchModel->addItem($itemModel2);
-        //
-        // $queueApi->addToQueue($batchModel);
-
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Admin',
