@@ -188,6 +188,7 @@ return [
     ViewProjectController::class => function () {
         return new ViewProjectController(
             Di::get(UserApi::class),
+            Di::get(PingApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
