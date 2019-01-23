@@ -11,10 +11,9 @@ interface PingApiInterface
 {
     /**
      * Creates a Ping Model
-     * @param array $props
      * @return PingModelInterface
      */
-    public function createModel(array $props = []): PingModelInterface;
+    public function createModel(): PingModelInterface;
 
     /**
      * Converts a UUID to bytes for database queries
