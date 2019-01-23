@@ -10,6 +10,7 @@ use src\app\pings\interfaces\PingApiInterface;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pings\interfaces\PingModelInterface;
+use src\app\pings\services\SavePingService;
 
 class PingApi implements PingApiInterface
 {
@@ -30,7 +31,9 @@ class PingApi implements PingApiInterface
 
     public function save(PingModelInterface $model): void
     {
-        // TODO: Implement save() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(SavePingService::class);
+        $service->save($model);
     }
 
     public function archive(PingModelInterface $model): void
