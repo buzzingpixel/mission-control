@@ -17,7 +17,13 @@ trait HasProjectGuidTrait
     public function projectGuid(?string $guid = null): ?string
     {
         if ($guid !== null) {
-            $this->projectUuidModel = new UuidModel($guid);
+            if (! $guid) {
+                $this->projectUuidModel = null;
+            }
+
+            if ($guid) {
+                $this->projectUuidModel = new UuidModel($guid);
+            }
         }
 
         if (! $this->projectUuidModel) {

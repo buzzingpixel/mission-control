@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace src\app\projects;
 
 use corbomite\di\Di;
-use corbomite\db\models\UuidModel;
-use corbomite\db\Factory as DbFactory;
 use src\app\projects\models\ProjectModel;
+use src\app\support\traits\UuidToBytesTrait;
+use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\projects\services\SaveProjectService;
 use src\app\projects\services\DeleteProjectService;
@@ -20,28 +20,19 @@ use src\app\projects\exceptions\ProjectNameNotUniqueException;
 
 class ProjectsApi implements ProjectsApiInterface
 {
-    private $di;
-    private $dbFactory;
+    use UuidToBytesTrait;
+    use MakeQueryModelTrait;
 
-    public function __construct(Di $di, DbFactory $dbFactory)
+    private $di;
+
+    public function __construct(Di $di)
     {
         $this->di = $di;
-        $this->dbFactory = $dbFactory;
     }
 
-    public function createModel(array $props = []): ProjectModelInterface
+    public function createModel(): ProjectModelInterface
     {
-        return new ProjectModel($props);
-    }
-
-    public function uuidToBytes(string $string): string
-    {
-        return (new UuidModel($string))->toBytes();
-    }
-
-    public function makeQueryModel(): QueryModelInterface
-    {
-        return $this->dbFactory->makeQueryModel();
+        return new ProjectModel();
     }
 
     /**

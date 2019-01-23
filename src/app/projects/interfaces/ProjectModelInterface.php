@@ -9,12 +9,6 @@ use corbomite\db\interfaces\UuidModelInterface;
 interface ProjectModelInterface
 {
     /**
-     * Constructor accepts array of properties to set on the model
-     * @param array $props
-     */
-    public function __construct(array $props = []);
-
-    /**
      * Returns the value of guid. Sets value if incoming argument is set
      * @param string|null $guid
      * @return string

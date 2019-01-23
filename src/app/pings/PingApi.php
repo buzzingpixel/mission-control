@@ -7,14 +7,14 @@ use corbomite\di\Di;
 use src\app\pings\models\PingModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\pings\interfaces\PingApiInterface;
+use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pings\interfaces\PingModelInterface;
-use src\app\support\traits\CreateQueryModelTrait;
 
 class PingApi implements PingApiInterface
 {
     use UuidToBytesTrait;
-    use CreateQueryModelTrait;
+    use MakeQueryModelTrait;
 
     private $di;
 

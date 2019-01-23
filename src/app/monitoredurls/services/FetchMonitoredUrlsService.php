@@ -41,7 +41,9 @@ class FetchMonitoredUrlsService
             $model = new MonitoredUrlModel();
 
             $model->setGuidAsBytes($record->guid);
-            $model->setProjectGuidAsBytes($record->project_guid);
+            if ($record->project_guid) {
+                $model->setProjectGuidAsBytes($record->project_guid);
+            }
             $model->isActive($record->is_active === 1 || $record->is_active === '1');
             $model->title($record->title);
             $model->slug($record->slug);

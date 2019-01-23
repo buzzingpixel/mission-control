@@ -17,8 +17,7 @@ use src\app\projects\services\UnArchiveProjectService;
 return [
     ProjectsApi::class => function () {
         return new ProjectsApi(
-            new Di(),
-            new DbFactory()
+            new Di()
         );
     },
     ArchiveProjectService::class => function () {

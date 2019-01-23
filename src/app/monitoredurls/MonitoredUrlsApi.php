@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace src\app\monitoredurls;
 
 use corbomite\di\Di;
-use corbomite\db\models\UuidModel;
-use corbomite\db\Factory as DbFactory;
+use \src\app\support\traits\UuidToBytesTrait;
+use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
-use src\app\monitoredurls\models\MonitoredUrlIncidentModel;
 use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\services\SaveIncidentService;
 use src\app\monitoredurls\services\FetchIncidentsService;
+use src\app\monitoredurls\models\MonitoredUrlIncidentModel;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\DeleteMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
@@ -22,33 +22,24 @@ use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
 
 class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 {
-    private $di;
-    private $dbFactory;
+    use UuidToBytesTrait;
+    use MakeQueryModelTrait;
 
-    public function __construct(Di $di, DbFactory $dbFactory)
+    private $di;
+
+    public function __construct(Di $di)
     {
         $this->di = $di;
-        $this->dbFactory = $dbFactory;
     }
 
-    public function createModel(array $props = []): MonitoredUrlModelInterface
+    public function createModel(): MonitoredUrlModelInterface
     {
-        return new MonitoredUrlModel($props);
+        return new MonitoredUrlModel();
     }
 
-    public function uuidToBytes(string $string): string
+    public function createIncidentModel(): MonitoredUrlIncidentModelInterface
     {
-        return (new UuidModel($string))->toBytes();
-    }
-
-    public function createIncidentModel(array $props = []): MonitoredUrlIncidentModelInterface
-    {
-        return new MonitoredUrlIncidentModel($props);
-    }
-
-    public function makeQueryModel(): QueryModelInterface
-    {
-        return $this->dbFactory->makeQueryModel();
+        return new MonitoredUrlIncidentModel();
     }
 
     public function save(MonitoredUrlModelInterface $model): void

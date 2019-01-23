@@ -14,7 +14,7 @@ interface ProjectsApiInterface
      * @param array $props
      * @return ProjectModelInterface
      */
-    public function createModel(array $props = []): ProjectModelInterface;
+    public function createModel(): ProjectModelInterface;
 
     /**
      * Converts a UUID to bytes for database queries

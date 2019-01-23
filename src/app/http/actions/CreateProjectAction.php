@@ -72,7 +72,10 @@ class CreateProjectAction
             return null;
         }
 
-        $model = $this->projectsApi->createModel($store['inputValues']);
+        $model = $this->projectsApi->createModel();
+
+        $model->title($title);
+        $model->description($description);
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */

@@ -11,10 +11,9 @@ interface MonitoredUrlsApiInterface
 {
     /**
      * Creates a Monitored URL model
-     * @param array $props
      * @return MonitoredUrlModelInterface
      */
-    public function createModel(array $props = []): MonitoredUrlModelInterface;
+    public function createModel(): MonitoredUrlModelInterface;
 
     /**
      * Converts a UUID to bytes for database queries
@@ -28,7 +27,7 @@ interface MonitoredUrlsApiInterface
      * @param array $props
      * @return MonitoredUrlIncidentModelInterface
      */
-    public function createIncidentModel(array $props = []): MonitoredUrlIncidentModelInterface;
+    public function createIncidentModel(): MonitoredUrlIncidentModelInterface;
 
     /**
      * Creates a Fetch Data Params instance

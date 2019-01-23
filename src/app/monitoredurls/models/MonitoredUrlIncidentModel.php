@@ -14,16 +14,6 @@ class MonitoredUrlIncidentModel implements MonitoredUrlIncidentModelInterface
 {
     use UuidTrait;
 
-    public function __construct(array $props = [])
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->eventAt = new DateTime('now', new DateTimeZone('UTC'));
-
-        foreach ($props as $k => $v) {
-            $this->{$k}($v);
-        }
-    }
-
     /** @var UuidModelInterface */
     private $monitoredUrlUuidModel;
 
@@ -80,10 +70,16 @@ class MonitoredUrlIncidentModel implements MonitoredUrlIncidentModelInterface
         return $this->message = $val ?? $this->message;
     }
 
+    /** @var DateTime|null */
     private $eventAt;
 
     public function eventAt(?DateTime $val = null): DateTime
     {
+        if (! $val && ! $this->eventAt) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->eventAt = new DateTime('now', new DateTimeZone('UTC'));
+        }
+
         return $this->eventAt = $val ?? $this->eventAt;
     }
 }

@@ -6,11 +6,13 @@ namespace src\app\pings\models;
 use DateTime;
 use DateTimeZone;
 
+use src\app\support\traits\ModelErrorsTrait;
 use src\app\support\traits\StandardModelTrait;
 use src\app\pings\interfaces\PingModelInterface;
 
 class PingModel implements PingModelInterface
 {
+    use ModelErrorsTrait;
     use StandardModelTrait;
 
     public function __construct()
@@ -20,20 +22,6 @@ class PingModel implements PingModelInterface
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->lastPingAt = new DateTime('now', new DateTimeZone('UTC'));
-    }
-
-    private $pendingError = false;
-
-    public function pendingError(?bool $val = null): bool
-    {
-        return $this->pendingError = $val ?? $this->pendingError;
-    }
-
-    private $hasError = false;
-
-    public function hasError(?bool $val = null): bool
-    {
-        return $this->hasError = $val ?? $this->hasError;
     }
 
     /** @var int|null */

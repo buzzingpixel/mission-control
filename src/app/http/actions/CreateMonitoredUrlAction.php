@@ -81,10 +81,7 @@ class CreateMonitoredUrlAction
 
         $model->title($title);
         $model->url($url);
-
-        if ($project_guid) {
-            $model->projectGuid($project_guid);
-        }
+        $model->projectGuid($project_guid);
 
         try {
             $this->monitoredUrlsApi->save($model);

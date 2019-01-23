@@ -22,8 +22,7 @@ use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 return [
     MonitoredUrlsApi::class => function () {
         return new MonitoredUrlsApi(
-            new Di(),
-            new DbFactory()
+            new Di()
         );
     },
     ArchiveMonitoredUrlService::class => function () {

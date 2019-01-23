@@ -24,6 +24,7 @@ class CreatePingsTable extends AbstractMigration
                 'comment' => 'UUID generated in code and stored as binary',
             ])
             ->addColumn('project_guid', 'binary', [
+                'null' => true,
                 'limit' => 16,
                 'comment' => 'Associated project UUID stored as binary',
             ])
