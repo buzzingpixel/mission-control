@@ -8,6 +8,7 @@ use src\app\reminders\models\ReminderModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\reminders\services\FetchReminderService;
 use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\reminders\interfaces\ReminderModelInterface;
@@ -65,7 +66,15 @@ class ReminderApi implements ReminderApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        // TODO: Implement fetchAll() method.
-        return [];
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(FetchReminderService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        return $service->fetch($params);
     }
 }

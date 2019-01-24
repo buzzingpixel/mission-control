@@ -7,11 +7,15 @@ use src\app\reminders\ReminderApi;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
+use src\app\reminders\services\FetchReminderService;
 use src\app\reminders\services\SaveReminderService;
 
 return [
     ReminderApi::class => function () {
         return new ReminderApi(new Di());
+    },
+    FetchReminderService::class => function () {
+        return new FetchReminderService(Di::get(BuildQueryService::class));
     },
     SaveReminderService::class => function () {
         return new SaveReminderService(
