@@ -136,7 +136,6 @@ class CheckUrlTask
          * error, so this isn't "fake news". The site is down and we'll proceed
          * with that
          */
-        // If this condition is true we know now the site is down (already was pending)
         if ($hasError) {
             $incident->eventType('down');
             $model->hasError(true);
