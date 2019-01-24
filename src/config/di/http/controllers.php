@@ -21,6 +21,7 @@ use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\ViewProjectController;
+use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\PasswordResetController;
@@ -130,6 +131,16 @@ return [
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    EditReminderController::class => function () {
+        return new EditReminderController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
+            Di::get(ReminderApi::class),
             Di::get(RequireLoginService::class)
         );
     },
