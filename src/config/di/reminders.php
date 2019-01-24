@@ -11,7 +11,10 @@ use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\services\FetchReminderService;
 use src\app\reminders\services\DeleteReminderService;
 use src\app\reminders\services\ArchiveReminderService;
+use src\app\reminders\listeners\ProjectDeleteListener;
+use src\app\reminders\listeners\ProjectArchiveListener;
 use src\app\reminders\services\UnArchiveReminderService;
+use src\app\reminders\listeners\ProjectUnArchiveListener;
 
 return [
     ReminderApi::class => function () {
@@ -47,6 +50,21 @@ return [
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
+        );
+    },
+    ProjectArchiveListener::class => function () {
+        return new ProjectArchiveListener(
+            Di::get(ReminderApi::class)
+        );
+    },
+    ProjectDeleteListener::class => function () {
+        return new ProjectDeleteListener(
+            Di::get(ReminderApi::class)
+        );
+    },
+    ProjectUnArchiveListener::class => function () {
+        return new ProjectUnArchiveListener(
+            Di::get(ReminderApi::class)
         );
     },
 ];
