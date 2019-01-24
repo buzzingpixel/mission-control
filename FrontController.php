@@ -27,6 +27,7 @@ if (getenv('DISABLE_CSRF') === 'true') {
         'projects',
         'monitored-urls',
         'pings',
+        'reminders',
     ]);
 }
 

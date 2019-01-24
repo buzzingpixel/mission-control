@@ -7,6 +7,7 @@ use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use src\app\projects\ProjectsApi;
 use corbomite\http\RequestHelper;
+use src\app\reminders\ReminderApi;
 use corbomite\flashdata\FlashDataApi;
 use src\app\http\actions\LogOutAction;
 use src\app\http\actions\EditPingAction;
@@ -24,6 +25,7 @@ use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
 use src\app\http\actions\ChangePasswordAction;
+use src\app\http\actions\CreateReminderAction;
 use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
@@ -72,6 +74,16 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ProjectsApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    CreateReminderAction::class => function () {
+        return new CreateReminderAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(ReminderApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );
