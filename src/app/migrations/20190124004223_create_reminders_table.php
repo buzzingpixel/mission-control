@@ -41,6 +41,20 @@ class CreateRemindersTable extends AbstractMigration
             ->addColumn('message', 'string', [
                 'comment' => 'The reminder message',
             ])
+            ->addColumn('start_reminding_on', 'datetime', [
+                'comment' => 'The datetime representation of when the reminder should start',
+            ])
+            ->addColumn('start_reminding_on_time_zone', 'string', [
+                'comment' => 'The timezone start_reminding_on was set with',
+            ])
+            ->addColumn('last_reminder_sent', 'datetime', [
+                'null' => true,
+                'comment' => 'The datetime representation of when the reminder was last sent',
+            ])
+            ->addColumn('last_reminder_sent_time_zone', 'string', [
+                'null' => true,
+                'comment' => 'The timezone last_reminder_sent was set with',
+            ])
             ->addColumn('added_at', 'datetime', [
                 'comment' => 'The datetime representation of when the reminder was added',
             ])

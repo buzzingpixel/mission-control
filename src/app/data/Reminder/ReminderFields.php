@@ -13,6 +13,10 @@ namespace src\app\data\Reminder;
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
  * @property mixed $message varchar(255) NOT NULL
+ * @property mixed $start_reminding_on datetime NOT NULL
+ * @property mixed $start_reminding_on_time_zone varchar(255) NOT NULL
+ * @property mixed $last_reminder_sent datetime
+ * @property mixed $last_reminder_sent_time_zone varchar(255)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */

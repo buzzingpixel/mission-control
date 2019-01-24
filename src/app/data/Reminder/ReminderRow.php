@@ -15,6 +15,10 @@ use Atlas\Table\Row;
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
  * @property mixed $message varchar(255) NOT NULL
+ * @property mixed $start_reminding_on datetime NOT NULL
+ * @property mixed $start_reminding_on_time_zone varchar(255) NOT NULL
+ * @property mixed $last_reminder_sent datetime
+ * @property mixed $last_reminder_sent_time_zone varchar(255)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */
@@ -27,6 +31,10 @@ class ReminderRow extends Row
         'title' => null,
         'slug' => null,
         'message' => null,
+        'start_reminding_on' => null,
+        'start_reminding_on_time_zone' => null,
+        'last_reminder_sent' => 'NULL',
+        'last_reminder_sent_time_zone' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
     ];
