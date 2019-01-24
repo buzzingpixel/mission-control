@@ -2,9 +2,11 @@
 declare(strict_types=1);
 
 use src\app\projects\ProjectsApi;
+use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\monitoredurls\listeners\ProjectDeleteListener;
 use src\app\monitoredurls\listeners\ProjectArchiveListener;
 use src\app\monitoredurls\listeners\ProjectUnArchiveListener;
+use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
 use corbomite\events\interfaces\EventListenerRegistrationInterface;
 use src\app\pings\listeners\ProjectDeleteListener as PingProjectDeleteListener;
 use src\app\pings\listeners\ProjectArchiveListener as PingProjectArchiveListener;
@@ -14,6 +16,9 @@ use src\app\reminders\listeners\ProjectArchiveListener as ReminderProjectArchive
 use src\app\reminders\listeners\ProjectUnArchiveListener as ReminderProjectUnArchiveListener;
 
 /** @var EventListenerRegistrationInterface $r */
+
+// Monitored URL delete listeners
+$r->register(MonitoredUrlsApi::class, 'MonitoredUrlBeforeDelete', MonitoredUrlDeleteListener::class);
 
 // Monitored URL Project Listeners
 $r->register(ProjectsApi::class, 'ProjectBeforeDelete', ProjectDeleteListener::class);

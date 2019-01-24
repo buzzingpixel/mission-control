@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use corbomite\db\PDO;
 use Cocur\Slugify\Slugify;
 use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
@@ -23,6 +24,7 @@ use src\app\monitoredurls\listeners\ProjectUnArchiveListener;
 use src\app\monitoredurls\services\DeleteMonitoredUrlService;
 use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 use src\app\monitoredurls\services\ArchiveMonitoredUrlService;
+use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
 use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 
 return [
@@ -80,6 +82,11 @@ return [
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class),
             new DbFactory()
+        );
+    },
+    MonitoredUrlDeleteListener::class => function () {
+        return new MonitoredUrlDeleteListener(
+            Di::get(PDO::class)
         );
     },
     ProjectArchiveListener::class => function () {
