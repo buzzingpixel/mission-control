@@ -20,7 +20,7 @@ interface ReminderModelInterface extends StandardModelInterface
      * @param DateTime|null $val
      * @return DateTime
      */
-    public function startRemindingOn(?DateTime $val = null): ?DateTime;
+    public function startRemindingOn(?DateTime $val = null): DateTime;
 
     /**
      * Returns the value. Sets value if incoming argument is set.

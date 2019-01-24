@@ -8,6 +8,7 @@ use src\app\reminders\models\ReminderModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\reminders\interfaces\ReminderModelInterface;
 use src\app\reminders\exceptions\InvalidReminderModelException;
@@ -36,7 +37,9 @@ class ReminderApi implements ReminderApiInterface
      */
     public function save(ReminderModelInterface $model): void
     {
-        // TODO: Implement save() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(SaveReminderService::class);
+        $service->save($model);
     }
 
     public function archive(ReminderModelInterface $model): void

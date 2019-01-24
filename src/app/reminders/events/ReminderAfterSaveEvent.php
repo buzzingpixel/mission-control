@@ -1,23 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace src\app\pings\events;
+namespace src\app\reminders\events;
 
-use src\app\pings\PingApi;
+use src\app\reminders\ReminderApi;
 use corbomite\events\interfaces\EventInterface;
-use src\app\pings\interfaces\PingModelInterface;
+use src\app\reminders\interfaces\ReminderModelInterface;
 
-class PingAfterSaveEvent implements EventInterface
+class ReminderAfterSaveEvent implements EventInterface
 {
     private $wasNew;
-    private $pingModel;
+    private $reminderModel;
 
     public function __construct(
-        PingModelInterface $pingModel,
+        ReminderModelInterface $reminderModel,
         bool $wasNew = false
     ) {
         $this->wasNew = $wasNew;
-        $this->pingModel = $pingModel;
+        $this->reminderModel = $reminderModel;
     }
 
     public function wasNew(): bool
@@ -25,19 +25,19 @@ class PingAfterSaveEvent implements EventInterface
         return $this->wasNew;
     }
 
-    public function pingModel(): PingModelInterface
+    public function pingModel(): ReminderModelInterface
     {
-        return $this->pingModel;
+        return $this->reminderModel;
     }
 
     public function provider(): string
     {
-        return PingApi::class;
+        return ReminderApi::class;
     }
 
     public function name(): string
     {
-        return 'PingAfterSave';
+        return 'ReminderAfterSave';
     }
 
     private $stop = false;

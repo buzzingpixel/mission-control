@@ -23,7 +23,7 @@ class ReminderModel implements ReminderModelInterface
     /** @var DateTime|null */
     private $startRemindingOn;
 
-    public function startRemindingOn(?DateTime $val = null): ?DateTime
+    public function startRemindingOn(?DateTime $val = null): DateTime
     {
         return $this->startRemindingOn = $val ?? $this->startRemindingOn;
     }
