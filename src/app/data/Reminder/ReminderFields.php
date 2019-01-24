@@ -4,24 +4,18 @@
  */
 declare(strict_types=1);
 
-namespace src\app\data\Ping;
+namespace src\app\data\Reminder;
 
 /**
  * @property mixed $guid binary(16) NOT NULL
  * @property mixed $project_guid binary(16)
- * @property mixed $ping_id varchar(36) NOT NULL
  * @property mixed $is_active tinyint(3,0) NOT NULL
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
- * @property mixed $pending_error tinyint(3,0) NOT NULL
- * @property mixed $has_error tinyint(3,0) NOT NULL
- * @property mixed $expect_every bigint(20,0) unsigned NOT NULL
- * @property mixed $warn_after bigint(20,0) unsigned NOT NULL
- * @property mixed $last_ping_at datetime NOT NULL
- * @property mixed $last_ping_at_time_zone varchar(255) NOT NULL
+ * @property mixed $message varchar(255) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */
-trait PingFields
+trait ReminderFields
 {
 }

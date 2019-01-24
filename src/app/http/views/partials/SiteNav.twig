@@ -62,20 +62,20 @@
                 </li>
                 <li class="SiteNav__ListItem">
                     <a
-                        href="/servers"
-                        class="SiteNav__Link{% if segment1 == 'servers' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Servers
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
                         href="/reminders"
                         class="SiteNav__Link{% if segment1 == 'reminders' %} SiteNav__Link--IsActive{% endif %}"
                     >
                         Reminders
                     </a>
                 </li>
+                {#<li class="SiteNav__ListItem">
+                    <a
+                        href="/servers"
+                        class="SiteNav__Link{% if segment1 == 'servers' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        Servers
+                    </a>
+                </li>#}
                 {% if userApi.fetchCurrentUser.getExtendedProperty('is_admin') == 1 %}
                     <li class="SiteNav__ListItem">
                         <a

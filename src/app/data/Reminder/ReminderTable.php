@@ -4,22 +4,22 @@
  */
 declare(strict_types=1);
 
-namespace src\app\data\Ping;
+namespace src\app\data\Reminder;
 
 use Atlas\Table\Table;
 
 /**
- * @method PingRow|null fetchRow($primaryVal)
- * @method PingRow[] fetchRows(array $primaryVals)
- * @method PingTableSelect select(array $whereEquals = [])
- * @method PingRow newRow(array $cols = [])
- * @method PingRow newSelectedRow(array $cols)
+ * @method ReminderRow|null fetchRow($primaryVal)
+ * @method ReminderRow[] fetchRows(array $primaryVals)
+ * @method ReminderTableSelect select(array $whereEquals = [])
+ * @method ReminderRow newRow(array $cols = [])
+ * @method ReminderRow newSelectedRow(array $cols)
  */
-class PingTable extends Table
+class ReminderTable extends Table
 {
     const DRIVER = 'mysql';
 
-    const NAME = 'pings';
+    const NAME = 'reminders';
 
     const COLUMNS = [
         'guid' => [
@@ -40,17 +40,6 @@ class PingTable extends Table
             'scale' => null,
             'notnull' => false,
             'default' => 'NULL',
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'ping_id' => [
-            'name' => 'ping_id',
-            'type' => 'varchar',
-            'size' => 36,
-            'scale' => null,
-            'notnull' => true,
-            'default' => null,
             'autoinc' => false,
             'primary' => false,
             'options' => null,
@@ -88,63 +77,8 @@ class PingTable extends Table
             'primary' => false,
             'options' => null,
         ],
-        'pending_error' => [
-            'name' => 'pending_error',
-            'type' => 'tinyint',
-            'size' => 3,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => 0,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'has_error' => [
-            'name' => 'has_error',
-            'type' => 'tinyint',
-            'size' => 3,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => 0,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'expect_every' => [
-            'name' => 'expect_every',
-            'type' => 'bigint unsigned',
-            'size' => 20,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'warn_after' => [
-            'name' => 'warn_after',
-            'type' => 'bigint unsigned',
-            'size' => 20,
-            'scale' => 0,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'last_ping_at' => [
-            'name' => 'last_ping_at',
-            'type' => 'datetime',
-            'size' => null,
-            'scale' => null,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => false,
-            'primary' => false,
-            'options' => null,
-        ],
-        'last_ping_at_time_zone' => [
-            'name' => 'last_ping_at_time_zone',
+        'message' => [
+            'name' => 'message',
             'type' => 'varchar',
             'size' => 255,
             'scale' => null,
@@ -181,16 +115,10 @@ class PingTable extends Table
     const COLUMN_NAMES = [
         'guid',
         'project_guid',
-        'ping_id',
         'is_active',
         'title',
         'slug',
-        'pending_error',
-        'has_error',
-        'expect_every',
-        'warn_after',
-        'last_ping_at',
-        'last_ping_at_time_zone',
+        'message',
         'added_at',
         'added_at_time_zone',
     ];
@@ -198,16 +126,10 @@ class PingTable extends Table
     const COLUMN_DEFAULTS = [
         'guid' => null,
         'project_guid' => 'NULL',
-        'ping_id' => null,
         'is_active' => 1,
         'title' => null,
         'slug' => null,
-        'pending_error' => 0,
-        'has_error' => 0,
-        'expect_every' => null,
-        'warn_after' => null,
-        'last_ping_at' => null,
-        'last_ping_at_time_zone' => null,
+        'message' => null,
         'added_at' => null,
         'added_at_time_zone' => null,
     ];
