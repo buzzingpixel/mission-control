@@ -25,6 +25,7 @@ use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RenderErrorPageController;
@@ -82,6 +83,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    CreateReminderController::class => function () {
+        return new CreateReminderController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },

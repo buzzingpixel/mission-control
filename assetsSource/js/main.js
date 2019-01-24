@@ -19,7 +19,9 @@ function runMain(F, W) {
         windowWidth: 'int',
         filterHasRun: 'int',
         selectIsLoading: 'bool',
-        selectHasLoaded: 'bool'
+        selectHasLoaded: 'bool',
+        flatPickerIsLoading: 'bool',
+        flackPickerHasLoaded: 'bool'
     });
 
     F.GlobalModel = new GlobalModelConstructor({
@@ -50,6 +52,12 @@ function runMain(F, W) {
 
     $('.JS-Select').each(function() {
         F.controller.construct('Select', {
+            el: this
+        });
+    });
+
+    $('.JS-FlatPicker').each(function () {
+        F.controller.construct('FlatPicker', {
             el: this
         });
     });

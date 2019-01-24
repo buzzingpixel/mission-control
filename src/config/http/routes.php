@@ -20,6 +20,7 @@ use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\EditMonitoredUrlController;
@@ -52,6 +53,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/pings/edit/{slug}', EditPingControl
 
 // Reminders
 $routeCollector->addRoute(['GET', 'POST'], '/reminders[/{archives:archives}]', RemindersIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/reminders/create', CreateReminderController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);

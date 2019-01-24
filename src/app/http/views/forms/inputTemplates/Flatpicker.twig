@@ -1,0 +1,11 @@
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <input
+            type="text"
+            name="{{ name }}"
+            value="{{ value }}"
+            id="{{ name }}"
+            class="input StandardForm__TextInput{% if thisInputHasErrors %} StandardForm__TextInput--HasError{% endif %} JS-FlatPicker"
+        >
+    {% endblock %}
+{% endembed %}
