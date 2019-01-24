@@ -19,6 +19,7 @@ use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
+use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
@@ -123,6 +124,16 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ProjectsApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    EditReminderAction::class => function () {
+        return new EditReminderAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(ReminderApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );

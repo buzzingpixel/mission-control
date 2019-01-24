@@ -8,6 +8,7 @@ use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\CreateUserAction;
 use src\app\http\actions\EditProjectAction;
+use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
@@ -25,6 +26,7 @@ return [
     'createPing' => ['class' => CreatePingAction::class],
     'createUser' => ['class' => CreateUserAction::class],
     'editProject' => ['class' => EditProjectAction::class],
+    'editReminder' => ['class' => EditReminderAction::class],
     'pingListActions' => ['class' => PingListActions::class],
     'adminUserActions' => ['class' => AdminUserActions::class],
     'createProject' => ['class' => CreateProjectAction::class],
