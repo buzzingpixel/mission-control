@@ -21,6 +21,7 @@ use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
+use src\app\http\actions\ReminderListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
@@ -168,6 +169,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(ProjectsApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    ReminderListActions::class => function () {
+        return new ReminderListActions(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ReminderApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );
