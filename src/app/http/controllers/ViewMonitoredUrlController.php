@@ -121,9 +121,13 @@ class ViewMonitoredUrlController
                 $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
             ));
 
-            $styledType = strtolower($incident->eventType()) === 'down' ?
-                'Error' :
-                'Good';
+            $styledType = 'Good';
+
+            if ($incident->eventType() === 'pending') {
+                $styledType = 'Caution';
+            } elseif ($incident->eventType() === 'down') {
+                $styledType = 'Error';
+            }
 
             $rows[] = [
                 'inputValue' => 'null',
