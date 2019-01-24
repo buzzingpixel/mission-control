@@ -15,6 +15,7 @@ use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
+use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\EditReminderController;
@@ -52,6 +53,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/pings[/{archives:archives}]', PingI
 $routeCollector->addRoute(['GET', 'POST'], '/pings/create', CreatePingController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/pings/view/{slug}', ViewPingController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/pings/edit/{slug}', EditPingController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/pings/checkin/{pingId}', PingCheckinController::class);
 
 // Reminders
 $routeCollector->addRoute(['GET', 'POST'], '/reminders[/{archives:archives}]', RemindersIndexController::class);

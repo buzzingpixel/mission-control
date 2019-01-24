@@ -20,6 +20,7 @@ use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
+use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\ViewReminderController;
@@ -165,6 +166,12 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class)
+        );
+    },
+    PingCheckinController::class => function () {
+        return new PingCheckinController(
+            Di::get(PingApi::class),
+            new Response()
         );
     },
     PingIndexController::class => function () {
