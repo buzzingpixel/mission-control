@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 use corbomite\di\Di;
 use Cocur\Slugify\Slugify;
+use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\db\services\BuildQueryService;
+use src\app\monitoredurls\schedules\CheckUrlsSchedule;
 use src\app\monitoredurls\services\SaveIncidentService;
+use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
 use src\app\monitoredurls\services\FetchIncidentsService;
 use src\app\monitoredurls\listeners\ProjectDeleteListener;
 use src\app\monitoredurls\listeners\ProjectArchiveListener;
@@ -88,6 +91,17 @@ return [
     },
     ProjectDeleteListener::class => function () {
         return new ProjectDeleteListener(
+            Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    CheckUrlsSchedule::class => function () {
+        return new CheckUrlsSchedule(
+            Di::get(QueueApi::class)
+        );
+    },
+    CollectUrlsForQueueTask::class => function () {
+        return new CollectUrlsForQueueTask(
+            Di::get(QueueApi::class),
             Di::get(MonitoredUrlsApi::class)
         );
     },
