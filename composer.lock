@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "72ebf0bf32f808e4872dfcc36bc43d03",
+    "content-hash": "3c6cd97759732cdef98e682de8475233",
     "packages": [
         {
             "name": "atlas/cli",

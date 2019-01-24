@@ -7,11 +7,14 @@ use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
+use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\db\services\BuildQueryService;
+use src\app\monitoredurls\tasks\CheckUrlTask;
 use src\app\monitoredurls\schedules\CheckUrlsSchedule;
 use src\app\monitoredurls\services\SaveIncidentService;
 use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
+use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use src\app\monitoredurls\services\FetchIncidentsService;
 use src\app\monitoredurls\listeners\ProjectDeleteListener;
 use src\app\monitoredurls\listeners\ProjectArchiveListener;
@@ -102,6 +105,13 @@ return [
     CollectUrlsForQueueTask::class => function () {
         return new CollectUrlsForQueueTask(
             Di::get(QueueApi::class),
+            Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    CheckUrlTask::class => function () {
+        return new CheckUrlTask(
+            Di::get(EmailApi::class),
+            new GuzzleClientNoHttpErrors(),
             Di::get(MonitoredUrlsApi::class)
         );
     },
