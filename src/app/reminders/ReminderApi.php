@@ -12,6 +12,7 @@ use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\services\FetchReminderService;
 use src\app\reminders\services\ArchiveReminderService;
 use src\app\reminders\interfaces\ReminderApiInterface;
+use src\app\reminders\services\UnArchiveReminderService;
 use src\app\reminders\interfaces\ReminderModelInterface;
 use src\app\reminders\exceptions\InvalidReminderModelException;
 use src\app\reminders\exceptions\ReminderNameNotUniqueException;
@@ -53,7 +54,9 @@ class ReminderApi implements ReminderApiInterface
 
     public function unArchive(ReminderModelInterface $model): void
     {
-        // TODO: Implement unArchive() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(UnArchiveReminderService::class);
+        $service->unArchive($model);
     }
 
     public function delete(ReminderModelInterface $model): void

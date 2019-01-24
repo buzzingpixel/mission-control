@@ -10,6 +10,7 @@ use corbomite\db\services\BuildQueryService;
 use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\services\FetchReminderService;
 use src\app\reminders\services\ArchiveReminderService;
+use src\app\reminders\services\UnArchiveReminderService;
 
 return [
     ReminderApi::class => function () {
@@ -28,6 +29,13 @@ return [
     SaveReminderService::class => function () {
         return new SaveReminderService(
             new Slugify(),
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    UnArchiveReminderService::class => function () {
+        return new UnArchiveReminderService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
