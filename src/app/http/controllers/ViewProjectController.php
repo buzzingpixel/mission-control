@@ -15,6 +15,7 @@ use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
+use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 
 class ViewProjectController
@@ -23,6 +24,7 @@ class ViewProjectController
     private $pingApi;
     private $response;
     private $projectsApi;
+    private $reminderApi;
     private $twigEnvironment;
     private $monitoredUrlsApi;
     private $requireLoginService;
@@ -33,6 +35,7 @@ class ViewProjectController
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
         ProjectsApiInterface $projectsApi,
+        ReminderApiInterface $reminderApi,
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
@@ -40,6 +43,7 @@ class ViewProjectController
         $this->pingApi = $pingApi;
         $this->response = $response;
         $this->projectsApi = $projectsApi;
+        $this->reminderApi = $reminderApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->monitoredUrlsApi = $monitoredUrlsApi;
         $this->requireLoginService = $requireLoginService;
@@ -126,7 +130,8 @@ class ViewProjectController
                 'controlsHasBorderBottom' => true,
                 'includes' => array_merge(
                     $this->getMonitoredUrls(),
-                    $this->getPings()
+                    $this->getPings(),
+                    $this->getReminders()
                 ),
             ])
         );
@@ -294,6 +299,80 @@ class ViewProjectController
                         'Expect Every',
                         'Warn After',
                         'Last Ping',
+                    ],
+                    'rows' => $rows,
+                ],
+            ]
+        ];
+    }
+
+    private function getReminders(): array
+    {
+        $params = $this->reminderApi->makeQueryModel();
+        $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
+            $this->projectModel->guid()
+        ));
+        $params->addOrder('title', 'asc');
+
+        if (! $models = $this->reminderApi->fetchAll($params)) {
+            return [];
+        }
+
+        $rows = [];
+
+        foreach ($models as $model) {
+            $startRemindingOn = $model->startRemindingOn();
+
+            if ($startRemindingOn) {
+                $startRemindingOn->setTimezone(new DateTimeZone(
+                    $this->userTimeZone
+                ));
+            }
+
+            $lastReminderSent = $model->lastReminderSent();
+
+            if ($lastReminderSent) {
+                $lastReminderSent->setTimezone(new DateTimeZone(
+                    $this->userTimeZone
+                ));
+            }
+
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/reminders/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                    'Start Reminding On' => $startRemindingOn ?
+                        $startRemindingOn->format('n/j/Y g:i a') :
+                        '',
+                    'Last Reminder Sent At' => $lastReminderSent ?
+                        $lastReminderSent->format('n/j/Y g:i a') :
+                        '',
+                ],
+            ];
+        }
+
+        $actions = [];
+
+        if ($this->isAdmin) {
+            $actions['unArchive'] = 'Un-Archive Selected';
+            $actions['archive'] = 'Archive Selected';
+            $actions['delete'] = 'Delete Selected';
+        }
+
+        return [
+            [
+                'template' => 'forms/TableListForm.twig',
+                'formTitle' => 'Reminders',
+                'actionParam' => 'reminderListActions',
+                'actions' => $actions,
+                'actionColButtonContent' => 'View&nbsp;Reminder&nbsp;Details',
+                'table' => [
+                    'inputsName' => 'guids[]',
+                    'headings' => [
+                        'Title',
+                        'Start Reminding On',
+                        'Last Reminder Sent At',
                     ],
                     'rows' => $rows,
                 ],
