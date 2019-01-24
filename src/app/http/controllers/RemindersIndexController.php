@@ -107,9 +107,7 @@ class RemindersIndexController
             ];
         }
 
-        $actions = [
-            'markComplete' => 'Mark Complete',
-        ];
+        $actions = [];
 
         if ($isAdmin) {
             if ($archivesPage) {
