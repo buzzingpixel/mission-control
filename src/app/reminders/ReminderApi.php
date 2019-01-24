@@ -10,6 +10,7 @@ use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\reminders\services\SaveReminderService;
 use src\app\reminders\services\FetchReminderService;
+use src\app\reminders\services\DeleteReminderService;
 use src\app\reminders\services\ArchiveReminderService;
 use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\reminders\services\UnArchiveReminderService;
@@ -61,7 +62,9 @@ class ReminderApi implements ReminderApiInterface
 
     public function delete(ReminderModelInterface $model): void
     {
-        // TODO: Implement delete() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(DeleteReminderService::class);
+        $service->delete($model);
     }
 
     public function fetchOne(
