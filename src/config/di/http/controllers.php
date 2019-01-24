@@ -7,6 +7,7 @@ use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\queue\QueueApi;
 use src\app\projects\ProjectsApi;
+use src\app\reminders\ReminderApi;
 use corbomite\twig\TwigEnvironment;
 use src\app\utilities\TimeZoneListUtility;
 use src\app\monitoredurls\MonitoredUrlsApi;
@@ -25,6 +26,7 @@ use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ChangePasswordController;
 use src\app\http\controllers\ForgotPasswordController;
+use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RenderErrorPageController;
 use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
@@ -158,6 +160,15 @@ return [
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    RemindersIndexController::class => function () {
+        return new RemindersIndexController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ReminderApi::class),
             Di::get(RequireLoginService::class)
         );
     },
