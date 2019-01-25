@@ -5,6 +5,7 @@ namespace src\app\pings\tasks;
 
 use src\app\pings\interfaces\PingApiInterface;
 use corbomite\queue\interfaces\QueueApiInterface;
+use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 
 class CollectPingsForQueueTask
 {
@@ -22,8 +23,40 @@ class CollectPingsForQueueTask
         $this->queueApi = $queueApi;
     }
 
+    /**
+     * @throws InvalidActionQueueBatchModel
+     */
     public function __invoke()
     {
-        // TODO: Implement __invoke() method.
+        $queryModel = $this->queueApi->makeQueryModel();
+        $queryModel->addWhere('name', CheckPingTask::BATCH_NAME);
+        $queryModel->addWhere('is_finished', '0');
+        $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
+
+        if ($existingBatchItem) {
+            return;
+        }
+
+        $batch = $this->queueApi->makeActionQueueBatchModel();
+        $batch->name(CheckPingTask::BATCH_NAME);
+        $batch->title(CheckPingTask::BATCH_TITLE);
+
+        $queryModel = $this->pingApi->makeQueryModel();
+        $queryModel->addOrder('title', 'asc');
+        $queryModel->addWhere('is_active', '1');
+
+        foreach ($this->pingApi->fetchAll($queryModel) as $model) {
+            $item = $this->queueApi->makeActionQueueItemModel();
+
+            $item->context([
+                'guid' => $model->guid(),
+            ]);
+
+            $item->class(CheckPingTask::class);
+
+            $batch->addItem($item);
+        }
+
+        $this->queueApi->addToQueue($batch);
     }
 }
