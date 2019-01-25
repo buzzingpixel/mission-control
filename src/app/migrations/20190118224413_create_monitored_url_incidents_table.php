@@ -42,6 +42,14 @@ class CreateMonitoredUrlIncidentsTable extends AbstractMigration
             ->addColumn('event_at_time_zone', 'string', [
                 'comment' => 'The timezone event_at was set with',
             ])
+            ->addColumn('last_notification_at', 'datetime', [
+                'null' => true,
+                'comment' => 'The datetime representation of when the last notification was sent',
+            ])
+            ->addColumn('last_notification_at_time_zone', 'string', [
+                'null' => true,
+                'comment' => 'The timezone last_notification_at was set with',
+            ])
             ->create();
     }
 }
