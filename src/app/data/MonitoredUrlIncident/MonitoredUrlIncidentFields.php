@@ -14,6 +14,8 @@ namespace src\app\data\MonitoredUrlIncident;
  * @property mixed $message text(65535) NOT NULL
  * @property mixed $event_at datetime NOT NULL
  * @property mixed $event_at_time_zone varchar(255) NOT NULL
+ * @property mixed $last_notification_at datetime
+ * @property mixed $last_notification_at_time_zone varchar(255)
  */
 trait MonitoredUrlIncidentFields
 {

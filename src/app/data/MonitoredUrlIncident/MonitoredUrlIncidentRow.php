@@ -16,6 +16,8 @@ use Atlas\Table\Row;
  * @property mixed $message text(65535) NOT NULL
  * @property mixed $event_at datetime NOT NULL
  * @property mixed $event_at_time_zone varchar(255) NOT NULL
+ * @property mixed $last_notification_at datetime
+ * @property mixed $last_notification_at_time_zone varchar(255)
  */
 class MonitoredUrlIncidentRow extends Row
 {
@@ -27,5 +29,7 @@ class MonitoredUrlIncidentRow extends Row
         'message' => null,
         'event_at' => null,
         'event_at_time_zone' => null,
+        'last_notification_at' => 'NULL',
+        'last_notification_at_time_zone' => 'NULL',
     ];
 }

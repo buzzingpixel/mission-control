@@ -99,6 +99,28 @@ class MonitoredUrlIncidentTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'last_notification_at' => [
+            'name' => 'last_notification_at',
+            'type' => 'datetime',
+            'size' => null,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
+        'last_notification_at_time_zone' => [
+            'name' => 'last_notification_at_time_zone',
+            'type' => 'varchar',
+            'size' => 255,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
     ];
 
     const COLUMN_NAMES = [
@@ -109,6 +131,8 @@ class MonitoredUrlIncidentTable extends Table
         'message',
         'event_at',
         'event_at_time_zone',
+        'last_notification_at',
+        'last_notification_at_time_zone',
     ];
 
     const COLUMN_DEFAULTS = [
@@ -119,6 +143,8 @@ class MonitoredUrlIncidentTable extends Table
         'message' => null,
         'event_at' => null,
         'event_at_time_zone' => null,
+        'last_notification_at' => 'NULL',
+        'last_notification_at_time_zone' => 'NULL',
     ];
 
     const PRIMARY_KEY = [
