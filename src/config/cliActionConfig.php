@@ -7,6 +7,7 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
+use src\app\cli\actions\DevUtilityAction;
 use src\app\cli\actions\PromoteUserToAdminAction;
 use src\app\cli\actions\DemoteUserFromAdminAction;
 
@@ -21,6 +22,10 @@ return [
             'demote-user' => [
                 'description' => 'Demotes a user from admin',
                 'class' => DemoteUserFromAdminAction::class,
+            ],
+            'dev-utility' => [
+                'description' => 'Do whatever we need during dev',
+                'class' => DevUtilityAction::class,
             ],
         ],
     ],
