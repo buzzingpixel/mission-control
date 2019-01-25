@@ -8,6 +8,7 @@ use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\notificationemails\models\NotificationEmailModel;
+use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
 use src\app\notificationemails\exceptions\InvalidNotificationEmailModelException;
@@ -34,7 +35,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
      */
     public function save(NotificationEmailModelInterface $model): void
     {
-        // TODO: Implement save() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(SaveNotificationEmailService::class);
+        $service->save($model);
     }
 
     public function disable(NotificationEmailModelInterface $model): void

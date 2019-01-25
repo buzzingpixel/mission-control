@@ -23,6 +23,7 @@ if (file_exists(APP_BASE_PATH . '/.env')) {
 if (getenv('DISABLE_CSRF') === 'true') {
     define('CSRF_EXEMPT_SEGMENTS', [
         '',
+        'admin',
         'account',
         'projects',
         'monitored-urls',
