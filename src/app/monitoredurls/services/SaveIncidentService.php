@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace src\app\monitoredurls\services;
 
+use DateTimeZone;
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\MonitoredUrlIncident\MonitoredUrlIncident;
@@ -19,18 +19,15 @@ class SaveIncidentService
     private $ormFactory;
     private $buildQuery;
     private $eventDispatcher;
-    private $dbFactory;
 
     public function __construct(
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
-        EventDispatcher $eventDispatcher,
-        DbFactory $dbFactory
+        EventDispatcher $eventDispatcher
     ) {
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
-        $this->dbFactory = $dbFactory;
     }
 
     /**
@@ -52,7 +49,7 @@ class SaveIncidentService
             throw new InvalidMonitoredUrlIncidentModelException();
         }
 
-        $fetchModel = $this->dbFactory->makeQueryModel();
+        $fetchModel = $this->ormFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->getGuidAsBytes());
         $existingRecord = $this->buildQuery->build(MonitoredUrlIncident::class, $fetchModel)->fetchRecord();
@@ -97,6 +94,10 @@ class SaveIncidentService
         MonitoredUrlIncidentModelInterface $model,
         MonitoredUrlIncidentRecord $record
     ): void {
+        $eventAt = $model->eventAt();
+
+        $eventAt->setTimezone(new DateTimeZone('UTC'));
+
         $record->monitored_url_guid = $model->getMonitoredUrlGuidAsBytes();
         $record->event_type = $model->eventType();
         $record->status_code = $model->statusCode();

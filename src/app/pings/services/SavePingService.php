@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\pings\services;
 
+use DateTimeZone;
 use Cocur\Slugify\Slugify;
 use src\app\data\Ping\Ping;
 use src\app\data\Ping\PingRecord;
@@ -135,8 +136,6 @@ class SavePingService
         PingModelInterface $model,
         PingRecord $record
     ): void {
-        $lastPingAt = $model->lastPingAt();
-
         $record->project_guid = $model->getProjectGuidAsBytes();
         $record->is_active = $model->isActive();
         $record->title = $model->title();
@@ -148,13 +147,18 @@ class SavePingService
         $record->last_ping_at = null;
         $record->last_ping_at_time_zone = null;
 
-        if ($lastPingAt) {
+        if ($lastPingAt = $model->lastPingAt()) {
+            $lastPingAt->setTimezone(new DateTimeZone('UTC'));
             $record->last_ping_at = $lastPingAt->format('Y-m-d H:i:s');
             $record->last_ping_at_time_zone = $lastPingAt->getTimezone()->getName();
         }
 
-        $record->added_at = $model->addedAt()->format('Y-m-d H:i:s');
-        $record->added_at_time_zone = $model->addedAt()->getTimezone()->getName();
+
+        $addedAt = $model->addedAt();
+        $addedAt->setTimezone(new DateTimeZone('UTC'));
+
+        $record->added_at = $addedAt->format('Y-m-d H:i:s');
+        $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
         $this->ormFactory->makeOrm()->persist($record);
     }

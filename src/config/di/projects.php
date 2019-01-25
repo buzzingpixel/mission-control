@@ -24,16 +24,14 @@ return [
         return new ArchiveProjectService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     DeleteProjectService::class => function () {
         return new DeleteProjectService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     FetchProjectsService::class => function () {
@@ -46,16 +44,14 @@ return [
             new Slugify(),
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     UnArchiveProjectService::class => function () {
         return new UnArchiveProjectService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
 ];

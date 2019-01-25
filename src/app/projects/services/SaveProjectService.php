@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace src\app\projects\services;
 
+use DateTimeZone;
 use Cocur\Slugify\Slugify;
 use src\app\data\Project\Project;
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
@@ -22,20 +22,17 @@ class SaveProjectService
     private $ormFactory;
     private $buildQuery;
     private $eventDispatcher;
-    private $dbFactory;
 
     public function __construct(
         Slugify $slugify,
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
-        EventDispatcher $eventDispatcher,
-        DbFactory $dbFactory
+        EventDispatcher $eventDispatcher
     ) {
         $this->slugify = $slugify;
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
-        $this->dbFactory = $dbFactory;
     }
 
     /**
@@ -59,7 +56,7 @@ class SaveProjectService
 
         $model->slug($this->slugify->slugify($model->title()));
 
-        $fetchModel = $this->dbFactory->makeQueryModel();
+        $fetchModel = $this->ormFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->getGuidAsBytes(), '!=');
         $fetchModel->addWhereGroup(false);
@@ -71,7 +68,7 @@ class SaveProjectService
             throw new ProjectNameNotUniqueException();
         }
 
-        $fetchModel = $this->dbFactory->makeQueryModel();
+        $fetchModel = $this->ormFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->getGuidAsBytes());
         $existingRecord = $this->buildQuery->build(Project::class, $fetchModel)->fetchRecord();
@@ -130,12 +127,15 @@ class SaveProjectService
 
     private function finalSave(ProjectModelInterface $model, ProjectRecord $record): void
     {
+        $addedAt = $model->addedAt();
+        $addedAt->setTimezone(new DateTimeZone('UTC'));
+
         $record->is_active = $model->isActive();
         $record->title = $model->title();
         $record->slug = $model->slug();
         $record->description = $model->description();
-        $record->added_at = $model->addedAt()->format('Y-m-d H:i:s');
-        $record->added_at_time_zone = $model->addedAt()->getTimezone()->getName();
+        $record->added_at = $addedAt->format('Y-m-d H:i:s');
+        $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
         $this->ormFactory->makeOrm()->persist($record);
     }

@@ -37,16 +37,14 @@ return [
         return new ArchiveMonitoredUrlService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     DeleteMonitoredUrlService::class => function () {
         return new DeleteMonitoredUrlService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     FetchIncidentsService::class => function () {
@@ -63,8 +61,7 @@ return [
         return new SaveIncidentService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     SaveMonitoredUrlService::class => function () {
@@ -72,16 +69,14 @@ return [
             new Slugify(),
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     UnArchiveMonitoredUrlService::class => function () {
         return new UnArchiveMonitoredUrlService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class),
-            new DbFactory()
+            Di::get(EventDispatcher::class)
         );
     },
     MonitoredUrlDeleteListener::class => function () {

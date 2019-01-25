@@ -5,7 +5,6 @@ namespace src\app\projects\services;
 
 use src\app\data\Project\Project;
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
@@ -18,18 +17,15 @@ class DeleteProjectService
     private $buildQuery;
     private $ormFactory;
     private $eventDispatcher;
-    private $dbFactory;
 
     public function __construct(
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
-        EventDispatcher $eventDispatcher,
-        DbFactory $dbFactory
+        EventDispatcher $eventDispatcher
     ) {
         $this->buildQuery = $buildQuery;
         $this->ormFactory = $ormFactory;
         $this->eventDispatcher = $eventDispatcher;
-        $this->dbFactory = $dbFactory;
     }
 
     public function __invoke(ProjectModelInterface $model): void
@@ -60,7 +56,7 @@ class DeleteProjectService
 
     private function fetchRecord(ProjectModelInterface $model): ProjectRecord
     {
-        $params = $this->dbFactory->makeQueryModel();
+        $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
         return $this->buildQuery->build(Project::class, $params)->fetchRecord();
     }

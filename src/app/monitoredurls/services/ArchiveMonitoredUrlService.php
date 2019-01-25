@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace src\app\monitoredurls\services;
 
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\MonitoredUrl\MonitoredUrl;
 use corbomite\db\interfaces\BuildQueryInterface;
@@ -18,18 +17,15 @@ class ArchiveMonitoredUrlService
     private $buildQuery;
     private $ormFactory;
     private $eventDispatcher;
-    private $dbFactory;
 
     public function __construct(
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
-        EventDispatcher $eventDispatcher,
-        DbFactory $dbFactory
+        EventDispatcher $eventDispatcher
     ) {
         $this->buildQuery = $buildQuery;
         $this->ormFactory = $ormFactory;
         $this->eventDispatcher = $eventDispatcher;
-        $this->dbFactory = $dbFactory;
     }
 
     public function __invoke(MonitoredUrlModelInterface $model): void
@@ -64,7 +60,7 @@ class ArchiveMonitoredUrlService
 
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord
     {
-        $params = $this->dbFactory->makeQueryModel();
+        $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
         return $this->buildQuery->build(MonitoredUrl::class, $params)->fetchRecord();
     }
