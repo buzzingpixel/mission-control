@@ -29,6 +29,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
         return new NotificationEmailModel();
     }
 
+    /**
+     * @throws InvalidNotificationEmailModelException
+     */
     public function save(NotificationEmailModelInterface $model): void
     {
         // TODO: Implement save() method.
@@ -63,7 +66,7 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
         if (! $params) {
             $params = $this->makeQueryModel();
             $params->addWhere('is_active', '1');
-            $params->addOrder('title', 'asc');
+            $params->addOrder('email_address', 'asc');
         }
 
         if ($this->limit) {

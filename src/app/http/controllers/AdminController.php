@@ -11,6 +11,7 @@ use src\app\http\services\RequireLoginService;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 
 class AdminController
 {
@@ -19,19 +20,22 @@ class AdminController
     private $queueApi;
     private $twigEnvironment;
     private $requireLoginService;
+    private $notificationEmailsApi;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
         QueueApiInterface $queueApi,
         TwigEnvironment $twigEnvironment,
-        RequireLoginService $requireLoginService
+        RequireLoginService $requireLoginService,
+        NotificationEmailsApiInterface $notificationEmailsApi
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
         $this->queueApi = $queueApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
+        $this->notificationEmailsApi = $notificationEmailsApi;
     }
 
     /**
@@ -53,7 +57,27 @@ class AdminController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        $rows = [];
+        $notificationEmailRows = [];
+
+        $queryModel = $this->notificationEmailsApi->makeQueryModel();
+        $queryModel->addOrder('email_address', 'asc');
+
+        foreach ($this->notificationEmailsApi->fetchAll($queryModel) as $notificationEmailModel) {
+            $styledStatus = $notificationEmailModel->isActive() ? 'Inactive' : 'Good';
+
+            $notificationEmailRows[] = [
+                'inputValue' => $notificationEmailModel->guid(),
+                'cols' => [
+                    'Email Address' => $notificationEmailModel->emailAddress(),
+                    'Status' => $notificationEmailModel->isActive() ? 'Active' : 'Inactive',
+                ],
+                'colorStyledCols' => [
+                    'Status' => $styledStatus,
+                ],
+            ];
+        }
+
+        $userRows = [];
 
         $queryModel = $this->userApi->makeQueryModel();
         $queryModel->addOrder('email_address', 'asc');
@@ -67,7 +91,7 @@ class AdminController
                 $styledStatus = 'Good';
             }
 
-            $rows[] = [
+            $userRows[] = [
                 'inputValue' => $userModel->guid(),
                 'cols' => [
                     'Email' => $userModel->emailAddress(),
@@ -105,15 +129,35 @@ class AdminController
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'metaTitle' => 'Admin',
                 'title' => 'Admin',
-                'pageControlButtons' => [
-                    [
-                        'href' => '/admin/create-user',
-                        'content' => 'Create User',
-                    ]
-                ],
                 'includes' => [
                     [
                         'template' => 'forms/TableListForm.twig',
+                        'tableControlButtons' => [[
+                            'href' => '/admin/add-notification-email',
+                            'content' => 'Add Notification Email',
+                        ]],
+                        'formTitle' => 'Notification Emails',
+                        'actionParam' => 'notificationEmailsActions',
+                        'actions' => [
+                            'disable' => 'Disable Selected',
+                            'enable' => 'Enable Selected',
+                            'delete' => 'Delete Selected',
+                        ],
+                        'table' => [
+                            'inputsName' => 'guids[]',
+                            'headings' => [
+                                'Email Address',
+                                'Status',
+                            ],
+                            'rows' => [],
+                        ],
+                    ],
+                    [
+                        'template' => 'forms/TableListForm.twig',
+                        'tableControlButtons' => [[
+                            'href' => '/admin/create-user',
+                            'content' => 'Create User',
+                        ]],
                         'formTitle' => 'Users',
                         'actionParam' => 'adminUserActions',
                         'actions' => [
@@ -128,7 +172,7 @@ class AdminController
                                 'Timezone',
                                 'Admin'
                             ],
-                            'rows' => $rows,
+                            'rows' => $userRows,
                         ],
                     ],
                     [

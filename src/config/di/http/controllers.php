@@ -25,6 +25,7 @@ use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\CreateProjectController;
+use src\app\notificationemails\NotificationEmailsApi;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ChangePasswordController;
@@ -53,7 +54,8 @@ return [
             new Response(),
             Di::get(QueueApi::class),
             Di::get(TwigEnvironment::class),
-            Di::get(RequireLoginService::class)
+            Di::get(RequireLoginService::class),
+            Di::get(NotificationEmailsApi::class)
         );
     },
     ChangePasswordController::class => function () {

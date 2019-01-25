@@ -6,7 +6,6 @@ use corbomite\db\PDO;
 use Cocur\Slugify\Slugify;
 use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
 use corbomite\db\Factory as OrmFactory;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
