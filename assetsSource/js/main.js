@@ -56,7 +56,7 @@ function runMain(F, W) {
         });
     });
 
-    $('.JS-FlatPicker').each(function () {
+    $('.JS-FlatPicker').each(function() {
         F.controller.construct('FlatPicker', {
             el: this
         });
