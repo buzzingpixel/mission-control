@@ -9,6 +9,7 @@ use src\app\data\Reminder\Reminder;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Reminder\ReminderRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
+use Atlas\Table\Exception as AtlasTableException;
 use src\app\reminders\events\ReminderAfterSaveEvent;
 use src\app\reminders\events\ReminderBeforeSaveEvent;
 use src\app\reminders\interfaces\ReminderModelInterface;
@@ -158,6 +159,14 @@ class SaveReminderService
         $record->added_at = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
-        $this->ormFactory->makeOrm()->persist($record);
+        try {
+            $this->ormFactory->makeOrm()->persist($record);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
+                return;
+            }
+
+            throw $e;
+        }
     }
 }

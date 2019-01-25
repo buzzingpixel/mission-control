@@ -10,6 +10,7 @@ use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use src\app\data\Project\ProjectRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
+use Atlas\Table\Exception as AtlasTableException;
 use src\app\projects\events\ProjectAfterSaveEvent;
 use src\app\projects\events\ProjectBeforeSaveEvent;
 use src\app\projects\interfaces\ProjectModelInterface;
@@ -137,6 +138,14 @@ class SaveProjectService
         $record->added_at = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
-        $this->ormFactory->makeOrm()->persist($record);
+        try {
+            $this->ormFactory->makeOrm()->persist($record);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
+                return;
+            }
+
+            throw $e;
+        }
     }
 }

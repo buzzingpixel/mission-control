@@ -10,6 +10,7 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\data\MonitoredUrl\MonitoredUrl;
 use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\MonitoredUrl\MonitoredUrlRecord;
+use Atlas\Table\Exception as AtlasTableException;
 use src\app\monitoredurls\events\MonitoredUrlAfterSaveEvent;
 use src\app\monitoredurls\events\MonitoredUrlBeforeSaveEvent;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
@@ -147,6 +148,14 @@ class SaveMonitoredUrlService
         $record->added_at = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
-        $this->ormFactory->makeOrm()->persist($record);
+        try {
+            $this->ormFactory->makeOrm()->persist($record);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
+                return;
+            }
+
+            throw $e;
+        }
     }
 }

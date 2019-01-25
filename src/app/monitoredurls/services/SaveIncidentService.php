@@ -7,6 +7,7 @@ use DateTimeZone;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\interfaces\BuildQueryInterface;
+use Atlas\Table\Exception as AtlasTableException;
 use src\app\data\MonitoredUrlIncident\MonitoredUrlIncident;
 use src\app\data\MonitoredUrlIncident\MonitoredUrlIncidentRecord;
 use src\app\monitoredurls\events\MonitoredUrlIncidentAfterSaveEvent;
@@ -105,6 +106,14 @@ class SaveIncidentService
         $record->event_at = $model->eventAt()->format('Y-m-d H:i:s');
         $record->event_at_time_zone = $model->eventAt()->getTimezone()->getName();
 
-        $this->ormFactory->makeOrm()->persist($record);
+        try {
+            $this->ormFactory->makeOrm()->persist($record);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
+                return;
+            }
+
+            throw $e;
+        }
     }
 }
