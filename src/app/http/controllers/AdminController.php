@@ -83,16 +83,20 @@ class AdminController
         $queueRows = [];
 
         foreach ($this->queueApi->fetchAllBatches() as $batch) {
-            $batch->addedAt()->setTimezone(new \DateTimeZone(
-                $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
-            ));
+            $addedAt = $batch->addedAt();
+
+            if ($addedAt) {
+                $addedAt->setTimezone(new \DateTimeZone(
+                    $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
+                ));
+            }
 
             $queueRows[] = [
                 'inputValue' => 'null',
                 'cols' => [
                     'Title' => $batch->title(),
                     'Percent Complete' => $batch->percentComplete(),
-                    'Added At' => $batch->addedAt()->format('n/j/Y g:i:s a'),
+                    'Added At' => $addedAt ? $addedAt->format('n/j/Y g:i:s a') : '',
                 ],
             ];
         }
@@ -127,7 +131,6 @@ class AdminController
                             'rows' => $rows,
                         ],
                     ],
-
                     [
                         'template' => 'forms/TableListForm.twig',
                         'formTitle' => 'Batches Waiting in Queue',
