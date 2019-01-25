@@ -7,7 +7,7 @@ use DateTime;
 use Throwable;
 use DateTimeZone;
 use src\app\support\extensions\GuzzleClientNoHttpErrors;
-use \buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;

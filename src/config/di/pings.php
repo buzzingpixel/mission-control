@@ -4,14 +4,19 @@ declare(strict_types=1);
 use corbomite\di\Di;
 use src\app\pings\PingApi;
 use Cocur\Slugify\Slugify;
+use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
+use src\app\pings\tasks\CheckPingTask;
 use corbomite\db\Factory as OrmFactory;
+use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\pings\services\SavePingService;
 use corbomite\db\services\BuildQueryService;
 use src\app\pings\services\FetchPingService;
 use src\app\pings\services\DeletePingService;
 use src\app\pings\services\ArchivePingService;
+use src\app\pings\schedules\CheckPingsSchedule;
 use src\app\pings\services\UnArchivePingService;
+use src\app\pings\tasks\CollectPingsForQueueTask;
 use src\app\pings\listeners\ProjectDeleteListener;
 use src\app\pings\listeners\ProjectArchiveListener;
 use src\app\pings\listeners\ProjectUnArchiveListener;
@@ -68,6 +73,23 @@ return [
     ProjectUnArchiveListener::class => function () {
         return new ProjectUnArchiveListener(
             Di::get(PingApi::class)
+        );
+    },
+    CheckPingsSchedule::class => function () {
+        return new CheckPingsSchedule(
+            Di::get(QueueApi::class)
+        );
+    },
+    CollectPingsForQueueTask::class => function () {
+        return new CollectPingsForQueueTask(
+            Di::get(PingApi::class),
+            Di::get(QueueApi::class)
+        );
+    },
+    CheckPingTask::class => function () {
+        return new CheckPingTask(
+            Di::get(PingApi::class),
+            Di::get(EmailApi::class)
         );
     },
 ];
