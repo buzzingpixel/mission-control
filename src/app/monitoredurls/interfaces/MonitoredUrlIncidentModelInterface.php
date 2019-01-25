@@ -87,4 +87,11 @@ interface MonitoredUrlIncidentModelInterface
      * @return DateTime
      */
     public function eventAt(?DateTime $val = null): DateTime;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set.
+     * @param DateTime|null $val
+     * @return DateTime
+     */
+    public function lastNotificationAt(?DateTime $val = null): ?DateTime;
 }

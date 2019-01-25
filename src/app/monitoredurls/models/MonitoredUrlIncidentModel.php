@@ -82,4 +82,12 @@ class MonitoredUrlIncidentModel implements MonitoredUrlIncidentModelInterface
 
         return $this->eventAt = $val ?? $this->eventAt;
     }
+
+    /** @var DateTime|null */
+    private $lastNotificationAt;
+
+    public function lastNotificationAt(?DateTime $val = null): ?DateTime
+    {
+        return $this->lastNotificationAt = $val ?? $this->lastNotificationAt;
+    }
 }
