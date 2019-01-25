@@ -37,6 +37,8 @@ class PingCheckinController
             throw new Http404Exception('Ping not found');
         }
 
+        $model->pendingError(false);
+        $model->hasError(false);
         $model->lastPingAt(new DateTime('now', new DateTimeZone('UTC')));
 
         $this->pingApi->save($model);
