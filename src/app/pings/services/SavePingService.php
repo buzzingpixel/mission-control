@@ -13,6 +13,7 @@ use src\app\pings\events\PingAfterSaveEvent;
 use src\app\pings\events\PingBeforeSaveEvent;
 use src\app\pings\interfaces\PingModelInterface;
 use corbomite\db\interfaces\BuildQueryInterface;
+use Atlas\Table\Exception as AtlasTableException;
 use src\app\pings\exceptions\InvalidPingModelException;
 use src\app\pings\exceptions\PingNameNotUniqueException;
 use corbomite\events\interfaces\EventDispatcherInterface;
@@ -160,6 +161,14 @@ class SavePingService
         $record->added_at = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
-        $this->ormFactory->makeOrm()->persist($record);
+        try {
+            $this->ormFactory->makeOrm()->persist($record);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
+                return;
+            }
+
+            throw $e;
+        }
     }
 }

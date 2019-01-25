@@ -69,7 +69,7 @@ class CheckUrlTask
     /**
      * @throws Throwable
      */
-    public function innerRun(array $context): void
+    private function innerRun(array $context): void
     {
         $model = $this->getModel($context['guid']);
 
