@@ -96,6 +96,7 @@ class SaveIncidentService
         MonitoredUrlIncidentRecord $record
     ): void {
         $eventAt = $model->eventAt();
+        $lastNotificationAt = $model->lastNotificationAt();
 
         $eventAt->setTimezone(new DateTimeZone('UTC'));
 
@@ -103,8 +104,19 @@ class SaveIncidentService
         $record->event_type = $model->eventType();
         $record->status_code = $model->statusCode();
         $record->message = $model->message();
-        $record->event_at = $model->eventAt()->format('Y-m-d H:i:s');
-        $record->event_at_time_zone = $model->eventAt()->getTimezone()->getName();
+        $record->event_at = $eventAt->format('Y-m-d H:i:s');
+        $record->event_at_time_zone = $eventAt->getTimezone()->getName();
+
+        if ($lastNotificationAt) {
+            $lastNotificationAt->setTimezone(new DateTimeZone('UTC'));
+            $record->last_notification_at = $lastNotificationAt->format('Y-m-d H:i:s');
+            $record->last_notification_at_time_zone = $lastNotificationAt->getTimezone()->getName();
+        }
+
+        if (! $lastNotificationAt) {
+            $record->last_notification_at = null;
+            $record->last_notification_at_time_zone = null;
+        }
 
         try {
             $this->ormFactory->makeOrm()->persist($record);
