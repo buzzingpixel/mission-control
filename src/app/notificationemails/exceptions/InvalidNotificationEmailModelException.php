@@ -7,15 +7,15 @@ declare(strict_types=1);
  * @license Apache-2.0
  */
 
-namespace src\app\reminders\exceptions;
+namespace src\app\notificationemails\exceptions;
 
 use Exception;
 use Throwable;
 
-class InvalidReminderModelException extends Exception
+class InvalidNotificationEmailModelException extends Exception
 {
     public function __construct(
-        string $message = 'The Reminder model is not valid',
+        string $message = 'The Notification Email model is not valid',
         int $code = 500,
         Throwable $previous = null
     ) {
