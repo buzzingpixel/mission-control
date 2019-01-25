@@ -67,9 +67,12 @@ class ReminderApi implements ReminderApiInterface
         $service->delete($model);
     }
 
+    private $limit;
+
     public function fetchOne(
         ?QueryModelInterface $params = null
     ): ?ReminderModelInterface {
+        $this->limit = 1;
         return $this->fetchAll($params)[0] ?? null;
     }
 
@@ -82,6 +85,10 @@ class ReminderApi implements ReminderApiInterface
             $params = $this->makeQueryModel();
             $params->addWhere('is_active', '1');
             $params->addOrder('title', 'asc');
+        }
+
+        if ($this->limit) {
+            $params->limit($this->limit);
         }
 
         return $service->fetch($params);
