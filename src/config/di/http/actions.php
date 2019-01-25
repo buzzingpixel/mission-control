@@ -30,9 +30,21 @@ use src\app\http\actions\ChangePasswordAction;
 use src\app\http\actions\CreateReminderAction;
 use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
+use src\app\http\actions\AddEmailNotificationAction;
+use src\app\notificationemails\NotificationEmailsApi;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
+    AddEmailNotificationAction::class => function () {
+        return new AddEmailNotificationAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class),
+            Di::get(NotificationEmailsApi::class)
+        );
+    },
     AdminUserActions::class => function () {
         return new AdminUserActions(
             Di::get(UserApi::class),
