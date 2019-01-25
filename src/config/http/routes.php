@@ -30,6 +30,7 @@ use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
+use src\app\http\controllers\AddNotificationEmailController;
 
 // Account
 $routeCollector->addRoute(['GET', 'POST'], '/account', AccountController::class);
@@ -64,6 +65,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/reminders/edit/{slug}', EditReminde
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/admin/create-user', CreateUserController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/admin/add-notification-email', AddNotificationEmailController::class);
 
 // Password Reset routes
 $routeCollector->get('/iforgot', ForgotPasswordController::class);

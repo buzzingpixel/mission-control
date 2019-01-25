@@ -8,10 +8,9 @@ use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 
-class CreateUserController
+class AddNotificationEmailController
 {
     private $userApi;
     private $response;
@@ -43,40 +42,41 @@ class CreateUserController
             throw new LogicException('Unknown Error');
         }
 
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $response = $this->response->withHeader('Content-Type', 'text/html');
+
+        if ($user->getExtendedProperty('is_admin') !== 1) {
+            $response->getBody()->write(
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
+            );
+
+            return $response;
+        }
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
-                'metaTitle' => 'Create User',
+                'metaTitle' => 'Add Notification Email',
                 'breadCrumbs' => [
                     [
                         'href' => '/admin',
                         'content' => 'Admin'
                     ],
                     [
-                        'content' => 'Create User'
+                        'content' => 'Add Email'
                     ]
                 ],
-                'title' => 'Create User',
+                'title' => 'Add Notification Email',
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
-                        'actionParam' => 'createUser',
+                        'actionParam' => 'addNotificationEmail',
                         'inputs' => [
                             [
                                 'template' => 'Text',
                                 'type' => 'email',
-                                'name' => 'email',
+                                'name' => 'email_address',
                                 'label' => 'Email Address',
-                            ],
-                            [
-                                'template' => 'Checkbox',
-                                'name' => 'admin',
-                                'label' => 'Admin',
                             ],
                         ],
                     ]

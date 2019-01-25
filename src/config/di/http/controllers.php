@@ -37,6 +37,7 @@ use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
+use src\app\http\controllers\AddNotificationEmailController;
 
 return [
     AccountController::class => function () {
@@ -46,6 +47,14 @@ return [
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class),
             Di::get(TimeZoneListUtility::class)
+        );
+    },
+    AddNotificationEmailController::class => function () {
+        return new AddNotificationEmailController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
         );
     },
     AdminController::class => function () {
