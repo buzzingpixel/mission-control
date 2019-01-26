@@ -11,6 +11,7 @@ use src\app\notificationemails\models\NotificationEmailModel;
 use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
+use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
 use src\app\notificationemails\exceptions\InvalidNotificationEmailModelException;
 
 class NotificationEmailsApi implements NotificationEmailsApiInterface
@@ -32,6 +33,7 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     /**
      * @throws InvalidNotificationEmailModelException
+     * @throws NotificationEmailNotUniqueException
      */
     public function save(NotificationEmailModelInterface $model): void
     {

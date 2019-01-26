@@ -11,6 +11,7 @@ use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
+use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
 
 class AddEmailNotificationAction
 {
@@ -76,7 +77,13 @@ class AddEmailNotificationAction
 
         $model->emailAddress($emailAddress);
 
-        $this->notificationEmailsApi->save($model);
+        try {
+            $this->notificationEmailsApi->save($model);
+        } catch (NotificationEmailNotUniqueException $e) {
+            $store['inputErrors']['email_address'][] = 'Email address already exists';
+            $this->dataStore->storeItem('FormSubmission', $store);
+            return null;
+        }
 
         $flashDataModel = $this->flashDataApi->makeFlashDataModel([
             'name' => 'Message'

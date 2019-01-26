@@ -9,6 +9,7 @@ use Atlas\Table\Exception as AtlasTableException;
 use src\app\data\NotificationEmail\NotificationEmail;
 use src\app\data\NotificationEmail\NotificationEmailRecord;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
+use \src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
 use src\app\notificationemails\exceptions\InvalidNotificationEmailModelException;
 
 class SaveNotificationEmailService
@@ -26,6 +27,7 @@ class SaveNotificationEmailService
 
     /**
      * @throws InvalidNotificationEmailModelException
+     * @throws NotificationEmailNotUniqueException
      */
     public function __invoke(NotificationEmailModelInterface $model)
     {
@@ -34,6 +36,7 @@ class SaveNotificationEmailService
 
     /**
      * @throws InvalidNotificationEmailModelException
+     * @throws NotificationEmailNotUniqueException
      */
     public function save(NotificationEmailModelInterface $model): void
     {
@@ -47,9 +50,8 @@ class SaveNotificationEmailService
         $fetchModel->addWhere('email_address', $model->emailAddress());
         $existing = $this->buildQuery->build(NotificationEmail::class, $fetchModel)->fetchRecord();
 
-        // TODO: Throw a not unique email exception
         if ($existing) {
-            throw new InvalidNotificationEmailModelException();
+            throw new NotificationEmailNotUniqueException();
         }
 
         $fetchModel = $this->ormFactory->makeQueryModel();

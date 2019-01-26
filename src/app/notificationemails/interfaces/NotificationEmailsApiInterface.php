@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\notificationemails\interfaces;
 
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
 use src\app\notificationemails\exceptions\InvalidNotificationEmailModelException;
 
 interface NotificationEmailsApiInterface
@@ -31,6 +32,7 @@ interface NotificationEmailsApiInterface
      * Saves a Notification Email Model
      * @param NotificationEmailModelInterface $model
      * @throws InvalidNotificationEmailModelException
+     * @throws NotificationEmailNotUniqueException
      */
     public function save(NotificationEmailModelInterface $model);
 
