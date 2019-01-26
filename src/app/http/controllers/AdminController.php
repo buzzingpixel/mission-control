@@ -63,7 +63,7 @@ class AdminController
         $queryModel->addOrder('email_address', 'asc');
 
         foreach ($this->notificationEmailsApi->fetchAll($queryModel) as $notificationEmailModel) {
-            $styledStatus = $notificationEmailModel->isActive() ? 'Inactive' : 'Good';
+            $styledStatus = $notificationEmailModel->isActive() ? 'Good' : 'Inactive';
 
             $notificationEmailRows[] = [
                 'inputValue' => $notificationEmailModel->guid(),
@@ -149,7 +149,7 @@ class AdminController
                                 'Email Address',
                                 'Status',
                             ],
-                            'rows' => [],
+                            'rows' => $notificationEmailRows,
                         ],
                     ],
                     [

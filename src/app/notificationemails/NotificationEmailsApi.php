@@ -9,6 +9,7 @@ use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\notificationemails\models\NotificationEmailModel;
 use src\app\notificationemails\services\SaveNotificationEmailService;
+use src\app\notificationemails\services\FetchNotificationEmailService;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
 use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
@@ -68,6 +69,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(FetchNotificationEmailService::class);
+
         if (! $params) {
             $params = $this->makeQueryModel();
             $params->addWhere('is_active', '1');
@@ -78,7 +82,6 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
             $params->limit($this->limit);
         }
 
-        // TODO: Implement fetchAll() method.
-        return [];
+        return $service->fetch($params);
     }
 }
