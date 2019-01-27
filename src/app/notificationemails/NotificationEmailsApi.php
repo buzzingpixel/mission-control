@@ -10,6 +10,7 @@ use corbomite\db\interfaces\QueryModelInterface;
 use src\app\notificationemails\models\NotificationEmailModel;
 use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\services\FetchNotificationEmailService;
+use src\app\notificationemails\services\DeleteNotificationEmailService;
 use src\app\notificationemails\services\EnableNotificationEmailService;
 use src\app\notificationemails\services\DisableNotificationEmailService;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
@@ -61,7 +62,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     public function delete(NotificationEmailModelInterface $model): void
     {
-        // TODO: Implement delete() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(DeleteNotificationEmailService::class);
+        $service->delete($model);
     }
 
     private $limit;

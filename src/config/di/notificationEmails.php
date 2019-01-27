@@ -7,6 +7,7 @@ use corbomite\db\services\BuildQueryService;
 use src\app\notificationemails\NotificationEmailsApi;
 use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\services\FetchNotificationEmailService;
+use src\app\notificationemails\services\DeleteNotificationEmailService;
 use src\app\notificationemails\services\EnableNotificationEmailService;
 use src\app\notificationemails\services\DisableNotificationEmailService;
 
@@ -14,6 +15,12 @@ return [
     NotificationEmailsApi::class => function () {
         return new NotificationEmailsApi(
             new Di()
+        );
+    },
+    DeleteNotificationEmailService::class => function () {
+        return new DeleteNotificationEmailService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class)
         );
     },
     DisableNotificationEmailService::class => function () {
