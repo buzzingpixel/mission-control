@@ -10,6 +10,7 @@ use corbomite\db\interfaces\QueryModelInterface;
 use src\app\notificationemails\models\NotificationEmailModel;
 use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\services\FetchNotificationEmailService;
+use src\app\notificationemails\services\EnableNotificationEmailService;
 use src\app\notificationemails\services\DisableNotificationEmailService;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
@@ -53,7 +54,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     public function enable(NotificationEmailModelInterface $model): void
     {
-        // TODO: Implement enable() method.
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->getFromDefinition(EnableNotificationEmailService::class);
+        $service->enable($model);
     }
 
     public function delete(NotificationEmailModelInterface $model): void
