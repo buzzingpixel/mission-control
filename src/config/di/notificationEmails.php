@@ -7,11 +7,18 @@ use corbomite\db\services\BuildQueryService;
 use src\app\notificationemails\NotificationEmailsApi;
 use src\app\notificationemails\services\SaveNotificationEmailService;
 use src\app\notificationemails\services\FetchNotificationEmailService;
+use src\app\notificationemails\services\DisableNotificationEmailService;
 
 return [
     NotificationEmailsApi::class => function () {
         return new NotificationEmailsApi(
             new Di()
+        );
+    },
+    DisableNotificationEmailService::class => function () {
+        return new DisableNotificationEmailService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class)
         );
     },
     FetchNotificationEmailService::class => function () {
