@@ -32,6 +32,7 @@ use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\AddEmailNotificationAction;
 use src\app\notificationemails\NotificationEmailsApi;
+use src\app\http\actions\NotificationEmailListActions;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
@@ -165,6 +166,15 @@ return [
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class),
             Di::get(MonitoredUrlsApi::class)
+        );
+    },
+    NotificationEmailListActions::class => function () {
+        return new NotificationEmailListActions(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class),
+            Di::get(NotificationEmailsApi::class)
         );
     },
     PingListActions::class => function () {

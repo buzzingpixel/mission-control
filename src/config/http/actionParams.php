@@ -20,6 +20,7 @@ use src\app\http\actions\CreateReminderAction;
 use src\app\http\actions\EditMonitoredUrlAction;
 use src\app\http\actions\CreateMonitoredUrlAction;
 use src\app\http\actions\AddEmailNotificationAction;
+use src\app\http\actions\NotificationEmailListActions;
 use src\app\http\actions\SendPasswordResetEmailAction;
 
 return [
@@ -43,4 +44,5 @@ return [
     'monitoredUrlListActions' => ['class' => MonitoredUrlActions::class],
     'addNotificationEmail' => ['class' => AddEmailNotificationAction::class],
     'sendPasswordResetEmail' => ['class' => SendPasswordResetEmailAction::class],
+    'notificationEmailsActions' => ['class' => NotificationEmailListActions::class],
 ];
