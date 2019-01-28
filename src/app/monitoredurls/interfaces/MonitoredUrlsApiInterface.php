@@ -79,14 +79,21 @@ interface MonitoredUrlsApiInterface
     public function fetchAll(?QueryModelInterface $params = null): array;
 
     /**
-     * Adds an incident
+     * Saves an incident
      * @param MonitoredUrlIncidentModelInterface $model
      * @return mixed
      */
     public function saveIncident(MonitoredUrlIncidentModelInterface $model);
 
     /**
-     * Fetches events based on params
+     * Fetches one incident base on params
+     * @param QueryModelInterface|null $params
+     * @return MonitoredUrlIncidentModelInterface|null
+     */
+    public function fetchOneIncident(?QueryModelInterface $params = null): ?MonitoredUrlIncidentModelInterface;
+
+    /**
+     * Fetches incidents based on params
      * @return MonitoredUrlIncidentModelInterface[]
      */
     public function fetchIncidents(?QueryModelInterface $params = null): array;

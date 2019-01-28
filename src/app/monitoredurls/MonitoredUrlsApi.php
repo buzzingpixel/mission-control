@@ -76,7 +76,9 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
         ?QueryModelInterface $params = null
     ): ?MonitoredUrlModelInterface {
         $this->limit = 1;
-        return $this->fetchAll($params)[0] ?? null;
+        $all = $this->fetchAll($params)[0] ?? null;
+        $this->limit = null;
+        return $all;
     }
 
     public function fetchAll(?QueryModelInterface $params = null): array
@@ -104,6 +106,16 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
         $service->save($model);
     }
 
+    private $incidentLimit;
+
+    public function fetchOneIncident(?QueryModelInterface $params = null): ?MonitoredUrlIncidentModelInterface
+    {
+        $this->incidentLimit = 1;
+        $all = $this->fetchIncidents($params)[0] ?? null;
+        $this->incidentLimit = null;
+        return $all;
+    }
+
     public function fetchIncidents(?QueryModelInterface $params = null): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -113,6 +125,10 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
             $params = $this->makeQueryModel();
             $params->limit(50);
             $params->addOrder('event_at');
+        }
+
+        if ($this->incidentLimit) {
+            $params->limit($this->incidentLimit);
         }
 
         return $service->fetch($params);

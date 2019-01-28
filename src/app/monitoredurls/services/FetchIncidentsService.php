@@ -51,6 +51,14 @@ class FetchIncidentsService
                 new DateTimeZone($record->event_at_time_zone)
             ));
 
+            if ($record->last_notification_at) {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $model->lastNotificationAt(new DateTime(
+                    $record->last_notification_at,
+                    new DateTimeZone($record->event_at_time_zone)
+                ));
+            }
+
             $models[] = $model;
         }
 
