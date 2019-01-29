@@ -86,7 +86,14 @@ class CheckUrlForNotificationTask
         $message .= 'Message: ' . $incidentModel->message();
 
         foreach ($this->sendNotificationAdapters as $adapter) {
-            $this->sendNotificationWithAdapter($adapter, $subject, $message);
+            $this->sendNotificationWithAdapter(
+                $adapter,
+                $subject,
+                $message,
+                $incidentModel->eventType(),
+                $urlModel->slug(),
+                $urlModel->url()
+            );
         }
 
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -98,9 +105,36 @@ class CheckUrlForNotificationTask
     private function sendNotificationWithAdapter(
         SendNotificationAdapterInterface $adapter,
         string $subject,
-        string $message
+        string $message,
+        string $eventType,
+        string $urlSlug,
+        string $url
     ) {
-        $adapter->send($subject, $message);
+        $status = '';
+
+        if ($eventType === 'down') {
+            $status = 'bad';
+        } elseif ($eventType === 'up') {
+            $status = 'good';
+        }
+
+        $adapter->send(
+            $subject,
+            $message,
+            [
+                'status' => $status,
+                'urls' => [
+                    [
+                        'content' => 'View Incidents',
+                        'href' => getenv('SITE_URL') . '/monitored-urls/view/' . $urlSlug
+                    ],
+                    [
+                        'content' => 'Go To URL',
+                        'href' => $url
+                    ],
+                ],
+            ]
+        );
     }
 
     private function getUrlModel(string $guid): MonitoredUrlModelInterface

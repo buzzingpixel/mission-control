@@ -6,9 +6,11 @@ use corbomite\queue\QueueApi;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\notificationemails\NotificationEmailsApi;
+use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use src\app\notifications\tasks\CheckUrlForNotificationTask;
 use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
 use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
+use src\app\notifications\notificationadapters\SlackNotificationAdapter;
 use src\app\notifications\notificationadapters\SendEmailNotificationAdapter;
 
 return [
@@ -21,7 +23,8 @@ return [
         return new CheckUrlForNotificationTask(
             Di::get(MonitoredUrlsApi::class),
             [
-                Di::get(SendEmailNotificationAdapter::class)
+                Di::get(SendEmailNotificationAdapter::class),
+                Di::get(SlackNotificationAdapter::class),
             ]
         );
     },
@@ -35,6 +38,12 @@ return [
         return new SendEmailNotificationAdapter(
             Di::get(EmailApi::class),
             Di::get(NotificationEmailsApi::class)
+        );
+    },
+    SlackNotificationAdapter::class => function () {
+        return new SlackNotificationAdapter(
+            new GuzzleClientNoHttpErrors(),
+            getenv('SLACK_NOTIFICATION_WEBHOOK_URL') ?: null
         );
     },
 ];

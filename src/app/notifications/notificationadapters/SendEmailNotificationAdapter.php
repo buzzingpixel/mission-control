@@ -24,7 +24,7 @@ class SendEmailNotificationAdapter implements SendNotificationAdapterInterface
     /**
      * @throws InvalidEmailModelException
      */
-    public function send(string $subject, string $message)
+    public function send(string $subject, string $message, array $context = [])
     {
         $queryModel = $this->notificationEmailsApi->makeQueryModel();
         $queryModel->addWhere('is_active', '1');
