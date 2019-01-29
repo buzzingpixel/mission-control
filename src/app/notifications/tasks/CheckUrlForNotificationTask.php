@@ -30,8 +30,20 @@ class CheckUrlForNotificationTask
     public function __invoke(array $context): void
     {
         $incidentModel = $this->getIncidentModel($context['guid']);
+        $previousIncidentModel = $this->getIncidentModel($context['guid'], true);
 
         if (! $incidentModel) {
+            return;
+        }
+
+        // If the previous incident was pending and the current incident is up
+        // We can stop here
+        if ($previousIncidentModel &&
+            (
+                $previousIncidentModel->eventType() === 'pending' &&
+                $incidentModel->eventType() === 'up'
+            )
+        ) {
             return;
         }
 
@@ -98,11 +110,18 @@ class CheckUrlForNotificationTask
         return $this->monitoredUrlsApi->fetchOne($queryModel);
     }
 
-    private function getIncidentModel(string $urlGuid): ?MonitoredUrlIncidentModelInterface
+    private function getIncidentModel(string $urlGuid, bool $previous = false): ?MonitoredUrlIncidentModelInterface
     {
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
+
         $queryModel->addWhere('monitored_url_guid', $this->monitoredUrlsApi->uuidToBytes($urlGuid));
+
+        if ($previous) {
+            $queryModel->offset(1);
+        }
+
         $queryModel->addOrder('event_at');
+
         return $this->monitoredUrlsApi->fetchOneIncident($queryModel);
     }
 }
