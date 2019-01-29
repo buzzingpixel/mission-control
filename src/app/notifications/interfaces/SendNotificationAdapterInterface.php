@@ -5,5 +5,5 @@ namespace src\app\notifications\interfaces;
 
 interface SendNotificationAdapterInterface
 {
-    public function send(string $sbj, string $message);
+    public function send(string $subject, string $message);
 }

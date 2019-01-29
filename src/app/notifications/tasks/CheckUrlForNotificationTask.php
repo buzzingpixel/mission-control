@@ -74,13 +74,21 @@ class CheckUrlForNotificationTask
         $message .= 'Message: ' . $incidentModel->message();
 
         foreach ($this->sendNotificationAdapters as $adapter) {
-            $adapter->send($subject, $message);
+            $this->sendNotificationWithAdapter($adapter, $subject, $message);
         }
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $incidentModel->lastNotificationAt(new DateTime());
 
         $this->monitoredUrlsApi->saveIncident($incidentModel);
+    }
+
+    private function sendNotificationWithAdapter(
+        SendNotificationAdapterInterface $adapter,
+        string $subject,
+        string $message
+    ) {
+        $adapter->send($subject, $message);
     }
 
     private function getUrlModel(string $guid): MonitoredUrlModelInterface
