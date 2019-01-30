@@ -19,6 +19,8 @@ namespace src\app\data\Ping;
  * @property mixed $warn_after bigint(20,0) unsigned NOT NULL
  * @property mixed $last_ping_at datetime NOT NULL
  * @property mixed $last_ping_at_time_zone varchar(255) NOT NULL
+ * @property mixed $last_notification_at datetime
+ * @property mixed $last_notification_at_time_zone varchar(255)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */

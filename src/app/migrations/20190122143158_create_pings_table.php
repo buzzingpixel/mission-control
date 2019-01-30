@@ -64,6 +64,14 @@ class CreatePingsTable extends AbstractMigration
             ->addColumn('last_ping_at_time_zone', 'string', [
                 'comment' => 'The timezone last_ping_at was set with',
             ])
+            ->addColumn('last_notification_at', 'datetime', [
+                'null' => true,
+                'comment' => 'The datetime representation of when the down notification was last sent',
+            ])
+            ->addColumn('last_notification_at_time_zone', 'string', [
+                'null' => true,
+                'comment' => 'The timezone last_notification_at was set with',
+            ])
             ->addColumn('added_at', 'datetime', [
                 'comment' => 'The datetime representation of when the ping was added',
             ])
