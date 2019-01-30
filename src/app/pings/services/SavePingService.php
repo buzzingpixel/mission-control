@@ -154,6 +154,14 @@ class SavePingService
             $record->last_ping_at_time_zone = $lastPingAt->getTimezone()->getName();
         }
 
+        $record->last_notification_at = null;
+        $record->last_notification_at_time_zone = null;
+
+        if ($lastNotificationAt = $model->lastNotificationAt()) {
+            $lastNotificationAt->setTimezone(new DateTimeZone('UTC'));
+            $record->last_notification_at = $lastNotificationAt->format('Y-m-d H:i:s');
+            $record->last_notification_at_time_zone = $lastNotificationAt->getTimezone()->getName();
+        }
 
         $addedAt = $model->addedAt();
         $addedAt->setTimezone(new DateTimeZone('UTC'));

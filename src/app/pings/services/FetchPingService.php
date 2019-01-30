@@ -53,13 +53,19 @@ class FetchPingService
             $model->expectEvery($record->expect_every);
             $model->warnAfter($record->warn_after);
 
-            $lastPingAt = $record->last_ping_at;
-
-            if ($lastPingAt) {
+            if ($lastPingAt = $record->last_ping_at) {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 $model->lastPingAt(new DateTime(
                     $lastPingAt,
                     new DateTimeZone($record->last_ping_at_time_zone)
+                ));
+            }
+
+            if ($lastNotificationAt = $record->last_notification_at) {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $model->lastNotificationAt(new DateTime(
+                    $lastNotificationAt,
+                    new DateTimeZone($record->last_notification_at_time_zone)
                 ));
             }
 

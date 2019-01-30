@@ -52,4 +52,11 @@ class PingModel implements PingModelInterface
 
         return $this->lastPingAt = $val ?? $this->lastPingAt;
     }
+
+    private $lastNotificationAt;
+
+    public function lastNotificationAt(?DateTime $val = null): ?DateTime
+    {
+        return $this->lastNotificationAt = $val ?? $this->lastNotificationAt;
+    }
 }
