@@ -59,4 +59,9 @@ class PingModel implements PingModelInterface
     {
         return $this->lastNotificationAt = $val ?? $this->lastNotificationAt;
     }
+
+    public function clearLastNotificationAt()
+    {
+        $this->lastNotificationAt = null;
+    }
 }

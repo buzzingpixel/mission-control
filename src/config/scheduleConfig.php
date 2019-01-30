@@ -4,6 +4,7 @@ declare(strict_types=1);
 use src\app\pings\schedules\CheckPingsSchedule;
 use src\app\monitoredurls\schedules\CheckUrlsSchedule;
 use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
+use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
 
 return [
     [
@@ -16,6 +17,10 @@ return [
     ],
     [
         'class' => CheckUrlsForNotificationsSchedule::class,
+        'runEvery' => 'Always'
+    ],
+    [
+        'class' => CheckPingsForNotificationsSchedule::class,
         'runEvery' => 'Always'
     ],
 ];

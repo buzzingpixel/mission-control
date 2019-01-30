@@ -59,6 +59,11 @@ interface PingModelInterface extends StandardModelInterface
     public function lastNotificationAt(?DateTime $val = null): ?DateTime;
 
     /**
+     * Clears lastNotificationAt
+     */
+    public function clearLastNotificationAt();
+
+    /**
      * Returns the value. Sets value if incoming argument is set.
      * If no DateTime has been set, it should return the current DateTime.
      * @param DateTime|null $val
