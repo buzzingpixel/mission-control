@@ -5,6 +5,7 @@ use src\app\pings\schedules\CheckPingsSchedule;
 use src\app\monitoredurls\schedules\CheckUrlsSchedule;
 use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
 use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
+use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
 
 return [
     [
@@ -22,5 +23,9 @@ return [
     [
         'class' => CheckPingsForNotificationsSchedule::class,
         'runEvery' => 'Always'
+    ],
+    [
+        'class' => CheckRemindersForNotificationsSchedule::class,
+        'runEvery' => 'DayAtMidnight'
     ],
 ];
