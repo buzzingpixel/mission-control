@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 /** @var \FastRoute\RouteCollector $routeCollector */
 
+use src\app\http\controllers\TestController;
 use src\app\http\controllers\AdminController;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditPingController;
@@ -31,6 +32,11 @@ use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\AddNotificationEmailController;
+
+// Testing
+if (getenv('DEV_MODE') === 'true') {
+    $routeCollector->addRoute(['GET', 'POST'], '/test', new TestController());
+}
 
 // Account
 $routeCollector->addRoute(['GET', 'POST'], '/account', AccountController::class);
