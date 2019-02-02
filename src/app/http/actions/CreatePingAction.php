@@ -110,8 +110,7 @@ class CreatePingAction
 
         $flashDataModel->dataItem(
             'content',
-            'Ping "' . $model->title() . '" created successfully. The Check In URL is ' .
-                getenv('SITE_URL') . '/pings/checkin/' . $model->pingId()
+            'Ping "' . $model->title() . '" created successfully.'
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */
