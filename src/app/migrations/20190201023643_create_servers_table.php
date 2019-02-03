@@ -52,7 +52,7 @@ class CreateServersTable extends AbstractMigration
             ->addColumn('ssh_port', 'string', [
                 'comment' => 'The server ssh port',
             ])
-            ->addColumn('ssh_public_key_guid', 'binary', [
+            ->addColumn('ssh_key_guid', 'binary', [
                 'null' => true,
                 'limit' => 16,
                 'comment' => 'The SSH key to use when connecting to the server',

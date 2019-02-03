@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateSshPublicKeysTable extends AbstractMigration
+class CreateSshKeysTable extends AbstractMigration
 {
     public function change()
     {
-        $this->table('ssh_public_keys', [
+        $this->table('ssh_keys', [
                 'id' => false,
                 'primary_key' => [
                     'guid'
@@ -33,8 +33,11 @@ class CreateSshPublicKeysTable extends AbstractMigration
             ->addColumn('slug', 'string', [
                 'comment' => 'The slug (code should ensure uniqueness)',
             ])
-            ->addColumn('key', 'text', [
+            ->addColumn('public', 'text', [
                 'comment' => 'The Public Key',
+            ])
+            ->addColumn('private', 'text', [
+                'comment' => 'The Private Key',
             ])
             ->create();
     }
