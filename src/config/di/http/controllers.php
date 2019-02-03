@@ -23,6 +23,7 @@ use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\EditReminderController;
+use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\notificationemails\NotificationEmailsApi;
@@ -216,6 +217,14 @@ return [
         return new RenderErrorPageController(
             Di::get(TwigEnvironment::class),
             new Response()
+        );
+    },
+    ServersIndexController::class => function () {
+        return new ServersIndexController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
         );
     },
     ViewMonitoredUrlController::class => function () {

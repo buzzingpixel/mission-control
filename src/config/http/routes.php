@@ -17,6 +17,7 @@ use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
+use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\EditReminderController;
@@ -67,6 +68,9 @@ $routeCollector->addRoute(['GET', 'POST'], '/reminders[/{archives:archives}]', R
 $routeCollector->addRoute(['GET', 'POST'], '/reminders/create', CreateReminderController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/reminders/view/{slug}', ViewReminderController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/reminders/edit/{slug}', EditReminderController::class);
+
+// Servers
+$routeCollector->addRoute(['GET', 'POST'], '/servers[/{archives:archives}]', ServersIndexController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);
