@@ -33,12 +33,12 @@ interface SSHKeyModelInterface extends HasGuidInterface
      * @param string|null $val
      * @return string
      */
-    public function public(?string $val = null): string;
+    public function public(?string $val = null): ?string;
 
     /**
      * Returns the value. Sets value if incoming argument is set
      * @param string|null $val
      * @return string
      */
-    public function private(?string $val = null): string;
+    public function private(?string $val = null): ?string;
 }
