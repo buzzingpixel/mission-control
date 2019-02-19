@@ -11,6 +11,7 @@ use src\app\support\traits\MakeQueryModelTrait;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
@@ -91,10 +92,15 @@ class ServerApi implements ServerApiInterface
         return $this->fetchAll($params)[0] ?? null;
     }
 
+    private $sshKeyLimit;
+
     public function fetchOneSSHKey(
         ?QueryModelInterface $params = null
     ): ?SSHKeyModelInterface {
-        return $this->fetchAllSSHKeys($params)[0] ?? null;
+        $this->sshKeyLimit = 1;
+        $result = $this->fetchAllSSHKeys($params)[0] ?? null;
+        $this->sshKeyLimit = null;
+        return $result;
     }
 
     /**
@@ -109,13 +115,23 @@ class ServerApi implements ServerApiInterface
     }
 
     /**
-     * Fetches all ssh key model results based on params
-     * @param QueryModelInterface $params
      * @return SSHKeyModelInterface[]
      */
     public function fetchAllSSHKeys(?QueryModelInterface $params = null): array
     {
-        // TODO: Implement ServerApi::fetchAllSSHKeys() method
-        dd('TODO: Implement ServerApi::fetchAllSSHKeys() method');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->get(FetchSSHKeyService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        if ($this->sshKeyLimit) {
+            $params->limit($this->sshKeyLimit);
+        }
+
+        return $service->fetch($params);
     }
 }

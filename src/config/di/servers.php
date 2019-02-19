@@ -9,11 +9,17 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
+use src\app\servers\services\FetchSSHKeyService;
 
 return [
     ServerApi::class => function () {
         return new ServerApi(
             Di::diContainer()
+        );
+    },
+    FetchSSHKeyService::class => function () {
+        return new FetchSSHKeyService(
+            Di::get(BuildQueryService::class)
         );
     },
     SaveServerService::class => function () {
