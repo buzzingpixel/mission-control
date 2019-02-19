@@ -25,7 +25,7 @@ class ServerBeforeSaveEvent implements EventInterface
         return $this->isNew;
     }
 
-    public function pingModel(): ServerModelInterface
+    public function serverModel(): ServerModelInterface
     {
         return $this->serverModel;
     }

@@ -8,6 +8,7 @@ use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\servers\services\SaveServerService;
+use src\app\servers\services\SaveSSHKeyService;
 
 return [
     ServerApi::class => function () {
@@ -17,6 +18,14 @@ return [
     },
     SaveServerService::class => function () {
         return new SaveServerService(
+            new Slugify(),
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    SaveSSHKeyService::class => function () {
+        return new SaveSSHKeyService(
             new Slugify(),
             new OrmFactory(),
             Di::get(BuildQueryService::class),

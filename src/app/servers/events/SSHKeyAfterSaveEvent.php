@@ -5,19 +5,19 @@ namespace src\app\servers\events;
 
 use src\app\servers\ServerApi;
 use corbomite\events\interfaces\EventInterface;
-use src\app\servers\interfaces\ServerModelInterface;
+use src\app\servers\interfaces\SSHKeyModelInterface;
 
-class ServerAfterSaveEvent implements EventInterface
+class SSHKeyAfterSaveEvent implements EventInterface
 {
     private $wasNew;
-    private $serverModel;
+    private $sshKeyModel;
 
     public function __construct(
-        ServerModelInterface $serverModel,
+        SSHKeyModelInterface $sshKeyModel,
         bool $wasNew = false
     ) {
         $this->wasNew = $wasNew;
-        $this->serverModel = $serverModel;
+        $this->sshKeyModel = $sshKeyModel;
     }
 
     public function wasNew(): bool
@@ -25,9 +25,9 @@ class ServerAfterSaveEvent implements EventInterface
         return $this->wasNew;
     }
 
-    public function serverModel(): ServerModelInterface
+    public function sshKeyModel(): SSHKeyModelInterface
     {
-        return $this->serverModel;
+        return $this->sshKeyModel;
     }
 
     public function provider(): string
@@ -37,7 +37,7 @@ class ServerAfterSaveEvent implements EventInterface
 
     public function name(): string
     {
-        return 'ServerAfterSave';
+        return 'SSHKeyAfterSave';
     }
 
     private $stop = false;

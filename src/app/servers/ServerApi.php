@@ -9,6 +9,7 @@ use src\app\servers\models\SSHKeyModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\servers\services\SaveServerService;
+use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
@@ -44,8 +45,8 @@ class ServerApi implements ServerApiInterface
 
     public function saveSSHKey(SSHKeyModelInterface $model): void
     {
-        // TODO: Implement ServerApi::saveSSHKey() method
-        dd('TODO: Implement ServerApi::saveSSHKey() method');
+        $service = $this->di->get(SaveSSHKeyService::class);
+        $service->save($model);
     }
 
     public function archive(ServerModelInterface $model): void
