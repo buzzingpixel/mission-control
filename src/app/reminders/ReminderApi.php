@@ -73,7 +73,9 @@ class ReminderApi implements ReminderApiInterface
         ?QueryModelInterface $params = null
     ): ?ReminderModelInterface {
         $this->limit = 1;
-        return $this->fetchAll($params)[0] ?? null;
+        $result = $this->fetchAll($params)[0] ?? null;
+        $this->limit = null;
+        return $result;
     }
 
     public function fetchAll(?QueryModelInterface $params = null): array

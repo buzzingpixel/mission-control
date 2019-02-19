@@ -12,6 +12,7 @@ use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\services\FetchSSHKeyService;
+use src\app\pings\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
@@ -52,8 +53,8 @@ class ServerApi implements ServerApiInterface
 
     public function archive(ServerModelInterface $model): void
     {
-        // TODO: Implement ServerApi::archive() method
-        dd('TODO: Implement ServerApi::archive() method');
+        $service = $this->di->get(ArchiveServerService::class);
+        $service->archive($model);
     }
 
     public function archiveSSHKey(SSHKeyModelInterface $model): void

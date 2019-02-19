@@ -73,7 +73,9 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
         ?QueryModelInterface $params = null
     ): ?NotificationEmailModelInterface {
         $this->limit = 1;
-        return $this->fetchAll($params)[0] ?? null;
+        $result = $this->fetchAll($params)[0] ?? null;
+        $this->limit = null;
+        return $result;
     }
 
     public function fetchAll(?QueryModelInterface $params = null): array
