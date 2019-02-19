@@ -12,6 +12,7 @@ use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
+use src\app\servers\services\ArchiveSSHKeyService;
 
 return [
     ServerApi::class => function () {
@@ -21,6 +22,13 @@ return [
     },
     ArchiveServerService::class => function () {
         return new ArchiveServerService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    ArchiveSSHKeyService::class => function () {
+        return new ArchiveSSHKeyService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
