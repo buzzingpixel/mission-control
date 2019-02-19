@@ -11,11 +11,19 @@ use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
+use src\app\servers\services\ArchiveServerService;
 
 return [
     ServerApi::class => function () {
         return new ServerApi(
             Di::diContainer()
+        );
+    },
+    ArchiveServerService::class => function () {
+        return new ArchiveServerService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
         );
     },
     FetchServerService::class => function () {

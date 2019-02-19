@@ -13,7 +13,7 @@ use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
-use src\app\pings\services\ArchiveServerService;
+use src\app\servers\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
