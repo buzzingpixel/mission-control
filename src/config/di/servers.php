@@ -10,11 +10,20 @@ use corbomite\db\services\BuildQueryService;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\FetchSSHKeyService;
+use src\app\servers\services\FetchServerService;
 
 return [
     ServerApi::class => function () {
         return new ServerApi(
             Di::diContainer()
+        );
+    },
+    FetchServerService::class => function () {
+        return new FetchServerService(
+            Di::diContainer(),
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(FetchSSHKeyService::class)
         );
     },
     FetchSSHKeyService::class => function () {

@@ -12,6 +12,7 @@ use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\services\FetchSSHKeyService;
+use src\app\servers\services\FetchServerService;
 use src\app\pings\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
@@ -87,10 +88,15 @@ class ServerApi implements ServerApiInterface
         dd('TODO: Implement ServerApi::deleteSSHKey() method');
     }
 
+    private $serverLimit;
+
     public function fetchOne(
         ?QueryModelInterface $params = null
     ): ?ServerModelInterface {
-        return $this->fetchAll($params)[0] ?? null;
+        $this->serverLimit = 1;
+        $result = $this->fetchAll($params)[0] ?? null;
+        $this->serverLimit = null;
+        return $result;
     }
 
     private $sshKeyLimit;
@@ -111,8 +117,20 @@ class ServerApi implements ServerApiInterface
      */
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        // TODO: Implement ServerApi::fetchAll() method
-        dd('TODO: Implement ServerApi::fetchAll() method');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $service = $this->di->get(FetchServerService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        if ($this->serverLimit) {
+            $params->limit($this->serverLimit);
+        }
+
+        return $service->fetch($params);
     }
 
     /**
