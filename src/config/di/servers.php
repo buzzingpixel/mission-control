@@ -13,6 +13,7 @@ use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\UnArchiveServerService;
 
 return [
     ServerApi::class => function () {
@@ -58,6 +59,13 @@ return [
     SaveSSHKeyService::class => function () {
         return new SaveSSHKeyService(
             new Slugify(),
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    UnArchiveServerService::class => function () {
+        return new UnArchiveServerService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
