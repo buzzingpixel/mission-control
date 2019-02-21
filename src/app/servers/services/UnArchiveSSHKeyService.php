@@ -30,10 +30,10 @@ class UnArchiveSSHKeyService
 
     public function __invoke(SSHKeyModelInterface $model): void
     {
-        $this->archive($model);
+        $this->unArchive($model);
     }
 
-    public function archive(SSHKeyModelInterface $model): void
+    public function unArchive(SSHKeyModelInterface $model): void
     {
         $before = new SSHKeyBeforeUnArchiveEvent($model);
 

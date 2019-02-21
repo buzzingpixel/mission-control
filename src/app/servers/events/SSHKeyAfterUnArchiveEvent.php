@@ -28,7 +28,7 @@ class SSHKeyAfterUnArchiveEvent implements EventInterface
 
     public function name(): string
     {
-        return 'SSHKeyAfterArchive';
+        return 'SSHKeyAfterUnArchive';
     }
 
     private $stop = false;
