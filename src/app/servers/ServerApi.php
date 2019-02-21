@@ -14,6 +14,7 @@ use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
+use src\app\pings\services\DeleteSSHKeyService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\services\ArchiveSSHKeyService;
@@ -88,8 +89,8 @@ class ServerApi implements ServerApiInterface
 
     public function deleteSSHKey(SSHKeyModelInterface $model): void
     {
-        // TODO: Implement ServerApi::deleteSSHKey() method
-        dd('TODO: Implement ServerApi::deleteSSHKey() method');
+        $service = $this->di->get(DeleteSSHKeyService::class);
+        $service->delete($model);
     }
 
     private $serverLimit;
