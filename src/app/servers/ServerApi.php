@@ -16,6 +16,7 @@ use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\UnArchiveSSHKeyService;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
 use src\app\servers\services\UnArchiveServerService;
@@ -74,8 +75,8 @@ class ServerApi implements ServerApiInterface
 
     public function unArchiveSSHKey(SSHKeyModelInterface $model): void
     {
-        // TODO: Implement ServerApi::unArchiveSSHKey() method
-        dd('TODO: Implement ServerApi::unArchiveSSHKey() method');
+        $service = $this->di->get(UnArchiveSSHKeyService::class);
+        $service->unArchive($model);
     }
 
     public function delete(ServerModelInterface $model): void

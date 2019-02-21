@@ -14,6 +14,7 @@ use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
+use src\app\servers\services\UnArchiveSSHKeyService;
 
 return [
     ServerApi::class => function () {
@@ -66,6 +67,13 @@ return [
     },
     UnArchiveServerService::class => function () {
         return new UnArchiveServerService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    UnArchiveSSHKeyService::class => function () {
+        return new UnArchiveSSHKeyService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
