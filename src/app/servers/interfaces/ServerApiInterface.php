@@ -47,7 +47,7 @@ interface ServerApiInterface
      * Saves an SSH Key Model
      * @param SSHKeyModelInterface $serverModel
      * @throws InvalidSSHKeyModelException
-     * @throw TitleNotUniqueException
+     * @throws TitleNotUniqueException
      */
     public function saveSSHKey(SSHKeyModelInterface $model);
 
