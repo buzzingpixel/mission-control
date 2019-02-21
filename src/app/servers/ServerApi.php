@@ -9,6 +9,7 @@ use src\app\servers\models\SSHKeyModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\servers\services\SaveServerService;
+use src\app\pings\services\DeleteServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\servers\services\FetchSSHKeyService;
@@ -81,8 +82,8 @@ class ServerApi implements ServerApiInterface
 
     public function delete(ServerModelInterface $model): void
     {
-        // TODO: Implement ServerApi::delete() method
-        dd('TODO: Implement ServerApi::delete() method');
+        $service = $this->di->get(DeleteServerService::class);
+        $service->delete($model);
     }
 
     public function deleteSSHKey(SSHKeyModelInterface $model): void

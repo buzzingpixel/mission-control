@@ -9,6 +9,7 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
+use src\app\pings\services\DeleteServerService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
@@ -31,6 +32,13 @@ return [
     },
     ArchiveSSHKeyService::class => function () {
         return new ArchiveSSHKeyService(
+            new OrmFactory(),
+            Di::get(BuildQueryService::class),
+            Di::get(EventDispatcher::class)
+        );
+    },
+    DeleteServerService::class => function () {
+        return new DeleteServerService(
             new OrmFactory(),
             Di::get(BuildQueryService::class),
             Di::get(EventDispatcher::class)
