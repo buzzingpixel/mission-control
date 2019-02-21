@@ -21,6 +21,7 @@ use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\EditReminderController;
+use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
@@ -71,6 +72,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/reminders/edit/{slug}', EditReminde
 
 // Servers
 $routeCollector->addRoute(['GET', 'POST'], '/servers[/{archives:archives}]', ServersIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/servers/create', CreateServerController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);

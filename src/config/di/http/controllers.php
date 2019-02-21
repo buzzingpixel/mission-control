@@ -6,6 +6,7 @@ use src\app\pings\PingApi;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\queue\QueueApi;
+use src\app\servers\ServerApi;
 use src\app\projects\ProjectsApi;
 use src\app\reminders\ReminderApi;
 use corbomite\twig\TwigEnvironment;
@@ -22,6 +23,7 @@ use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
+use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewReminderController;
@@ -105,6 +107,16 @@ return [
         return new CreateReminderController(
             Di::get(UserApi::class),
             new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    CreateServerController::class => function () {
+        return new CreateServerController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ServerApi::class),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
