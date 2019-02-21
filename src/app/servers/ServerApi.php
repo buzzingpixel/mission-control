@@ -158,4 +158,36 @@ class ServerApi implements ServerApiInterface
 
         return $service->fetch($params);
     }
+
+    public function fetchAsSelectArray(
+        ?QueryModelInterface $params = null,
+        $keyIsSlug = false
+    ): array {
+        $models = $this->fetchAll($params);
+
+        $items = [];
+
+        foreach ($models as $model) {
+            $key = $keyIsSlug ? $model->slug() : $model->guid();
+            $items[$key] = $model->title();
+        }
+
+        return $items;
+    }
+
+    public function fetchSSHKeysAsSelectArray(
+        ?QueryModelInterface $params = null,
+        $keyIsSlug = false
+    ): array {
+        $models = $this->fetchAllSSHKeys($params);
+
+        $items = [];
+
+        foreach ($models as $model) {
+            $key = $keyIsSlug ? $model->slug() : $model->guid();
+            $items[$key] = $model->title();
+        }
+
+        return $items;
+    }
 }

@@ -118,4 +118,32 @@ interface ServerApiInterface
      * @return SSHKeyModelInterface[]
      */
     public function fetchAllSSHKeys(?QueryModelInterface $params = null): array;
+
+    /**
+     * Fetch servers as select array
+     * @param QueryModelInterface|null $params
+     * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
+     * @return array [
+     *     'server-slug' => 'Server Name',
+     *     'another-server-slug' => 'Another Server Name',
+     * ]
+     */
+    public function fetchAsSelectArray(
+        ?QueryModelInterface $params = null,
+        $keyIsSlug = false
+    ): array;
+
+    /**
+     * Fetch SSH Keys as select array
+     * @param QueryModelInterface|null $params
+     * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
+     * @return array [
+     *     'ssh-key-slug' => 'SSH Key Name',
+     *     'another-ssh-key-slug' => 'Another SSH Key Name',
+     * ]
+     */
+    public function fetchSSHKeysAsSelectArray(
+        ?QueryModelInterface $params = null,
+        $keyIsSlug = false
+    ): array;
 }
