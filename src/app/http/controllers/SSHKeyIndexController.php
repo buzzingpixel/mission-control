@@ -10,22 +10,26 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
 
 class SSHKeyIndexController
 {
     private $userApi;
     private $response;
+    private $serverApi;
     private $twigEnvironment;
     private $requireLoginService;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
+        ServerApiInterface $serverApi,
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
+        $this->serverApi = $serverApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
@@ -65,7 +69,21 @@ class SSHKeyIndexController
             ];
         }
 
+        $params = $this->serverApi->makeQueryModel();
+        $params->addOrder('title', 'asc');
+        $params->addWhere('is_active', $archivesPage ? '0' : '1');
+
         $rows = [];
+
+        foreach ($this->serverApi->fetchAllSSHKeys($params) as $model) {
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/ssh-keys/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                ],
+            ];
+        }
 
         $actions = [];
 
@@ -104,7 +122,7 @@ class SSHKeyIndexController
                         'template' => 'forms/TableListForm.twig',
                         'actionParam' => 'serverListActions',
                         'actions' => $actions,
-                        'actionColButtonContent' => 'View&nbsp;Server&nbsp;Details',
+                        'actionColButtonContent' => 'View&nbsp;SSH Key&nbsp;Details',
                         'table' => [
                             'inputsName' => 'guids[]',
                             'headings' => [
