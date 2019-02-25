@@ -23,6 +23,7 @@ use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\CreateServerController;
+use src\app\http\controllers\CreateSSHKeyController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
@@ -77,6 +78,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/servers/create', CreateServerContro
 
 // SSH Keys
 $routeCollector->addRoute(['GET', 'POST'], '/ssh-keys[/{archives:archives}]', SSHKeyIndexController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/ssh-keys/create', CreateSSHKeyController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);

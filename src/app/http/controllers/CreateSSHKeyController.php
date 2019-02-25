@@ -8,9 +8,10 @@ use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 
-class CreateProjectController
+class CreateSSHKeyController
 {
     private $userApi;
     private $response;
@@ -42,44 +43,50 @@ class CreateProjectController
             throw new LogicException('Unknown Error');
         }
 
-        $response = $this->response->withHeader('Content-Type', 'text/html');
-
         if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify('account/Unauthorized.twig')
-            );
-
-            return $response;
+            throw new Http404Exception();
         }
+
+        $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
-                'metaTitle' => 'Create Project',
+                'metaTitle' => 'Create SSH Key',
                 'breadCrumbs' => [
                     [
-                        'href' => '/projects',
-                        'content' => 'Projects'
+                        'href' => '/ssh-keys',
+                        'content' => 'SSH Keys'
                     ],
                     [
-                        'content' => 'Create'
+                        'content' => 'Create SSH Key'
                     ]
                 ],
-                'title' => 'Create New Project',
+                'title' => 'Create SSH Key',
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
-                        'actionParam' => 'createProject',
+                        'actionParam' => 'createSshKey',
                         'inputs' => [
                             [
                                 'template' => 'Text',
                                 'type' => 'text',
-                                'name' => 'title',
+                                'name' => 'Title',
                                 'label' => 'Title',
                             ],
                             [
+                                'template' => 'Checkbox',
+                                'name' => 'generate',
+                                'label' => 'Generate?',
+                            ],
+                            [
                                 'template' => 'TextArea',
-                                'name' => 'description',
-                                'label' => 'Description',
+                                'name' => 'public',
+                                'label' => 'Public Key (ignored if Generate selected)',
+                            ],
+                            [
+                                'template' => 'TextArea',
+                                'name' => 'private',
+                                'label' => 'Private Key (ignored if Generate selected)',
                             ],
                         ],
                     ]
