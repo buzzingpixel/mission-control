@@ -35,13 +35,7 @@ class ArchiveReminderService
 
     public function archive(ReminderModelInterface $model): void
     {
-        $beforeEvent = new ReminderBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderBeforeArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class ArchiveReminderService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new ReminderAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderAfterArchiveEvent($model));
     }
 
     private function fetchRecord(ReminderModelInterface $model): ReminderRecord

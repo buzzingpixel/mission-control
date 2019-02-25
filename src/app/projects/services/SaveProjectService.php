@@ -75,44 +75,20 @@ class SaveProjectService
         $existingRecord = $this->buildQuery->build(Project::class, $fetchModel)->fetchRecord();
 
         if (! $existingRecord) {
-            $beforeEvent = new ProjectBeforeSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $beforeEvent->provider(),
-                $beforeEvent->name(),
-                $beforeEvent
-            );
+            $this->eventDispatcher->dispatch(new ProjectBeforeSaveEvent($model, true));
 
             $this->saveNewProject($model);
 
-            $afterEvent = new ProjectAfterSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $afterEvent->provider(),
-                $afterEvent->name(),
-                $afterEvent
-            );
+            $this->eventDispatcher->dispatch(new ProjectAfterSaveEvent($model, true));
 
             return;
         }
 
-        $beforeEvent = new ProjectBeforeSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectBeforeSaveEvent($model));
 
         $this->finalSave($model, $existingRecord);
 
-        $afterEvent = new ProjectAfterSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectAfterSaveEvent($model));
     }
 
     private function saveNewProject(ProjectModelInterface $model): void

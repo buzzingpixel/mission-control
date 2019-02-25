@@ -35,23 +35,11 @@ class DeleteMonitoredUrlService
 
     public function delete(MonitoredUrlModelInterface $model): void
     {
-        $beforeEvent = new MonitoredUrlBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $afterEvent = new MonitoredUrlAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlAfterDeleteEvent($model));
     }
 
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord

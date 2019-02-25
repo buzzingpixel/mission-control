@@ -35,13 +35,7 @@ class UnArchivePingService
 
     public function unArchive(PingModelInterface $model): void
     {
-        $beforeEvent = new PingBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new PingBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class UnArchivePingService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new PingAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new PingAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(PingModelInterface $model): PingRecord

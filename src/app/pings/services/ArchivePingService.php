@@ -35,13 +35,7 @@ class ArchivePingService
 
     public function archive(PingModelInterface $model): void
     {
-        $beforeEvent = new PingBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new PingBeforeArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class ArchivePingService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new PingAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new PingAfterArchiveEvent($model));
     }
 
     private function fetchRecord(PingModelInterface $model): PingRecord

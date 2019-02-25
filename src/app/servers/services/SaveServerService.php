@@ -80,14 +80,11 @@ class SaveServerService
 
         $isNew = ! $existingRecord;
 
-        $before = new ServerBeforeSaveEvent($model, $isNew);
-        $after = new ServerAfterSaveEvent($model, $isNew);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new ServerBeforeSaveEvent($model, $isNew));
 
         $isNew ? $this->saveNew($model) : $this->finalSave($model, $existingRecord);
 
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new ServerAfterSaveEvent($model, $isNew));
     }
 
     private function saveNew(ServerModelInterface $model): void

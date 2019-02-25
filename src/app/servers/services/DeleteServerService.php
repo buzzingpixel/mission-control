@@ -35,15 +35,11 @@ class DeleteServerService
 
     public function delete(ServerModelInterface $model): void
     {
-        $before = new ServerBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new ServerBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $after = new ServerAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new ServerAfterDeleteEvent($model));
     }
 
     private function fetchRecord(ServerModelInterface $model): ServerRecord

@@ -75,44 +75,20 @@ class SaveMonitoredUrlService
         $existingRecord = $this->buildQuery->build(MonitoredUrl::class, $fetchModel)->fetchRecord();
 
         if (! $existingRecord) {
-            $beforeEvent = new MonitoredUrlBeforeSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $beforeEvent->provider(),
-                $beforeEvent->name(),
-                $beforeEvent
-            );
+            $this->eventDispatcher->dispatch(new MonitoredUrlBeforeSaveEvent($model, true));
 
             $this->saveNewProject($model);
 
-            $afterEvent = new MonitoredUrlAfterSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $afterEvent->provider(),
-                $afterEvent->name(),
-                $afterEvent
-            );
+            $this->eventDispatcher->dispatch(new MonitoredUrlAfterSaveEvent($model, true));
 
             return;
         }
 
-        $beforeEvent = new MonitoredUrlBeforeSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlBeforeSaveEvent($model));
 
         $this->finalSave($model, $existingRecord);
 
-        $afterEvent = new MonitoredUrlAfterSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlAfterSaveEvent($model));
     }
 
     private function saveNewProject(MonitoredUrlModelInterface $model): void

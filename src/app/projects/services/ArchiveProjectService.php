@@ -35,9 +35,7 @@ class ArchiveProjectService
 
     public function archive(ProjectModelInterface $model): void
     {
-        $before = new ProjectBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new ProjectBeforeArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -45,13 +43,7 @@ class ArchiveProjectService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new ProjectAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectAfterArchiveEvent($model));
     }
 
     private function fetchRecord(ProjectModelInterface $model): ProjectRecord

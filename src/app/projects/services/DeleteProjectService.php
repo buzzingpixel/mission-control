@@ -35,23 +35,11 @@ class DeleteProjectService
 
     public function delete(ProjectModelInterface $model): void
     {
-        $beforeEvent = new ProjectBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $afterEvent = new ProjectAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectAfterDeleteEvent($model));
     }
 
     private function fetchRecord(ProjectModelInterface $model): ProjectRecord

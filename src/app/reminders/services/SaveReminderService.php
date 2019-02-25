@@ -75,44 +75,20 @@ class SaveReminderService
         $existingRecord = $this->buildQuery->build(Reminder::class, $fetchModel)->fetchRecord();
 
         if (! $existingRecord) {
-            $beforeEvent = new ReminderBeforeSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $beforeEvent->provider(),
-                $beforeEvent->name(),
-                $beforeEvent
-            );
+            $this->eventDispatcher->dispatch(new ReminderBeforeSaveEvent($model, true));
 
             $this->saveNew($model);
 
-            $afterEvent = new ReminderAfterSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $afterEvent->provider(),
-                $afterEvent->name(),
-                $afterEvent
-            );
+            $this->eventDispatcher->dispatch(new ReminderAfterSaveEvent($model, true));
 
             return;
         }
 
-        $beforeEvent = new ReminderBeforeSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderBeforeSaveEvent($model));
 
         $this->finalSave($model, $existingRecord);
 
-        $afterEvent = new ReminderAfterSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderAfterSaveEvent($model));
     }
 
     private function saveNew(ReminderModelInterface $model): void

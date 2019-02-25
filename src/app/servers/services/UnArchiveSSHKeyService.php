@@ -35,9 +35,7 @@ class UnArchiveSSHKeyService
 
     public function unArchive(SSHKeyModelInterface $model): void
     {
-        $before = new SSHKeyBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new SSHKeyBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -45,9 +43,7 @@ class UnArchiveSSHKeyService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $after = new SSHKeyAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new SSHKeyAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(SSHKeyModelInterface $model): SshKeyRecord

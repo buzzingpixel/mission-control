@@ -35,23 +35,11 @@ class DeletePingService
 
     public function delete(PingModelInterface $model): void
     {
-        $beforeEvent = new PingBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new PingBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $afterEvent = new PingAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new PingAfterDeleteEvent($model));
     }
 
     private function fetchRecord(PingModelInterface $model): PingRecord

@@ -35,23 +35,11 @@ class DeleteReminderService
 
     public function delete(ReminderModelInterface $model): void
     {
-        $beforeEvent = new ReminderBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $afterEvent = new ReminderAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderAfterDeleteEvent($model));
     }
 
     private function fetchRecord(ReminderModelInterface $model): ReminderRecord

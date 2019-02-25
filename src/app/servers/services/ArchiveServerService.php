@@ -35,9 +35,7 @@ class ArchiveServerService
 
     public function archive(ServerModelInterface $model): void
     {
-        $before = new ServerAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new ServerAfterArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -45,9 +43,7 @@ class ArchiveServerService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $after = new ServerBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new ServerBeforeArchiveEvent($model));
     }
 
     private function fetchRecord(ServerModelInterface $model): ServerRecord

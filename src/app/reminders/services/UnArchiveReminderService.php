@@ -35,13 +35,7 @@ class UnArchiveReminderService
 
     public function unArchive(ReminderModelInterface $model): void
     {
-        $beforeEvent = new ReminderBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class UnArchiveReminderService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new ReminderAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ReminderAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(ReminderModelInterface $model): ReminderRecord

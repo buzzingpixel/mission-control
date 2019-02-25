@@ -35,15 +35,11 @@ class DeleteSSHKeyService
 
     public function delete(SSHKeyModelInterface $model): void
     {
-        $before = new SSHKeyBeforeDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new SSHKeyBeforeDeleteEvent($model));
 
         $this->ormFactory->makeOrm()->delete($this->fetchRecord($model));
 
-        $after = new SSHKeyAfterDeleteEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new SSHKeyAfterDeleteEvent($model));
     }
 
     private function fetchRecord(SSHKeyModelInterface $model): SshKeyRecord

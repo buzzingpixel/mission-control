@@ -35,9 +35,7 @@ class ArchiveSSHKeyService
 
     public function archive(SSHKeyModelInterface $model): void
     {
-        $before = new SSHKeyAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new SSHKeyAfterArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -45,9 +43,7 @@ class ArchiveSSHKeyService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $after = new SSHKeyBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new SSHKeyBeforeArchiveEvent($model));
     }
 
     private function fetchRecord(SSHKeyModelInterface $model): SshKeyRecord

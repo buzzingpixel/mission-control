@@ -35,9 +35,7 @@ class UnArchiveServerService
 
     public function unArchive(ServerModelInterface $model): void
     {
-        $before = new ServerBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new ServerBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -45,9 +43,7 @@ class UnArchiveServerService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $after = new ServerAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new ServerAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(ServerModelInterface $model): ServerRecord

@@ -56,28 +56,20 @@ class SaveIncidentService
         $existingRecord = $this->buildQuery->build(MonitoredUrlIncident::class, $fetchModel)->fetchRecord();
 
         if (! $existingRecord) {
-            $before = new MonitoredUrlIncidentBeforeSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+            $this->eventDispatcher->dispatch(new MonitoredUrlIncidentBeforeSaveEvent($model, true));
 
             $this->saveNew($model);
 
-            $after = new MonitoredUrlIncidentAfterSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+            $this->eventDispatcher->dispatch(new MonitoredUrlIncidentAfterSaveEvent($model, true));
 
             return;
         }
 
-        $before = new MonitoredUrlIncidentBeforeSaveEvent($model, false);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new MonitoredUrlIncidentBeforeSaveEvent($model, false));
 
         $this->finalSave($model, $existingRecord);
 
-        $after = new MonitoredUrlIncidentAfterSaveEvent($model, false);
-
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new MonitoredUrlIncidentAfterSaveEvent($model, false));
     }
 
     private function saveNew(MonitoredUrlIncidentModelInterface $model): void

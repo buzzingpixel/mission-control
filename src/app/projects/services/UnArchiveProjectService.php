@@ -35,13 +35,7 @@ class UnArchiveProjectService
 
     public function unArchive(ProjectModelInterface $model): void
     {
-        $beforeEvent = new ProjectBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class UnArchiveProjectService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new ProjectAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new ProjectAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(ProjectModelInterface $model): ProjectRecord

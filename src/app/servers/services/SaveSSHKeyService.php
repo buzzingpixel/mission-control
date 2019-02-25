@@ -78,14 +78,11 @@ class SaveSSHKeyService
 
         $isNew = ! $existingRecord;
 
-        $before = new SSHKeyBeforeSaveEvent($model, $isNew);
-        $after = new SSHKeyAfterSaveEvent($model, $isNew);
-
-        $this->eventDispatcher->dispatch($before->provider(), $before->name(), $before);
+        $this->eventDispatcher->dispatch(new SSHKeyBeforeSaveEvent($model, $isNew));
 
         $isNew ? $this->saveNew($model) : $this->finalSave($model, $existingRecord);
 
-        $this->eventDispatcher->dispatch($after->provider(), $after->name(), $after);
+        $this->eventDispatcher->dispatch(new SSHKeyAfterSaveEvent($model, $isNew));
     }
 
     private function saveNew(SSHKeyModelInterface $model): void

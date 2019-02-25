@@ -79,44 +79,20 @@ class SavePingService
         $existingRecord = $this->buildQuery->build(Ping::class, $fetchModel)->fetchRecord();
 
         if (! $existingRecord) {
-            $beforeEvent = new PingBeforeSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $beforeEvent->provider(),
-                $beforeEvent->name(),
-                $beforeEvent
-            );
+            $this->eventDispatcher->dispatch(new PingBeforeSaveEvent($model, true));
 
             $this->saveNew($model);
 
-            $afterEvent = new PingAfterSaveEvent($model, true);
-
-            $this->eventDispatcher->dispatch(
-                $afterEvent->provider(),
-                $afterEvent->name(),
-                $afterEvent
-            );
+            $this->eventDispatcher->dispatch(new PingAfterSaveEvent($model, true));
 
             return;
         }
 
-        $beforeEvent = new PingBeforeSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new PingBeforeSaveEvent($model));
 
         $this->finalSave($model, $existingRecord);
 
-        $afterEvent = new PingAfterSaveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new PingAfterSaveEvent($model));
     }
 
     private function saveNew(PingModelInterface $model): void

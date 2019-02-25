@@ -35,13 +35,7 @@ class ArchiveMonitoredUrlService
 
     public function archive(MonitoredUrlModelInterface $model): void
     {
-        $beforeEvent = new MonitoredUrlBeforeArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlBeforeArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class ArchiveMonitoredUrlService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new MonitoredUrlAfterArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlAfterArchiveEvent($model));
     }
 
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord

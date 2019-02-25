@@ -35,13 +35,7 @@ class UnArchiveMonitoredUrlService
 
     public function unArchive(MonitoredUrlModelInterface $model): void
     {
-        $beforeEvent = new MonitoredUrlBeforeUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $beforeEvent->provider(),
-            $beforeEvent->name(),
-            $beforeEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlBeforeUnArchiveEvent($model));
 
         $record = $this->fetchRecord($model);
 
@@ -49,13 +43,7 @@ class UnArchiveMonitoredUrlService
 
         $this->ormFactory->makeOrm()->persist($record);
 
-        $afterEvent = new MonitoredUrlAfterUnArchiveEvent($model);
-
-        $this->eventDispatcher->dispatch(
-            $afterEvent->provider(),
-            $afterEvent->name(),
-            $afterEvent
-        );
+        $this->eventDispatcher->dispatch(new MonitoredUrlAfterUnArchiveEvent($model));
     }
 
     private function fetchRecord(MonitoredUrlModelInterface $model): MonitoredUrlRecord
