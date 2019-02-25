@@ -120,7 +120,7 @@ class SSHKeyIndexController
                 'includes' => [
                     [
                         'template' => 'forms/TableListForm.twig',
-                        'actionParam' => 'serverListActions',
+                        'actionParam' => 'sshKeyListActions',
                         'actions' => $actions,
                         'actionColButtonContent' => 'View&nbsp;SSH Key&nbsp;Details',
                         'table' => [
