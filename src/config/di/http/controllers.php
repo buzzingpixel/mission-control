@@ -19,6 +19,7 @@ use src\app\http\controllers\EditPingController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
+use src\app\http\controllers\ViewSSHKeyController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\EditProjectController;
@@ -294,6 +295,15 @@ return [
             new Response(),
             Di::get(TwigEnvironment::class),
             Di::get(ReminderApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    ViewSSHKeyController::class => function () {
+        return new ViewSSHKeyController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ServerApi::class),
+            Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
         );
     },
