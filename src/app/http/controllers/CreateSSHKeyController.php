@@ -70,7 +70,7 @@ class CreateSSHKeyController
                             [
                                 'template' => 'Text',
                                 'type' => 'text',
-                                'name' => 'Title',
+                                'name' => 'title',
                                 'label' => 'Title',
                             ],
                             [

@@ -5,6 +5,7 @@ use corbomite\di\Di;
 use src\app\pings\PingApi;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
+use src\app\servers\ServerApi;
 use src\app\projects\ProjectsApi;
 use corbomite\http\RequestHelper;
 use src\app\reminders\ReminderApi;
@@ -19,6 +20,7 @@ use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
+use src\app\http\actions\CreateSSHKeyAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\ReminderListActions;
@@ -99,6 +101,16 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ReminderApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    CreateSSHKeyAction::class => function () {
+        return new CreateSSHKeyAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(ServerApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );

@@ -29,6 +29,8 @@ if (getenv('DISABLE_CSRF') === 'true') {
         'monitored-urls',
         'pings',
         'reminders',
+        'servers',
+        'ssh-keys',
     ]);
 }
 

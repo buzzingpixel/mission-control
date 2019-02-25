@@ -9,6 +9,7 @@ use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\CreateUserAction;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\EditReminderAction;
+use src\app\http\actions\CreateSSHKeyAction;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\ReminderListActions;
@@ -31,6 +32,7 @@ return [
     'editProject' => ['class' => EditProjectAction::class],
     'editReminder' => ['class' => EditReminderAction::class],
     'pingListActions' => ['class' => PingListActions::class],
+    'createSshKey' => ['class' => CreateSSHKeyAction::class],
     'adminUserActions' => ['class' => AdminUserActions::class],
     'createProject' => ['class' => CreateProjectAction::class],
     'resetPassword' => ['class' => ResetPasswordAction::class],
