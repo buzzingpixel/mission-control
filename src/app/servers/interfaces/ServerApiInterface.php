@@ -146,4 +146,12 @@ interface ServerApiInterface
         ?QueryModelInterface $params = null,
         $keyIsSlug = false
     ): array;
+
+    /**
+     * Generates an SSH key and returns an array with two keys:
+     *     - publickey
+     *     - privatekey
+     * @return array
+     */
+    public function generateSSHKey(): array;
 }

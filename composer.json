@@ -33,7 +33,8 @@
         "cocur/slugify": "^3.1",
         "buzzingpixel/corbomite-events": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
-        "digitalnature/php-ref": "^1.2"
+        "digitalnature/php-ref": "^1.2",
+        "phpseclib/phpseclib": "^2.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

@@ -18,6 +18,7 @@ use src\app\pings\services\DeleteSSHKeyService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\GenerateSSHKeyService;
 use src\app\servers\services\UnArchiveSSHKeyService;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
@@ -189,5 +190,11 @@ class ServerApi implements ServerApiInterface
         }
 
         return $items;
+    }
+
+    public function generateSSHKey(): array
+    {
+        $service = $this->di->get(GenerateSSHKeyService::class);
+        return $service->generate();
     }
 }

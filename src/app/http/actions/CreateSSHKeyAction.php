@@ -97,8 +97,9 @@ class CreateSSHKeyAction
         $model->private($private);
 
         if ($generate === 'true') {
-            // TODO: Generate SSH Keys
-            dd('TODO: Generate SSH Keys');
+            $key = $this->serverApi->generateSSHKey();
+            $model->public($key['publickey']);
+            $model->private($key['privatekey']);
         }
 
         try {

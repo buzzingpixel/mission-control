@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use phpseclib\Crypt\RSA;
 use Cocur\Slugify\Slugify;
 use src\app\servers\ServerApi;
 use corbomite\events\EventDispatcher;
@@ -15,6 +16,7 @@ use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\GenerateSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
 use src\app\servers\services\UnArchiveSSHKeyService;
 
@@ -64,6 +66,9 @@ return [
         return new FetchSSHKeyService(
             Di::get(BuildQueryService::class)
         );
+    },
+    GenerateSSHKeyService::class => function () {
+        return new GenerateSSHKeyService(new RSA());
     },
     SaveServerService::class => function () {
         return new SaveServerService(
