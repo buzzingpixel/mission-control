@@ -20,6 +20,7 @@ use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\CreateUserController;
+use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
@@ -233,6 +234,14 @@ return [
     },
     ServersIndexController::class => function () {
         return new ServersIndexController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(TwigEnvironment::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    SSHKeyIndexController::class => function () {
+        return new SSHKeyIndexController(
             Di::get(UserApi::class),
             new Response(),
             Di::get(TwigEnvironment::class),

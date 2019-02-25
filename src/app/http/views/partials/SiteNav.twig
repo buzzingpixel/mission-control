@@ -76,6 +76,14 @@
                         Servers
                     </a>
                 </li>
+                <li class="SiteNav__ListItem">
+                    <a
+                        href="/ssh-keys"
+                        class="SiteNav__Link{% if segment1 == 'ssh-keys' %} SiteNav__Link--IsActive{% endif %}"
+                    >
+                        SSH Keys
+                    </a>
+                </li>
                 {% if userApi.fetchCurrentUser.getExtendedProperty('is_admin') == 1 %}
                     <li class="SiteNav__ListItem">
                         <a
