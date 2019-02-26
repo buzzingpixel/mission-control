@@ -13,7 +13,7 @@ use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\servers\exceptions\TitleNotUniqueException;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 
-class CreateSSHKeyAction
+class EditSSHKeyAction
 {
     private $userApi;
     private $response;
@@ -45,7 +45,7 @@ class CreateSSHKeyAction
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'Create SSH Key Action requires post request'
+                'Edit SSH Key Action requires post request'
             );
         }
 
@@ -55,8 +55,18 @@ class CreateSSHKeyAction
             throw new Http404Exception();
         }
 
+        $fetchParams = $this->serverApi->makeQueryModel();
+        $fetchParams->addWhere('guid', $this->serverApi->uuidToBytes(
+            $this->requestHelper->post('guid')
+        ));
+        $model = $this->serverApi->fetchOneSSHKey($fetchParams);
+
+        if (! $model) {
+            throw new Http404Exception();
+        }
+
         $title = trim($this->requestHelper->post('title'));
-        $generate = trim($this->requestHelper->post('generate') ?? '');
+        $regenerate = trim($this->requestHelper->post('regenerate') ?? '');
         $public = trim($this->requestHelper->post('public'));
         $private = trim($this->requestHelper->post('private'));
 
@@ -64,7 +74,7 @@ class CreateSSHKeyAction
             'inputErrors' => [],
             'inputValues' => [
                 'title' => $title,
-                'generate' => $generate,
+                'regenerate' => $regenerate,
                 'public' => $public,
                 'private' => $private,
             ],
@@ -74,7 +84,7 @@ class CreateSSHKeyAction
             $store['inputErrors']['title'][] = 'This field is required';
         }
 
-        if ($generate !== 'true') {
+        if ($regenerate !== 'true') {
             if (! $public) {
                 $store['inputErrors']['public'][] = 'This field is required';
             }
@@ -89,13 +99,11 @@ class CreateSSHKeyAction
             return null;
         }
 
-        $model = $this->serverApi->createSShKeyModel();
-
         $model->title($title);
         $model->public($public);
         $model->private($private);
 
-        if ($generate === 'true') {
+        if ($regenerate === 'true') {
             $key = $this->serverApi->generateSSHKey();
             $model->public($key['publickey']);
             $model->private($key['privatekey']);
@@ -117,7 +125,7 @@ class CreateSSHKeyAction
 
         $flashDataModel->dataItem(
             'content',
-            'SSH Key "' . $model->title() . '" created successfully.'
+            'SSH Key "' . $model->title() . '" saved successfully.'
         );
 
         /** @noinspection PhpUnhandledExceptionInspection */

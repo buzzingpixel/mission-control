@@ -103,6 +103,12 @@ class EditSSHKeyController
                         'actionParam' => 'editSshKey',
                         'inputs' => [
                             [
+                                'template' => 'Hidden',
+                                'type' => 'hidden',
+                                'name' => 'guid',
+                                'value' => $model->guid(),
+                            ],
+                            [
                                 'template' => 'Text',
                                 'type' => 'text',
                                 'name' => 'title',

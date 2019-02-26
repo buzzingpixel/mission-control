@@ -18,6 +18,7 @@ use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
+use src\app\http\actions\EditSSHKeyAction;
 use src\app\http\actions\SSHKeyListActions;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
@@ -161,6 +162,16 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ReminderApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    EditSSHKeyAction::class => function () {
+        return new EditSSHKeyAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(ServerApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );
