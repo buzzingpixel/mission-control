@@ -10,22 +10,26 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
 
 class ServersIndexController
 {
     private $userApi;
     private $response;
+    private $serverApi;
     private $twigEnvironment;
     private $requireLoginService;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
+        ServerApiInterface $serverApi,
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
+        $this->serverApi = $serverApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
@@ -65,49 +69,26 @@ class ServersIndexController
             ];
         }
 
-        // $params = $this->pingApi->makeQueryModel();
-        // $params->addOrder('title', 'asc');
-        // $params->addWhere('is_active', $archivesPage ? '0' : '1');
+        $params = $this->serverApi->makeQueryModel();
+        $params->addOrder('title', 'asc');
+        $params->addWhere('is_active', $archivesPage ? '0' : '1');
 
         $rows = [];
 
-        // $userTimeZone = $user->getExtendedProperty('timezone') ?:
-        //     date_default_timezone_get();
-
-        // foreach ($this->pingApi->fetchAll($params) as $model) {
-        //     $model->lastPingAt()->setTimezone(new DateTimeZone($userTimeZone));
-        //
-        //     $status = '--';
-        //     $styledStatus = 'Inactive';
-        //
-        //     if ($model->isActive()) {
-        //         $status = 'Active';
-        //         $styledStatus = 'Good';
-        //
-        //         if ($model->hasError()) {
-        //             $status = 'Missing';
-        //             $styledStatus = 'Error';
-        //         } elseif ($model->pendingError()) {
-        //             $status = 'Overdue';
-        //             $styledStatus = 'Caution';
-        //         }
-        //     }
-        //
-        //     $rows[] = [
-        //         'inputValue' => $model->guid(),
-        //         'actionButtonLink' => '/pings/view/' . $model->slug(),
-        //         'cols' => [
-        //             'Title' => $model->title(),
-        //             'Status' => $status,
-        //             'Expect Every' => $model->expectEvery() . ' Minutes',
-        //             'Warn After' => $model->warnAfter() . ' Minutes',
-        //             'Last Ping' => $model->lastPingAt()->format('n/j/Y g:i a'),
-        //         ],
-        //         'colorStyledCols' => [
-        //             'Status' => $styledStatus,
-        //         ],
-        //     ];
-        // }
+        foreach ($this->serverApi->fetchAll($params) as $model) {
+            $key = $model->sshKeyModel();
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/servers/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                    'Address' => $model->address(),
+                    'SSH Port' => $model->sshPort(),
+                    'SSH User Name' => $model->sshUserName(),
+                    'SSH Key' => '<a href="/ssh-keys/view/' . $key->slug() . '">' . $key->title() . '</a>',
+                ],
+            ];
+        }
 
         $actions = [];
 

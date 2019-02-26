@@ -256,6 +256,7 @@ return [
         return new ServersIndexController(
             Di::get(UserApi::class),
             new Response(),
+            Di::get(ServerApi::class),
             Di::get(TwigEnvironment::class),
             Di::get(RequireLoginService::class)
         );
