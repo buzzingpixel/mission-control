@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
-use DateTimeZone;
 use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +13,7 @@ use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use src\app\servers\interfaces\ServerApiInterface;
 
-class ViewSSHKeyController
+class EditSSHKeyController
 {
     private $userApi;
     private $response;
@@ -45,6 +44,16 @@ class ViewSSHKeyController
             return $requireLogin;
         }
 
+        if (! $user = $this->userApi->fetchCurrentUser()) {
+            throw new LogicException('Unknown Error');
+        }
+
+        if ($user->getExtendedProperty('is_admin') !== 1) {
+            throw new Http404Exception();
+        }
+
+        $response = $this->response->withHeader('Content-Type', 'text/html');
+
         $fetchParams = $this->serverApi->makeQueryModel();
         $fetchParams->addWhere('slug', $request->getAttribute('slug'));
         $model = $this->serverApi->fetchOneSSHKey($fetchParams);
@@ -54,14 +63,6 @@ class ViewSSHKeyController
                 'SSH Key with slug "' . $request->getAttribute('slug') . '" not found'
             );
         }
-
-        if (! $user = $this->userApi->fetchCurrentUser()) {
-            throw new LogicException('Unknown Error');
-        }
-
-        $isAdmin = $user->getExtendedProperty('is_admin') === 1;
-
-        $response = $this->response->withHeader('Content-Type', 'text/html');
 
         $notification = false;
 
@@ -82,42 +83,51 @@ class ViewSSHKeyController
         }
 
         $breadCrumbs[] = [
-            'content' => 'Viewing',
+            'href' => '/ssh-keys/view/' . $model->slug(),
+            'content' => 'View',
         ];
 
-        $keyValueItems = [
-            [
-                'key' => 'Public Key',
-                'value' => '<pre>' . $model->public() . '</pre>',
-            ],
+        $breadCrumbs[] = [
+            'content' => 'Edit'
         ];
-
-        $pageControlButtons = [];
-
-        if ($isAdmin) {
-            $pageControlButtons[] = [
-                'href' => '/ssh-keys/edit/' . $model->slug(),
-                'content' => 'Edit SSH Key',
-            ];
-
-            $keyValueItems[] = [
-                'key' => 'Private Key',
-                'value' => '<pre>' . $model->private() . '</pre>',
-            ];
-        }
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'notification' => $notification,
-                'metaTitle' => $model->title(),
+                'metaTitle' => 'Edit SSH Key: ' . $model->title(),
                 'breadCrumbs' => $breadCrumbs,
-                'title' => $model->title(),
-                'pageControlButtons' => $pageControlButtons,
+                'title' => 'Edit SSH Key: ' . $model->title(),
                 'includes' => [
                     [
-                        'template' => 'includes/KeyValue.twig',
-                        'keyValueItems' => $keyValueItems,
-                    ],
+                        'template' => 'forms/StandardForm.twig',
+                        'actionParam' => 'editSshKey',
+                        'inputs' => [
+                            [
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'title',
+                                'label' => 'Title',
+                                'value' => $model->title(),
+                            ],
+                            [
+                                'template' => 'Checkbox',
+                                'name' => 'regenerate',
+                                'label' => 'Regenerate?',
+                            ],
+                            [
+                                'template' => 'TextArea',
+                                'name' => 'public',
+                                'label' => 'Public Key (ignored if Regenerate selected)',
+                                'value' => $model->public(),
+                            ],
+                            [
+                                'template' => 'TextArea',
+                                'name' => 'private',
+                                'label' => 'Private Key (ignored if Regenerate selected)',
+                                'value' => $model->private(),
+                            ],
+                        ],
+                    ]
                 ],
             ])
         );

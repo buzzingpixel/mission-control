@@ -14,6 +14,7 @@ use src\app\http\controllers\EditPingController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\CreatePingController;
+use src\app\http\controllers\EditSSHKeyController;
 use src\app\http\controllers\ViewSSHKeyController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\SSHKeyIndexController;
@@ -81,6 +82,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/servers/create', CreateServerContro
 $routeCollector->addRoute(['GET', 'POST'], '/ssh-keys[/{archives:archives}]', SSHKeyIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/ssh-keys/create', CreateSSHKeyController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/ssh-keys/view/{slug}', ViewSSHKeyController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/ssh-keys/edit/{slug}', EditSSHKeyController::class);
 
 // Admin
 $routeCollector->addRoute(['GET', 'POST'], '/admin', AdminController::class);
