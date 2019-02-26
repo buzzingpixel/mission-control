@@ -22,6 +22,7 @@ use src\app\http\actions\EditSSHKeyAction;
 use src\app\http\actions\SSHKeyListActions;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
+use src\app\http\actions\CreateServerAction;
 use src\app\http\actions\CreateSSHKeyAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
@@ -103,6 +104,16 @@ return [
             new Response(),
             Di::get(DataStore::class),
             Di::get(ReminderApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
+        );
+    },
+    CreateServerAction::class => function () {
+        return new CreateServerAction(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(DataStore::class),
+            Di::get(ServerApi::class),
             Di::get(FlashDataApi::class),
             Di::get(RequestHelper::class)
         );
