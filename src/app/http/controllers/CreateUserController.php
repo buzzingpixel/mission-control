@@ -43,11 +43,17 @@ class CreateUserController
             throw new LogicException('Unknown Error');
         }
 
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $response = $this->response->withHeader('Content-Type', 'text/html');
+
+        if ($user->getExtendedProperty('is_admin') !== 1) {
+            $response->getBody()->write(
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
+            );
+
+            return $response;
+        }
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [

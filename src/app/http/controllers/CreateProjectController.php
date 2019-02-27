@@ -46,7 +46,9 @@ class CreateProjectController
 
         if ($user->getExtendedProperty('is_admin') !== 1) {
             $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify('account/Unauthorized.twig')
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
             );
 
             return $response;
