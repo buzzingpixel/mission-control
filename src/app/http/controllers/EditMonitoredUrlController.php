@@ -101,6 +101,9 @@ class EditMonitoredUrlController
             'content' => 'Edit'
         ];
 
+        $selectParams = $this->projectsApi->makeQueryModel();
+        $selectParams->addOrder('title', 'asc');
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'notification' => $notification,
@@ -136,7 +139,8 @@ class EditMonitoredUrlController
                                 'template' => 'Select',
                                 'name' => 'project_guid',
                                 'label' => 'Project',
-                                'options' => $this->projectsApi->fetchAsSelectArray(),
+                                'options' => $this->projectsApi
+                                    ->fetchAsSelectArray($selectParams),
                                 'value' => $model->projectGuid(),
                             ],
                         ],

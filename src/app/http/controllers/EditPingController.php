@@ -101,6 +101,9 @@ class EditPingController
             'content' => 'Edit'
         ];
 
+        $selectParams = $this->pingApi->makeQueryModel();
+        $selectParams->addOrder('title', 'asc');
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'notification' => $notification,
@@ -143,7 +146,8 @@ class EditPingController
                                 'template' => 'Select',
                                 'name' => 'project_guid',
                                 'label' => 'Project',
-                                'options' => $this->projectsApi->fetchAsSelectArray(),
+                                'options' => $this->projectsApi
+                                    ->fetchAsSelectArray($selectParams),
                                 'value' => $model->projectGuid(),
                             ],
                         ],
