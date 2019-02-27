@@ -12,7 +12,7 @@ use src\app\servers\interfaces\ServerApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 
-class SSHKeyListActions
+class ServerListActions
 {
     private $userApi;
     private $response;
@@ -54,7 +54,7 @@ class SSHKeyListActions
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
-                'SSH Key List Actions requires post request'
+                'Server List Actions requires post request'
             );
         }
 
@@ -65,12 +65,12 @@ class SSHKeyListActions
         }
 
         if (! $this->guids) {
-            throw new Http500Exception('No SSH Keys specified');
+            throw new Http500Exception('No Servers specified');
         }
 
         $fetchParams = $this->serverApi->makeQueryModel();
         $fetchParams->addWhere('guid', $this->guids);
-        $models = $this->serverApi->fetchAllSSHKeys($fetchParams);
+        $models = $this->serverApi->fetchAll($fetchParams);
 
         $verb = '';
 
@@ -78,15 +78,15 @@ class SSHKeyListActions
             switch ($this->requestHelper->post('bulk_action')) {
                 case 'archive':
                     $verb = 'archived';
-                    $this->serverApi->archiveSSHKey($model);
+                    $this->serverApi->archive($model);
                     break;
                 case 'delete':
                     $verb = 'deleted';
-                    $this->serverApi->deleteSSHKey($model);
+                    $this->serverApi->delete($model);
                     break;
                 case 'unArchive':
                     $verb = 'un-archived';
-                    $this->serverApi->unArchiveSSHKey($model);
+                    $this->serverApi->unArchive($model);
                     break;
                 default:
                     throw new Http500Exception('Invalid bulk action');
@@ -100,8 +100,8 @@ class SSHKeyListActions
         $flashDataModel->dataItem('type', 'Success');
 
         $singularPlural = \count($models) > 1 ?
-            'SSH Keys' :
-            'SSH Key';
+            'Servers' :
+            'Server';
 
         $flashDataModel->dataItem(
             'content',
@@ -111,7 +111,7 @@ class SSHKeyListActions
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->flashDataApi->setFlashData($flashDataModel);
 
-        $response = $this->response->withHeader('Location', '/ssh-keys');
+        $response = $this->response->withHeader('Location', '/servers');
 
         $response = $response->withStatus(303);
 

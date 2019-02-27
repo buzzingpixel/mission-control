@@ -9,6 +9,7 @@ use src\app\http\actions\EditSSHKeyAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\CreatePingAction;
 use src\app\http\actions\CreateUserAction;
+use src\app\http\actions\ServerListActions;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\SSHKeyListActions;
 use src\app\http\actions\CreateServerAction;
@@ -45,6 +46,7 @@ return [
     'resetPassword' => ['class' => ResetPasswordAction::class],
     'updateAccount' => ['class' => UpdateAccountAction::class],
     'changePassword' => ['class' => ChangePasswordAction::class],
+    'serverListActions' => ['class' => ServerListActions::class],
     'sshKeyListActions' => ['class' => SSHKeyListActions::class],
     'createReminder' => ['class' => CreateReminderAction::class],
     'projectListActions' => ['class' => ProjectListActions::class],

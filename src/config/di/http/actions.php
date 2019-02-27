@@ -20,6 +20,7 @@ use src\app\http\actions\CreateUserAction;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\http\actions\EditServerAction;
 use src\app\http\actions\EditSSHKeyAction;
+use src\app\http\actions\ServerListActions;
 use src\app\http\actions\SSHKeyListActions;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\actions\EditProjectAction;
@@ -262,6 +263,15 @@ return [
             Di::get(UserApi::class),
             new Response(),
             Di::get(EmailApi::class)
+        );
+    },
+    ServerListActions::class => function () {
+        return new ServerListActions(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ServerApi::class),
+            Di::get(FlashDataApi::class),
+            Di::get(RequestHelper::class)
         );
     },
     SSHKeyListActions::class => function () {
