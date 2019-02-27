@@ -13,6 +13,7 @@ use src\app\http\services\RequireLoginService;
 use src\app\pings\interfaces\PingApiInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
@@ -23,6 +24,7 @@ class ViewProjectController
     private $userApi;
     private $pingApi;
     private $response;
+    private $serverApi;
     private $projectsApi;
     private $reminderApi;
     private $twigEnvironment;
@@ -33,6 +35,7 @@ class ViewProjectController
         UserApiInterface $userApi,
         PingApiInterface $pingApi,
         ResponseInterface $response,
+        ServerApiInterface $serverApi,
         TwigEnvironment $twigEnvironment,
         ProjectsApiInterface $projectsApi,
         ReminderApiInterface $reminderApi,
@@ -42,6 +45,7 @@ class ViewProjectController
         $this->userApi = $userApi;
         $this->pingApi = $pingApi;
         $this->response = $response;
+        $this->serverApi = $serverApi;
         $this->projectsApi = $projectsApi;
         $this->reminderApi = $reminderApi;
         $this->twigEnvironment = $twigEnvironment;
@@ -131,7 +135,8 @@ class ViewProjectController
                 'includes' => array_merge(
                     $this->getMonitoredUrls(),
                     $this->getPings(),
-                    $this->getReminders()
+                    $this->getReminders(),
+                    $this->getServers()
                 ),
             ])
         );
@@ -373,6 +378,65 @@ class ViewProjectController
                         'Title',
                         'Start Reminding On',
                         'Last Reminder Sent At',
+                    ],
+                    'rows' => $rows,
+                ],
+            ]
+        ];
+    }
+
+    private function getServers(): array
+    {
+        $fetchParams = $this->serverApi->makeQueryModel();
+        $fetchParams->addWhere('project_guid', $this->projectsApi->uuidToBytes(
+            $this->projectModel->guid()
+        ));
+        $fetchParams->addOrder('title', 'asc');
+
+        if (! $servers = $this->serverApi->fetchAll($fetchParams)) {
+            return [];
+        }
+
+        $rows = [];
+
+        foreach ($servers as $model) {
+            $key = $model->sshKeyModel();
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/servers/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                    'Address' => $model->address(),
+                    'SSH Port' => $model->sshPort(),
+                    'SSH User Name' => $model->sshUserName(),
+                    'SSH Key' => '<a href="/ssh-keys/view/' . $key->slug() . '">' . $key->title() . '</a>',
+                ],
+            ];
+        }
+
+        $actions = [];
+
+        if ($this->isAdmin) {
+            $actions['unArchive'] = 'Un-Archive Selected';
+            $actions['archive'] = 'Archive Selected';
+            $actions['delete'] = 'Delete Selected';
+        }
+
+        return [
+            [
+                'template' => 'forms/TableListForm.twig',
+                'formTitle' => 'Servers',
+                'actionParam' => 'serverListActions',
+                'actions' => $actions,
+                'actionColButtonContent' => 'View&nbsp;Server&nbsp;Details',
+                'table' => [
+                    'inputsName' => 'guids[]',
+                    'headings' => [
+                        'Title',
+                        'Address',
+                        'SSH Port',
+                        'SSH Key',
+                        'SSH User Name',
                     ],
                     'rows' => $rows,
                 ],

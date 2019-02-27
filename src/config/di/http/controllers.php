@@ -305,6 +305,7 @@ return [
             Di::get(UserApi::class),
             Di::get(PingApi::class),
             new Response(),
+            Di::get(ServerApi::class),
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
             Di::get(ReminderApi::class),
