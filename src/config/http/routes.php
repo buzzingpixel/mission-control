@@ -13,6 +13,7 @@ use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditPingController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
+use src\app\http\controllers\EditServerController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\EditSSHKeyController;
 use src\app\http\controllers\ViewServerController;
@@ -79,6 +80,7 @@ $routeCollector->addRoute(['GET', 'POST'], '/reminders/edit/{slug}', EditReminde
 $routeCollector->addRoute(['GET', 'POST'], '/servers[/{archives:archives}]', ServersIndexController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/servers/create', CreateServerController::class);
 $routeCollector->addRoute(['GET', 'POST'], '/servers/view/{slug}', ViewServerController::class);
+$routeCollector->addRoute(['GET', 'POST'], '/servers/edit/{slug}', EditServerController::class);
 
 // SSH Keys
 $routeCollector->addRoute(['GET', 'POST'], '/ssh-keys[/{archives:archives}]', SSHKeyIndexController::class);

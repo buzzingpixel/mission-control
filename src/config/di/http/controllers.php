@@ -18,6 +18,7 @@ use src\app\http\controllers\AccountController;
 use src\app\http\controllers\EditPingController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\PingIndexController;
+use src\app\http\controllers\EditServerController;
 use src\app\http\controllers\EditSSHKeyController;
 use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\ViewServerController;
@@ -179,6 +180,16 @@ return [
             Di::get(TwigEnvironment::class),
             Di::get(ProjectsApi::class),
             Di::get(ReminderApi::class),
+            Di::get(RequireLoginService::class)
+        );
+    },
+    EditServerController::class => function () {
+        return new EditServerController(
+            Di::get(UserApi::class),
+            new Response(),
+            Di::get(ServerApi::class),
+            Di::get(TwigEnvironment::class),
+            Di::get(ProjectsApi::class),
             Di::get(RequireLoginService::class)
         );
     },
