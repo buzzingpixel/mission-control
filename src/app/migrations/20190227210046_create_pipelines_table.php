@@ -28,6 +28,10 @@ class CreatePipelinesTable extends AbstractMigration
                 'limit' => 16,
                 'comment' => 'Associated project UUID stored as binary',
             ])
+            ->addColumn('is_active', 'boolean', [
+                'default' => 1,
+                'comment' => 'Determines active or archived',
+            ])
             ->addColumn('title', 'string', [
                 'comment' => 'The title',
             ])

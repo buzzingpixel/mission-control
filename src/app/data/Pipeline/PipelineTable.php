@@ -44,6 +44,17 @@ class PipelineTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'is_active' => [
+            'name' => 'is_active',
+            'type' => 'tinyint',
+            'size' => 3,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => 1,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'title' => [
             'name' => 'title',
             'type' => 'varchar',
@@ -93,6 +104,7 @@ class PipelineTable extends Table
     const COLUMN_NAMES = [
         'guid',
         'project_guid',
+        'is_active',
         'title',
         'slug',
         'description',
@@ -102,6 +114,7 @@ class PipelineTable extends Table
     const COLUMN_DEFAULTS = [
         'guid' => null,
         'project_guid' => 'NULL',
+        'is_active' => 1,
         'title' => null,
         'slug' => null,
         'description' => null,
