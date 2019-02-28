@@ -14,6 +14,7 @@ use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use src\app\pipelines\services\UnArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
 
 class PipelineApi implements PipelineApiInterface
@@ -52,7 +53,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function unArchive(PipelineModelInterface $model): void
     {
-        // TODO: Implement unArchive() method.
+        $service = $this->di->get(UnArchivePipelineService::class);
+        $service->unArchive($model);
     }
 
     public function delete(PipelineModelInterface $model): void
