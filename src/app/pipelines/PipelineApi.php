@@ -8,8 +8,9 @@ use src\app\pipelines\models\PipelineModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\pipelines\models\PipelineItemModel;
-use src\app\pipelines\services\SavePipelineService;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\pipelines\services\SavePipelineService;
+use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
@@ -70,6 +71,18 @@ class PipelineApi implements PipelineApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        // TODO: Implement fetchAll() method.
+        $service = $this->di->get(FetchPipelineService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
+            $params->addWhere('is_active', '1');
+            $params->addOrder('title', 'asc');
+        }
+
+        if ($this->limit) {
+            $params->limit($this->limit);
+        }
+
+        return $service->fetch($params);
     }
 }

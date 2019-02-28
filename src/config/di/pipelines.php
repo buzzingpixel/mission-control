@@ -8,10 +8,16 @@ use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\pipelines\services\SavePipelineService;
+use src\app\pipelines\services\FetchPipelineService;
 
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
         return new PipelineApi($di);
+    },
+    FetchPipelineService::class => static function (ContainerInterface $di) {
+        return new FetchPipelineService(
+            $di->get(BuildQueryService::class)
+        );
     },
     SavePipelineService::class => static function (ContainerInterface $di) {
         return new SavePipelineService(
