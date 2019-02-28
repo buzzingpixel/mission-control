@@ -6,6 +6,43 @@
 
 {% set segment1 = requestHelper.segment(1) %}
 
+{% set nav = [
+    {
+        href: 'projects',
+        content: 'Projects',
+        activeNoSegment: true
+    },
+    {
+        href: 'monitored-urls',
+        content: 'Monitored URLs',
+    },
+    {
+        href: 'pings',
+        content: 'Pings',
+    },
+    {
+        href: 'reminders',
+        content: 'Reminders',
+    },
+    {
+        href: 'servers',
+        content: 'Servers',
+    },
+    {
+        href: 'ssh-keys',
+        content: 'SSH Keys',
+    },
+    {
+        href: 'pipelines',
+        content: 'Pipelines',
+    },
+    {
+        href: 'admin',
+        content: 'Admin',
+        adminOnly: true,
+    },
+] %}
+
 <nav class="SiteNav">
     <div class="SiteNav__Inner">
         <div class="SiteNav__SiteTitle heading heading--level-4">Mission Control</div>
@@ -36,64 +73,24 @@
                 </a>
             </div>
             <ul class="SiteNav__List">
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/projects"
-                        class="SiteNav__Link{% if not segment1 or segment1 == 'projects' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Projects
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/monitored-urls"
-                        class="SiteNav__Link{% if segment1 == 'monitored-urls' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Monitored URLs
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/pings"
-                        class="SiteNav__Link{% if segment1 == 'pings' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Pings
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/reminders"
-                        class="SiteNav__Link{% if segment1 == 'reminders' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Reminders
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/servers"
-                        class="SiteNav__Link{% if segment1 == 'servers' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        Servers
-                    </a>
-                </li>
-                <li class="SiteNav__ListItem">
-                    <a
-                        href="/ssh-keys"
-                        class="SiteNav__Link{% if segment1 == 'ssh-keys' %} SiteNav__Link--IsActive{% endif %}"
-                    >
-                        SSH Keys
-                    </a>
-                </li>
-                {% if userApi.fetchCurrentUser.getExtendedProperty('is_admin') == 1 %}
-                    <li class="SiteNav__ListItem">
-                        <a
-                            href="/admin"
-                            class="SiteNav__Link{% if segment1 == 'admin' %} SiteNav__Link--IsActive{% endif %}"
-                        >
-                            Admin
-                        </a>
-                    </li>
-                {% endif %}
+                {% for item in nav %}
+                    {% set activeNoSegment = item['activeNoSegment'] ?? false %}
+                    {% set adminOnly = item['adminOnly'] ?? false %}
+                    {% set display = true %}
+                    {% if adminOnly and userApi.fetchCurrentUser.getExtendedProperty('is_admin') != 1 %}
+                        {% set display = false %}
+                    {% endif %}
+                    {% if display %}
+                        <li class="SiteNav__ListItem">
+                            <a
+                                href="/{{ item.href }}"
+                                class="SiteNav__Link{% if (activeNoSegment and not segment1) or segment1 == item.href %} SiteNav__Link--IsActive{% endif %}"
+                            >
+                                {{ item.content }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </div>
     </div>
