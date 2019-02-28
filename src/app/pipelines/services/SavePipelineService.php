@@ -10,6 +10,7 @@ use corbomite\db\Factory as OrmFactory;
 use src\app\data\Pipeline\PipelineRecord;
 use src\app\data\PipelineItem\PipelineItem;
 use corbomite\db\interfaces\BuildQueryInterface;
+use src\app\data\PipelineItem\PipelineItemSelect;
 use Atlas\Table\Exception as AtlasTableException;
 use src\app\pipelines\events\PipelineAfterSaveEvent;
 use src\app\pipelines\events\PipelineBeforeSaveEvent;
@@ -74,7 +75,13 @@ class SavePipelineService
         $fetchModel = $this->ormFactory->makeQueryModel();
         $fetchModel->limit(1);
         $fetchModel->addWhere('guid', $model->getGuidAsBytes());
-        $existingRecord = $this->buildQuery->build(Pipeline::class, $fetchModel)->fetchRecord();
+        $existingRecord = $this->buildQuery->build(Pipeline::class, $fetchModel)
+            ->with([
+                'pipeline_items' => function (PipelineItemSelect $select) {
+                    $select->orderBy('`order` ASC');
+                },
+            ])
+            ->fetchRecord();
 
         if (! $existingRecord) {
             $this->eventDispatcher->dispatch(new PipelineBeforeSaveEvent($model, true));
@@ -130,17 +137,31 @@ class SavePipelineService
 
         $items = $orm->newRecordSet(PipelineItem::class);
 
-        $order = 1;
+        if ($record->pipeline_items) {
+            $items = $record->pipeline_items;
+        }
+
+        $order = 0;
 
         foreach ($model->pipelineItems() as $item) {
+            $order++;
+
+            $itemRecord = $items->getOneBy([
+                'guid' => $item->getGuidAsBytes(),
+            ]);
+
+            if ($itemRecord) {
+                $itemRecord->order = $order;
+                $itemRecord->script = $item->script();
+                continue;
+            }
+
             $items->appendNew([
                 'guid' => $item->getGuidAsBytes(),
-                'pipeline_guid' => $item->getPipelineGuidAsBytes(),
+                'pipeline_guid' => $model->getGuidAsBytes(),
                 'order' => $order,
                 'script' => $item->script(),
             ]);
-
-            $order++;
         }
 
         $record->project_guid = $model->getProjectGuidAsBytes();
@@ -151,13 +172,19 @@ class SavePipelineService
         $record->pipeline_items = $items;
 
         try {
-            $this->ormFactory->makeOrm()->persist($record);
+            $orm->persist($record);
         } catch (AtlasTableException $e) {
-            if ($e->getMessage() === 'Expected 1 row affected, actual 0.') {
-                return;
+            if ($e->getMessage() !== 'Expected 1 row affected, actual 0.') {
+                throw $e;
             }
+        }
 
-            throw $e;
+        try {
+            $orm->persistRecordSet($items);
+        } catch (AtlasTableException $e) {
+            if ($e->getMessage() !== 'Expected 1 row affected, actual 0.') {
+                throw $e;
+            }
         }
     }
 }
