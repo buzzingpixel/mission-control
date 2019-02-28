@@ -8,6 +8,8 @@ use corbomite\cli\Kernel as CliKernel;
 use corbomite\http\Kernel as HttpKernel;
 use src\app\http\middlewares\ErrorPagesMiddleware;
 
+@session_start();
+
 define('APP_BASE_PATH', __DIR__);
 define('APP_VENDOR_PATH', APP_BASE_PATH . '/vendor');
 putenv('TWIG_CACHE_PATH=' . APP_BASE_PATH . '/cache/twig');
@@ -18,20 +20,6 @@ require APP_VENDOR_PATH . '/autoload.php';
 
 if (file_exists(APP_BASE_PATH . '/.env')) {
     (new Dotenv\Dotenv(APP_BASE_PATH))->load();
-}
-
-if (getenv('DISABLE_CSRF') === 'true') {
-    define('CSRF_EXEMPT_SEGMENTS', [
-        '',
-        'admin',
-        'account',
-        'projects',
-        'monitored-urls',
-        'pings',
-        'reminders',
-        'servers',
-        'ssh-keys',
-    ]);
 }
 
 if (! getenv('SITE_URL')) {
