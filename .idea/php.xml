@@ -150,12 +150,13 @@
       <path value="$PROJECT_DIR$/vendor/php-http/discovery" />
       <path value="$PROJECT_DIR$/vendor/cocur/slugify" />
       <path value="$PROJECT_DIR$/vendor/buzzingpixel/corbomite-events" />
-      <path value="$PROJECT_DIR$/vendor/digitalnature/php-ref" />
       <path value="$PROJECT_DIR$/vendor/hassankhan/config" />
       <path value="$PROJECT_DIR$/vendor/2bj/phanybar" />
       <path value="$PROJECT_DIR$/vendor/codedungeon/php-cli-colors" />
       <path value="$PROJECT_DIR$/vendor/codedungeon/phpunit-result-printer" />
       <path value="$PROJECT_DIR$/vendor/phpseclib/phpseclib" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

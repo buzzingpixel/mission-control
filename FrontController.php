@@ -31,10 +31,7 @@ if (! getenv('SITE_URL')) {
 putenv('SITE_URL=' . rtrim(getenv('SITE_URL'), '/'));
 
 if (PHP_SAPI === 'cli') {
-    // Register handler to catch errors that come up before the app registers a handler
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PlainTextHandler());
-    $whoops->register();
+    require __DIR__ . '/src/config/devMode.php';
 
     /** @noinspection PhpUnhandledExceptionInspection */
     Di::get(CliKernel::class)($argv);
@@ -42,26 +39,7 @@ if (PHP_SAPI === 'cli') {
 }
 
 if (getenv('DEV_MODE') === 'true') {
-    // Register handler to catch errors that come up before Yii registers a handler
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
-    $whoops->register();
-
-    // Configure ref dumper
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ref::config('shortcutFunc', ['r', 'rt', 'd', 'dd']);
-
-    function d()
-    {
-        call_user_func_array('r', func_get_args());
-    }
-
-    function dd()
-    {
-        ob_clean();
-        call_user_func_array('r', func_get_args());
-        die;
-    }
+    require __DIR__ . '/src/config/devMode.php';
 }
 
 /** @noinspection PhpUnhandledExceptionInspection */

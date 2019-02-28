@@ -7,6 +7,6 @@ class DevUtilityAction
 {
     public function __invoke()
     {
-        var_dump('DevUtilityAction::__invoke');
+        dd('DevUtilityAction::__invoke');
     }
 }
