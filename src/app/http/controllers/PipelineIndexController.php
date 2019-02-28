@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace src\app\http\controllers;
 
 use Throwable;
-use DateTimeZone;
 use LogicException;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;

@@ -23,9 +23,10 @@ use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
-use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
+use src\app\http\controllers\ServersIndexController;
+use src\app\http\controllers\ViewPipelineController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\CreateSSHKeyController;
@@ -92,6 +93,7 @@ $r->addRoute(['GET', 'POST'], '/ssh-keys/edit/{slug}', EditSSHKeyController::cla
 
 // Pipelines
 $r->addRoute(['GET', 'POST'], '/pipelines[/{archives:archives}]', PipelineIndexController::class);
+$r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}', ViewPipelineController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);
