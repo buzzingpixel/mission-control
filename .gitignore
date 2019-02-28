@@ -12,20 +12,28 @@
 # Tools
 #------------------------------------
 
-projectOverrides.json
-/*-workspace
 /.env
-/node_modules
-/.idea
-/*.sublime-*
-/vendor/*
+projectOverrides.json
+/**/.phpunit.result.cache
+/**/auth.json
+/**/*-workspace
+/**/fabCache/*
+/**/node_modules/
+/**/*.sublime-*
+/**/vendor/*
+
+/**/.idea/**/workspace.xml
+/**/.idea/**/tasks.xml
+/**/.idea/**/usage.statistics.xml
+/**/.idea/**/dictionaries
+/**/.idea/**/shelf
 
 
 
 
 
 #------------------------------------
-# System
+# Platforms
 #------------------------------------
 
 .cache
