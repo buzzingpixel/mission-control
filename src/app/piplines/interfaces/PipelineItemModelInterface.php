@@ -38,7 +38,7 @@ interface PipelineItemModelInterface extends HasGuidInterface
      * @param int|null $val
      * @return int
      */
-    public function order(?int $val = null): ?int;
+    public function order(?int $val = null): int;
 
     /**
      * Returns the value. Sets value if incoming argument is set
