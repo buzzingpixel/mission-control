@@ -11,6 +11,7 @@ use src\app\pipelines\models\PipelineItemModel;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
+use src\app\pipelines\services\DeletePipelineService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineModelInterface;
@@ -59,7 +60,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function delete(PipelineModelInterface $model): void
     {
-        // TODO: Implement delete() method.
+        $service = $this->di->get(DeletePipelineService::class);
+        $service->delete($model);
     }
 
     private $limit;

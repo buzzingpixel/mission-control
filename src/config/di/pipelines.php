@@ -9,6 +9,7 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
+use src\app\pipelines\services\DeletePipelineService;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\services\UnArchivePipelineService;
 
@@ -18,6 +19,13 @@ return [
     },
     ArchivePipelineService::class => static function (ContainerInterface $di) {
         return new ArchivePipelineService(
+            new OrmFactory(),
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
+        );
+    },
+    DeletePipelineService::class => static function (ContainerInterface $di) {
+        return new DeletePipelineService(
             new OrmFactory(),
             $di->get(BuildQueryService::class),
             $di->get(EventDispatcher::class)
