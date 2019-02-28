@@ -9,10 +9,18 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
+use src\app\pipelines\services\ArchivePipelineService;
 
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
         return new PipelineApi($di);
+    },
+    ArchivePipelineService::class => static function (ContainerInterface $di) {
+        return new ArchivePipelineService(
+            new OrmFactory(),
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
+        );
     },
     FetchPipelineService::class => static function (ContainerInterface $di) {
         return new FetchPipelineService(

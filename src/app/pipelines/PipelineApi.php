@@ -12,6 +12,7 @@ use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
 
@@ -45,7 +46,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function archive(PipelineModelInterface $model): void
     {
-        // TODO: Implement archive() method.
+        $service = $this->di->get(ArchivePipelineService::class);
+        $service->archive($model);
     }
 
     public function unArchive(PipelineModelInterface $model): void
