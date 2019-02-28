@@ -50,13 +50,6 @@ class PipelineItemModel implements PipelineItemModelInterface
         $this->pipelineUuidModel = UuidModel::fromBytes($bytes);
     }
 
-    private $order = 0;
-
-    public function order(?int $val = null): int
-    {
-        return $this->order = $val ?? $this->order;
-    }
-
     private $script = '';
 
     public function script(?string $val = null): string

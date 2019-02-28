@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace src\app\pipelines\interfaces;
 
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\pipelines\exceptions\InvalidPipelineModel;
+use src\app\servers\exceptions\TitleNotUniqueException;
 
 interface PipelineApiInterface
 {
@@ -36,6 +38,8 @@ interface PipelineApiInterface
      * Saves a Pipeline
      * @param PipelineModelInterface $model
      * @return mixed
+     * @throws InvalidPipelineModel
+     * @throws TitleNotUniqueException
      */
     public function save(PipelineModelInterface $model);
 

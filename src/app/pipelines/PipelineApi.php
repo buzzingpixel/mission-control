@@ -8,6 +8,7 @@ use src\app\pipelines\models\PipelineModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\pipelines\models\PipelineItemModel;
+use src\app\pipelines\services\SavePipelineService;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
@@ -37,7 +38,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function save(PipelineModelInterface $model): void
     {
-        // TODO: Implement save() method.
+        $service = $this->di->get(SavePipelineService::class);
+        $service->save($model);
     }
 
     public function archive(PipelineModelInterface $model): void
