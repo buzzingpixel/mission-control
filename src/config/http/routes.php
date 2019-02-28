@@ -29,6 +29,7 @@ use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\EditReminderController;
 use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\CreateSSHKeyController;
+use src\app\http\controllers\PipelineIndexController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
@@ -88,6 +89,9 @@ $r->addRoute(['GET', 'POST'], '/ssh-keys[/{archives:archives}]', SSHKeyIndexCont
 $r->addRoute(['GET', 'POST'], '/ssh-keys/create', CreateSSHKeyController::class);
 $r->addRoute(['GET', 'POST'], '/ssh-keys/view/{slug}', ViewSSHKeyController::class);
 $r->addRoute(['GET', 'POST'], '/ssh-keys/edit/{slug}', EditSSHKeyController::class);
+
+// Pipelines
+$r->addRoute(['GET', 'POST'], '/pipelines[/{archives:archives}]', PipelineIndexController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);
