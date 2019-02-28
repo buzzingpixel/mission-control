@@ -27,4 +27,11 @@ interface PipelineModelInterface extends StandardModelInterface
      * @return PipelineItemModelInterface[]
      */
     public function pipelineItems(?array $val = null): array;
+
+    /**
+     * Adds a pipeline item
+     * @param PipelineItemModelInterface $model
+     * @return mixed
+     */
+    public function addPipelineItem(PipelineItemModelInterface $model);
 }
