@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\pipelines;
 
 use Psr\Container\ContainerInterface;
+use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\models\PipelineModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
@@ -44,6 +45,11 @@ class PipelineApi implements PipelineApiInterface
     {
         $service = $this->di->get(SavePipelineService::class);
         $service->save($model);
+    }
+
+    public function saveJob(PipelineJobModelInterface $model): void
+    {
+        // TODO: Implement saveJob() method.
     }
 
     public function archive(PipelineModelInterface $model): void
@@ -90,5 +96,16 @@ class PipelineApi implements PipelineApiInterface
         }
 
         return $service->fetch($params);
+    }
+
+    public function fetchOneJob(
+        ?QueryModelInterface $params = null
+    ): ?PipelineJobModelInterface {
+        // TODO: Implement fetchOneJob() method.
+    }
+
+    public function fetchAllJobs(?QueryModelInterface $params = null): array
+    {
+        // TODO: Implement fetchAllJobs() method.
     }
 }

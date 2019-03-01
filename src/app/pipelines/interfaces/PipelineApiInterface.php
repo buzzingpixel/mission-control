@@ -44,6 +44,13 @@ interface PipelineApiInterface
     public function save(PipelineModelInterface $model);
 
     /**
+     * Saves a Pipeline Job
+     * @param PipelineJobModelInterface $model
+     * @return mixed
+     */
+    public function saveJob(PipelineJobModelInterface $model);
+
+    /**
      * Archives a Pipeline
      * @param PipelineModelInterface $model
      */
@@ -77,4 +84,20 @@ interface PipelineApiInterface
      * @return PipelineModelInterface[]
      */
     public function fetchAll(?QueryModelInterface $params = null): array;
+
+    /**
+     * Fetches one Pipeline job model result based on params
+     * @param QueryModelInterface|null $params
+     * @return PipelineJobModelInterface|null
+     */
+    public function fetchOneJob(
+        ?QueryModelInterface $params = null
+    ): ?PipelineJobModelInterface;
+
+    /**
+     * Fetches all Pipeline job models based on params
+     * @param QueryModelInterface|null $params
+     * @return PipelineJobModelInterface[]
+     */
+    public function fetchAllJobs(?QueryModelInterface $params = null): array;
 }
