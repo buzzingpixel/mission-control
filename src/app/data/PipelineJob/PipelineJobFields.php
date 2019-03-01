@@ -17,6 +17,7 @@ namespace src\app\data\PipelineJob;
  * @property mixed $job_added_at_time_zone varchar(255)
  * @property mixed $job_finished_at datetime
  * @property mixed $job_finished_at_zone varchar(255)
+ * @property null|\src\app\data\PipelineJobItem\PipelineJobItemRecordSet $pipeline_job_items
  */
 trait PipelineJobFields
 {

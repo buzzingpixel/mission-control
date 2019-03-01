@@ -10,6 +10,7 @@ use corbomite\db\services\BuildQueryService;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\services\DeletePipelineService;
+use src\app\pipelines\services\SavePipelineJobService;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\services\UnArchivePipelineService;
 
@@ -34,6 +35,13 @@ return [
     FetchPipelineService::class => static function (ContainerInterface $di) {
         return new FetchPipelineService(
             $di->get(BuildQueryService::class)
+        );
+    },
+    SavePipelineJobService::class => static function (ContainerInterface $di) {
+        return new SavePipelineJobService(
+            new OrmFactory(),
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
     SavePipelineService::class => static function (ContainerInterface $di) {

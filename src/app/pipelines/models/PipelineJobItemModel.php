@@ -13,34 +13,31 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
 {
     use UuidTrait;
 
+    /** @var UuidModelInterface|null */
     private $pipelineUuidModel;
 
-    public function pipelineGuid(?string $guid = null): string
+    public function pipelineGuid(?string $guid = null): ?string
     {
         if ($guid !== null) {
             $this->pipelineUuidModel = new UuidModel($guid);
         }
 
         if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineUuidModel->toString();
     }
 
-    public function pipelineGuidAsModel(): UuidModelInterface
+    public function pipelineGuidAsModel(): ?UuidModelInterface
     {
-        if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
-        }
-
         return $this->pipelineUuidModel;
     }
 
-    public function getPipelineGuidAsBytes(): string
+    public function getPipelineGuidAsBytes(): ?string
     {
         if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineUuidModel->toBytes();
@@ -51,34 +48,31 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
         $this->pipelineUuidModel = UuidModel::fromBytes($bytes);
     }
 
+    /** @var UuidModelInterface|null */
     private $pipelineJobUuidModel;
 
-    public function pipelineJobGuid(?string $guid = null): string
+    public function pipelineJobGuid(?string $guid = null): ?string
     {
         if ($guid !== null) {
             $this->pipelineJobUuidModel = new UuidModel($guid);
         }
 
         if (! $this->pipelineJobUuidModel) {
-            $this->pipelineJobUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineJobUuidModel->toString();
     }
 
-    public function pipelineJobGuidAsModel(): UuidModelInterface
+    public function pipelineJobGuidAsModel(): ?UuidModelInterface
     {
-        if (! $this->pipelineJobUuidModel) {
-            $this->pipelineJobUuidModel = new UuidModel();
-        }
-
         return $this->pipelineJobUuidModel;
     }
 
-    public function getPipelineJobGuidAsBytes(): string
+    public function getPipelineJobGuidAsBytes(): ?string
     {
         if (! $this->pipelineJobUuidModel) {
-            $this->pipelineJobUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineJobUuidModel->toBytes();
@@ -89,34 +83,31 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
         $this->pipelineJobUuidModel = UuidModel::fromBytes($bytes);
     }
 
+    /** @var UuidModelInterface|null */
     private $pipelineItemUuidModel;
 
-    public function pipelineItemGuid(?string $guid = null): string
+    public function pipelineItemGuid(?string $guid = null): ?string
     {
         if ($guid !== null) {
             $this->pipelineItemUuidModel = new UuidModel($guid);
         }
 
         if (! $this->pipelineItemUuidModel) {
-            $this->pipelineItemUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineItemUuidModel->toString();
     }
 
-    public function pipelineItemGuidAsModel(): UuidModelInterface
+    public function pipelineItemGuidAsModel(): ?UuidModelInterface
     {
-        if (! $this->pipelineItemUuidModel) {
-            $this->pipelineItemUuidModel = new UuidModel();
-        }
-
         return $this->pipelineItemUuidModel;
     }
 
-    public function getPipelineItemGuidAsBytes(): string
+    public function getPipelineItemGuidAsBytes(): ?string
     {
         if (! $this->pipelineItemUuidModel) {
-            $this->pipelineItemUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineItemUuidModel->toBytes();

@@ -12,27 +12,34 @@ interface PipelineJobModelInterface extends HasGuidInterface
     /**
      * Returns the value. Sets value if incoming argument is set
      * @param string|null $guid
-     * @return string
+     * @return string|null
      */
-    public function pipelineGuid(?string $val = null): string;
+    public function pipelineGuid(?string $val = null): ?string;
 
     /**
      * Gets the UuidModel for the pipeline guid
-     * @return UuidModelInterface
+     * @return UuidModelInterface|null
      */
-    public function pipelineGuidAsModel(): UuidModelInterface;
+    public function pipelineGuidAsModel(): ?UuidModelInterface;
 
     /**
      * Gets the Pipeline GUID as bytes for saving to the database in binary
-     * @return string
+     * @return string|null
      */
-    public function getPipelineGuidAsBytes(): string;
+    public function getPipelineGuidAsBytes(): ?string;
 
     /**
      * Sets the Pipeline GUID from bytes coming from the database binary column
      * @param string $bytes
      */
     public function setPipelineGuidAsBytes(string $bytes);
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     * @param bool|null $val
+     * @return bool
+     */
+    public function hasStarted(?bool $val = null): bool;
 
     /**
      * Returns the value. Sets value if incoming argument is set
@@ -69,4 +76,17 @@ interface PipelineJobModelInterface extends HasGuidInterface
      * @return DateTime|null
      */
     public function jobFinishedAt(?DateTime $val = null): ?DateTime;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     * @param PipelineJobItemModelInterface[]|null $val
+     * @return PipelineJobItemModelInterface[]
+     */
+    public function pipelineJobItems(?array $val = null): array;
+
+    /**
+     * Adds a pipeline job item
+     * @param PipelineItemModelInterface $model
+     */
+    public function addPipelineJobItem(PipelineJobItemModelInterface $model);
 }

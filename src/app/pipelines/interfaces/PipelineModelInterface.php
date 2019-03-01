@@ -31,7 +31,6 @@ interface PipelineModelInterface extends StandardModelInterface
     /**
      * Adds a pipeline item
      * @param PipelineItemModelInterface $model
-     * @return mixed
      */
     public function addPipelineItem(PipelineItemModelInterface $model);
 }

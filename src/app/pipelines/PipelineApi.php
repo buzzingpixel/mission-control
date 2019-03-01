@@ -4,20 +4,24 @@ declare(strict_types=1);
 namespace src\app\pipelines;
 
 use Psr\Container\ContainerInterface;
-use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\models\PipelineModel;
 use src\app\support\traits\UuidToBytesTrait;
+use src\app\pipelines\models\PipelineJobModel;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\pipelines\models\PipelineItemModel;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\pipelines\models\PipelineJobItemModel;
 use src\app\pipelines\services\SavePipelineService;
 use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\services\DeletePipelineService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\pipelines\services\SavePipelineJobService;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\pipelines\services\UnArchivePipelineService;
+use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
+use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 
 class PipelineApi implements PipelineApiInterface
 {
@@ -41,6 +45,16 @@ class PipelineApi implements PipelineApiInterface
         return new PipelineItemModel();
     }
 
+    public function createPipelineJobModel(): PipelineJobModelInterface
+    {
+        return new PipelineJobModel();
+    }
+
+    public function createPipelineJobItemModel(): PipelineJobItemModelInterface
+    {
+        return new PipelineJobItemModel();
+    }
+
     public function save(PipelineModelInterface $model): void
     {
         $service = $this->di->get(SavePipelineService::class);
@@ -49,7 +63,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function saveJob(PipelineJobModelInterface $model): void
     {
-        // TODO: Implement saveJob() method.
+        $service = $this->di->get(SavePipelineJobService::class);
+        $service->save($model);
     }
 
     public function archive(PipelineModelInterface $model): void

@@ -10,7 +10,7 @@ class PipelineItemRelationships extends MapperRelationships
 {
     protected function define()
     {
-        $this->manyToOne('pipelines', Pipeline::class, [
+        $this->manyToOne('pipeline', Pipeline::class, [
             'pipeline_guid' => 'guid',
         ]);
     }

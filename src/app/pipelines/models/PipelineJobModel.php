@@ -9,39 +9,37 @@ use corbomite\db\traits\UuidTrait;
 use corbomite\db\models\UuidModel;
 use corbomite\db\interfaces\UuidModelInterface;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
+use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 
 class PipelineJobModel implements PipelineJobModelInterface
 {
     use UuidTrait;
 
+    /** @var UuidModelInterface|null */
     private $pipelineUuidModel;
 
-    public function pipelineGuid(?string $guid = null): string
+    public function pipelineGuid(?string $guid = null): ?string
     {
         if ($guid !== null) {
             $this->pipelineUuidModel = new UuidModel($guid);
         }
 
         if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineUuidModel->toString();
     }
 
-    public function pipelineGuidAsModel(): UuidModelInterface
+    public function pipelineGuidAsModel(): ?UuidModelInterface
     {
-        if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
-        }
-
         return $this->pipelineUuidModel;
     }
 
-    public function getPipelineGuidAsBytes(): string
+    public function getPipelineGuidAsBytes(): ?string
     {
         if (! $this->pipelineUuidModel) {
-            $this->pipelineUuidModel = new UuidModel();
+            return null;
         }
 
         return $this->pipelineUuidModel->toBytes();
@@ -50,6 +48,13 @@ class PipelineJobModel implements PipelineJobModelInterface
     public function setPipelineGuidAsBytes(string $bytes): void
     {
         $this->pipelineUuidModel = UuidModel::fromBytes($bytes);
+    }
+
+    private $hasStarted = false;
+
+    public function hasStarted(?bool $val = null): bool
+    {
+        return $this->hasStarted = $val ?? $this->hasStarted;
     }
 
     private $isFinished = false;
@@ -91,5 +96,27 @@ class PipelineJobModel implements PipelineJobModelInterface
     public function jobFinishedAt(?DateTime $val = null): ?DateTime
     {
         return $this->jobFinishedAt = $val ?? $this->jobFinishedAt;
+    }
+
+    private $pipelineJobItems = [];
+
+    public function pipelineJobItems(?array $val = null): array
+    {
+        if ($val === null) {
+            return $this->pipelineJobItems;
+        }
+
+        $this->pipelineJobItems = [];
+
+        foreach ($val as $model) {
+            $this->addPipelineJobItem($model);
+        }
+
+        return $this->pipelineJobItems;
+    }
+
+    public function addPipelineJobItem(PipelineJobItemModelInterface $model)
+    {
+        $this->pipelineJobItems[] = $model;
     }
 }

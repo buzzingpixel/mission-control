@@ -6,6 +6,7 @@ namespace src\app\pipelines\interfaces;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\pipelines\exceptions\InvalidPipelineModel;
 use src\app\servers\exceptions\TitleNotUniqueException;
+use src\app\pipelines\exceptions\InvalidPipelineJobModel;
 
 interface PipelineApiInterface
 {
@@ -20,6 +21,18 @@ interface PipelineApiInterface
      * @return PipelineItemModelInterface
      */
     public function createPipelineItemModel(): PipelineItemModelInterface;
+
+    /**
+     * Creates a Pipeline Job Model
+     * @return PipelineJobModelInterface
+     */
+    public function createPipelineJobModel(): PipelineJobModelInterface;
+
+    /**
+     * Creates a Pipeline Job Item Model
+     * @return PipelineJobItemModelInterface
+     */
+    public function createPipelineJobItemModel(): PipelineJobItemModelInterface;
 
     /**
      * Converts a UUID to bytes for database queries
@@ -46,7 +59,7 @@ interface PipelineApiInterface
     /**
      * Saves a Pipeline Job
      * @param PipelineJobModelInterface $model
-     * @return mixed
+     * @throws InvalidPipelineJobModel
      */
     public function saveJob(PipelineJobModelInterface $model);
 

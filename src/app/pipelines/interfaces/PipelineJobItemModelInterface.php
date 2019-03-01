@@ -14,19 +14,19 @@ interface PipelineJobItemModelInterface extends HasGuidInterface
      * @param string|null $guid
      * @return string
      */
-    public function pipelineGuid(?string $val = null): string;
+    public function pipelineGuid(?string $val = null): ?string;
 
     /**
      * Gets the UuidModel for the pipeline guid
      * @return UuidModelInterface
      */
-    public function pipelineGuidAsModel(): UuidModelInterface;
+    public function pipelineGuidAsModel(): ?UuidModelInterface;
 
     /**
      * Gets the Pipeline GUID as bytes for saving to the database in binary
      * @return string
      */
-    public function getPipelineGuidAsBytes(): string;
+    public function getPipelineGuidAsBytes(): ?string;
 
     /**
      * Sets the Pipeline GUID from bytes coming from the database binary column
@@ -39,19 +39,19 @@ interface PipelineJobItemModelInterface extends HasGuidInterface
      * @param string|null $guid
      * @return string
      */
-    public function pipelineJobGuid(?string $val = null): string;
+    public function pipelineJobGuid(?string $val = null): ?string;
 
     /**
      * Gets the UuidModel for the pipeline item guid
      * @return UuidModelInterface
      */
-    public function pipelineJobGuidAsModel(): UuidModelInterface;
+    public function pipelineJobGuidAsModel(): ?UuidModelInterface;
 
     /**
      * Gets the Pipeline Item GUID as bytes for saving to the database in binary
      * @return string
      */
-    public function getPipelineJobGuidAsBytes(): string;
+    public function getPipelineJobGuidAsBytes(): ?string;
 
     /**
      * Sets the Pipeline Item GUID from bytes coming from the database binary column
@@ -64,19 +64,19 @@ interface PipelineJobItemModelInterface extends HasGuidInterface
      * @param string|null $guid
      * @return string
      */
-    public function pipelineItemGuid(?string $val = null): string;
+    public function pipelineItemGuid(?string $val = null): ?string;
 
     /**
      * Gets the UuidModel for the pipeline item guid
      * @return UuidModelInterface
      */
-    public function pipelineItemGuidAsModel(): UuidModelInterface;
+    public function pipelineItemGuidAsModel(): ?UuidModelInterface;
 
     /**
      * Gets the Pipeline Item GUID as bytes for saving to the database in binary
      * @return string
      */
-    public function getPipelineItemGuidAsBytes(): string;
+    public function getPipelineItemGuidAsBytes(): ?string;
 
     /**
      * Sets the Pipeline Item GUID from bytes coming from the database binary column
