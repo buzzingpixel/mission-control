@@ -81,12 +81,12 @@ class SavePipelineJobService
      */
     private function validate(PipelineJobModelInterface $model): void
     {
-        if (! $model->pipelineGuid()) {
+        if (! $model->pipeline()) {
             throw new InvalidPipelineJobModel();
         }
 
         foreach ($model->pipelineJobItems() as $item) {
-            if (! $item->pipelineItemGuid()) {
+            if (! $item->pipelineItem()) {
                 throw new InvalidPipelineJobModel();
             }
         }
@@ -126,9 +126,9 @@ class SavePipelineJobService
 
             $propArray = [
                 'guid' => $item->getGuidAsBytes(),
-                'pipeline_guid' => $model->getPipelineGuidAsBytes(),
+                'pipeline_guid' => $model->pipeline()->getGuidAsBytes(),
                 'pipeline_job_guid' => $model->getGuidAsBytes(),
-                'pipeline_item_guid' => $item->getPipelineItemGuidAsBytes(),
+                'pipeline_item_guid' => $item->pipelineItem()->getGuidAsBytes(),
                 'order' => $order,
                 'has_failed' => $item->hasFailed(),
                 'log_content' => $item->logContent(),
@@ -154,7 +154,7 @@ class SavePipelineJobService
 
         $jobAddedAt->setTimezone(new DateTimeZone('UTC'));
 
-        $record->pipeline_guid = $model->getPipelineGuidAsBytes();
+        $record->pipeline_guid = $model->pipeline()->getGuidAsBytes();
         $record->has_started = $model->hasStarted();
         $record->is_finished = $model->isFinished();
         $record->has_failed = $model->hasFailed();

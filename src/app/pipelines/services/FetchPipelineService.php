@@ -38,40 +38,40 @@ class FetchPipelineService
     {
         $models = [];
 
-        foreach ($this->fetchResults($params) as $record) {
-            $model = new PipelineModel();
+        foreach ($this->fetchResults($params) as $pipelineRecord) {
+            $pipeline = new PipelineModel();
 
-            $model->setGuidAsBytes($record->guid);
+            $pipeline->setGuidAsBytes($pipelineRecord->guid);
 
-            if ($record->project_guid) {
-                $model->setProjectGuidAsBytes($record->project_guid);
+            if ($pipelineRecord->project_guid) {
+                $pipeline->setProjectGuidAsBytes($pipelineRecord->project_guid);
             }
 
-            $model->isActive($record->is_active === 1 || $record->is_active === '1');
+            $pipeline->isActive($pipelineRecord->is_active === 1 || $pipelineRecord->is_active === '1');
 
-            $model->title($record->title);
+            $pipeline->title($pipelineRecord->title);
 
-            $model->slug($record->slug);
+            $pipeline->slug($pipelineRecord->slug);
 
-            $model->description($record->description);
+            $pipeline->description($pipelineRecord->description);
 
-            $model->secretId($record->secret_id);
+            $pipeline->secretId($pipelineRecord->secret_id);
 
-            foreach ($record->pipeline_items as $itemRecord) {
+            foreach ($pipelineRecord->pipeline_items as $itemRecord) {
                 /** @var PipelineItemRecord $itemRecord */
 
                 $itemModel = new PipelineItemModel();
 
                 $itemModel->setGuidAsBytes($itemRecord->guid);
 
-                $itemModel->setPipelineGuidAsBytes($itemRecord->pipeline_guid);
+                $itemModel->pipeline($pipeline);
 
                 $itemModel->script($itemRecord->script);
 
-                $model->addPipelineItem($itemModel);
+                $pipeline->addPipelineItem($itemModel);
             }
 
-            $models[] = $model;
+            $models[] = $pipeline;
         }
 
         return $models;

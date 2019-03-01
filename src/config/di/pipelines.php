@@ -12,6 +12,7 @@ use src\app\pipelines\services\FetchPipelineService;
 use src\app\pipelines\services\DeletePipelineService;
 use src\app\pipelines\services\SavePipelineJobService;
 use src\app\pipelines\services\ArchivePipelineService;
+use src\app\pipelines\services\FetchPipelineJobService;
 use src\app\pipelines\services\UnArchivePipelineService;
 
 return [
@@ -30,6 +31,11 @@ return [
             new OrmFactory(),
             $di->get(BuildQueryService::class),
             $di->get(EventDispatcher::class)
+        );
+    },
+    FetchPipelineJobService::class => static function (ContainerInterface $di) {
+        return new FetchPipelineJobService(
+            $di->get(BuildQueryService::class)
         );
     },
     FetchPipelineService::class => static function (ContainerInterface $di) {

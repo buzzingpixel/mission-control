@@ -150,18 +150,19 @@ class SavePipelineService
                 'guid' => $item->getGuidAsBytes(),
             ]);
 
-            if ($itemRecord) {
-                $itemRecord->order = $order;
-                $itemRecord->script = $item->script();
-                continue;
-            }
-
-            $items->appendNew([
+            $propArray = [
                 'guid' => $item->getGuidAsBytes(),
                 'pipeline_guid' => $model->getGuidAsBytes(),
                 'order' => $order,
                 'script' => $item->script(),
-            ]);
+            ];
+
+            if ($itemRecord) {
+                $itemRecord->set($propArray);
+                continue;
+            }
+
+            $items->appendNew($propArray);
         }
 
         $record->project_guid = $model->getProjectGuidAsBytes();
