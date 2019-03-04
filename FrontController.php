@@ -4,6 +4,7 @@ declare(strict_types=1);
 // phpcs:ignoreFile
 
 use corbomite\di\Di;
+use Symfony\Component\Dotenv\Dotenv;
 use corbomite\cli\Kernel as CliKernel;
 use corbomite\http\Kernel as HttpKernel;
 use src\app\http\middlewares\ErrorPagesMiddleware;
@@ -18,8 +19,13 @@ putenv('CORBOMITE_DB_DATA_DIRECTORY=./src/app/data');
 
 require APP_VENDOR_PATH . '/autoload.php';
 
-if (file_exists(APP_BASE_PATH . '/.env')) {
-    (new Dotenv\Dotenv(APP_BASE_PATH))->load();
+if (class_exists(Dotenv::class)) {
+    $dotenv = new Dotenv();
+    $dotenv->overload(__DIR__ . '/.env');
+    $optionalFile = __DIR__ . '/.env.override';
+    if (file_exists($optionalFile)) {
+        $dotenv->overload($optionalFile);
+    }
 }
 
 if (! getenv('SITE_URL')) {

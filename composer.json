@@ -33,14 +33,14 @@
         "phpseclib/phpseclib": "^2.0",
         "relay/relay": "2.x@dev",
         "symfony/var-dumper": "^4.2",
-        "timostamm/text-truncation": "dev-master",
-        "vlucas/phpdotenv": "^2.5"
+        "timostamm/text-truncation": "dev-master"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
+        "phpmd/phpmd": "^2.6",
         "phpunit/phpunit": "^7.2",
+        "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "^3.4",
-        "phpmd/phpmd": "^2.6"
+        "symfony/dotenv": "^4.2"
     },
     "autoload": {
         "psr-4": {
@@ -68,9 +68,8 @@
         }
     },
     "scripts": {
-        "post-create-project-cmd": [
-            "@php -r \"copy('.env.example', '.env');\"",
-            "@composer dump-autoload -o"
+        "post-install-cmd": [
+            "@php -r \"file_exists('.env.override') || file_put_contents('.env.override', '');\""
         ]
     }
 }

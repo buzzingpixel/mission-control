@@ -12,7 +12,7 @@
 # Tools
 #------------------------------------
 
-/.env
+/.env.override
 projectOverrides.json
 /**/.phpunit.result.cache
 /**/auth.json

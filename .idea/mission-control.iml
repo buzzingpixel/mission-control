@@ -131,6 +131,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dependency-injection" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dotenv" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/filesystem" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
@@ -144,7 +145,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/timostamm/text-truncation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/tubalmartin/cssmin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/wildbit/postmark-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/zendframework/zend-diactoros" />
