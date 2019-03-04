@@ -8,10 +8,7 @@ fi
 
 while true; do
     rm -rf /app/cache/twig/*;
-    chmod -R 0777 /cache-volume;
+    chmod -R 0777 /app/cache;
     chmod -R 0777 /db-volume;
-    chmod -R 0777 /public-cache-volume;
-    rsync -av /app/vendor/ /vendor-volume --delete
-    # rsync -av /cache-volume/ /app/cache --delete;
-    sleep 2;
+    sleep 5;
 done

@@ -253,16 +253,16 @@
         },
         {
             "name": "atlas/pdo",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atlasphp/Atlas.Pdo.git",
-                "reference": "3fad08d7732b0760b7706c65bc727426483610dd"
+                "reference": "31e9aa28f86d999260ac842da45a81f46b8c4826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atlasphp/Atlas.Pdo/zipball/3fad08d7732b0760b7706c65bc727426483610dd",
-                "reference": "3fad08d7732b0760b7706c65bc727426483610dd",
+                "url": "https://api.github.com/repos/atlasphp/Atlas.Pdo/zipball/31e9aa28f86d999260ac842da45a81f46b8c4826",
+                "reference": "31e9aa28f86d999260ac842da45a81f46b8c4826",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +296,7 @@
                 "pdo",
                 "sql"
             ],
-            "time": "2018-08-08T13:04:27+00:00"
+            "time": "2019-03-01T14:17:13+00:00"
         },
         {
             "name": "atlas/query",

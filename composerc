@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cmd="composer "${@};
+
+docker exec -it --user root --workdir /app php-mission-control bash -c "${cmd}"
