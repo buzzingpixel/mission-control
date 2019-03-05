@@ -7,8 +7,14 @@ if [[ ! -f /db-volume/ib_buffer_pool ]]; then
 fi
 
 while true; do
-    rm -rf /app/cache/twig/*;
-    chmod -R 0777 /app/cache;
+    rm -rf /cache-volume/twig/*;
+
+    chmod -R 0777 /cache-volume;
     chmod -R 0777 /db-volume;
-    sleep 5;
+
+    rsync -av /app/vendor/ /vendor-volume --delete
+    rsync -av /cache-volume/ /app/cache --delete;
+    rsync -av /node-modules-volume/ /app/node_modules --delete;
+
+    sleep 2;
 done
