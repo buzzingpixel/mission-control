@@ -62,6 +62,9 @@
         "httpRouteConfigFilePath": "src/config/http/routes.php",
         "httpActionConfigFilePath": "src/config/http/actionParams.php",
         "scheduleConfigFilePath": "src/config/scheduleConfig.php",
+        "twigExtensions": [
+            "src\\app\\http\\twigextensions\\UtilitiesTwigExtension"
+        ],
         "twigGlobalsFilePath": "src/config/http/globals.php",
         "twigTemplatesDirectories": {
             "": "src/app/http/views"

@@ -7,9 +7,11 @@
                 {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}
             </script>
             <div class="PipelineBuilder__Inner">
-                <div class="PipelineBuilder__Items"></div>
+                <div class="PipelineBuilder__Items JS-PipelineBuilder__Items">
+                    {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}
+                    {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}</div>
                 <div class="PipelineBuilder__AddItemWrapper">
-                    <span class="PipelineBuilder__AddItem">
+                    <span class="PipelineBuilder__AddItem JS-PipelineBuilder__AddItem">
                         {% include 'svg/IconPlus.svg' %}
                     </span>
                 </div>

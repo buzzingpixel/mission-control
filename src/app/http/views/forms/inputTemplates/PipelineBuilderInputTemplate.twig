@@ -1,20 +1,25 @@
 {% set rows = rows|default('10') %}
+{% set uniqueId = createUuidV4() %}
+{% set uuid = uuid|default('') %}
 
 {% spaceless %}
-<div class="PipelineBuilder__Area">
+{% if uuid %}
+    <input type="hidden" name="{{ name }}[{{ uniqueId }}][uuid]" value="{{ uuid }}">
+{% endif %}
+<div class="PipelineBuilder__Area JS-PipelineBuilder__Area" data-unique-id="{{ uniqueId }}">
     <div class="PipelineBuilder__AreaControls">
         <span class="PipelineBuilder__AreaControlsDraggerWrap">
             <span class="PipelineBuilder__AreaControlsDragger">
                 {% include 'svg/IconSixDots.svg' %}
             </span>
         </span>
-        <span class="PipelineBuilder__AreaControlsRemove">
+        <span class="PipelineBuilder__AreaControlsRemove JS-PipelineBuilder__AreaRemove">
             {% include 'svg/IconClose.svg' %}
         </span>
     </div>
     <textarea
         rows="{{ rows }}"
-        name="{{ name }}[]"
+        name="{{ name }}[{{ uniqueId }}][script]"
         class="textarea PipelineBuilder__TextArea"
     >{{ value }}</textarea>
 </div>

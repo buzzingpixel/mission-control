@@ -61,6 +61,12 @@ function runMain(F, W) {
             el: this
         });
     });
+
+    $('.JS-PipelineBuilder').each(function() {
+        F.controller.construct('PipelineBuilder', {
+            el: this
+        });
+    });
 }
 
 runMain(window.FAB, window);
