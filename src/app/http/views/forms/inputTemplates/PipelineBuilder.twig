@@ -1,0 +1,16 @@
+{% set type = type|default('text') %}
+
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <div class="PipelineBuilder JS-PipelineBuilder">
+            <script type="text/template" class="JS-PipelineBuilder__InputTemplate">
+                {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}
+            </script>
+            <div class="PipelineBuilder__Inner">
+                <div class="PipelineBuilder__AddItem">
+                    {% include 'svg/IconPlus.svg' %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endembed %}

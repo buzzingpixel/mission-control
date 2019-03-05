@@ -95,6 +95,11 @@ class CreatePipelineController
                                 'name' => 'description',
                                 'label' => 'Description',
                             ],
+                            [
+                                'template' => 'PipelineBuilder',
+                                'name' => 'pipeline_items',
+                                'label' => 'Pipeline Items',
+                            ],
                         ],
                     ]
                 ],
