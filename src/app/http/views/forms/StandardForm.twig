@@ -4,6 +4,7 @@
 {% set formSubTitle = formSubTitle|default(false) %}
 {% set inputs = inputs|default([]) %}
 {% set submitText = submitText|default('Submit') %}
+{% set isFullWidth = isFullWidth|default(false) %}
 
 {# @var \corbomite\requestdatastore\DataStoreInterface dataStore #}
 {% set dataStore = dataStore() %}
@@ -20,20 +21,31 @@
 
 {% set inputErrors = dataStore.storeItem('FormSubmission.inputErrors') ?? [] %}
 {% set inputValues = dataStore.storeItem('FormSubmission.inputValues') ?? [] %}
+{% set parentIsForm = parentIsForm ?? false %}
+
+{% set standardFormClass = 'StandardForm' %}
+
+{% if isFullWidth %}
+    {% set standardFormClass = standardFormClass ~ ' StandardForm--IsFullWidth' %}
+{% endif %}
 
 {% block content %}
+    {% if parentIsForm %}
+    <div class="{{ standardFormClass }}">
+    {% else %}
     <form
         {% if formAction %}
         action="{{ formAction }}"
         {% endif %}
         method="post"
         accept-charset="UTF-8"
-        class="StandardForm"
+        class="{{ standardFormClass }}"
     >
         {{ getCsrfInput() }}
         {% if actionParam %}
             <input type="hidden" name="action" value="{{ actionParam }}">
         {% endif %}
+    {% endif %}
         {% if formTitle %}
             <h2 class="StandardForm__Title">{{ formTitle|smartypants }}</h2>
         {% endif %}
@@ -52,5 +64,9 @@
                 value="{{ submitText }}"
             >
         </fieldset>
+    {% if not parentIsForm %}
     </form>
+    {% else %}
+    </div>
+    {% endif %}
 {% endblock %}

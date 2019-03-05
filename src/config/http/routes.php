@@ -35,6 +35,7 @@ use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\CreateProjectController;
 use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreatePipelineController;
 use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RemindersIndexController;
@@ -94,6 +95,7 @@ $r->addRoute(['GET', 'POST'], '/ssh-keys/edit/{slug}', EditSSHKeyController::cla
 // Pipelines
 $r->addRoute(['GET', 'POST'], '/pipelines[/{archives:archives}]', PipelineIndexController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}', ViewPipelineController::class);
+$r->addRoute(['GET', 'POST'], '/pipelines/create', CreatePipelineController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);

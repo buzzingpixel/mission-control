@@ -6,8 +6,12 @@ if [[ ! -f /db-volume/ib_buffer_pool ]]; then
     cp -R /root/db-starter/* /db-volume/;
 fi
 
+echo -e "*\n!.gitignore" > /cache-volume/.gitignore;
+echo -e "*\n!.gitignore" > /app/cache/.gitignore;
+
 while true; do
     rm -rf /cache-volume/twig/*;
+    rm -rf /app/cache/twig/*;
 
     chmod -R 0777 /cache-volume;
     chmod -R 0777 /db-volume;

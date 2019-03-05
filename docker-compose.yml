@@ -11,10 +11,10 @@ services:
       HOSTNAME: utility-mission-control
     volumes:
       - .:/app:delegated
-      - cache-volume:/cache-volume
-      - db-volume:/db-volume
-      - node-modules-volume:/node-modules-volume
-      - vendor-volume:/vendor-volume
+      - cache-volume:/cache-volume:delegated
+      - db-volume:/db-volume:delegated
+      - node-modules-volume:/node-modules-volume:delegated
+      - vendor-volume:/vendor-volume:delegated
     command: bash -c "chmod +x /app/scripts/devUtilityScript.sh && /app/scripts/devUtilityScript.sh"
     networks:
       common:
@@ -75,7 +75,7 @@ services:
     volumes:
       - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - db-volume:/var/lib/mysql
+      - db-volume:/var/lib/mysql:delegated
     ports:
       - "${DOCKER_DB_PORT}:3306"
     networks:

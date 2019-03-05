@@ -41,6 +41,7 @@ use src\app\notificationemails\NotificationEmailsApi;
 use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreatePipelineController;
 use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RemindersIndexController;
@@ -97,6 +98,15 @@ return [
     },
     CreatePingController::class => static function (ContainerInterface $di) {
         return new CreatePingController(
+            $di->get(UserApi::class),
+            new Response(),
+            $di->get(TwigEnvironment::class),
+            $di->get(ProjectsApi::class),
+            $di->get(RequireLoginService::class)
+        );
+    },
+    CreatePipelineController::class => static function (ContainerInterface $di) {
+        return new CreatePipelineController(
             $di->get(UserApi::class),
             new Response(),
             $di->get(TwigEnvironment::class),

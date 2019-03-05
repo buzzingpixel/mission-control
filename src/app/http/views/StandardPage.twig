@@ -6,8 +6,24 @@
 {% set includes = includes|default([]) %}
 {% set tags = tags|default([]) %}
 {% set controlsHasBorderBottom = controlsHasBorderBottom|default(false) %}
+{% set formWrap = formWrap|default(false) %}
 
 {% block content %}
+    {% if formWrap %}
+        {% set formAction = formAction|default(false) %}
+        {% set formActionParam = formActionParam|default(false) %}
+        <form
+            {% if formAction %}
+            action="{{ formAction }}"
+            {% endif %}
+            method="post"
+            accept-charset="UTF-8"
+        >
+        {{ getCsrfInput() }}
+        {% if formActionParam %}
+            <input type="hidden" name="action" value="{{ formActionParam }}">
+        {% endif %}
+    {% endif %}
     <div class="StandardPage">
         <div class="StandardPage__Inner">
             <div class="StandardPage__Controls{% if controlsHasBorderBottom %} StandardPage__Controls--HasBorderBottom{% endif %}">
@@ -28,12 +44,21 @@
                 </h1>
                 <div class="StandardPage__ControlsButtons">
                     {% for button in pageControlButtons %}
-                        <a
-                            href="{{ button.href }}"
-                            class="button StandardPage__ControlsButton"
-                        >
-                            {{ button.content|smartypants }}
-                        </a>
+                        {% set type = button['type'] ?? 'link' %}
+                        {% if type == 'submitInput' %}
+                             <input
+                                type="submit"
+                                class="button StandardPage__ControlsButton"
+                                value="{{ button.content|smartypants }}"
+                            >
+                        {% else %}
+                            <a
+                                href="{{ button.href }}"
+                                class="button StandardPage__ControlsButton"
+                            >
+                                {{ button.content|smartypants }}
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -46,4 +71,7 @@
             </div>
         </div>
     </div>
+    {% if formWrap %}
+        </form>
+    {% endif %}
 {% endblock %}
