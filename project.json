@@ -8,7 +8,8 @@
         "assetsSource/fonts",
         "assetsSource/img",
         "assetsSource/lib",
-        "node_modules/choices.js/public/assets"
+        "node_modules/choices.js/public/assets",
+        "node_modules/garnishjs/dist"
     ],
     "watchUsesPolling": true
 }
