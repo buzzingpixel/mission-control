@@ -23,7 +23,9 @@ function runMain(F, W) {
         flatPickerIsLoading: 'bool',
         flackPickerHasLoaded: 'bool',
         garnishIsLoading: 'bool',
-        garnishHasLoaded: 'bool'
+        garnishHasLoaded: 'bool',
+        codeMirrorIsLoading: 'bool',
+        codeMirrorHasLoaded: 'bool'
     });
 
     F.GlobalModel = new GlobalModelConstructor({
