@@ -21,7 +21,9 @@ function runMain(F, W) {
         selectIsLoading: 'bool',
         selectHasLoaded: 'bool',
         flatPickerIsLoading: 'bool',
-        flackPickerHasLoaded: 'bool'
+        flackPickerHasLoaded: 'bool',
+        garnishIsLoading: 'bool',
+        garnishHasLoaded: 'bool'
     });
 
     F.GlobalModel = new GlobalModelConstructor({

@@ -9,7 +9,8 @@
         "assetsSource/img",
         "assetsSource/lib",
         "node_modules/choices.js/public/assets",
-        "node_modules/garnishjs/dist"
+        "node_modules/garnishjs/dist",
+        "node_modules/velocity-animate"
     ],
     "watchUsesPolling": true
 }
