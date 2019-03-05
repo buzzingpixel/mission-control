@@ -1,10 +1,12 @@
-{% set rows = rows|default('6') %}
+{% set rows = rows|default('10') %}
 
 {% spaceless %}
 <div class="PipelineBuilder__Area">
     <div class="PipelineBuilder__AreaControls">
-        <span class="PipelineBuilder__AreaControlsDragger">
-            {% include 'svg/IconSixDots.svg' %}
+        <span class="PipelineBuilder__AreaControlsDraggerWrap">
+            <span class="PipelineBuilder__AreaControlsDragger">
+                {% include 'svg/IconSixDots.svg' %}
+            </span>
         </span>
         <span class="PipelineBuilder__AreaControlsRemove">
             {% include 'svg/IconClose.svg' %}
@@ -12,9 +14,8 @@
     </div>
     <textarea
         rows="{{ rows }}"
-        name="{{ name }}"
-        id="{{ name }}"
-        class="textarea"
+        name="{{ name }}[]"
+        class="textarea PipelineBuilder__TextArea"
     >{{ value }}</textarea>
 </div>
 {% endspaceless %}
