@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/mission-control.iml" filepath="$PROJECT_DIR$/.idea/mission-control.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Mission Control.iml" filepath="$PROJECT_DIR$/.idea/Mission Control.iml" />
     </modules>
   </component>
 </project>

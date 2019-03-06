@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
       - .env.override
-    image: buzzingpixel/utility:latest
+    image: buzzingpixel/utility:1.1.0
     container_name: utility-mission-control
     environment:
       HOSTNAME: utility-mission-control
@@ -15,14 +15,14 @@ services:
       - db-volume:/db-volume:delegated
       - node-modules-volume:/node-modules-volume:delegated
       - vendor-volume:/vendor-volume:delegated
-    command: bash -c "chmod +x /app/scripts/devUtilityScript.sh && /app/scripts/devUtilityScript.sh"
+    command: bash -c "chmod +x /app/scripts/dev/devUtilityScript.sh && /app/scripts/dev/devUtilityScript.sh"
     networks:
       common:
   web:
     env_file:
       - .env
       - .env.override
-    image: buzzingpixel/nginx:latest
+    image: buzzingpixel/nginx:1.0.2
     container_name: nginx-mission-control
     environment:
       HOSTNAME: nginx-mission-control
@@ -52,6 +52,7 @@ services:
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
       - ./serverConfig/php/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
       - ${DOCKER_PHP_ENV_INI_FILE}:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
+      - ./serverConfig/php/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
       - .:/app:delegated
       - .:/app-www:delegated
       - cache-volume:/app-www/cache:delegated
