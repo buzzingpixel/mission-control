@@ -6,6 +6,7 @@ use corbomite\db\PDO;
 use Cocur\Slugify\Slugify;
 use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
+use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
@@ -27,93 +28,93 @@ use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
 use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 
 return [
-    MonitoredUrlsApi::class => function () {
+    MonitoredUrlsApi::class => static function (ContainerInterface $di) {
         return new MonitoredUrlsApi(
             new Di()
         );
     },
-    ArchiveMonitoredUrlService::class => function () {
+    ArchiveMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new ArchiveMonitoredUrlService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeleteMonitoredUrlService::class => function () {
+    DeleteMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new DeleteMonitoredUrlService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    FetchIncidentsService::class => function () {
+    FetchIncidentsService::class => static function (ContainerInterface $di) {
         return new FetchIncidentsService(
-            Di::get(BuildQueryService::class)
+            $di->get(BuildQueryService::class)
         );
     },
-    FetchMonitoredUrlsService::class => function () {
+    FetchMonitoredUrlsService::class => static function (ContainerInterface $di) {
         return new FetchMonitoredUrlsService(
-            Di::get(BuildQueryService::class)
+            $di->get(BuildQueryService::class)
         );
     },
-    SaveIncidentService::class => function () {
+    SaveIncidentService::class => static function (ContainerInterface $di) {
         return new SaveIncidentService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    SaveMonitoredUrlService::class => function () {
+    SaveMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new SaveMonitoredUrlService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchiveMonitoredUrlService::class => function () {
+    UnArchiveMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new UnArchiveMonitoredUrlService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    MonitoredUrlDeleteListener::class => function () {
+    MonitoredUrlDeleteListener::class => static function (ContainerInterface $di) {
         return new MonitoredUrlDeleteListener(
-            Di::get(PDO::class)
+            $di->get(PDO::class)
         );
     },
-    ProjectArchiveListener::class => function () {
+    ProjectArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectArchiveListener(
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(MonitoredUrlsApi::class)
         );
     },
-    ProjectUnArchiveListener::class => function () {
+    ProjectUnArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectUnArchiveListener(
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(MonitoredUrlsApi::class)
         );
     },
-    ProjectDeleteListener::class => function () {
+    ProjectDeleteListener::class => static function (ContainerInterface $di) {
         return new ProjectDeleteListener(
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(MonitoredUrlsApi::class)
         );
     },
-    CheckUrlsSchedule::class => function () {
+    CheckUrlsSchedule::class => static function (ContainerInterface $di) {
         return new CheckUrlsSchedule(
-            Di::get(QueueApi::class)
+            $di->get(QueueApi::class)
         );
     },
-    CollectUrlsForQueueTask::class => function () {
+    CollectUrlsForQueueTask::class => static function (ContainerInterface $di) {
         return new CollectUrlsForQueueTask(
-            Di::get(QueueApi::class),
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(QueueApi::class),
+            $di->get(MonitoredUrlsApi::class)
         );
     },
-    CheckUrlTask::class => function () {
+    CheckUrlTask::class => static function (ContainerInterface $di) {
         return new CheckUrlTask(
-            Di::get(EmailApi::class),
+            $di->get(EmailApi::class),
             new GuzzleClientNoHttpErrors(),
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(MonitoredUrlsApi::class)
         );
     },
 ];

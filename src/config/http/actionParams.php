@@ -21,6 +21,7 @@ use src\app\http\actions\ReminderListActions;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
+use src\app\http\actions\CreatePipelineAction;
 use src\app\http\actions\ChangePasswordAction;
 use src\app\http\actions\CreateReminderAction;
 use src\app\http\actions\EditMonitoredUrlAction;
@@ -46,6 +47,7 @@ return [
     'resetPassword' => ['class' => ResetPasswordAction::class],
     'updateAccount' => ['class' => UpdateAccountAction::class],
     'changePassword' => ['class' => ChangePasswordAction::class],
+    'createPipeline' => ['class' => CreatePipelineAction::class],
     'serverListActions' => ['class' => ServerListActions::class],
     'sshKeyListActions' => ['class' => SSHKeyListActions::class],
     'createReminder' => ['class' => CreateReminderAction::class],

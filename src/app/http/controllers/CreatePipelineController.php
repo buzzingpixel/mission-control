@@ -96,6 +96,13 @@ class CreatePipelineController
                                 'label' => 'Description',
                             ],
                             [
+                                'template' => 'Select',
+                                'name' => 'project_guid',
+                                'label' => 'Project',
+                                'options' => $this->projectsApi
+                                    ->fetchAsSelectArray(),
+                            ],
+                            [
                                 'template' => 'PipelineBuilder',
                                 'name' => 'pipeline_items',
                                 'label' => 'Pipeline Items',

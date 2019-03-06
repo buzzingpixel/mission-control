@@ -1,0 +1,136 @@
+<?php
+declare(strict_types=1);
+
+namespace src\app\http\actions;
+
+use LogicException;
+use Psr\Http\Message\ResponseInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\user\interfaces\UserApiInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\http\interfaces\RequestHelperInterface;
+use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\servers\exceptions\TitleNotUniqueException;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use function trim;
+use function is_array;
+
+class CreatePipelineAction
+{
+    private $userApi;
+    private $response;
+    private $dataStore;
+    private $pipelineApi;
+    private $flashDataApi;
+    private $requestHelper;
+
+    public function __construct(
+        UserApiInterface $userApi,
+        ResponseInterface $response,
+        DataStoreInterface $dataStore,
+        PipelineApiInterface $pipelineApi,
+        FlashDataApiInterface $flashDataApi,
+        RequestHelperInterface $requestHelper
+    ) {
+        $this->userApi = $userApi;
+        $this->response = $response;
+        $this->dataStore = $dataStore;
+        $this->pipelineApi = $pipelineApi;
+        $this->flashDataApi = $flashDataApi;
+        $this->requestHelper = $requestHelper;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function __invoke(): ?ResponseInterface
+    {
+        if ($this->requestHelper->method() !== 'post') {
+            throw new LogicException(
+                'Create Pipeline Action requires post request'
+            );
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
+            throw new Http404Exception();
+        }
+
+        $title = trim($this->requestHelper->post('title'));
+        $description = trim($this->requestHelper->post('description'));
+        $projectGuid = trim($this->requestHelper->post('project_guid'));
+        $items = $this->requestHelper->post('pipeline_items');
+
+        $items = is_array($items) ? $items : [];
+
+        $store = [
+            'inputErrors' => [],
+            'inputValues' => [
+                'title' => $title,
+                'description' => $description,
+                'pipeline_items' => $items,
+            ],
+        ];
+
+        if (! $title) {
+            $store['inputErrors']['title'][] = 'This field is required';
+        }
+
+        if ($store['inputErrors']) {
+            $this->dataStore->storeItem('FormSubmission', $store);
+            return null;
+        }
+
+        $model = $this->pipelineApi->createPipelineModel();
+
+        $model->title($title);
+
+        $model->description($description);
+
+        $model->projectGuid($projectGuid);
+
+        foreach ($items as $item) {
+            if (! isset($item['script']) || ! $item['script']) {
+                continue;
+            }
+
+            $itemModel = $this->pipelineApi->createPipelineItemModel();
+
+            $itemModel->script($item['script']);
+
+            $model->addPipelineItem($itemModel);
+        }
+
+        try {
+            $this->pipelineApi->save($model);
+        } catch (TitleNotUniqueException $e) {
+            $store['inputErrors']['title'][] = 'Title must be unique';
+            $this->dataStore->storeItem('FormSubmission', $store);
+            return null;
+        }
+
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
+            'name' => 'Message'
+        ]);
+
+        $flashDataModel->dataItem('type', 'Success');
+
+        $flashDataModel->dataItem(
+            'content',
+            'Pipeline "' . $model->title() . '" created successfully.'
+        );
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->flashDataApi->setFlashData($flashDataModel);
+
+        $response = $this->response->withHeader(
+            'Location',
+            '/pipelines/view/' . $model->slug()
+        );
+
+        $response = $response->withStatus(303);
+
+        return $response;
+    }
+}

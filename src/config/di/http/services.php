@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use corbomite\user\UserApi;
 use Zend\Diactoros\Response;
 use corbomite\twig\TwigEnvironment;
+use Psr\Container\ContainerInterface;
 use src\app\http\services\RequireLoginService;
 
 return [
-    RequireLoginService::class => function () {
+    RequireLoginService::class => function (ContainerInterface $di) {
         return new RequireLoginService(
-            Di::get(TwigEnvironment::class),
-            Di::get(UserApi::class),
+            $di->get(TwigEnvironment::class),
+            $di->get(UserApi::class),
             new Response()
         );
     },

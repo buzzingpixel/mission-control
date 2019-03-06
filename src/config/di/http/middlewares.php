@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
+use Psr\Container\ContainerInterface;
 use src\app\http\middlewares\ErrorPagesMiddleware;
 use src\app\http\controllers\RenderErrorPageController;
 
 return [
-    ErrorPagesMiddleware::class => function () {
+    ErrorPagesMiddleware::class => static function (ContainerInterface $di) {
         return new ErrorPagesMiddleware(
-            Di::get(RenderErrorPageController::class)
+            $di->get(RenderErrorPageController::class)
         );
     },
 ];
