@@ -31,6 +31,10 @@ class CreatePipelineItemsTable extends AbstractMigration
             ->addColumn('order', 'integer', [
                 'comment' => 'The order of the items in the pipeline',
             ])
+            ->addColumn('description', 'string', [
+                'null' => true,
+                'comment' => 'Optional description',
+            ])
             ->addColumn('script', 'text', [
                 'comment' => 'The script this item executes',
             ])
