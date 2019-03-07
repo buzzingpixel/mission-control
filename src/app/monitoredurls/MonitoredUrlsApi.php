@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\monitoredurls;
 
-use corbomite\di\Di;
+use Psr\Container\ContainerInterface;
 use \src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
@@ -27,7 +27,7 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     private $di;
 
-    public function __construct(Di $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
     }
@@ -44,29 +44,25 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function save(MonitoredUrlModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SaveMonitoredUrlService::class);
+        $service = $this->di->get(SaveMonitoredUrlService::class);
         $service->save($model);
     }
 
     public function archive(MonitoredUrlModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(ArchiveMonitoredUrlService::class);
+        $service = $this->di->get(ArchiveMonitoredUrlService::class);
         $service->archive($model);
     }
 
     public function unArchive(MonitoredUrlModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(UnArchiveMonitoredUrlService::class);
+        $service = $this->di->get(UnArchiveMonitoredUrlService::class);
         $service->unArchive($model);
     }
 
     public function delete(MonitoredUrlModelInterface $model)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DeleteMonitoredUrlService::class);
+        $service = $this->di->get(DeleteMonitoredUrlService::class);
         $service->delete($model);
     }
 
@@ -83,8 +79,7 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchMonitoredUrlsService::class);
+        $service = $this->di->get(FetchMonitoredUrlsService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();
@@ -101,8 +96,7 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
 
     public function saveIncident(MonitoredUrlIncidentModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SaveIncidentService::class);
+        $service = $this->di->get(SaveIncidentService::class);
         $service->save($model);
     }
 
@@ -119,7 +113,7 @@ class MonitoredUrlsApi implements MonitoredUrlsApiInterface
     public function fetchIncidents(?QueryModelInterface $params = null): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchIncidentsService::class);
+        $service = $this->di->get(FetchIncidentsService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();

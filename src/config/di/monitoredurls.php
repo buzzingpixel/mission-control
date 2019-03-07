@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use corbomite\db\PDO;
 use Cocur\Slugify\Slugify;
 use corbomite\queue\QueueApi;
@@ -29,9 +28,7 @@ use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
 
 return [
     MonitoredUrlsApi::class => static function (ContainerInterface $di) {
-        return new MonitoredUrlsApi(
-            new Di()
-        );
+        return new MonitoredUrlsApi($di);
     },
     ArchiveMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new ArchiveMonitoredUrlService(

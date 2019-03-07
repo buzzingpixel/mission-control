@@ -6,6 +6,7 @@ namespace src\app\monitoredurls\interfaces;
 use corbomite\db\interfaces\QueryModelInterface;
 use src\app\monitoredurls\exceptions\InvalidMonitoredUrlModelException;
 use src\app\monitoredurls\exceptions\MonitoredUrlNameNotUniqueException;
+use src\app\monitoredurls\exceptions\InvalidMonitoredUrlIncidentModelException;
 
 interface MonitoredUrlsApiInterface
 {
@@ -81,7 +82,7 @@ interface MonitoredUrlsApiInterface
     /**
      * Saves an incident
      * @param MonitoredUrlIncidentModelInterface $model
-     * @return mixed
+     * @throws InvalidMonitoredUrlIncidentModelException
      */
     public function saveIncident(MonitoredUrlIncidentModelInterface $model);
 

@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use corbomite\user\UserApi;
+use Psr\Container\ContainerInterface;
 use corbomite\cli\services\CliQuestionService;
 use src\app\cli\actions\PromoteUserToAdminAction;
 use src\app\cli\actions\DemoteUserFromAdminAction;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 return [
-    PromoteUserToAdminAction::class => function () {
+    PromoteUserToAdminAction::class => static function (ContainerInterface $di) {
         return new PromoteUserToAdminAction(
-            Di::get(UserApi::class),
+            $di->get(UserApi::class),
             new ConsoleOutput(),
-            Di::get(CliQuestionService::class)
+            $di->get(CliQuestionService::class)
         );
     },
-    DemoteUserFromAdminAction::class => function () {
+    DemoteUserFromAdminAction::class => static function (ContainerInterface $di) {
         return new DemoteUserFromAdminAction(
-            Di::get(UserApi::class),
+            $di->get(UserApi::class),
             new ConsoleOutput(),
-            Di::get(CliQuestionService::class)
+            $di->get(CliQuestionService::class)
         );
     },
 ];

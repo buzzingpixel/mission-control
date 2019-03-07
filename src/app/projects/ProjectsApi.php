@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\projects;
 
-use corbomite\di\Di;
+use Psr\Container\ContainerInterface;
 use src\app\projects\models\ProjectModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
@@ -25,7 +25,7 @@ class ProjectsApi implements ProjectsApiInterface
 
     private $di;
 
-    public function __construct(Di $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
     }
@@ -41,29 +41,25 @@ class ProjectsApi implements ProjectsApiInterface
      */
     public function save(ProjectModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SaveProjectService::class);
+        $service = $this->di->get(SaveProjectService::class);
         $service->save($model);
     }
 
     public function archive(ProjectModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(ArchiveProjectService::class);
+        $service = $this->di->get(ArchiveProjectService::class);
         $service->archive($model);
     }
 
     public function unArchive(ProjectModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(UnArchiveProjectService::class);
+        $service = $this->di->get(UnArchiveProjectService::class);
         $service->unArchive($model);
     }
 
     public function delete(ProjectModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DeleteProjectService::class);
+        $service = $this->di->get(DeleteProjectService::class);
         $service->delete($model);
     }
 
@@ -84,8 +80,7 @@ class ProjectsApi implements ProjectsApiInterface
     public function fetchAll(
         ?QueryModelInterface $params = null
     ): array {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchProjectsService::class);
+        $service = $this->di->get(FetchProjectsService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();

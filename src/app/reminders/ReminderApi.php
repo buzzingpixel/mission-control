@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\reminders;
 
-use corbomite\di\Di;
+use Psr\Container\ContainerInterface;
 use src\app\reminders\models\ReminderModel;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
@@ -25,7 +25,7 @@ class ReminderApi implements ReminderApiInterface
 
     private $di;
 
-    public function __construct(Di $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
     }
@@ -41,29 +41,25 @@ class ReminderApi implements ReminderApiInterface
      */
     public function save(ReminderModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SaveReminderService::class);
+        $service = $this->di->get(SaveReminderService::class);
         $service->save($model);
     }
 
     public function archive(ReminderModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(ArchiveReminderService::class);
+        $service = $this->di->get(ArchiveReminderService::class);
         $service->archive($model);
     }
 
     public function unArchive(ReminderModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(UnArchiveReminderService::class);
+        $service = $this->di->get(UnArchiveReminderService::class);
         $service->unArchive($model);
     }
 
     public function delete(ReminderModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DeleteReminderService::class);
+        $service = $this->di->get(DeleteReminderService::class);
         $service->delete($model);
     }
 
@@ -80,8 +76,7 @@ class ReminderApi implements ReminderApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchReminderService::class);
+        $service = $this->di->get(FetchReminderService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();

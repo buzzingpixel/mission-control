@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\notificationemails;
 
-use corbomite\di\Di;
+use Psr\Container\ContainerInterface;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\support\traits\MakeQueryModelTrait;
 use corbomite\db\interfaces\QueryModelInterface;
@@ -25,7 +25,7 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     private $di;
 
-    public function __construct(Di $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
     }
@@ -35,35 +35,27 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
         return new NotificationEmailModel();
     }
 
-    /**
-     * @throws InvalidNotificationEmailModelException
-     * @throws NotificationEmailNotUniqueException
-     */
     public function save(NotificationEmailModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SaveNotificationEmailService::class);
+        $service = $this->di->get(SaveNotificationEmailService::class);
         $service->save($model);
     }
 
     public function disable(NotificationEmailModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DisableNotificationEmailService::class);
+        $service = $this->di->get(DisableNotificationEmailService::class);
         $service->disable($model);
     }
 
     public function enable(NotificationEmailModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(EnableNotificationEmailService::class);
+        $service = $this->di->get(EnableNotificationEmailService::class);
         $service->enable($model);
     }
 
     public function delete(NotificationEmailModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DeleteNotificationEmailService::class);
+        $service = $this->di->get(DeleteNotificationEmailService::class);
         $service->delete($model);
     }
 
@@ -80,8 +72,7 @@ class NotificationEmailsApi implements NotificationEmailsApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchNotificationEmailService::class);
+        $service = $this->di->get(FetchNotificationEmailService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();

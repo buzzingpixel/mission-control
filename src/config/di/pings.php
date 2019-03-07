@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use src\app\pings\PingApi;
 use Cocur\Slugify\Slugify;
 use corbomite\queue\QueueApi;
 use corbomite\events\EventDispatcher;
+use Psr\Container\ContainerInterface;
 use src\app\pings\tasks\CheckPingTask;
 use corbomite\db\Factory as OrmFactory;
 use buzzingpixel\corbomitemailer\EmailApi;
@@ -22,74 +22,74 @@ use src\app\pings\listeners\ProjectArchiveListener;
 use src\app\pings\listeners\ProjectUnArchiveListener;
 
 return [
-    PingApi::class => function () {
-        return new PingApi(new Di());
+    PingApi::class => static function (ContainerInterface $di) {
+        return new PingApi($di);
     },
-    ArchivePingService::class => function () {
+    ArchivePingService::class => static function (ContainerInterface $di) {
         return new ArchivePingService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeletePingService::class => function () {
+    DeletePingService::class => static function (ContainerInterface $di) {
         return new DeletePingService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    FetchPingService::class => function () {
+    FetchPingService::class => static function (ContainerInterface $di) {
         return new FetchPingService(
-            Di::get(BuildQueryService::class)
+            $di->get(BuildQueryService::class)
         );
     },
-    SavePingService::class => function () {
+    SavePingService::class => static function (ContainerInterface $di) {
         return new SavePingService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get('UuidFactoryWithOrderedTimeCodec'),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get('UuidFactoryWithOrderedTimeCodec'),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchivePingService::class => function () {
+    UnArchivePingService::class => static function (ContainerInterface $di) {
         return new UnArchivePingService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    ProjectArchiveListener::class => function () {
+    ProjectArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectArchiveListener(
-            Di::get(PingApi::class)
+            $di->get(PingApi::class)
         );
     },
-    ProjectDeleteListener::class => function () {
+    ProjectDeleteListener::class => static function (ContainerInterface $di) {
         return new ProjectDeleteListener(
-            Di::get(PingApi::class)
+            $di->get(PingApi::class)
         );
     },
-    ProjectUnArchiveListener::class => function () {
+    ProjectUnArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectUnArchiveListener(
-            Di::get(PingApi::class)
+            $di->get(PingApi::class)
         );
     },
-    CheckPingsSchedule::class => function () {
+    CheckPingsSchedule::class => static function (ContainerInterface $di) {
         return new CheckPingsSchedule(
-            Di::get(QueueApi::class)
+            $di->get(QueueApi::class)
         );
     },
-    CollectPingsForQueueTask::class => function () {
+    CollectPingsForQueueTask::class => static function (ContainerInterface $di) {
         return new CollectPingsForQueueTask(
-            Di::get(PingApi::class),
-            Di::get(QueueApi::class)
+            $di->get(PingApi::class),
+            $di->get(QueueApi::class)
         );
     },
-    CheckPingTask::class => function () {
+    CheckPingTask::class => static function (ContainerInterface $di) {
         return new CheckPingTask(
-            Di::get(PingApi::class),
-            Di::get(EmailApi::class)
+            $di->get(PingApi::class),
+            $di->get(EmailApi::class)
         );
     },
 ];

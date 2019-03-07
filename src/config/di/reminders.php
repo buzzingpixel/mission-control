@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use Cocur\Slugify\Slugify;
 use src\app\reminders\ReminderApi;
 use corbomite\events\EventDispatcher;
+use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\reminders\services\SaveReminderService;
@@ -17,54 +17,54 @@ use src\app\reminders\services\UnArchiveReminderService;
 use src\app\reminders\listeners\ProjectUnArchiveListener;
 
 return [
-    ReminderApi::class => function () {
-        return new ReminderApi(new Di());
+    ReminderApi::class => static function (ContainerInterface $di) {
+        return new ReminderApi($di);
     },
-    ArchiveReminderService::class => function () {
+    ArchiveReminderService::class => static function (ContainerInterface $di) {
         return new ArchiveReminderService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeleteReminderService::class => function () {
+    DeleteReminderService::class => static function (ContainerInterface $di) {
         return new DeleteReminderService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    FetchReminderService::class => function () {
-        return new FetchReminderService(Di::get(BuildQueryService::class));
+    FetchReminderService::class => static function (ContainerInterface $di) {
+        return new FetchReminderService($di->get(BuildQueryService::class));
     },
-    SaveReminderService::class => function () {
+    SaveReminderService::class => static function (ContainerInterface $di) {
         return new SaveReminderService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchiveReminderService::class => function () {
+    UnArchiveReminderService::class => static function (ContainerInterface $di) {
         return new UnArchiveReminderService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    ProjectArchiveListener::class => function () {
+    ProjectArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectArchiveListener(
-            Di::get(ReminderApi::class)
+            $di->get(ReminderApi::class)
         );
     },
-    ProjectDeleteListener::class => function () {
+    ProjectDeleteListener::class => static function (ContainerInterface $di) {
         return new ProjectDeleteListener(
-            Di::get(ReminderApi::class)
+            $di->get(ReminderApi::class)
         );
     },
-    ProjectUnArchiveListener::class => function () {
+    ProjectUnArchiveListener::class => static function (ContainerInterface $di) {
         return new ProjectUnArchiveListener(
-            Di::get(ReminderApi::class)
+            $di->get(ReminderApi::class)
         );
     },
 ];

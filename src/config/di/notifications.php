@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use src\app\pings\PingApi;
 use corbomite\queue\QueueApi;
 use src\app\reminders\ReminderApi;
+use Psr\Container\ContainerInterface;
 use buzzingpixel\corbomitemailer\EmailApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\notificationemails\NotificationEmailsApi;
@@ -22,70 +22,70 @@ use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
 use src\app\notifications\notificationadapters\SendEmailNotificationAdapter;
 
 return [
-    'NotificationAdaptersArray' => function () {
+    'NotificationAdaptersArray' => static function (ContainerInterface $di) {
         return [
-            Di::get(SendEmailNotificationAdapter::class),
-            Di::get(SlackNotificationAdapter::class),
+            $di->get(SendEmailNotificationAdapter::class),
+            $di->get(SlackNotificationAdapter::class),
         ];
     },
-    CheckPingsForNotificationsSchedule::class => function () {
+    CheckPingsForNotificationsSchedule::class => static function (ContainerInterface $di) {
         return new CheckPingsForNotificationsSchedule(
-            Di::get(QueueApi::class)
+            $di->get(QueueApi::class)
         );
     },
-    CheckRemindersForNotificationsSchedule::class => function () {
+    CheckRemindersForNotificationsSchedule::class => static function (ContainerInterface $di) {
         return new CheckRemindersForNotificationsSchedule(
-            Di::get(QueueApi::class)
+            $di->get(QueueApi::class)
         );
     },
-    CheckUrlsForNotificationsSchedule::class => function () {
+    CheckUrlsForNotificationsSchedule::class => static function (ContainerInterface $di) {
         return new CheckUrlsForNotificationsSchedule(
-            Di::get(QueueApi::class)
+            $di->get(QueueApi::class)
         );
     },
-    CheckPingForNotificationTask::class => function () {
+    CheckPingForNotificationTask::class => static function (ContainerInterface $di) {
         return new CheckPingForNotificationTask(
-            Di::get(PingApi::class),
-            Di::get('NotificationAdaptersArray')
+            $di->get(PingApi::class),
+            $di->get('NotificationAdaptersArray')
         );
     },
-    CheckReminderForNotificationTask::class => function () {
+    CheckReminderForNotificationTask::class => static function (ContainerInterface $di) {
         return new CheckReminderForNotificationTask(
-            Di::get(ReminderApi::class),
-            Di::get('NotificationAdaptersArray')
+            $di->get(ReminderApi::class),
+            $di->get('NotificationAdaptersArray')
         );
     },
-    CheckUrlForNotificationTask::class => function () {
+    CheckUrlForNotificationTask::class => static function (ContainerInterface $di) {
         return new CheckUrlForNotificationTask(
-            Di::get(MonitoredUrlsApi::class),
-            Di::get('NotificationAdaptersArray')
+            $di->get(MonitoredUrlsApi::class),
+            $di->get('NotificationAdaptersArray')
         );
     },
-    CollectPingsForNotificationQueueTask::class => function () {
+    CollectPingsForNotificationQueueTask::class => static function (ContainerInterface $di) {
         return new CollectPingsForNotificationQueueTask(
-            Di::get(PingApi::class),
-            Di::get(QueueApi::class)
+            $di->get(PingApi::class),
+            $di->get(QueueApi::class)
         );
     },
-    CollectRemindersForNotificationQueueTask::class => function () {
+    CollectRemindersForNotificationQueueTask::class => static function (ContainerInterface $di) {
         return new CollectRemindersForNotificationQueueTask(
-            Di::get(QueueApi::class),
-            Di::get(ReminderApi::class)
+            $di->get(QueueApi::class),
+            $di->get(ReminderApi::class)
         );
     },
-    CollectUrlsForNotificationQueueTask::class => function () {
+    CollectUrlsForNotificationQueueTask::class => static function (ContainerInterface $di) {
         return new CollectUrlsForNotificationQueueTask(
-            Di::get(QueueApi::class),
-            Di::get(MonitoredUrlsApi::class)
+            $di->get(QueueApi::class),
+            $di->get(MonitoredUrlsApi::class)
         );
     },
-    SendEmailNotificationAdapter::class => function () {
+    SendEmailNotificationAdapter::class => static function (ContainerInterface $di) {
         return new SendEmailNotificationAdapter(
-            Di::get(EmailApi::class),
-            Di::get(NotificationEmailsApi::class)
+            $di->get(EmailApi::class),
+            $di->get(NotificationEmailsApi::class)
         );
     },
-    SlackNotificationAdapter::class => function () {
+    SlackNotificationAdapter::class => static function (ContainerInterface $di) {
         return new SlackNotificationAdapter(
             new GuzzleClientNoHttpErrors(),
             getenv('SLACK_NOTIFICATION_WEBHOOK_URL') ?: null

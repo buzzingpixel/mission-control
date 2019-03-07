@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace src\app\pings;
 
-use corbomite\di\Di;
 use src\app\pings\models\PingModel;
+use Psr\Container\ContainerInterface;
 use src\app\pings\services\SavePingService;
 use src\app\support\traits\UuidToBytesTrait;
 use src\app\pings\services\FetchPingService;
@@ -23,7 +23,7 @@ class PingApi implements PingApiInterface
 
     private $di;
 
-    public function __construct(Di $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
     }
@@ -35,29 +35,25 @@ class PingApi implements PingApiInterface
 
     public function save(PingModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(SavePingService::class);
+        $service = $this->di->get(SavePingService::class);
         $service->save($model);
     }
 
     public function archive(PingModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(ArchivePingService::class);
+        $service = $this->di->get(ArchivePingService::class);
         $service->archive($model);
     }
 
     public function unArchive(PingModelInterface $model): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(UnArchivePingService::class);
+        $service = $this->di->get(UnArchivePingService::class);
         $service->unArchive($model);
     }
 
     public function delete(PingModelInterface $model)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(DeletePingService::class);
+        $service = $this->di->get(DeletePingService::class);
         $service->delete($model);
     }
 
@@ -74,8 +70,7 @@ class PingApi implements PingApiInterface
 
     public function fetchAll(?QueryModelInterface $params = null): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $service = $this->di->getFromDefinition(FetchPingService::class);
+        $service = $this->di->get(FetchPingService::class);
 
         if (! $params) {
             $params = $this->makeQueryModel();

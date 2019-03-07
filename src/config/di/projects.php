@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use Cocur\Slugify\Slugify;
 use src\app\projects\ProjectsApi;
 use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as DbFactory;
+use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use src\app\projects\services\SaveProjectService;
@@ -15,43 +14,41 @@ use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\services\UnArchiveProjectService;
 
 return [
-    ProjectsApi::class => function () {
-        return new ProjectsApi(
-            new Di()
-        );
+    ProjectsApi::class => static function (ContainerInterface $di) {
+        return new ProjectsApi($di);
     },
-    ArchiveProjectService::class => function () {
+    ArchiveProjectService::class => static function (ContainerInterface $di) {
         return new ArchiveProjectService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeleteProjectService::class => function () {
+    DeleteProjectService::class => static function (ContainerInterface $di) {
         return new DeleteProjectService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    FetchProjectsService::class => function () {
+    FetchProjectsService::class => static function (ContainerInterface $di) {
         return new FetchProjectsService(
-            Di::get(BuildQueryService::class)
+            $di->get(BuildQueryService::class)
         );
     },
-    SaveProjectService::class => function () {
+    SaveProjectService::class => static function (ContainerInterface $di) {
         return new SaveProjectService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchiveProjectService::class => function () {
+    UnArchiveProjectService::class => static function (ContainerInterface $di) {
         return new UnArchiveProjectService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
 ];
