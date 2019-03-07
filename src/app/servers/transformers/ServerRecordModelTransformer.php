@@ -31,6 +31,10 @@ class ServerRecordModelTransformer
      */
     public function transformRecordSet($recordSet): array
     {
+        if ($recordSet === null) {
+            return [];
+        }
+
         $recordArray = is_array($recordSet) ?
             $recordSet :
             iterator_to_array($recordSet);
@@ -41,16 +45,12 @@ class ServerRecordModelTransformer
 
         $sshKeyModels = $this->getSSHKeyModels($sshKeyIds);
 
-        $models = array_map(
-            [
-                $this,
-                'transformRecord'
-            ],
-            $recordArray,
-            [$sshKeyModels]
+        return array_map(
+            function (ServerRecord $record) use ($sshKeyModels) {
+                return $this->transformRecord($record, $sshKeyModels);
+            },
+            $recordArray
         );
-
-        return $models;
     }
 
     /**

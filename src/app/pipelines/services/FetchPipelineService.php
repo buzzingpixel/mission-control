@@ -5,26 +5,23 @@ namespace src\app\pipelines\services;
 
 use src\app\data\Pipeline\Pipeline;
 use src\app\data\Pipeline\PipelineRecord;
-use src\app\pipelines\models\PipelineModel;
-use src\app\pipelines\models\PipelineItemModel;
 use corbomite\db\interfaces\QueryModelInterface;
 use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\PipelineItem\PipelineItemSelect;
-use src\app\data\PipelineItem\PipelineItemRecord;
 use src\app\pipelines\interfaces\PipelineModelInterface;
-use src\app\servers\transformers\ServerRecordModelTransformer;
+use src\app\pipelines\transformers\PipelineRecordModelTransformer;
 
 class FetchPipelineService
 {
     private $buildQuery;
-    private $serverRecordModelTransformer;
+    private $pipelineRecordModelTransformer;
 
     public function __construct(
         BuildQueryInterface $buildQuery,
-        ServerRecordModelTransformer $serverRecordModelTransformer
+        PipelineRecordModelTransformer $pipelineRecordModelTransformer
     ) {
         $this->buildQuery = $buildQuery;
-        $this->serverRecordModelTransformer = $serverRecordModelTransformer;
+        $this->pipelineRecordModelTransformer = $pipelineRecordModelTransformer;
     }
 
     /**
@@ -40,53 +37,9 @@ class FetchPipelineService
      */
     public function fetch(QueryModelInterface $params): array
     {
-        $models = [];
-
-        foreach ($this->fetchResults($params) as $pipelineRecord) {
-            $pipeline = new PipelineModel();
-
-            $pipeline->setGuidAsBytes($pipelineRecord->guid);
-
-            if ($pipelineRecord->project_guid) {
-                $pipeline->setProjectGuidAsBytes($pipelineRecord->project_guid);
-            }
-
-            $pipeline->isActive($pipelineRecord->is_active === 1 || $pipelineRecord->is_active === '1');
-
-            $pipeline->title($pipelineRecord->title);
-
-            $pipeline->slug($pipelineRecord->slug);
-
-            $pipeline->description($pipelineRecord->description);
-
-            $pipeline->secretId($pipelineRecord->secret_id);
-
-            foreach ($pipelineRecord->pipeline_items as $itemRecord) {
-                /** @var PipelineItemRecord $itemRecord */
-
-                $itemModel = new PipelineItemModel();
-
-                $itemModel->setGuidAsBytes($itemRecord->guid);
-
-                $itemModel->pipeline($pipeline);
-
-                $itemModel->description($itemRecord->description);
-
-                $itemModel->script($itemRecord->script);
-
-                $itemModel->servers(
-                    $this->serverRecordModelTransformer->transformRecordSet(
-                        $itemRecord->servers
-                    )
-                );
-
-                $pipeline->addPipelineItem($itemModel);
-            }
-
-            $models[] = $pipeline;
-        }
-
-        return $models;
+        return $this->pipelineRecordModelTransformer->transformRecordSet(
+            $this->fetchResults($params)
+        );
     }
 
     /**

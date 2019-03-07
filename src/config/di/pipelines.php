@@ -15,7 +15,8 @@ use src\app\pipelines\services\SavePipelineJobService;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\services\FetchPipelineJobService;
 use src\app\pipelines\services\UnArchivePipelineService;
-use src\app\servers\transformers\ServerRecordModelTransformer;
+use src\app\pipelines\transformers\PipelineRecordModelTransformer;
+use src\app\pipelines\transformers\PipelineJobRecordModelTransformer;
 
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
@@ -37,13 +38,14 @@ return [
     },
     FetchPipelineJobService::class => static function (ContainerInterface $di) {
         return new FetchPipelineJobService(
-            $di->get(BuildQueryService::class)
+            $di->get(BuildQueryService::class),
+            $di->get(PipelineJobRecordModelTransformer::class)
         );
     },
     FetchPipelineService::class => static function (ContainerInterface $di) {
         return new FetchPipelineService(
             $di->get(BuildQueryService::class),
-            $di->get(ServerRecordModelTransformer::class)
+            $di->get(PipelineRecordModelTransformer::class)
         );
     },
     SavePipelineJobService::class => static function (ContainerInterface $di) {
