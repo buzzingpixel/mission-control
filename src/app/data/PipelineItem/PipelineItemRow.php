@@ -12,6 +12,7 @@ use Atlas\Table\Row;
  * @property mixed $guid binary(16) NOT NULL
  * @property mixed $pipeline_guid binary(16)
  * @property mixed $order int(10,0) NOT NULL
+ * @property mixed $description varchar(255)
  * @property mixed $script text(65535) NOT NULL
  */
 class PipelineItemRow extends Row
@@ -20,6 +21,7 @@ class PipelineItemRow extends Row
         'guid' => null,
         'pipeline_guid' => 'NULL',
         'order' => null,
+        'description' => 'NULL',
         'script' => null,
     ];
 }

@@ -154,6 +154,7 @@ class SavePipelineService
                 'guid' => $item->getGuidAsBytes(),
                 'pipeline_guid' => $model->getGuidAsBytes(),
                 'order' => $order,
+                'description' => $item->description(),
                 'script' => $item->script(),
             ];
 

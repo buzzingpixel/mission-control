@@ -10,6 +10,7 @@ namespace src\app\data\PipelineItem;
  * @property mixed $guid binary(16) NOT NULL
  * @property mixed $pipeline_guid binary(16)
  * @property mixed $order int(10,0) NOT NULL
+ * @property mixed $description varchar(255)
  * @property mixed $script text(65535) NOT NULL
  * @property null|false|\src\app\data\Pipeline\PipelineRecord $pipeline
  */

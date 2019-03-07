@@ -55,6 +55,17 @@ class PipelineItemTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'description' => [
+            'name' => 'description',
+            'type' => 'varchar',
+            'size' => 255,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'script' => [
             'name' => 'script',
             'type' => 'text',
@@ -72,6 +83,7 @@ class PipelineItemTable extends Table
         'guid',
         'pipeline_guid',
         'order',
+        'description',
         'script',
     ];
 
@@ -79,6 +91,7 @@ class PipelineItemTable extends Table
         'guid' => null,
         'pipeline_guid' => 'NULL',
         'order' => null,
+        'description' => 'NULL',
         'script' => null,
     ];
 

@@ -21,5 +21,12 @@ interface PipelineItemModelInterface extends HasGuidInterface
      * @param string|null $val
      * @return string
      */
+    public function description(?string $val = null): string;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     * @param string|null $val
+     * @return string
+     */
     public function script(?string $val = null): string;
 }
