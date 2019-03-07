@@ -91,6 +91,11 @@ class ViewPipelineController
                 'href' => '/pipelines/edit/' . $model->slug(),
                 'content' => 'Edit Pipeline',
             ];
+
+            $pageControlButtons[] = [
+                'href' => '/pipelines/run/' . $model->slug(),
+                'content' => 'Run Pipeline',
+            ];
         }
 
         $response->getBody()->write(
