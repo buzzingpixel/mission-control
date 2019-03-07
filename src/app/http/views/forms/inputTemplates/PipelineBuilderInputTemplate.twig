@@ -18,6 +18,17 @@
                 {% include 'svg/IconClose.svg' %}
             </span>
         </div>
+        <div class="PipelineBuilder__DescriptionWrapper">
+            <label for="{{ name }}[{{ uniqueId }}][description]" class="label">
+                Description <small>(optional)</small>
+            </label>
+            <input
+                type="text"
+                name="{{ name }}[{{ uniqueId }}][description]"
+                id="{{ name }}[{{ uniqueId }}][description]"
+                class="input"
+            >
+        </div>
         <textarea
             rows="{{ rows }}"
             name="{{ name }}[{{ uniqueId }}][script]"
