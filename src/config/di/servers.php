@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use corbomite\di\Di;
 use phpseclib\Crypt\RSA;
 use Cocur\Slugify\Slugify;
 use src\app\servers\ServerApi;
+use Psr\Container\ContainerInterface;
 use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
@@ -19,85 +19,85 @@ use src\app\servers\services\ArchiveSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
 use src\app\servers\services\UnArchiveSSHKeyService;
+use src\app\servers\transformers\ServerRecordModelTransformer;
 
 return [
-    ServerApi::class => function () {
-        return new ServerApi(
-            Di::diContainer()
-        );
+    ServerApi::class => static function (ContainerInterface $di) {
+        return new ServerApi($di);
     },
-    ArchiveServerService::class => function () {
+    ArchiveServerService::class => static function (ContainerInterface $di) {
         return new ArchiveServerService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    ArchiveSSHKeyService::class => function () {
+    ArchiveSSHKeyService::class => static function (ContainerInterface $di) {
         return new ArchiveSSHKeyService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeleteServerService::class => function () {
+    DeleteServerService::class => static function (ContainerInterface $di) {
         return new DeleteServerService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    DeleteSSHKeyService:: class => function () {
+    DeleteSSHKeyService:: class => static function (ContainerInterface $di) {
         return new DeleteSSHKeyService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    FetchServerService::class => function () {
+    FetchServerService::class => static function (ContainerInterface $di) {
         return new FetchServerService(
-            Di::diContainer(),
-            new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(FetchSSHKeyService::class)
+            $di->get(BuildQueryService::class),
+            $di->get(ServerRecordModelTransformer::class)
         );
     },
-    FetchSSHKeyService::class => function () {
+    FetchSSHKeyService::class => static function (ContainerInterface $di) {
         return new FetchSSHKeyService(
-            Di::get(BuildQueryService::class)
+            $di->get(BuildQueryService::class)
         );
     },
-    GenerateSSHKeyService::class => function () {
+    GenerateSSHKeyService::class => static function () {
         return new GenerateSSHKeyService(new RSA());
     },
-    SaveServerService::class => function () {
+    SaveServerService::class => static function (ContainerInterface $di) {
         return new SaveServerService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    SaveSSHKeyService::class => function () {
+    SaveSSHKeyService::class => static function (ContainerInterface $di) {
         return new SaveSSHKeyService(
             new Slugify(),
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchiveServerService::class => function () {
+    UnArchiveServerService::class => static function (ContainerInterface $di) {
         return new UnArchiveServerService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
-    UnArchiveSSHKeyService::class => function () {
+    UnArchiveSSHKeyService::class => static function (ContainerInterface $di) {
         return new UnArchiveSSHKeyService(
             new OrmFactory(),
-            Di::get(BuildQueryService::class),
-            Di::get(EventDispatcher::class)
+            $di->get(BuildQueryService::class),
+            $di->get(EventDispatcher::class)
         );
     },
+    ServerRecordModelTransformer::class => static function (ContainerInterface $di) {
+        return new ServerRecordModelTransformer($di);
+    }
 ];

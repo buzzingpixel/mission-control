@@ -22,17 +22,6 @@ class PipelineItemServerTable extends Table
     const NAME = 'pipeline_item_servers';
 
     const COLUMNS = [
-        'guid' => [
-            'name' => 'guid',
-            'type' => 'binary',
-            'size' => 16,
-            'scale' => null,
-            'notnull' => true,
-            'default' => null,
-            'autoinc' => false,
-            'primary' => true,
-            'options' => null,
-        ],
         'pipeline_item_guid' => [
             'name' => 'pipeline_item_guid',
             'type' => 'binary',
@@ -41,7 +30,7 @@ class PipelineItemServerTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
         'server_guid' => [
@@ -52,25 +41,24 @@ class PipelineItemServerTable extends Table
             'notnull' => true,
             'default' => null,
             'autoinc' => false,
-            'primary' => false,
+            'primary' => true,
             'options' => null,
         ],
     ];
 
     const COLUMN_NAMES = [
-        'guid',
         'pipeline_item_guid',
         'server_guid',
     ];
 
     const COLUMN_DEFAULTS = [
-        'guid' => null,
         'pipeline_item_guid' => null,
         'server_guid' => null,
     ];
 
     const PRIMARY_KEY = [
-        'guid',
+        'pipeline_item_guid',
+        'server_guid',
     ];
 
     const AUTOINC_COLUMN = null;

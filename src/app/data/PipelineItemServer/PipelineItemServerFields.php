@@ -7,9 +7,10 @@ declare(strict_types=1);
 namespace src\app\data\PipelineItemServer;
 
 /**
- * @property mixed $guid binary(16) NOT NULL
  * @property mixed $pipeline_item_guid binary(16) NOT NULL
  * @property mixed $server_guid binary(16) NOT NULL
+ * @property null|false|\src\app\data\PipelineItem\PipelineItemRecord $pipeline_items
+ * @property null|false|\src\app\data\Server\ServerRecord $servers
  */
 trait PipelineItemServerFields
 {

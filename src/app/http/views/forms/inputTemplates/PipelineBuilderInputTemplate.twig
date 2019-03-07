@@ -35,12 +35,12 @@
             class="textarea PipelineBuilder__TextArea JS-PipelineBuilder__CodeEditor"
         >{{ value }}</textarea>
         <div class="PipelineBuilder__WhichServer">
-            <label for="{{ name }}[{{ uniqueId }}][server]" class="label">
+            <label for="{{ name }}[{{ uniqueId }}][servers]" class="label">
                 Run on servers
             </label>
             <select
-                name="{{ name }}[{{ uniqueId }}][server]"
-                id="{{ name }}[{{ uniqueId }}][server]"
+                name="{{ name }}[{{ uniqueId }}][servers][]"
+                id="{{ name }}[{{ uniqueId }}][servers]"
                 class="JS-PipelineBuilder__ServerSelect"
                 multiple
             >

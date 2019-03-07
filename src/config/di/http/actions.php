@@ -97,6 +97,7 @@ return [
             $di->get(UserApi::class),
             new Response(),
             $di->get(DataStore::class),
+            $di->get(ServerApi::class),
             $di->get(PipelineApi::class),
             $di->get(FlashDataApi::class),
             $di->get(RequestHelper::class)

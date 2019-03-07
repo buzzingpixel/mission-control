@@ -16,12 +16,9 @@ class CreatePipelineItemServersTable extends AbstractMigration
         $this->table('pipeline_item_servers', [
                 'id' => false,
                 'primary_key' => [
-                    'guid'
+                    'pipeline_item_guid',
+                    'server_guid'
                 ]
-            ])
-            ->addColumn('guid', 'binary', [
-                'limit' => 16,
-                'comment' => 'UUID generated in code and stored as binary',
             ])
             ->addColumn('pipeline_item_guid', 'binary', [
                 'limit' => 16,

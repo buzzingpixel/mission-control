@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Atlas\Pdo\Connection;
 use Cocur\Slugify\Slugify;
 use src\app\pipelines\PipelineApi;
 use Psr\Container\ContainerInterface;
@@ -14,6 +15,7 @@ use src\app\pipelines\services\SavePipelineJobService;
 use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\services\FetchPipelineJobService;
 use src\app\pipelines\services\UnArchivePipelineService;
+use src\app\servers\transformers\ServerRecordModelTransformer;
 
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
@@ -40,7 +42,8 @@ return [
     },
     FetchPipelineService::class => static function (ContainerInterface $di) {
         return new FetchPipelineService(
-            $di->get(BuildQueryService::class)
+            $di->get(BuildQueryService::class),
+            $di->get(ServerRecordModelTransformer::class)
         );
     },
     SavePipelineJobService::class => static function (ContainerInterface $di) {
@@ -53,6 +56,7 @@ return [
     SavePipelineService::class => static function (ContainerInterface $di) {
         return new SavePipelineService(
             new Slugify(),
+            $di->get(Connection::class),
             new OrmFactory(),
             $di->get(BuildQueryService::class),
             $di->get('UuidFactoryWithOrderedTimeCodec'),

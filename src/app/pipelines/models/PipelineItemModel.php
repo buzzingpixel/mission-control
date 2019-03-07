@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace src\app\pipelines\models;
 
 use corbomite\db\traits\UuidTrait;
+use src\app\servers\interfaces\ServerModelInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
 
@@ -31,5 +32,27 @@ class PipelineItemModel implements PipelineItemModelInterface
     public function script(?string $val = null): string
     {
         return $this->script = $val ?? $this->script;
+    }
+
+    private $servers = [];
+
+    public function servers(?array $val = null): array
+    {
+        if ($val === null) {
+            return $this->servers;
+        }
+
+        $this->servers = [];
+
+        foreach ($val as $model) {
+            $this->addServer($model);
+        }
+
+        return $this->servers;
+    }
+
+    public function addServer(ServerModelInterface $model)
+    {
+        $this->servers[] = $model;
     }
 }

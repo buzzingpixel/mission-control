@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use corbomite\requestdatastore\DataStoreInterface;
+use src\app\servers\interfaces\ServerApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\servers\exceptions\TitleNotUniqueException;
@@ -20,6 +21,7 @@ class CreatePipelineAction
     private $userApi;
     private $response;
     private $dataStore;
+    private $serverApi;
     private $pipelineApi;
     private $flashDataApi;
     private $requestHelper;
@@ -28,6 +30,7 @@ class CreatePipelineAction
         UserApiInterface $userApi,
         ResponseInterface $response,
         DataStoreInterface $dataStore,
+        ServerApiInterface $serverApi,
         PipelineApiInterface $pipelineApi,
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
@@ -35,6 +38,7 @@ class CreatePipelineAction
         $this->userApi = $userApi;
         $this->response = $response;
         $this->dataStore = $dataStore;
+        $this->serverApi = $serverApi;
         $this->pipelineApi = $pipelineApi;
         $this->flashDataApi = $flashDataApi;
         $this->requestHelper = $requestHelper;
@@ -100,6 +104,25 @@ class CreatePipelineAction
             $itemModel->description($item['description'] ?? '');
 
             $itemModel->script($item['script']);
+
+            $servers = $item['servers'] ?? [];
+
+            $servers = is_array($servers) ? $servers : [];
+
+            if (! $servers) {
+                $model->addPipelineItem($itemModel);
+                continue;
+            }
+
+            $servers = array_map(function (string $guid) {
+                return $this->serverApi->uuidToBytes($guid);
+            }, $servers);
+
+            $queryModel = $this->serverApi->makeQueryModel();
+
+            $queryModel->addWhere('guid', $servers);
+
+            $itemModel->servers($this->serverApi->fetchAll($queryModel));
 
             $model->addPipelineItem($itemModel);
         }

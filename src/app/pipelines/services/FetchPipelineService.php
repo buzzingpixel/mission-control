@@ -12,15 +12,19 @@ use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\PipelineItem\PipelineItemSelect;
 use src\app\data\PipelineItem\PipelineItemRecord;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use src\app\servers\transformers\ServerRecordModelTransformer;
 
 class FetchPipelineService
 {
     private $buildQuery;
+    private $serverRecordModelTransformer;
 
     public function __construct(
-        BuildQueryInterface $buildQuery
+        BuildQueryInterface $buildQuery,
+        ServerRecordModelTransformer $serverRecordModelTransformer
     ) {
         $this->buildQuery = $buildQuery;
+        $this->serverRecordModelTransformer = $serverRecordModelTransformer;
     }
 
     /**
@@ -66,7 +70,15 @@ class FetchPipelineService
 
                 $itemModel->pipeline($pipeline);
 
+                $itemModel->description($itemRecord->description);
+
                 $itemModel->script($itemRecord->script);
+
+                $itemModel->servers(
+                    $this->serverRecordModelTransformer->transformRecordSet(
+                        $itemRecord->servers
+                    )
+                );
 
                 $pipeline->addPipelineItem($itemModel);
             }
@@ -88,6 +100,10 @@ class FetchPipelineService
         $query->with([
             'pipeline_items' => function (PipelineItemSelect $select) {
                 $select->orderBy('`order` ASC');
+
+                $select->with([
+                    'servers'
+                ]);
             },
         ]);
 

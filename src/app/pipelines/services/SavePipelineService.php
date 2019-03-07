@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace src\app\pipelines\services;
 
+use Atlas\Pdo\Connection;
 use Cocur\Slugify\Slugify;
 use src\app\data\Pipeline\Pipeline;
 use Ramsey\Uuid\UuidFactoryInterface;
@@ -13,6 +14,7 @@ use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\PipelineItem\PipelineItemSelect;
 use Atlas\Table\Exception as AtlasTableException;
 use src\app\pipelines\events\PipelineAfterSaveEvent;
+use src\app\servers\interfaces\ServerModelInterface;
 use src\app\pipelines\events\PipelineBeforeSaveEvent;
 use src\app\pipelines\exceptions\InvalidPipelineModel;
 use src\app\pipelines\interfaces\PipelineModelInterface;
@@ -22,6 +24,7 @@ use corbomite\events\interfaces\EventDispatcherInterface;
 class SavePipelineService
 {
     private $slugify;
+    private $connection;
     private $ormFactory;
     private $buildQuery;
     private $uuidFactory;
@@ -29,12 +32,14 @@ class SavePipelineService
 
     public function __construct(
         Slugify $slugify,
+        Connection $connection,
         OrmFactory $ormFactory,
         BuildQueryInterface $buildQuery,
         UuidFactoryInterface $uuidFactory,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->slugify = $slugify;
+        $this->connection = $connection;
         $this->ormFactory = $ormFactory;
         $this->buildQuery = $buildQuery;
         $this->uuidFactory = $uuidFactory;
@@ -79,6 +84,10 @@ class SavePipelineService
             ->with([
                 'pipeline_items' => function (PipelineItemSelect $select) {
                     $select->orderBy('`order` ASC');
+
+                    $select->with([
+                        'servers'
+                    ]);
                 },
             ])
             ->fetchRecord();
@@ -149,6 +158,32 @@ class SavePipelineService
             $itemRecord = $items->getOneBy([
                 'guid' => $item->getGuidAsBytes(),
             ]);
+
+            $deleteServersQuery = $this->connection->prepare(
+                'DELETE FROM `pipeline_item_servers` WHERE `pipeline_item_guid` = :pipeline_item_guid'
+            );
+
+            $deleteServersQuery->execute([
+                ':pipeline_item_guid' => $item->getGuidAsBytes(),
+            ]);
+
+            $insertServersQuery = $this->connection->prepare(
+                'INSERT INTO `pipeline_item_servers` ' .
+                    '(pipeline_item_guid, server_guid) ' .
+                    'VALUES (:pipeline_item_guid, :server_guid)'
+            );
+
+            $servers = $item->servers();
+
+            array_walk($servers, function (ServerModelInterface $server) use (
+                $insertServersQuery,
+                $item
+            ) {
+                $insertServersQuery->execute([
+                    ':pipeline_item_guid' => $item->getGuidAsBytes(),
+                    ':server_guid' => $server->getGuidAsBytes(),
+                ]);
+            });
 
             $propArray = [
                 'guid' => $item->getGuidAsBytes(),

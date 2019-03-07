@@ -9,14 +9,12 @@ namespace src\app\data\PipelineItemServer;
 use Atlas\Table\Row;
 
 /**
- * @property mixed $guid binary(16) NOT NULL
  * @property mixed $pipeline_item_guid binary(16) NOT NULL
  * @property mixed $server_guid binary(16) NOT NULL
  */
 class PipelineItemServerRow extends Row
 {
     protected $cols = [
-        'guid' => null,
         'pipeline_item_guid' => null,
         'server_guid' => null,
     ];
