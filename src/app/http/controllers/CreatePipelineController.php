@@ -9,12 +9,14 @@ use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 
 class CreatePipelineController
 {
     private $userApi;
     private $response;
+    private $serverApi;
     private $projectsApi;
     private $twigEnvironment;
     private $requireLoginService;
@@ -22,12 +24,14 @@ class CreatePipelineController
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
+        ServerApiInterface $serverApi,
         TwigEnvironment $twigEnvironment,
         ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
+        $this->serverApi = $serverApi;
         $this->projectsApi = $projectsApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
@@ -106,6 +110,8 @@ class CreatePipelineController
                                 'template' => 'PipelineBuilder',
                                 'name' => 'pipeline_items',
                                 'label' => 'Pipeline Items',
+                                'serverArray' => $this->serverApi
+                                    ->fetchAsSelectArray()
                             ],
                         ],
                     ]

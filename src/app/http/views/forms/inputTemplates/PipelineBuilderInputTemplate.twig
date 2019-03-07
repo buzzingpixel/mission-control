@@ -22,5 +22,20 @@
         name="{{ name }}[{{ uniqueId }}][script]"
         class="textarea PipelineBuilder__TextArea JS-PipelineBuilder__CodeEditor"
     >{{ value }}</textarea>
+    <div class="PipelineBuilder__WhichServer">
+        <label for="{{ name }}[{{ uniqueId }}][server]" class="label">
+            Run on servers
+        </label>
+        <select
+            name="{{ name }}[{{ uniqueId }}][server]"
+            id="{{ name }}[{{ uniqueId }}][server]"
+            class="JS-PipelineBuilder__ServerSelect"
+            multiple
+        >
+            {% for key,val in serverArray %}
+                <option value="{{ key }}">{{ val|smartypants }}</option>
+            {% endfor %}
+        </select>
+    </div>
 </div>
 {% endspaceless %}

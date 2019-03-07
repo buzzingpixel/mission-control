@@ -109,6 +109,7 @@ return [
         return new CreatePipelineController(
             $di->get(UserApi::class),
             new Response(),
+            $di->get(ServerApi::class),
             $di->get(TwigEnvironment::class),
             $di->get(ProjectsApi::class),
             $di->get(RequireLoginService::class)

@@ -36,6 +36,10 @@ function runPipelineBuilder(F) {
                 self.elToCodeMirror(
                     $template.find('.JS-PipelineBuilder__CodeEditor').get(0)
                 );
+
+                F.controller.construct('Select', {
+                    el: $template.find('.JS-PipelineBuilder__ServerSelect').get(0)
+                });
             },
             'click .JS-PipelineBuilder__AreaRemove': function(e) {
                 var $el = $(e.currentTarget);
@@ -101,7 +105,7 @@ function runPipelineBuilder(F) {
                 container: self.$itemsContainer,
                 handle: '.JS-PipelineBuilder__Dragger',
                 axis: window.Garnish.Y_AXIS,
-                collapseDraggees: true,
+                collapseDraggees: false,
                 magnetStrength: 4,
                 helperLagBase: 1.5,
                 helperOpacity: 0.6
