@@ -157,7 +157,7 @@ function runPipelineBuilder(F) {
 
             self.$el.find('.JS-PipelineBuilder__CodeEditor').each(function() {
                 self.elToCodeMirror(this);
-            })
+            });
         },
 
         elToCodeMirror: function(el) {
