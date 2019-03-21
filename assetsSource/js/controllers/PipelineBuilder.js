@@ -106,6 +106,7 @@ function runPipelineBuilder(F) {
 
         setUpSortingReal: function() {
             var self = this;
+            var $existingItems = self.$el.find('.JS-PipelineBuilder__Area');
 
             self.sorter = new window.Garnish.DragSort({
                 container: self.$itemsContainer,
@@ -117,7 +118,15 @@ function runPipelineBuilder(F) {
                 helperOpacity: 0.6
             });
 
-            self.sorter.addItems(self.$el.find('.JS-PipelineBuilder__Area'));
+            $existingItems.detach();
+
+            $existingItems.each(function() {
+                var $item = $(this);
+
+                self.$itemsContainer.append($item);
+
+                self.sorter.addItems($item);
+            });
         },
 
         setUpCodeMirror: function() {

@@ -12,6 +12,7 @@ use src\app\http\actions\CreateUserAction;
 use src\app\http\actions\ServerListActions;
 use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\SSHKeyListActions;
+use src\app\http\actions\EditPipelineAction;
 use src\app\http\actions\CreateServerAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\CreateSSHKeyAction;
@@ -38,6 +39,7 @@ return [
     'editSshKey' => ['class' => EditSSHKeyAction::class],
     'createUser' => ['class' => CreateUserAction::class],
     'editProject' => ['class' => EditProjectAction::class],
+    'editPipeline' => ['class' => EditPipelineAction::class],
     'createServer' => ['class' => CreateServerAction::class],
     'editReminder' => ['class' => EditReminderAction::class],
     'pingListActions' => ['class' => PingListActions::class],
