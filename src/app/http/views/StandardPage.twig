@@ -7,6 +7,8 @@
 {% set tags = tags|default([]) %}
 {% set controlsHasBorderBottom = controlsHasBorderBottom|default(false) %}
 {% set formWrap = formWrap|default(false) %}
+{% set innerComponentsHtml = innerComponentsHtml|default(null) %}
+{% set ajaxInnerRefreshUrl = ajaxInnerRefreshUrl|default(null) %}
 
 {% block content %}
     {% if formWrap %}
@@ -62,7 +64,15 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="StandardPage__InnerLayoutsAndComponents">
+            <div
+                class="StandardPage__InnerLayoutsAndComponents"
+                {% if ajaxInnerRefreshUrl %}
+                data-ajax-refresh-url="{{ ajaxInnerRefreshUrl }}"
+                {% endif %}
+            >
+                {% if innerComponentsHtml %}
+                    {{ innerComponentsHtml|raw }}
+                {% endif %}
                 {% for params in includes %}
                     <div class="StandardPage__InnerLayoutsAndComponentsItem">
                         {% include params['template'] with params only %}

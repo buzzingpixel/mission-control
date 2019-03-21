@@ -1,0 +1,7 @@
+{% set includes = includes|default([]) %}
+
+{% for params in includes %}
+    <div class="StandardPage__InnerLayoutsAndComponentsItem">
+        {% include params['template'] with params only %}
+    </div>
+{% endfor %}

@@ -48,6 +48,7 @@ use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RenderErrorPageController;
 use src\app\http\controllers\EditMonitoredUrlController;
 use src\app\http\controllers\ViewMonitoredUrlController;
+use src\app\http\services\RenderPipelineInnerComponents;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\AddNotificationEmailController;
@@ -329,7 +330,8 @@ return [
             new Response(),
             $di->get(TwigEnvironment::class),
             $di->get(PipelineApi::class),
-            $di->get(RequireLoginService::class)
+            $di->get(RequireLoginService::class),
+            $di->get(RenderPipelineInnerComponents::class)
         );
     },
     ViewProjectController::class => static function (ContainerInterface $di) {

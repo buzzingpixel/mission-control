@@ -6,6 +6,8 @@
 {% set actions = actions|default([]) %}
 {% set actionColButtonContent = actionColButtonContent|default('') %}
 {% set tableControlButtons = tableControlButtons|default([]) %}
+{% set includeSelectCol = includeSelectCol ?? true %}
+{% set includeFilter = includeFilter ?? true %}
 
 {% block content %}
     <form
@@ -35,14 +37,16 @@
                 </div>
             </div>
         {% endif %}
-        <div class="TableList__Filter">
-            <input
-                type="search"
-                placeholder="Filter Results"
-                class="input TableList__FilterInput JS-Filterable__FilterInput"
-            >
-        </div>
-        {% set cols = 1 %}
+        {% if includeFilter %}
+            <div class="TableList__Filter">
+                <input
+                    type="search"
+                    placeholder="Filter Results"
+                    class="input TableList__FilterInput JS-Filterable__FilterInput"
+                >
+            </div>
+        {% endif %}
+        {% set cols =  includeSelectCol ? 1 : 0 %}
         <table class="Table JS-TableSelects">
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
@@ -64,9 +68,11 @@
                             Action
                         </th>
                     {% endif %}
+                    {% if includeSelectCol %}
                     <th class="Table__HeadingCol Table__HeadingCol--IsLast Table__HeadingCol--IsSelector">
                         <input type="checkbox" class="JS-TableSelects__All">
                     </th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody class="Table__Body JS-Filterable__ItemsContainer">
@@ -110,14 +116,16 @@
                                 </a>
                             </td>
                         {% endif %}
-                        <td class="Table__Column Table__Column--IsLast Table__Column--IsSelector">
-                            <input
-                                type="checkbox"
-                                name="{{ table.inputsName }}"
-                                value="{{ row.inputValue }}"
-                                class="JS-TableSelects__ItemSelector JS-TableSelects__SelectEscape"
-                            >
-                        </td>
+                        {% if includeSelectCol %}
+                            <td class="Table__Column Table__Column--IsLast Table__Column--IsSelector">
+                                <input
+                                    type="checkbox"
+                                    name="{{ table.inputsName }}"
+                                    value="{{ row.inputValue }}"
+                                    class="JS-TableSelects__ItemSelector JS-TableSelects__SelectEscape"
+                                >
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

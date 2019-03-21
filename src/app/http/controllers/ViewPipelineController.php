@@ -12,6 +12,7 @@ use src\app\http\services\RequireLoginService;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\http\services\RenderPipelineInnerComponents;
 
 class ViewPipelineController
 {
@@ -20,19 +21,22 @@ class ViewPipelineController
     private $pipelineApi;
     private $twigEnvironment;
     private $requireLoginService;
+    private $renderPipelineInnerComponents;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
         PipelineApiInterface $pipelineApi,
-        RequireLoginService $requireLoginService
+        RequireLoginService $requireLoginService,
+        RenderPipelineInnerComponents $renderPipelineInnerComponents
     ) {
         $this->userApi = $userApi;
         $this->response = $response;
         $this->pipelineApi = $pipelineApi;
         $this->twigEnvironment = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
+        $this->renderPipelineInnerComponents = $renderPipelineInnerComponents;
     }
 
     /**
@@ -106,8 +110,10 @@ class ViewPipelineController
                 'title' => $model->title(),
                 'subTitle' => $model->description(),
                 'pageControlButtons' => $pageControlButtons,
-                'includes' => [
-                ],
+                'innerComponentsHtml' => ($this->renderPipelineInnerComponents)(
+                    $model
+                ),
+                'ajaxInnerRefreshUrl' => '/ajax/pipelines/view/' . $model->slug(),
             ])
         );
 
