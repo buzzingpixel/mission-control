@@ -85,16 +85,15 @@ services:
     env_file:
       - .env
       - .env.override
-    image: node:latest
+    image: node:11.12.0
     container_name: node-mission-control
     ports:
       - "3000:3000"
       - "3001:3001"
     volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
       - .:/app:delegated
       - node-modules-volume:/app/node_modules
+      - yarn-cache-volume:/usr/local/share/.cache/yarn
     command: bash -c "sleep infinity & wait"
     networks:
       common:
@@ -104,6 +103,7 @@ volumes:
   db-volume:
   node-modules-volume:
   vendor-volume:
+  yarn-cache-volume:
 
 networks:
   common:

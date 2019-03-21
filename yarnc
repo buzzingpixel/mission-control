@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cmd="npm "${@};
+cmd="yarn "${@};
 docker kill node-mission-control
 docker-compose up -d
 docker exec -it --user root --workdir /app node-mission-control bash -c "${cmd}"
