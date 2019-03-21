@@ -1747,10 +1747,10 @@ eyes@0.1.x:
   resolved "https://registry.yarnpkg.com/eyes/-/eyes-0.1.8.tgz#62cf120234c683785d902348a800ef3e0cc20bc0"
   integrity sha1-Ys8SAjTGg3hdkCNIqADvPgzCC8A=
 
-fab-build-next@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/fab-build-next/-/fab-build-next-1.5.1.tgz#9bc873234b9e67b2b3a0668cdf54d300acfd0423"
-  integrity sha512-ffRE+06spbBQWu96xgA8BCmc66vK+neSHkHFY+q4OROqeS5CQ/gVoRXzamfNphiULRDr0Zc9DBq3kAQCJ0kJ/A==
+fab-build-next@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/fab-build-next/-/fab-build-next-1.6.0.tgz#88156efa45d2f8e875f448eaf8b29bbcee5cf665"
+  integrity sha512-Vp97rDSZQFNhYOLRxlXxt43AmrL0tjlI7RaEEGRuGZXEHEjcejUXV2244aXXjpAsmUtHD945tRDnXu6BR6DLaw==
   dependencies:
     browser-sync "^2.26.3"
     clean-css "^4.2.1"
@@ -1759,17 +1759,18 @@ fab-build-next@^1.5.1:
     fs-extra "^7.0.1"
     get-json "^1.0.1"
     jscs "^3.0.7"
-    jshint "^2.9.7"
-    node-notifier "^5.3.0"
-    postcss "^7.0.7"
+    jshint "^2.10.2"
+    node-notifier "^5.4.0"
+    postcss "^7.0.14"
     postcss-comment "^2.0.0"
     postcss-hexrgba "^1.0.1"
     postcss-mixins "^6.2.1"
-    postcss-preset-env "^6.5.0"
+    postcss-preset-env "^6.6.0"
     recursive-readdir-sync "^1.0.6"
     request "^2.88.0"
-    sync-directory "^2.0.6"
-    uglify-js "^3.4.9"
+    require.js "^1.0.0"
+    sync-directory "^2.0.8"
+    uglify-js "^3.5.1"
     watch "^1.0.2"
 
 fab.assets@^1.2.1:
@@ -2972,7 +2973,7 @@ jsesc@^2.5.2:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
 
-jshint@^2.9.7:
+jshint@^2.10.2:
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/jshint/-/jshint-2.10.2.tgz#ed6626c4f8223c98e94aaea62767435427a49a3d"
   integrity sha512-e7KZgCSXMJxznE/4WULzybCMNXNAd/bf5TSrvVEq78Q/K8ZwFpmBqQeDtNiHc3l49nV4E/+YeHU/JZjSUIrLAA==
@@ -3573,7 +3574,7 @@ negotiator@0.6.1:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
   integrity sha1-KzJxhOiZIQEXeyhWP7XnECrNDKk=
 
-node-notifier@^5.3.0:
+node-notifier@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/node-notifier/-/node-notifier-5.4.0.tgz#7b455fdce9f7de0c63538297354f3db468426e6a"
   integrity sha512-SUDEb+o71XR5lXSTyivXd9J7fCloE3SyP4lSgt3lU2oSANiox+SxlNRGPjDKrwU1YN3ix2KN/VGGCg0t01rttQ==
@@ -4337,7 +4338,7 @@ postcss-place@^4.0.1:
     postcss "^7.0.2"
     postcss-values-parser "^2.0.0"
 
-postcss-preset-env@^6.5.0:
+postcss-preset-env@^6.6.0:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-6.6.0.tgz#642e7d962e2bdc2e355db117c1eb63952690ed5b"
   integrity sha512-I3zAiycfqXpPIFD6HXhLfWXIewAWO8emOKz+QSsxaUZb9Dp8HbF5kUf+4Wy/AxR33o+LRoO8blEWCHth0ZsCLA==
@@ -4450,7 +4451,7 @@ postcss@^6.0.0, postcss@^6.0.14, postcss@^6.0.7:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^7.0.0, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.5, postcss@^7.0.6, postcss@^7.0.7:
+postcss@^7.0.0, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.5, postcss@^7.0.6:
   version "7.0.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.14.tgz#4527ed6b1ca0d82c53ce5ec1a2041c2346bbd6e5"
   integrity sha512-NsbD6XUUMZvBxtQAJuWDJeeC4QFsmWsfozWxCJPWf3M55K9iu2iMDaKqyoOdTJ1R4usBXuxlVFAIo8rZPQD4Bg==
@@ -4867,6 +4868,11 @@ require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
   integrity sha1-l/cXtp1IeE9fUmpsWqj/3aBVpNE=
+
+require.js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/require.js/-/require.js-1.0.0.tgz#71fa3273366af4427b0265a218be5e62ed4f90c8"
+  integrity sha1-cfoyczZq9EJ7AmWiGL5eYu1PkMg=
 
 requires-port@1.x.x:
   version "1.0.0"
@@ -5464,7 +5470,7 @@ symbol-observable@^1.0.3:
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
-sync-directory@^2.0.6:
+sync-directory@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/sync-directory/-/sync-directory-2.0.8.tgz#f647b1b2db7d5c992a31d9d7ba5eee9116b52fce"
   integrity sha512-/SPUQfOeXkEdlbY8bGUL0pg0YNfWSxtPOt1M+zKmtnViBzfivQItT0RcAPQIRIbuJ9aAJCRS9ISvculfxvImfg==
@@ -5619,7 +5625,7 @@ ua-parser-js@0.7.17:
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
   integrity sha512-uRdSdu1oA1rncCQL7sCj8vSyZkgtL7faaw9Tc9rZ3mGgraQ7+Pdx7w5mnOSF3gw9ZNG6oc+KXfkon3bKuROm0g==
 
-uglify-js@^3.4.9:
+uglify-js@^3.4.9, uglify-js@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.5.1.tgz#29cb91e76c9941899bc74b075ad0e6da9250abd5"
   integrity sha512-kI+3c+KphOAKIikQsZoT2oDsVYH5qvhpTtFObfMCdhPAYnjSvmW4oTWMhvDD4jtAGHJwztlBXQgozGcq3Xw9oQ==

@@ -6,3 +6,4 @@ docker exec -it --user root php-mission-control bash -c "chmod +x /app/scripts/d
 docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up"
 docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run"
 docker exec -it --user root --workdir /app node-mission-control bash -c "yarn"
+docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only"

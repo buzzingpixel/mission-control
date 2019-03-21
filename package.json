@@ -11,7 +11,7 @@
   "author": "Dubose Web Group",
   "dependencies": {
     "choices.js": "^4.1.3",
-    "fab-build-next": "^1.5.1",
+    "fab-build-next": "^1.6.0",
     "fab.assets": "^1.2.1",
     "fab.controller": "^1.2.1",
     "fab.model": "^1.2.1",
