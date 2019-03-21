@@ -44,6 +44,7 @@ use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\ViewPipelineJobDetailsController;
 
 // Testing
 if (getenv('DEV_MODE') === 'true') {
@@ -95,6 +96,7 @@ $r->addRoute(['GET', 'POST'], '/ssh-keys/edit/{slug}', EditSSHKeyController::cla
 // Pipelines
 $r->addRoute(['GET', 'POST'], '/pipelines[/{archives:archives}]', PipelineIndexController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}', ViewPipelineController::class);
+$r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}/job-details/{guid}', ViewPipelineJobDetailsController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/create', CreatePipelineController::class);
 
 // Admin

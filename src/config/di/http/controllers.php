@@ -52,6 +52,7 @@ use src\app\http\services\RenderPipelineInnerComponents;
 use src\app\http\controllers\MonitoredUrlIndexController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\ViewPipelineJobDetailsController;
 
 return [
     AccountController::class => static function (ContainerInterface $di) {
@@ -326,6 +327,16 @@ return [
     },
     ViewPipelineController::class => static function (ContainerInterface $di) {
         return new ViewPipelineController(
+            $di->get(UserApi::class),
+            new Response(),
+            $di->get(TwigEnvironment::class),
+            $di->get(PipelineApi::class),
+            $di->get(RequireLoginService::class),
+            $di->get(RenderPipelineInnerComponents::class)
+        );
+    },
+    ViewPipelineJobDetailsController::class => static function (ContainerInterface $di) {
+        return new ViewPipelineJobDetailsController(
             $di->get(UserApi::class),
             new Response(),
             $di->get(TwigEnvironment::class),
