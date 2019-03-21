@@ -150,9 +150,25 @@ class SavePipelineService
             $items = $record->pipeline_items;
         }
 
+        $pipelineItemsToDelete = [];
+
+        $itemsQuery = $this->connection->prepare(
+            'SELECT `guid` FROM `pipeline_items` WHERE `pipeline_guid` = :pipeline_guid'
+        );
+
+        $itemsQuery->execute([
+            ':pipeline_guid' => $model->getGuidAsBytes(),
+        ]);
+
+        foreach ($itemsQuery->fetchAll() as $queryItem) {
+            $pipelineItemsToDelete[$queryItem['guid']] = $queryItem['guid'];
+        }
+
         $order = 0;
 
         foreach ($model->pipelineItems() as $item) {
+            unset($pipelineItemsToDelete[$item->getGuidAsBytes()]);
+
             $order++;
 
             $itemRecord = $items->getOneBy([
@@ -199,6 +215,18 @@ class SavePipelineService
             }
 
             $items->appendNew($propArray);
+        }
+
+        if ($pipelineItemsToDelete) {
+            foreach ($pipelineItemsToDelete as $guid) {
+                $deleteItemQuery = $this->connection->prepare(
+                    'DELETE FROM `pipeline_items` WHERE `guid` = :guid'
+                );
+
+                $deleteItemQuery->execute([
+                    ':guid' => $guid,
+                ]);
+            }
         }
 
         $record->project_guid = $model->getProjectGuidAsBytes();
