@@ -1,6 +1,9 @@
 {% set rows = rows|default('10') %}
 {% set uniqueId = createUuidV4() %}
 {% set uuid = uuid|default('') %}
+{% set description = description|default('') %}
+{% set script = script|default('') %}
+{% set serverGuids = serverGuids|default([]) %}
 
 {% spaceless %}
 {% if uuid %}
@@ -27,13 +30,14 @@
                 name="{{ name }}[{{ uniqueId }}][description]"
                 id="{{ name }}[{{ uniqueId }}][description]"
                 class="input"
+                value="{{ description }}"
             >
         </div>
         <textarea
             rows="{{ rows }}"
             name="{{ name }}[{{ uniqueId }}][script]"
             class="textarea PipelineBuilder__TextArea JS-PipelineBuilder__CodeEditor"
-        >{{ value }}</textarea>
+        >{{ script }}</textarea>
         <div class="PipelineBuilder__WhichServer">
             <label for="{{ name }}[{{ uniqueId }}][servers]" class="label">
                 Run on servers
@@ -45,7 +49,14 @@
                 multiple
             >
                 {% for key,val in serverArray %}
-                    <option value="{{ key }}">{{ val|smartypants }}</option>
+                    <option
+                        value="{{ key }}"
+                        {% if key in serverGuids %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ val|smartypants }}
+                    </option>
                 {% endfor %}
             </select>
         </div>

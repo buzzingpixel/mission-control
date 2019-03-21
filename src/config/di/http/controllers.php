@@ -26,6 +26,7 @@ use src\app\http\controllers\ViewServerController;
 use src\app\http\controllers\ViewSSHKeyController;
 use src\app\http\controllers\CreateUserController;
 use src\app\http\controllers\SSHKeyIndexController;
+use src\app\http\controllers\EditPipelineController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
@@ -114,6 +115,17 @@ return [
             $di->get(ServerApi::class),
             $di->get(TwigEnvironment::class),
             $di->get(ProjectsApi::class),
+            $di->get(RequireLoginService::class)
+        );
+    },
+    EditPipelineController::class => static function (ContainerInterface $di) {
+        return new EditPipelineController(
+            $di->get(UserApi::class),
+            new Response(),
+            $di->get(ServerApi::class),
+            $di->get(TwigEnvironment::class),
+            $di->get(ProjectsApi::class),
+            $di->get(PipelineApi::class),
             $di->get(RequireLoginService::class)
         );
     },

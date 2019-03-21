@@ -63,6 +63,12 @@ function runPipelineBuilder(F) {
             self.setUpSorting();
 
             self.setUpCodeMirror();
+
+            self.$el.find('.JS-PipelineBuilder__ServerSelect').each(function() {
+                F.controller.construct('Select', {
+                    el: this
+                });
+            });
         },
 
         setUpSorting: function() {

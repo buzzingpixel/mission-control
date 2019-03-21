@@ -25,6 +25,7 @@ use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
+use src\app\http\controllers\EditPipelineController;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\ViewPipelineController;
 use src\app\http\controllers\EditReminderController;
@@ -98,6 +99,7 @@ $r->addRoute(['GET', 'POST'], '/pipelines[/{archives:archives}]', PipelineIndexC
 $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}', ViewPipelineController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}/job-details/{guid}', ViewPipelineJobDetailsController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/create', CreatePipelineController::class);
+$r->addRoute(['GET', 'POST'], '/pipelines/edit/{slug}', EditPipelineController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);
