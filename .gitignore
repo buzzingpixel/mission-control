@@ -3,6 +3,7 @@
 #------------------------------------
 
 # ...custom project excludes
+/public/assets
 
 
 
