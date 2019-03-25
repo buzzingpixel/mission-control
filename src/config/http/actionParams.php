@@ -20,6 +20,7 @@ use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\ReminderListActions;
 use src\app\http\actions\MonitoredUrlActions;
+use src\app\http\actions\PipelineListActions;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\UpdateAccountAction;
 use src\app\http\actions\CreatePipelineAction;
@@ -55,6 +56,7 @@ return [
     'createReminder' => ['class' => CreateReminderAction::class],
     'projectListActions' => ['class' => ProjectListActions::class],
     'editMonitoredUrl' => ['class' => EditMonitoredUrlAction::class],
+    'pipelineListActions' => ['class' => PipelineListActions::class],
     'reminderListActions' => ['class' => ReminderListActions::class],
     'createMonitoredUrl' => ['class' => CreateMonitoredUrlAction::class],
     'monitoredUrlListActions' => ['class' => MonitoredUrlActions::class],

@@ -30,6 +30,7 @@ use src\app\http\actions\CreateServerAction;
 use src\app\http\actions\CreateSSHKeyAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\ProjectListActions;
+use src\app\http\actions\PipelineListActions;
 use src\app\http\actions\ReminderListActions;
 use src\app\http\actions\CreateProjectAction;
 use src\app\http\actions\MonitoredUrlActions;
@@ -254,6 +255,15 @@ return [
             $di->get(UserApi::class),
             $di->get(PingApi::class),
             new Response(),
+            $di->get(FlashDataApi::class),
+            $di->get(RequestHelper::class)
+        );
+    },
+    PipelineListActions::class => static function (ContainerInterface $di) {
+        return new PipelineListActions(
+            $di->get(UserApi::class),
+            new Response(),
+            $di->get(PipelineApi::class),
             $di->get(FlashDataApi::class),
             $di->get(RequestHelper::class)
         );
