@@ -23,6 +23,7 @@ use src\app\pipelines\services\UnArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
+use src\app\pipelines\services\InitJobFromPipelineModelService;
 
 class PipelineApi implements PipelineApiInterface
 {
@@ -58,8 +59,8 @@ class PipelineApi implements PipelineApiInterface
 
     public function initJobFromPipelineModel(PipelineModelInterface $pipelineModel): void
     {
-        // TODO: Implement initJobFromPipelineModel
-        dd('TODO: Implement initJobFromPipelineModel');
+        $service = $this->di->get(InitJobFromPipelineModelService::class);
+        $service->init($pipelineModel);
     }
 
     public function save(PipelineModelInterface $model): void
