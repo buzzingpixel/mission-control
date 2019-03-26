@@ -18,9 +18,11 @@ use src\app\pipelines\services\ArchivePipelineService;
 use src\app\pipelines\services\FetchPipelineJobService;
 use src\app\pipelines\services\UnArchivePipelineService;
 use src\app\pipelines\listeners\SavePipelineJobListener;
+use src\app\pipelines\services\FetchOnePipelineJobItemService;
 use src\app\pipelines\services\InitJobFromPipelineModelService;
 use src\app\pipelines\transformers\PipelineRecordModelTransformer;
 use src\app\pipelines\transformers\PipelineJobRecordModelTransformer;
+use src\app\pipelines\transformers\PipelineJobItemRecordModelTransformer;
 
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
@@ -38,6 +40,13 @@ return [
             new OrmFactory(),
             $di->get(BuildQueryService::class),
             $di->get(EventDispatcher::class)
+        );
+    },
+    FetchOnePipelineJobItemService::class => static function (ContainerInterface $di) {
+        return new FetchOnePipelineJobItemService(
+            $di->get(BuildQueryService::class),
+            $di->get(PipelineJobRecordModelTransformer::class),
+            $di->get(PipelineJobItemRecordModelTransformer::class)
         );
     },
     FetchPipelineJobService::class => static function (ContainerInterface $di) {
@@ -87,6 +96,6 @@ return [
         );
     },
     RunJobItemTask::class => static function (ContainerInterface $di) {
-        return new RunJobItemTask();
+        return new RunJobItemTask($di->get(PipelineApi::class));
     }
 ];

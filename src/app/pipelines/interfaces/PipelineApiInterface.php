@@ -118,4 +118,11 @@ interface PipelineApiInterface
      * @return PipelineJobModelInterface[]
      */
     public function fetchAllJobs(?QueryModelInterface $params = null): array;
+
+    /**
+     * Fetches one Pipeline Job Item model based on params
+     * @param QueryModelInterface|null $params
+     * @return PipelineJobItemModelInterface|null
+     */
+    public function fetchOneJobItem(?QueryModelInterface $params = null): ?PipelineJobItemModelInterface;
 }

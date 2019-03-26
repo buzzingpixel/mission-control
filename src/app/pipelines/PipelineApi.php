@@ -22,6 +22,7 @@ use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\pipelines\services\UnArchivePipelineService;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
+use src\app\pipelines\services\FetchOnePipelineJobItemService;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 use src\app\pipelines\services\InitJobFromPipelineModelService;
 
@@ -142,6 +143,17 @@ class PipelineApi implements PipelineApiInterface
 
         if ($this->jobLimit) {
             $params->limit($this->jobLimit);
+        }
+
+        return $service->fetch($params);
+    }
+
+    public function fetchOneJobItem(?QueryModelInterface $params = null): ?PipelineJobItemModelInterface
+    {
+        $service = $this->di->get(FetchOnePipelineJobItemService::class);
+
+        if (! $params) {
+            $params = $this->makeQueryModel();
         }
 
         return $service->fetch($params);
