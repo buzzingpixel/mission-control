@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 use src\app\projects\ProjectsApi;
+use src\app\pipelines\PipelineApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
+use src\app\pipelines\listeners\SavePipelineJobListener;
 use src\app\monitoredurls\listeners\ProjectDeleteListener;
 use src\app\monitoredurls\listeners\ProjectArchiveListener;
 use src\app\monitoredurls\listeners\ProjectUnArchiveListener;
@@ -34,3 +36,6 @@ $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', PingProjectUnArchiveL
 $r->register(ProjectsApi::class, 'ProjectBeforeDelete', ReminderProjectDeleteListener::class);
 $r->register(ProjectsApi::class, 'ProjectBeforeArchive', ReminderProjectArchiveListener::class);
 $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', ReminderProjectUnArchiveListener::class);
+
+// Pipeline Listeners
+$r->register(PipelineApi::class, 'PipelineJobAfterSave', SavePipelineJobListener::class);
