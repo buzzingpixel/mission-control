@@ -11,6 +11,8 @@ use src\app\reminders\ReminderApi;
 use src\app\pipelines\PipelineApi;
 use corbomite\twig\TwigEnvironment;
 use Psr\Container\ContainerInterface;
+use corbomite\flashdata\FlashDataApi;
+use corbomite\requestdatastore\DataStore;
 use src\app\utilities\TimeZoneListUtility;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\http\controllers\AdminController;
@@ -25,6 +27,7 @@ use src\app\http\controllers\CreatePingController;
 use src\app\http\controllers\ViewServerController;
 use src\app\http\controllers\ViewSSHKeyController;
 use src\app\http\controllers\CreateUserController;
+use src\app\http\controllers\RunPipelineController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\EditPipelineController;
 use src\app\http\controllers\EditProjectController;
@@ -299,6 +302,15 @@ return [
         return new RenderErrorPageController(
             $di->get(TwigEnvironment::class),
             new Response()
+        );
+    },
+    RunPipelineController::class => static function (ContainerInterface $di) {
+        return new RunPipelineController(
+            $di->get(UserApi::class),
+            new Response(),
+            $di->get(DataStore::class),
+            $di->get(PipelineApi::class),
+            $di->get(FlashDataApi::class)
         );
     },
     ServersIndexController::class => static function (ContainerInterface $di) {

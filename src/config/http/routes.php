@@ -20,6 +20,7 @@ use src\app\http\controllers\EditSSHKeyController;
 use src\app\http\controllers\ViewServerController;
 use src\app\http\controllers\ViewSSHKeyController;
 use src\app\http\controllers\CreateUserController;
+use src\app\http\controllers\RunPipelineController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\PingCheckinController;
@@ -100,6 +101,7 @@ $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}', ViewPipelineController::
 $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}/job-details/{guid}', ViewPipelineJobDetailsController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/create', CreatePipelineController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/edit/{slug}', EditPipelineController::class);
+$r->get('/pipelines/run/{slug}', RunPipelineController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);

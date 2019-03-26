@@ -56,6 +56,12 @@ class PipelineApi implements PipelineApiInterface
         return new PipelineJobItemModel();
     }
 
+    public function initJobFromPipelineModel(PipelineModelInterface $pipelineModel): void
+    {
+        // TODO: Implement initJobFromPipelineModel
+        dd('TODO: Implement initJobFromPipelineModel');
+    }
+
     public function save(PipelineModelInterface $model): void
     {
         $service = $this->di->get(SavePipelineService::class);

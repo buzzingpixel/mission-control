@@ -35,6 +35,11 @@ interface PipelineApiInterface
     public function createPipelineJobItemModel(): PipelineJobItemModelInterface;
 
     /**
+     * Creates a Pipeline Job from a Pipeline Model
+     */
+    public function initJobFromPipelineModel(PipelineModelInterface $pipelineModel);
+
+    /**
      * Converts a UUID to bytes for database queries
      * @param string $string
      * @return string
