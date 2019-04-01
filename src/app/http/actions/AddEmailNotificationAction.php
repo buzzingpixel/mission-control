@@ -1,25 +1,36 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\user\interfaces\UserApiInterface;
+use Exception;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
-use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
+use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
+use const FILTER_VALIDATE_EMAIL;
+use function filter_var;
+use function trim;
 
 class AddEmailNotificationAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
+    /** @var NotificationEmailsApiInterface */
     private $notificationEmailsApi;
 
     public function __construct(
@@ -30,18 +41,18 @@ class AddEmailNotificationAction
         RequestHelperInterface $requestHelper,
         NotificationEmailsApiInterface $notificationEmailsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->flashDataApi = $flashDataApi;
-        $this->requestHelper = $requestHelper;
+        $this->userApi               = $userApi;
+        $this->response              = $response;
+        $this->dataStore             = $dataStore;
+        $this->flashDataApi          = $flashDataApi;
+        $this->requestHelper         = $requestHelper;
         $this->notificationEmailsApi = $notificationEmailsApi;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -59,9 +70,7 @@ class AddEmailNotificationAction
 
         $store = [
             'inputErrors' => [],
-            'inputValues' => [
-                'email_address' => $emailAddress,
-            ],
+            'inputValues' => ['email_address' => $emailAddress],
         ];
 
         if (! filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
@@ -70,6 +79,7 @@ class AddEmailNotificationAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -82,12 +92,11 @@ class AddEmailNotificationAction
         } catch (NotificationEmailNotUniqueException $e) {
             $store['inputErrors']['email_address'][] = 'Email address already exists';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

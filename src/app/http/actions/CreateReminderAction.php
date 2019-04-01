@@ -1,27 +1,37 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTime;
 use DateTimeZone;
+use Exception;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
-use src\app\reminders\interfaces\ReminderApiInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use src\app\reminders\exceptions\ReminderNameNotUniqueException;
+use src\app\reminders\interfaces\ReminderApiInterface;
+use function date_default_timezone_get;
+use function trim;
 
 class CreateReminderAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var ReminderApiInterface */
     private $reminderApi;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
     public function __construct(
@@ -32,18 +42,18 @@ class CreateReminderAction
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->reminderApi = $reminderApi;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->response      = $response;
+        $this->dataStore     = $dataStore;
+        $this->reminderApi   = $reminderApi;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -57,10 +67,10 @@ class CreateReminderAction
             throw new Http404Exception();
         }
 
-        $title = trim($this->requestHelper->post('title'));
-        $message = trim($this->requestHelper->post('message'));
+        $title            = trim($this->requestHelper->post('title'));
+        $message          = trim($this->requestHelper->post('message'));
         $startRemindingOn = trim($this->requestHelper->post('start_reminding_on'));
-        $projectGuid = trim($this->requestHelper->post('project_guid'));
+        $projectGuid      = trim($this->requestHelper->post('project_guid'));
 
         $store = [
             'inputErrors' => [],
@@ -92,6 +102,7 @@ class CreateReminderAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -107,12 +118,11 @@ class CreateReminderAction
         } catch (ReminderNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

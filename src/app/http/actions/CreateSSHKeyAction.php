@@ -1,25 +1,34 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\user\interfaces\UserApiInterface;
+use Exception;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use src\app\servers\interfaces\ServerApiInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\servers\exceptions\TitleNotUniqueException;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
+use function trim;
 
 class CreateSSHKeyAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var ServerApiInterface */
     private $serverApi;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
     public function __construct(
@@ -30,18 +39,18 @@ class CreateSSHKeyAction
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->serverApi = $serverApi;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->response      = $response;
+        $this->dataStore     = $dataStore;
+        $this->serverApi     = $serverApi;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -55,10 +64,10 @@ class CreateSSHKeyAction
             throw new Http404Exception();
         }
 
-        $title = trim($this->requestHelper->post('title'));
+        $title    = trim($this->requestHelper->post('title'));
         $generate = trim($this->requestHelper->post('generate') ?? '');
-        $public = trim($this->requestHelper->post('public'));
-        $private = trim($this->requestHelper->post('private'));
+        $public   = trim($this->requestHelper->post('public'));
+        $private  = trim($this->requestHelper->post('private'));
 
         $store = [
             'inputErrors' => [],
@@ -86,6 +95,7 @@ class CreateSSHKeyAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -106,12 +116,11 @@ class CreateSSHKeyAction
         } catch (TitleNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

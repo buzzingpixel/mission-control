@@ -1,25 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
-use src\app\pings\interfaces\PingApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
 use src\app\pings\exceptions\PingNameNotUniqueException;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use src\app\pings\interfaces\PingApiInterface;
+use function ctype_digit;
+use function getenv;
+use function trim;
 
 class EditPingAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
     public function __construct(
@@ -30,18 +40,18 @@ class EditPingAction
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->pingApi = $pingApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->pingApi       = $pingApi;
+        $this->response      = $response;
+        $this->dataStore     = $dataStore;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
     }
 
     /**
      * @throws Http404Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -65,9 +75,9 @@ class EditPingAction
             throw new Http404Exception();
         }
 
-        $title = trim($this->requestHelper->post('title'));
+        $title       = trim($this->requestHelper->post('title'));
         $expectEvery = trim($this->requestHelper->post('expect_every'));
-        $warnAfter = trim($this->requestHelper->post('warn_after'));
+        $warnAfter   = trim($this->requestHelper->post('warn_after'));
         $projectGuid = trim($this->requestHelper->post('project_guid'));
 
         $store = [
@@ -94,6 +104,7 @@ class EditPingAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -108,12 +119,11 @@ class EditPingAction
         } catch (PingNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

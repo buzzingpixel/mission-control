@@ -1,17 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
-use Psr\Http\Message\ResponseInterface;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\user\interfaces\UserApiInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class LogOutAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
 
     public function __construct(
@@ -19,15 +23,15 @@ class LogOutAction
         ResponseInterface $response,
         FlashDataApiInterface $flashDataApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
+        $this->userApi      = $userApi;
+        $this->response     = $response;
         $this->flashDataApi = $flashDataApi;
     }
 
     /**
      * @throws Http404Exception
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
         if (! $this->userApi->fetchCurrentUser()) {
             throw new Http404Exception();
@@ -35,9 +39,7 @@ class LogOutAction
 
         $this->userApi->logCurrentUserOut();
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'LogOutAction'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'LogOutAction']);
 
         $flashDataModel->dataItem('success', true);
 

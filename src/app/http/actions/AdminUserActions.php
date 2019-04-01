@@ -1,24 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
-use Throwable;
-use LogicException;
-use Psr\Http\Message\ResponseInterface;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\http\exceptions\Http500Exception;
-use corbomite\user\interfaces\UserApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
+use function count;
 
 class AdminUserActions
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
+    /** @var mixed */
     private $guids;
 
     public function __construct(
@@ -27,9 +34,9 @@ class AdminUserActions
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->response      = $response;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
 
         $this->guids = $this->requestHelper->post('guids');
@@ -38,7 +45,7 @@ class AdminUserActions
     /**
      * @throws Throwable
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -46,9 +53,9 @@ class AdminUserActions
             );
         }
 
-        if (! ($user = $this->userApi->fetchCurrentUser()) ||
-            ($user->getExtendedProperty('is_admin') !== 1)
-        ) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user || ($user->getExtendedProperty('is_admin') !== 1)) {
             throw new Http404Exception();
         }
 
@@ -83,13 +90,11 @@ class AdminUserActions
             }
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 
-        $singularPlural = \count($users) > 1 ? 'Users' : 'User';
+        $singularPlural = count($users) > 1 ? 'Users' : 'User';
 
         $flashDataModel->dataItem(
             'content',

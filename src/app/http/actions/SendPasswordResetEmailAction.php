@@ -1,18 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
+use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use corbomite\user\interfaces\UserApiInterface;
-use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
+use function getenv;
+use function mb_strtolower;
 
 class SendPasswordResetEmailAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var EmailApiInterface */
     private $emailApi;
 
     public function __construct(
@@ -20,14 +26,14 @@ class SendPasswordResetEmailAction
         ResponseInterface $response,
         EmailApiInterface $emailApi
     ) {
-        $this->userApi = $userApi;
+        $this->userApi  = $userApi;
         $this->response = $response;
         $this->emailApi = $emailApi;
     }
 
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        $requestMethod = strtolower(
+        $requestMethod = mb_strtolower(
             $request->getServerParams()['REQUEST_METHOD'] ?? 'get'
         );
 
@@ -39,7 +45,9 @@ class SendPasswordResetEmailAction
 
         $emailAddress = (string) ($request->getParsedBody()['email'] ?? '');
 
-        if (! $user = $this->userApi->fetchUser($emailAddress)) {
+        $user = $this->userApi->fetchUser($emailAddress);
+
+        if (! $user) {
             return $this->redirect();
         }
 
@@ -60,7 +68,7 @@ class SendPasswordResetEmailAction
         return $this->redirect();
     }
 
-    private function redirect(): ResponseInterface
+    private function redirect() : ResponseInterface
     {
         $response = $this->response->withHeader(
             'Location',

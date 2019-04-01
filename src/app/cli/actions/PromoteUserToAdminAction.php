@@ -1,17 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\cli\actions;
 
-use LogicException;
 use corbomite\cli\services\CliQuestionService;
 use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PromoteUserToAdminAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var OutputInterface */
     private $consoleOutput;
+    /** @var CliQuestionService */
     private $cliQuestionService;
 
     public function __construct(
@@ -19,18 +23,20 @@ class PromoteUserToAdminAction
         OutputInterface $consoleOutput,
         CliQuestionService $cliQuestionService
     ) {
-        $this->userApi = $userApi;
-        $this->consoleOutput = $consoleOutput;
+        $this->userApi            = $userApi;
+        $this->consoleOutput      = $consoleOutput;
         $this->cliQuestionService = $cliQuestionService;
     }
 
-    public function __invoke()
+    public function __invoke() : void
     {
         $emailAddress = $this->cliQuestionService->ask(
             '<fg=cyan>Email address: </>'
         );
 
-        if (! $user = $this->userApi->fetchUser($emailAddress)) {
+        $user = $this->userApi->fetchUser($emailAddress);
+
+        if (! $user) {
             throw new LogicException('User not found');
         }
 

@@ -1,24 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
-use Throwable;
-use LogicException;
-use Psr\Http\Message\ResponseInterface;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
+use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\user\exceptions\UserExistsException;
-use corbomite\http\interfaces\RequestHelperInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
+use const FILTER_VALIDATE_EMAIL;
+use function bin2hex;
+use function filter_var;
+use function random_bytes;
+use function trim;
 
 class CreateUserAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
     public function __construct(
@@ -28,17 +39,17 @@ class CreateUserAction
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->response      = $response;
+        $this->dataStore     = $dataStore;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -46,9 +57,9 @@ class CreateUserAction
             );
         }
 
-        if (! ($user = $this->userApi->fetchCurrentUser()) ||
-            ($user->getExtendedProperty('is_admin') !== 1)
-        ) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user || ($user->getExtendedProperty('is_admin') !== 1)) {
             throw new Http404Exception();
         }
 
@@ -57,7 +68,10 @@ class CreateUserAction
 
         $store = [
             'inputErrors' => [],
-            'inputValues' => compact('email', 'admin'),
+            'inputValues' => [
+                'email' => $email,
+                'admin' => $admin,
+            ],
         ];
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -66,6 +80,7 @@ class CreateUserAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -74,11 +89,14 @@ class CreateUserAction
         } catch (UserExistsException $e) {
             $store['inputErrors']['email'][] = 'Email must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
         if ($admin === 'true') {
-            if (!  $newUser = $this->userApi->fetchUser($email)) {
+            $newUser = $this->userApi->fetchUser($email);
+
+            if (! $newUser) {
                 throw new LogicException('An unknown error occurred');
             }
 
@@ -87,9 +105,7 @@ class CreateUserAction
             $this->userApi->saveUser($newUser);
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

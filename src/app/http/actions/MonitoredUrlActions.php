@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
-use LogicException;
-use Psr\Http\Message\ResponseInterface;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\http\exceptions\Http500Exception;
-use corbomite\user\interfaces\UserApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
+use Psr\Http\Message\ResponseInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use function count;
 
 class MonitoredUrlActions
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
+    /** @var MonitoredUrlsApiInterface */
     private $monitredUrlsApi;
 
+    /** @var array */
     private $guids = [];
 
     public function __construct(
@@ -29,10 +37,10 @@ class MonitoredUrlActions
         RequestHelperInterface $requestHelper,
         MonitoredUrlsApiInterface $monitredUrlsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->flashDataApi = $flashDataApi;
-        $this->requestHelper = $requestHelper;
+        $this->userApi         = $userApi;
+        $this->response        = $response;
+        $this->flashDataApi    = $flashDataApi;
+        $this->requestHelper   = $requestHelper;
         $this->monitredUrlsApi = $monitredUrlsApi;
 
         $guids = $this->requestHelper->post('guids');
@@ -50,7 +58,7 @@ class MonitoredUrlActions
      * @throws Http404Exception
      * @throws Http500Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -93,13 +101,11 @@ class MonitoredUrlActions
             }
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 
-        $singularPlural = \count($models) > 1 ?
+        $singularPlural = count($models) > 1 ?
             'Monitored URLs' :
             'Monitored URL';
 

@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\exceptions\Http500Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\pings\interfaces\PingApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\http\exceptions\Http500Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use function count;
 
 class PingListActions
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
+    /** @var array */
     private $guids = [];
 
     public function __construct(
@@ -29,10 +37,10 @@ class PingListActions
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->pingApi = $pingApi;
-        $this->response = $response;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->pingApi       = $pingApi;
+        $this->response      = $response;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
 
         $guids = $this->requestHelper->post('guids');
@@ -50,7 +58,7 @@ class PingListActions
      * @throws Http404Exception
      * @throws Http500Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -93,13 +101,11 @@ class PingListActions
             }
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 
-        $singularPlural = \count($models) > 1 ?
+        $singularPlural = count($models) > 1 ?
             'Pings' :
             'Ping';
 

@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\http\interfaces\RequestHelperInterface;
+use corbomite\requestdatastore\DataStoreInterface;
+use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\requestdatastore\DataStoreInterface;
-use corbomite\http\interfaces\RequestHelperInterface;
-use src\app\projects\interfaces\ProjectsApiInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
+use src\app\projects\interfaces\ProjectsApiInterface;
+use function trim;
 
 class CreateProjectAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var DataStoreInterface */
     private $dataStore;
+    /** @var ProjectsApiInterface */
     private $projectsApi;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
+    /** @var RequestHelperInterface */
     private $requestHelper;
 
     public function __construct(
@@ -30,18 +38,18 @@ class CreateProjectAction
         FlashDataApiInterface $flashDataApi,
         RequestHelperInterface $requestHelper
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->projectsApi = $projectsApi;
-        $this->flashDataApi = $flashDataApi;
+        $this->userApi       = $userApi;
+        $this->response      = $response;
+        $this->dataStore     = $dataStore;
+        $this->projectsApi   = $projectsApi;
+        $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
     }
 
     /**
      * @throws Http404Exception
      */
-    public function __invoke(): ?ResponseInterface
+    public function __invoke() : ?ResponseInterface
     {
         if ($this->requestHelper->method() !== 'post') {
             throw new LogicException(
@@ -55,12 +63,15 @@ class CreateProjectAction
             throw new Http404Exception();
         }
 
-        $title = trim($this->requestHelper->post('title'));
+        $title       = trim($this->requestHelper->post('title'));
         $description = trim($this->requestHelper->post('description'));
 
         $store = [
             'inputErrors' => [],
-            'inputValues' => compact('title', 'description'),
+            'inputValues' => [
+                'title' => $title,
+                'description' => $description,
+            ],
         ];
 
         if (! $title) {
@@ -69,6 +80,7 @@ class CreateProjectAction
 
         if ($store['inputErrors']) {
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
@@ -83,12 +95,11 @@ class CreateProjectAction
         } catch (ProjectNameNotUniqueException $e) {
             $store['inputErrors']['title'][] = 'Title must be unique';
             $this->dataStore->storeItem('FormSubmission', $store);
+
             return null;
         }
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

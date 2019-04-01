@@ -1,19 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\actions;
 
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use function mb_strtolower;
 
 class ResetPasswordAction
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
 
     public function __construct(
@@ -21,17 +26,17 @@ class ResetPasswordAction
         ResponseInterface $response,
         FlashDataApiInterface $flashDataApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
+        $this->userApi      = $userApi;
+        $this->response     = $response;
         $this->flashDataApi = $flashDataApi;
     }
 
     /**
      * @throws Http404Exception
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        $requestMethod = strtolower(
+        $requestMethod = mb_strtolower(
             $request->getServerParams()['REQUEST_METHOD'] ?? 'get'
         );
 
@@ -46,9 +51,7 @@ class ResetPasswordAction
             (string) ($request->getParsedBody()['password'] ?? '')
         );
 
-        $flashDataModel =$this->flashDataApi->makeFlashDataModel([
-            'name' => 'ResetPasswordAction'
-        ]);
+        $flashDataModel =$this->flashDataApi->makeFlashDataModel(['name' => 'ResetPasswordAction']);
 
         $flashDataModel->dataItem('success', true);
 
