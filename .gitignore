@@ -13,6 +13,7 @@
 # Tools
 #------------------------------------
 
+.php_cs.cache
 /.env.override
 projectOverrides.json
 /**/.phpunit.result.cache
