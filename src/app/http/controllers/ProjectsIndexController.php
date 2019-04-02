@@ -1,24 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class ProjectsIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $projectsApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -28,25 +35,29 @@ class ProjectsIndexController
         ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->projectsApi = $projectsApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -114,11 +125,9 @@ class ProjectsIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/projects',
-                        'content' => 'Projects'
+                        'content' => 'Projects',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ? 'Archived Projects' : 'Projects',
                 'pageControlButtons' => $pageControlButtons,
@@ -134,14 +143,12 @@ class ProjectsIndexController
                                 'Title',
                                 'Slug',
                                 'Description',
-                                'Added'
+                                'Added',
                             ],
-                            'widths' => [
-                                'Description' => '30%',
-                            ],
+                            'widths' => ['Description' => '30%'],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

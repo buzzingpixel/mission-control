@@ -1,24 +1,30 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
 
 class ViewServerController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -28,19 +34,21 @@ class ViewServerController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
@@ -54,7 +62,9 @@ class ViewServerController
             );
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -80,9 +90,7 @@ class ViewServerController
             ];
         }
 
-        $breadCrumbs[] = [
-            'content' => 'Viewing',
-        ];
+        $breadCrumbs[] = ['content' => 'Viewing'];
 
         $key = $model->sshKeyModel();
 

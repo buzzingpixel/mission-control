@@ -1,23 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use Throwable;
 
 class PipelineIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $pipelineApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var PipelineApiInterface */
+    private $pipelineApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -27,25 +33,29 @@ class PipelineIndexController
         PipelineApiInterface $pipelineApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->pipelineApi = $pipelineApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->pipelineApi         = $pipelineApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -108,11 +118,9 @@ class PipelineIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/pipelines',
-                        'content' => 'Pipelines'
+                        'content' => 'Pipelines',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'Pipeline Archives' :
@@ -132,7 +140,7 @@ class PipelineIndexController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

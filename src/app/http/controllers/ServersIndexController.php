@@ -1,23 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
 
 class ServersIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -27,25 +33,29 @@ class ServersIndexController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -76,7 +86,7 @@ class ServersIndexController
         $rows = [];
 
         foreach ($this->serverApi->fetchAll($params) as $model) {
-            $key = $model->sshKeyModel();
+            $key    = $model->sshKeyModel();
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/servers/view/' . $model->slug(),
@@ -112,11 +122,9 @@ class ServersIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/servers',
-                        'content' => 'Servers'
+                        'content' => 'Servers',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'Server Archives' :
@@ -139,7 +147,7 @@ class ServersIndexController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

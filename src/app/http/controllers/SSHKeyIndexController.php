@@ -1,23 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
 
 class SSHKeyIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -27,25 +33,29 @@ class SSHKeyIndexController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -107,11 +117,9 @@ class SSHKeyIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/ssh-keys',
-                        'content' => 'SSH Keys'
+                        'content' => 'SSH Keys',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'SSH Key Archives' :
@@ -125,12 +133,10 @@ class SSHKeyIndexController
                         'actionColButtonContent' => 'View&nbsp;SSH Key&nbsp;Details',
                         'table' => [
                             'inputsName' => 'guids[]',
-                            'headings' => [
-                                'Title',
-                            ],
+                            'headings' => ['Title'],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

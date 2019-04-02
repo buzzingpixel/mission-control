@@ -1,17 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
 use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
+use Throwable;
 
 class ChangePasswordController
 {
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -19,17 +23,19 @@ class ChangePasswordController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
@@ -63,7 +69,7 @@ class ChangePasswordController
                                 'label' => 'Confirm New Password',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

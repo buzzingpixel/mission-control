@@ -1,35 +1,47 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use src\app\pings\interfaces\PingApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use src\app\servers\interfaces\ServerApiInterface;
-use src\app\projects\interfaces\ProjectsApiInterface;
-use src\app\projects\interfaces\ProjectModelInterface;
-use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\pings\interfaces\PingApiInterface;
+use src\app\projects\interfaces\ProjectModelInterface;
+use src\app\projects\interfaces\ProjectsApiInterface;
+use src\app\reminders\interfaces\ReminderApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
+use function array_merge;
+use function date_default_timezone_get;
 
 class ViewProjectController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
-    private $projectsApi;
-    private $reminderApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
-    private $monitoredUrlsApi;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var ReminderApiInterface */
+    private $reminderApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var MonitoredUrlsApiInterface */
+    private $monitoredUrlsApi;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -42,36 +54,38 @@ class ViewProjectController
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->userApi = $userApi;
-        $this->pingApi = $pingApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->projectsApi = $projectsApi;
-        $this->reminderApi = $reminderApi;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
+        $this->userApi             = $userApi;
+        $this->pingApi             = $pingApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
+        $this->reminderApi         = $reminderApi;
         $this->requireLoginService = $requireLoginService;
+        $this->monitoredUrlsApi    = $monitoredUrlsApi;
     }
 
     /** @var bool */
     private $isAdmin;
-
     /** @var string */
     private $userTimeZone;
-
     /** @var ProjectModelInterface */
     private $projectModel;
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -119,9 +133,7 @@ class ViewProjectController
             ];
         }
 
-        $breadCrumbs[] = [
-            'content' => 'Viewing Project',
-        ];
+        $breadCrumbs[] = ['content' => 'Viewing Project'];
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
@@ -144,7 +156,7 @@ class ViewProjectController
         return $response;
     }
 
-    private function getMonitoredUrls(): array
+    private function getMonitoredUrls() : array
     {
         $params = $this->monitoredUrlsApi->makeQueryModel();
         $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
@@ -152,7 +164,9 @@ class ViewProjectController
         ));
         $params->addOrder('title', 'asc');
 
-        if (! $monitoredUrlModels = $this->monitoredUrlsApi->fetchAll($params)) {
+        $monitoredUrlModels = $this->monitoredUrlsApi->fetchAll($params);
+
+        if (! $monitoredUrlModels) {
             return [];
         }
 
@@ -167,18 +181,18 @@ class ViewProjectController
                 $this->userTimeZone
             ));
 
-            $status = '--';
+            $status       = '--';
             $styledStatus = 'Inactive';
 
             if ($model->isActive()) {
-                $status = 'Up';
+                $status       = 'Up';
                 $styledStatus = 'Good';
 
                 if ($model->hasError()) {
-                    $status = 'Down';
+                    $status       = 'Down';
                     $styledStatus = 'Error';
                 } elseif ($model->pendingError()) {
-                    $status = 'Pending Down';
+                    $status       = 'Pending Down';
                     $styledStatus = 'Caution';
                 }
             }
@@ -195,9 +209,7 @@ class ViewProjectController
                 'colLinks' => [
                     'URL' => $model->url(),
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -205,8 +217,8 @@ class ViewProjectController
 
         if ($this->isAdmin) {
             $actions['unArchive'] = 'Un-Archive Selected';
-            $actions['archive'] = 'Archive Selected';
-            $actions['delete'] = 'Delete Selected';
+            $actions['archive']   = 'Archive Selected';
+            $actions['delete']    = 'Delete Selected';
         }
 
         return [
@@ -222,15 +234,15 @@ class ViewProjectController
                         'Title',
                         'URL',
                         'Status',
-                        'Checked At'
+                        'Checked At',
                     ],
                     'rows' => $rows,
                 ],
-            ]
+            ],
         ];
     }
 
-    private function getPings(): array
+    private function getPings() : array
     {
         $params = $this->monitoredUrlsApi->makeQueryModel();
         $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
@@ -238,7 +250,9 @@ class ViewProjectController
         ));
         $params->addOrder('title', 'asc');
 
-        if (! $models = $this->pingApi->fetchAll($params)) {
+        $models = $this->pingApi->fetchAll($params);
+
+        if (! $models) {
             return [];
         }
 
@@ -249,18 +263,18 @@ class ViewProjectController
                 $this->userTimeZone
             ));
 
-            $status = '--';
+            $status       = '--';
             $styledStatus = 'Inactive';
 
             if ($model->isActive()) {
-                $status = 'Active';
+                $status       = 'Active';
                 $styledStatus = 'Good';
 
                 if ($model->hasError()) {
-                    $status = 'Missing';
+                    $status       = 'Missing';
                     $styledStatus = 'Error';
                 } elseif ($model->pendingError()) {
-                    $status = 'Overdue';
+                    $status       = 'Overdue';
                     $styledStatus = 'Caution';
                 }
             }
@@ -275,9 +289,7 @@ class ViewProjectController
                     'Warn After' => $model->warnAfter() . ' Minutes',
                     'Last Ping' => $model->lastPingAt()->format('n/j/Y g:i a'),
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -285,8 +297,8 @@ class ViewProjectController
 
         if ($this->isAdmin) {
             $actions['unArchive'] = 'Un-Archive Selected';
-            $actions['archive'] = 'Archive Selected';
-            $actions['delete'] = 'Delete Selected';
+            $actions['archive']   = 'Archive Selected';
+            $actions['delete']    = 'Delete Selected';
         }
 
         return [
@@ -307,11 +319,11 @@ class ViewProjectController
                     ],
                     'rows' => $rows,
                 ],
-            ]
+            ],
         ];
     }
 
-    private function getReminders(): array
+    private function getReminders() : array
     {
         $params = $this->reminderApi->makeQueryModel();
         $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
@@ -319,7 +331,9 @@ class ViewProjectController
         ));
         $params->addOrder('title', 'asc');
 
-        if (! $models = $this->reminderApi->fetchAll($params)) {
+        $models = $this->reminderApi->fetchAll($params);
+
+        if (! $models) {
             return [];
         }
 
@@ -361,8 +375,8 @@ class ViewProjectController
 
         if ($this->isAdmin) {
             $actions['unArchive'] = 'Un-Archive Selected';
-            $actions['archive'] = 'Archive Selected';
-            $actions['delete'] = 'Delete Selected';
+            $actions['archive']   = 'Archive Selected';
+            $actions['delete']    = 'Delete Selected';
         }
 
         return [
@@ -381,11 +395,11 @@ class ViewProjectController
                     ],
                     'rows' => $rows,
                 ],
-            ]
+            ],
         ];
     }
 
-    private function getServers(): array
+    private function getServers() : array
     {
         $fetchParams = $this->serverApi->makeQueryModel();
         $fetchParams->addWhere('project_guid', $this->projectsApi->uuidToBytes(
@@ -393,14 +407,16 @@ class ViewProjectController
         ));
         $fetchParams->addOrder('title', 'asc');
 
-        if (! $servers = $this->serverApi->fetchAll($fetchParams)) {
+        $servers = $this->serverApi->fetchAll($fetchParams);
+
+        if (! $servers) {
             return [];
         }
 
         $rows = [];
 
         foreach ($servers as $model) {
-            $key = $model->sshKeyModel();
+            $key    = $model->sshKeyModel();
             $rows[] = [
                 'inputValue' => $model->guid(),
                 'actionButtonLink' => '/servers/view/' . $model->slug(),
@@ -418,8 +434,8 @@ class ViewProjectController
 
         if ($this->isAdmin) {
             $actions['unArchive'] = 'Un-Archive Selected';
-            $actions['archive'] = 'Archive Selected';
-            $actions['delete'] = 'Delete Selected';
+            $actions['archive']   = 'Archive Selected';
+            $actions['delete']    = 'Delete Selected';
         }
 
         return [
@@ -440,7 +456,7 @@ class ViewProjectController
                     ],
                     'rows' => $rows,
                 ],
-            ]
+            ],
         ];
     }
 }

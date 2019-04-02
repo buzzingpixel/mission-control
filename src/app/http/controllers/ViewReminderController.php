@@ -1,25 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class ViewReminderController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $reminderApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ReminderApiInterface */
+    private $reminderApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -29,19 +36,21 @@ class ViewReminderController
         ReminderApiInterface $reminderApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->reminderApi = $reminderApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->reminderApi         = $reminderApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
@@ -55,7 +64,9 @@ class ViewReminderController
             );
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -90,9 +101,7 @@ class ViewReminderController
             ];
         }
 
-        $breadCrumbs[] = [
-            'content' => 'Viewing',
-        ];
+        $breadCrumbs[] = ['content' => 'Viewing'];
 
         $userTimeZone = $user->getExtendedProperty('timezone') ?:
             date_default_timezone_get();

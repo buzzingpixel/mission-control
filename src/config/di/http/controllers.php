@@ -1,62 +1,62 @@
 <?php
+
 declare(strict_types=1);
 
-use src\app\pings\PingApi;
-use corbomite\user\UserApi;
-use Zend\Diactoros\Response;
-use corbomite\queue\QueueApi;
-use src\app\servers\ServerApi;
-use src\app\projects\ProjectsApi;
-use src\app\reminders\ReminderApi;
-use src\app\pipelines\PipelineApi;
-use corbomite\twig\TwigEnvironment;
-use Psr\Container\ContainerInterface;
 use corbomite\flashdata\FlashDataApi;
-use corbomite\requestdatastore\DataStore;
-use src\app\utilities\TimeZoneListUtility;
-use src\app\monitoredurls\MonitoredUrlsApi;
-use src\app\http\controllers\AdminController;
-use src\app\http\services\RequireLoginService;
+use corbomite\queue\QueueApi;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\UserApi;
+use Psr\Container\ContainerInterface;
 use src\app\http\controllers\AccountController;
-use src\app\http\controllers\EditPingController;
-use src\app\http\controllers\ViewPingController;
-use src\app\http\controllers\PingIndexController;
-use src\app\http\controllers\EditServerController;
-use src\app\http\controllers\EditSSHKeyController;
+use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\AdminController;
+use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\CreatePingController;
-use src\app\http\controllers\ViewServerController;
-use src\app\http\controllers\ViewSSHKeyController;
-use src\app\http\controllers\CreateUserController;
-use src\app\http\controllers\RunPipelineController;
-use src\app\http\controllers\SSHKeyIndexController;
-use src\app\http\controllers\EditPipelineController;
-use src\app\http\controllers\EditProjectController;
-use src\app\http\controllers\PingCheckinController;
-use src\app\http\controllers\ViewProjectController;
-use src\app\http\controllers\ViewPipelineController;
+use src\app\http\controllers\CreatePipelineController;
+use src\app\http\controllers\CreateProjectController;
+use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\CreateSSHKeyController;
+use src\app\http\controllers\CreateUserController;
+use src\app\http\controllers\EditMonitoredUrlController;
+use src\app\http\controllers\EditPingController;
+use src\app\http\controllers\EditPipelineController;
+use src\app\http\controllers\EditProjectController;
 use src\app\http\controllers\EditReminderController;
-use src\app\http\controllers\ServersIndexController;
-use src\app\http\controllers\ViewReminderController;
-use src\app\http\controllers\PipelineIndexController;
-use src\app\http\controllers\CreateProjectController;
-use src\app\notificationemails\NotificationEmailsApi;
-use src\app\http\controllers\PasswordResetController;
-use src\app\http\controllers\ProjectsIndexController;
-use src\app\http\controllers\ChangePasswordController;
-use src\app\http\controllers\CreatePipelineController;
-use src\app\http\controllers\CreateReminderController;
+use src\app\http\controllers\EditServerController;
+use src\app\http\controllers\EditSSHKeyController;
 use src\app\http\controllers\ForgotPasswordController;
+use src\app\http\controllers\MonitoredUrlIndexController;
+use src\app\http\controllers\PasswordResetController;
+use src\app\http\controllers\PingCheckinController;
+use src\app\http\controllers\PingIndexController;
+use src\app\http\controllers\PipelineIndexController;
+use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RenderErrorPageController;
-use src\app\http\controllers\EditMonitoredUrlController;
+use src\app\http\controllers\RunPipelineController;
+use src\app\http\controllers\ServersIndexController;
+use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\ViewMonitoredUrlController;
-use src\app\http\services\RenderPipelineInnerComponents;
-use src\app\http\controllers\MonitoredUrlIndexController;
-use src\app\http\controllers\CreateMonitoredUrlController;
-use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\ViewPingController;
+use src\app\http\controllers\ViewPipelineController;
 use src\app\http\controllers\ViewPipelineJobDetailsController;
+use src\app\http\controllers\ViewProjectController;
+use src\app\http\controllers\ViewReminderController;
+use src\app\http\controllers\ViewServerController;
+use src\app\http\controllers\ViewSSHKeyController;
+use src\app\http\services\RenderPipelineInnerComponents;
+use src\app\http\services\RequireLoginService;
+use src\app\monitoredurls\MonitoredUrlsApi;
+use src\app\notificationemails\NotificationEmailsApi;
+use src\app\pings\PingApi;
+use src\app\pipelines\PipelineApi;
+use src\app\projects\ProjectsApi;
+use src\app\reminders\ReminderApi;
+use src\app\servers\ServerApi;
+use src\app\utilities\TimeZoneListUtility;
+use Zend\Diactoros\Response;
 
 return [
     AccountController::class => static function (ContainerInterface $di) {
@@ -308,7 +308,6 @@ return [
         return new RunPipelineController(
             $di->get(UserApi::class),
             new Response(),
-            $di->get(DataStore::class),
             $di->get(PipelineApi::class),
             $di->get(FlashDataApi::class)
         );

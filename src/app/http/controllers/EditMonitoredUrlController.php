@@ -1,27 +1,34 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\projects\interfaces\ProjectsApiInterface;
+use Throwable;
 
 class EditMonitoredUrlController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $projectsApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
-    private $monitoredUrlsApi;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var MonitoredUrlsApiInterface */
+    private $monitoredUrlsApi;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -31,24 +38,28 @@ class EditMonitoredUrlController
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->projectsApi = $projectsApi;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
         $this->requireLoginService = $requireLoginService;
+        $this->monitoredUrlsApi    = $monitoredUrlsApi;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -97,9 +108,7 @@ class EditMonitoredUrlController
             'content' => 'View',
         ];
 
-        $breadCrumbs[] = [
-            'content' => 'Edit'
-        ];
+        $breadCrumbs[] = ['content' => 'Edit'];
 
         $selectParams = $this->projectsApi->makeQueryModel();
         $selectParams->addOrder('title', 'asc');
@@ -144,7 +153,7 @@ class EditMonitoredUrlController
                                 'value' => $model->projectGuid(),
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

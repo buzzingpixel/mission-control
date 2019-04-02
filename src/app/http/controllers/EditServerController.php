@@ -1,26 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use src\app\servers\interfaces\ServerApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
 
 class EditServerController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
-    private $projectsApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -31,24 +38,28 @@ class EditServerController
         ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->projectsApi = $projectsApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -97,9 +108,7 @@ class EditServerController
             'content' => 'View',
         ];
 
-        $breadCrumbs[] = [
-            'content' => 'Edit'
-        ];
+        $breadCrumbs[] = ['content' => 'Edit'];
 
         $selectParams = $this->serverApi->makeQueryModel();
         $selectParams->addOrder('title', 'asc');
@@ -166,7 +175,7 @@ class EditServerController
                                 'value' => $model->projectGuid(),
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

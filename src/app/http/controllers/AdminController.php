@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\queue\interfaces\QueueApiInterface;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use DateTimeZone;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class AdminController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var QueueApiInterface */
     private $queueApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var NotificationEmailsApiInterface */
     private $notificationEmailsApi;
 
     public function __construct(
@@ -30,24 +38,28 @@ class AdminController
         RequireLoginService $requireLoginService,
         NotificationEmailsApiInterface $notificationEmailsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->queueApi = $queueApi;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->requireLoginService = $requireLoginService;
+        $this->userApi               = $userApi;
+        $this->response              = $response;
+        $this->queueApi              = $queueApi;
+        $this->twigEnvironment       = $twigEnvironment;
+        $this->requireLoginService   = $requireLoginService;
         $this->notificationEmailsApi = $notificationEmailsApi;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -77,9 +89,7 @@ class AdminController
                     'Email Address' => $notificationEmailModel->emailAddress(),
                     'Status' => $notificationEmailModel->isActive() ? 'Active' : 'Inactive',
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -90,7 +100,7 @@ class AdminController
         $queryModel->addWhere('guid', $user->getGuidAsBytes(), '!=');
 
         foreach ($this->userApi->fetchAll($queryModel) as $userModel) {
-            $userIsAdmin = $userModel->getExtendedProperty('is_admin') === 1;
+            $userIsAdmin  = $userModel->getExtendedProperty('is_admin') === 1;
             $styledStatus = 'Inactive';
 
             if ($userIsAdmin) {
@@ -104,9 +114,7 @@ class AdminController
                     'Timezone' => $userModel->getExtendedProperty('timezone') ?: date_default_timezone_get(),
                     'Admin' => $userIsAdmin ? 'Yes' : 'No',
                 ],
-                'colorStyledCols' => [
-                    'Admin' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Admin' => $styledStatus],
             ];
         }
 
@@ -116,7 +124,7 @@ class AdminController
             $addedAt = $batch->addedAt();
 
             if ($addedAt) {
-                $addedAt->setTimezone(new \DateTimeZone(
+                $addedAt->setTimezone(new DateTimeZone(
                     $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
                 ));
             }
@@ -141,7 +149,8 @@ class AdminController
                         'tableControlButtons' => [[
                             'href' => '/admin/add-notification-email',
                             'content' => 'Add Notification Email',
-                        ]],
+                        ],
+                        ],
                         'formTitle' => 'Notification Emails',
                         'actionParam' => 'notificationEmailsActions',
                         'actions' => [
@@ -163,7 +172,8 @@ class AdminController
                         'tableControlButtons' => [[
                             'href' => '/admin/create-user',
                             'content' => 'Create User',
-                        ]],
+                        ],
+                        ],
                         'formTitle' => 'Users',
                         'actionParam' => 'adminUserActions',
                         'actions' => [
@@ -176,7 +186,7 @@ class AdminController
                             'headings' => [
                                 'Email',
                                 'Timezone',
-                                'Admin'
+                                'Admin',
                             ],
                             'rows' => $userRows,
                         ],
@@ -190,7 +200,7 @@ class AdminController
                             'headings' => [
                                 'Title',
                                 'Percent Complete',
-                                'Added At'
+                                'Added At',
                             ],
                             'rows' => $queueRows,
                         ],

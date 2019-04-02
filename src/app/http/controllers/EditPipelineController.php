@@ -1,28 +1,36 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use src\app\servers\interfaces\ServerApiInterface;
-use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\projects\interfaces\ProjectsApiInterface;
+use src\app\servers\interfaces\ServerApiInterface;
+use Throwable;
 
 class EditPipelineController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var ServerApiInterface */
     private $serverApi;
-    private $projectsApi;
-    private $pipelineApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var PipelineApiInterface */
+    private $pipelineApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -34,25 +42,29 @@ class EditPipelineController
         PipelineApiInterface $pipelineApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->serverApi = $serverApi;
-        $this->projectsApi = $projectsApi;
-        $this->pipelineApi = $pipelineApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->serverApi           = $serverApi;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
+        $this->pipelineApi         = $pipelineApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -101,9 +113,7 @@ class EditPipelineController
             'content' => 'View',
         ];
 
-        $breadCrumbs[] = [
-            'content' => 'Edit'
-        ];
+        $breadCrumbs[] = ['content' => 'Edit'];
 
         $pipelineItems = [];
 
@@ -135,8 +145,9 @@ class EditPipelineController
                 'formActionParam' => 'editPipeline',
                 'pageControlButtons' => [[
                     'type' => 'submitInput',
-                    'content' => 'Save Pipeline'
-                ]],
+                    'content' => 'Save Pipeline',
+                ],
+                ],
                 'includes' => [
                     [
                         'template' => 'forms/StandardForm.twig',
@@ -178,7 +189,7 @@ class EditPipelineController
                                 'pipelineItems' => $pipelineItems,
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

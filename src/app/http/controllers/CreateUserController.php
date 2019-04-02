@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
+use Throwable;
 
 class CreateUserController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -24,22 +28,26 @@ class CreateUserController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -61,11 +69,9 @@ class CreateUserController
                 'breadCrumbs' => [
                     [
                         'href' => '/admin',
-                        'content' => 'Admin'
+                        'content' => 'Admin',
                     ],
-                    [
-                        'content' => 'Create User'
-                    ]
+                    ['content' => 'Create User'],
                 ],
                 'title' => 'Create User',
                 'includes' => [
@@ -85,7 +91,7 @@ class CreateUserController
                                 'label' => 'Admin',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

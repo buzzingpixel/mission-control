@@ -1,20 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
+use Throwable;
 
 class CreateProjectController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -23,22 +28,26 @@ class CreateProjectController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -60,11 +69,9 @@ class CreateProjectController
                 'breadCrumbs' => [
                     [
                         'href' => '/projects',
-                        'content' => 'Projects'
+                        'content' => 'Projects',
                     ],
-                    [
-                        'content' => 'Create'
-                    ]
+                    ['content' => 'Create'],
                 ],
                 'title' => 'Create New Project',
                 'includes' => [
@@ -84,7 +91,7 @@ class CreateProjectController
                                 'label' => 'Description',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

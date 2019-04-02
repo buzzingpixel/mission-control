@@ -1,22 +1,28 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
+use Throwable;
 
 class CreateMonitoredUrlController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $projectsApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ProjectsApiInterface */
+    private $projectsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -26,23 +32,27 @@ class CreateMonitoredUrlController
         ProjectsApiInterface $projectsApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->projectsApi = $projectsApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->projectsApi         = $projectsApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -64,11 +74,9 @@ class CreateMonitoredUrlController
                 'breadCrumbs' => [
                     [
                         'href' => '/monitored-urls',
-                        'content' => 'Monitored URLs'
+                        'content' => 'Monitored URLs',
                     ],
-                    [
-                        'content' => 'Create'
-                    ]
+                    ['content' => 'Create'],
                 ],
                 'title' => 'Create New Monitored URL',
                 'includes' => [
@@ -96,7 +104,7 @@ class CreateMonitoredUrlController
                                     ->fetchAsSelectArray(),
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

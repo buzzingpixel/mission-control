@@ -1,24 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class RemindersIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $reminderApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var ReminderApiInterface */
+    private $reminderApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -28,25 +35,29 @@ class RemindersIndexController
         ReminderApiInterface $reminderApi,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->reminderApi = $reminderApi;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->reminderApi         = $reminderApi;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -129,11 +140,9 @@ class RemindersIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/reminders',
-                        'content' => 'Reminders'
+                        'content' => 'Reminders',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'Reminders Archives' :
@@ -154,7 +163,7 @@ class RemindersIndexController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

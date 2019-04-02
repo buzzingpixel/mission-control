@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
+use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
+use DateTimeZone;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class ViewMonitoredUrlController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
-    private $monitoredUrlsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var MonitoredUrlsApiInterface */
+    private $monitoredUrlsApi;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -28,19 +36,21 @@ class ViewMonitoredUrlController
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
+        $this->monitoredUrlsApi    = $monitoredUrlsApi;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
@@ -54,7 +64,9 @@ class ViewMonitoredUrlController
             );
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -89,22 +101,20 @@ class ViewMonitoredUrlController
             ];
         }
 
-        $breadCrumbs[] = [
-            'content' => 'Viewing',
-        ];
+        $breadCrumbs[] = ['content' => 'Viewing'];
 
-        $status = '--';
+        $status       = '--';
         $styledStatus = 'Inactive';
 
         if ($model->isActive()) {
-            $status = 'Up';
+            $status       = 'Up';
             $styledStatus = 'Good';
 
             if ($model->hasError()) {
-                $status = 'Down';
+                $status       = 'Down';
                 $styledStatus = 'Error';
             } elseif ($model->pendingError()) {
-                $status = 'Pending Down';
+                $status       = 'Pending Down';
                 $styledStatus = 'Caution';
             }
         }
@@ -117,7 +127,7 @@ class ViewMonitoredUrlController
         $queryModel->addOrder('event_at');
 
         foreach ($this->monitoredUrlsApi->fetchIncidents($queryModel) as $incident) {
-            $incident->eventAt()->setTimezone(new \DateTimeZone(
+            $incident->eventAt()->setTimezone(new DateTimeZone(
                 $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
             ));
 
@@ -137,9 +147,7 @@ class ViewMonitoredUrlController
                     'Message' => $incident->message(),
                     'Date' => $incident->eventAt()->format('n/j/Y g:i a'),
                 ],
-                'colorStyledCols' => [
-                    'Type' => $styledType,
-                ],
+                'colorStyledCols' => ['Type' => $styledType],
             ];
         }
 
@@ -148,7 +156,8 @@ class ViewMonitoredUrlController
                 'tags' => [[
                     'content' => $status,
                     'style' => $styledStatus,
-                ]],
+                ],
+                ],
                 'notification' => $notification,
                 'metaTitle' => $model->title(),
                 'breadCrumbs' => $breadCrumbs,
@@ -168,7 +177,7 @@ class ViewMonitoredUrlController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

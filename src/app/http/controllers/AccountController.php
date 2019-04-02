@@ -1,22 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
-use Psr\Http\Message\ResponseInterface;
-use src\app\utilities\TimeZoneListUtility;
-use src\app\http\services\RequireLoginService;
 use corbomite\user\interfaces\UserApiInterface;
+use LogicException;
+use Psr\Http\Message\ResponseInterface;
+use src\app\http\services\RequireLoginService;
+use src\app\utilities\TimeZoneListUtility;
+use Throwable;
+use function date_default_timezone_get;
 
 class AccountController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var TimeZoneListUtility */
     private $timeZoneListUtility;
 
     public function __construct(
@@ -26,9 +33,9 @@ class AccountController
         RequireLoginService $requireLoginService,
         TimeZoneListUtility $timeZoneListUtility
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
         $this->timeZoneListUtility = $timeZoneListUtility;
     }
@@ -36,13 +43,17 @@ class AccountController
     /**
      * @throws Throwable
      */
-    public function __invoke(): ResponseInterface
+    public function __invoke() : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -61,7 +72,7 @@ class AccountController
                     [
                         'href' => '/account/change-password',
                         'content' => 'Change Password',
-                    ]
+                    ],
                 ],
                 'includes' => [
                     [
@@ -84,9 +95,9 @@ class AccountController
                                     ')',
                                 'options' => $tzs,
                                 'value' => $user->getExtendedProperty('timezone'),
-                            ]
+                            ],
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

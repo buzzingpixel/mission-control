@@ -1,25 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
-use corbomite\user\interfaces\UserApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class MonitoredUrlIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
-    private $monitoredUrlsApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var MonitoredUrlsApiInterface */
+    private $monitoredUrlsApi;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -28,25 +35,29 @@ class MonitoredUrlIndexController
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
+        $this->monitoredUrlsApi    = $monitoredUrlsApi;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -84,18 +95,18 @@ class MonitoredUrlIndexController
 
             $model->addedAt()->setTimezone(new DateTimeZone($userTimeZone));
 
-            $status = '--';
+            $status       = '--';
             $styledStatus = 'Inactive';
 
             if ($model->isActive()) {
-                $status = 'Up';
+                $status       = 'Up';
                 $styledStatus = 'Good';
 
                 if ($model->hasError()) {
-                    $status = 'Down';
+                    $status       = 'Down';
                     $styledStatus = 'Error';
                 } elseif ($model->pendingError()) {
-                    $status = 'Pending Down';
+                    $status       = 'Pending Down';
                     $styledStatus = 'Caution';
                 }
             }
@@ -112,9 +123,7 @@ class MonitoredUrlIndexController
                 'colLinks' => [
                     'URL' => $model->url(),
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -140,11 +149,9 @@ class MonitoredUrlIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/monitored-urls',
-                        'content' => 'Monitored URLs'
+                        'content' => 'Monitored URLs',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'Monitored URL Archives' :
@@ -162,11 +169,11 @@ class MonitoredUrlIndexController
                                 'Title',
                                 'URL',
                                 'Status',
-                                'Checked At'
+                                'Checked At',
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

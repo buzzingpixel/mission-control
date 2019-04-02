@@ -1,27 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use src\app\http\services\RequireLoginService;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
-use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\http\services\RenderPipelineInnerComponents;
+use src\app\http\services\RequireLoginService;
+use src\app\pipelines\interfaces\PipelineApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class ViewPipelineJobDetailsController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $pipelineApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var PipelineApiInterface */
+    private $pipelineApi;
+    /** @var RequireLoginService */
     private $requireLoginService;
+    /** @var RenderPipelineInnerComponents */
     private $renderPipelineInnerComponents;
 
     public function __construct(
@@ -32,24 +40,28 @@ class ViewPipelineJobDetailsController
         RequireLoginService $requireLoginService,
         RenderPipelineInnerComponents $renderPipelineInnerComponents
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->pipelineApi = $pipelineApi;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->requireLoginService = $requireLoginService;
+        $this->userApi                       = $userApi;
+        $this->response                      = $response;
+        $this->twigEnvironment               = $twigEnvironment;
+        $this->pipelineApi                   = $pipelineApi;
+        $this->requireLoginService           = $requireLoginService;
         $this->renderPipelineInnerComponents = $renderPipelineInnerComponents;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -71,7 +83,9 @@ class ViewPipelineJobDetailsController
         $params->addWhere('pipeline_guid', $pipelineModel->getGuidAsBytes());
         $params->addWhere('guid', $this->pipelineApi->uuidToBytes($jobGuid));
 
-        if (! $jobModel = $this->pipelineApi->fetchOneJob($params)) {
+        $jobModel = $this->pipelineApi->fetchOneJob($params);
+
+        if (! $jobModel) {
             throw new Http404Exception(
                 'Pipeline job with guid "' . $jobGuid . '" not found'
             );
@@ -82,17 +96,17 @@ class ViewPipelineJobDetailsController
 
         $jobModel->jobAddedAt()->setTimezone(new DateTimeZone($userTimeZone));
 
-        $status = 'In queue';
+        $status       = 'In queue';
         $styledStatus = 'Inactive';
 
         if ($jobModel->hasFailed()) {
-            $status = 'Failed';
+            $status       = 'Failed';
             $styledStatus = 'Error';
         } elseif ($jobModel->isFinished()) {
-            $status = 'Finished';
+            $status       = 'Finished';
             $styledStatus = 'Good';
         } elseif ($jobModel->hasStarted()) {
-            $status = 'In progress';
+            $status       = 'In progress';
             $styledStatus = 'Caution';
         }
 
@@ -107,14 +121,14 @@ class ViewPipelineJobDetailsController
                 $jobItem->finishedAt()->setTimezone(new DateTimeZone($userTimeZone));
             }
 
-            $status = 'In queue';
+            $status       = 'In queue';
             $styledStatus = 'Inactive';
 
             if ($jobItem->hasFailed()) {
-                $status = 'Failed';
+                $status       = 'Failed';
                 $styledStatus = 'Error';
             } elseif ($jobItem->finishedAt()) {
-                $status = 'Finished';
+                $status       = 'Finished';
                 $styledStatus = 'Good';
             }
 
@@ -125,9 +139,7 @@ class ViewPipelineJobDetailsController
                     'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
                     'Log' => $jobItem->logContent(),
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -136,7 +148,8 @@ class ViewPipelineJobDetailsController
                 'tags' => [[
                     'content' => $status,
                     'style' => $styledStatus,
-                ]],
+                ],
+                ],
                 'metaTitle' => $title,
                 'title' =>$title,
                 'breadCrumbs' => [
@@ -148,9 +161,7 @@ class ViewPipelineJobDetailsController
                         'href' => '/pipelines/view/' . $pipelineSlug,
                         'content' => $pipelineModel->title(),
                     ],
-                    [
-                        'content' => 'Viewing Job',
-                    ]
+                    ['content' => 'Viewing Job'],
                 ],
                 'includes' => [
                     [
@@ -166,7 +177,7 @@ class ViewPipelineJobDetailsController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

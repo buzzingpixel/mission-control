@@ -1,33 +1,37 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
+use corbomite\http\exceptions\Http404Exception;
 use DateTime;
-use Throwable;
 use DateTimeZone;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\pings\interfaces\PingApiInterface;
-use corbomite\http\exceptions\Http404Exception;
+use Throwable;
+use function json_encode;
 
 class PingCheckinController
 {
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
 
     public function __construct(
         PingApiInterface $pingApi,
         ResponseInterface $response
     ) {
-        $this->pingApi = $pingApi;
+        $this->pingApi  = $pingApi;
         $this->response = $response;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
         $queryModel = $this->pingApi->makeQueryModel();
         $queryModel->addWhere('ping_id', $request->getAttribute('pingId'));
@@ -45,9 +49,7 @@ class PingCheckinController
 
         $response = $this->response->withHeader('Content-Type', 'application/json');
 
-        $response->getBody()->write(json_encode([
-            'status' => 'OK',
-        ]));
+        $response->getBody()->write(json_encode(['status' => 'OK']));
 
         return $response;
     }

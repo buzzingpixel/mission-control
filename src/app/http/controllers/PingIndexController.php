@@ -1,24 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\pings\interfaces\PingApiInterface;
-use corbomite\user\interfaces\UserApiInterface;
+use Throwable;
+use function date_default_timezone_get;
 
 class PingIndexController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -28,25 +35,29 @@ class PingIndexController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->pingApi = $pingApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->pingApi             = $pingApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
         $archivesPage = $request->getAttribute('archives') === 'archives';
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -82,18 +93,18 @@ class PingIndexController
         foreach ($this->pingApi->fetchAll($params) as $model) {
             $model->lastPingAt()->setTimezone(new DateTimeZone($userTimeZone));
 
-            $status = '--';
+            $status       = '--';
             $styledStatus = 'Inactive';
 
             if ($model->isActive()) {
-                $status = 'Active';
+                $status       = 'Active';
                 $styledStatus = 'Good';
 
                 if ($model->hasError()) {
-                    $status = 'Missing';
+                    $status       = 'Missing';
                     $styledStatus = 'Error';
                 } elseif ($model->pendingError()) {
-                    $status = 'Overdue';
+                    $status       = 'Overdue';
                     $styledStatus = 'Caution';
                 }
             }
@@ -108,9 +119,7 @@ class PingIndexController
                     'Warn After' => $model->warnAfter() . ' Minutes',
                     'Last Ping' => $model->lastPingAt()->format('n/j/Y g:i a'),
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -136,11 +145,9 @@ class PingIndexController
                 'breadCrumbs' => $archivesPage ? [
                     [
                         'href' => '/pings',
-                        'content' => 'Pings'
+                        'content' => 'Pings',
                     ],
-                    [
-                        'content' => 'Viewing Archives'
-                    ]
+                    ['content' => 'Viewing Archives'],
                 ] : [],
                 'title' => $archivesPage ?
                     'Ping Archives' :
@@ -163,7 +170,7 @@ class PingIndexController
                             ],
                             'rows' => $rows,
                         ],
-                    ]
+                    ],
                 ],
             ])
         );

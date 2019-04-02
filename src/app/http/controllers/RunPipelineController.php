@@ -1,43 +1,44 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\user\interfaces\UserApiInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use corbomite\user\interfaces\UserApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\requestdatastore\DataStoreInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
-use corbomite\flashdata\interfaces\FlashDataApiInterface;
+use Throwable;
 
 class RunPipelineController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var ResponseInterface */
     private $response;
-    private $dataStore;
+    /** @var PipelineApiInterface */
     private $pipelineApi;
+    /** @var FlashDataApiInterface */
     private $flashDataApi;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
-        DataStoreInterface $dataStore,
         PipelineApiInterface $pipelineApi,
         FlashDataApiInterface $flashDataApi
     ) {
-        $this->userApi = $userApi;
-        $this->response = $response;
-        $this->dataStore = $dataStore;
-        $this->pipelineApi = $pipelineApi;
+        $this->userApi      = $userApi;
+        $this->response     = $response;
+        $this->pipelineApi  = $pipelineApi;
         $this->flashDataApi = $flashDataApi;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
         $user = $this->userApi->fetchCurrentUser();
 
@@ -55,9 +56,7 @@ class RunPipelineController
 
         $this->pipelineApi->initJobFromPipelineModel($model);
 
-        $flashDataModel = $this->flashDataApi->makeFlashDataModel([
-            'name' => 'Message'
-        ]);
+        $flashDataModel = $this->flashDataApi->makeFlashDataModel(['name' => 'Message']);
 
         $flashDataModel->dataItem('type', 'Success');
 

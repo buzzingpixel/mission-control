@@ -1,25 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
-use Throwable;
+use corbomite\http\exceptions\Http404Exception;
+use corbomite\twig\TwigEnvironment;
+use corbomite\user\interfaces\UserApiInterface;
 use DateTimeZone;
 use LogicException;
-use corbomite\twig\TwigEnvironment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\pings\interfaces\PingApiInterface;
-use corbomite\http\exceptions\Http404Exception;
-use corbomite\user\interfaces\UserApiInterface;
+use Throwable;
+use function date_default_timezone_get;
+use function getenv;
 
 class ViewPingController
 {
+    /** @var UserApiInterface */
     private $userApi;
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var ResponseInterface */
     private $response;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
+    /** @var RequireLoginService */
     private $requireLoginService;
 
     public function __construct(
@@ -29,19 +37,21 @@ class ViewPingController
         TwigEnvironment $twigEnvironment,
         RequireLoginService $requireLoginService
     ) {
-        $this->userApi = $userApi;
-        $this->pingApi = $pingApi;
-        $this->response = $response;
-        $this->twigEnvironment = $twigEnvironment;
+        $this->userApi             = $userApi;
+        $this->pingApi             = $pingApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
         $this->requireLoginService = $requireLoginService;
     }
 
     /**
      * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        if ($requireLogin = $this->requireLoginService->requireLogin()) {
+        $requireLogin = $this->requireLoginService->requireLogin();
+
+        if ($requireLogin) {
             return $requireLogin;
         }
 
@@ -55,7 +65,9 @@ class ViewPingController
             );
         }
 
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('Unknown Error');
         }
 
@@ -90,22 +102,20 @@ class ViewPingController
             ];
         }
 
-        $breadCrumbs[] = [
-            'content' => 'Viewing',
-        ];
+        $breadCrumbs[] = ['content' => 'Viewing'];
 
-        $status = '--';
+        $status       = '--';
         $styledStatus = 'Inactive';
 
         if ($model->isActive()) {
-            $status = 'Active';
+            $status       = 'Active';
             $styledStatus = 'Good';
 
             if ($model->hasError()) {
-                $status = 'Missing';
+                $status       = 'Missing';
                 $styledStatus = 'Error';
             } elseif ($model->pendingError()) {
-                $status = 'Overdue';
+                $status       = 'Overdue';
                 $styledStatus = 'Caution';
             }
         }
@@ -122,7 +132,8 @@ class ViewPingController
                 'tags' => [[
                     'content' => $status,
                     'style' => $styledStatus,
-                ]],
+                ],
+                ],
                 'notification' => $notification,
                 'metaTitle' => $model->title(),
                 'breadCrumbs' => $breadCrumbs,
