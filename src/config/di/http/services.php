@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-use corbomite\user\UserApi;
-use Zend\Diactoros\Response;
-use src\app\pipelines\PipelineApi;
 use corbomite\twig\TwigEnvironment;
+use corbomite\user\UserApi;
 use Psr\Container\ContainerInterface;
-use src\app\http\services\RequireLoginService;
 use src\app\http\services\RenderPipelineInnerComponents;
+use src\app\http\services\RequireLoginService;
+use src\app\pipelines\PipelineApi;
+use Zend\Diactoros\Response;
 
 return [
-    RequireLoginService::class => function (ContainerInterface $di) {
+    RequireLoginService::class => static function (ContainerInterface $di) {
         return new RequireLoginService(
             $di->get(TwigEnvironment::class),
             $di->get(UserApi::class),
@@ -21,8 +22,7 @@ return [
          return new RenderPipelineInnerComponents(
              $di->get(UserApi::class),
              $di->get(TwigEnvironment::class),
-             $di->get(PipelineApi::class),
-             $di->get(RequireLoginService::class)
+             $di->get(PipelineApi::class)
          );
-    }
+    },
 ];

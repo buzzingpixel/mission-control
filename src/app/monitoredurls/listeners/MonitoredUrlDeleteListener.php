@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\listeners;
@@ -10,6 +11,7 @@ use src\app\monitoredurls\events\MonitoredUrlBeforeDeleteEvent;
 
 class MonitoredUrlDeleteListener implements EventListenerInterface
 {
+    /** @var PDO */
     private $pdo;
 
     public function __construct(PDO $pdo)
@@ -17,7 +19,7 @@ class MonitoredUrlDeleteListener implements EventListenerInterface
         $this->pdo = $pdo;
     }
 
-    public function call(EventInterface $event): void
+    public function call(EventInterface $event) : void
     {
         /** @var MonitoredUrlBeforeDeleteEvent $event */
 

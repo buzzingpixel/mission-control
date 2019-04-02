@@ -1,31 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\services;
 
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use DateTime;
 use DateTimeZone;
 use src\app\data\MonitoredUrl\MonitoredUrl;
-use corbomite\db\interfaces\QueryModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\data\MonitoredUrl\MonitoredUrlRecord;
-use src\app\monitoredurls\models\MonitoredUrlModel;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\models\MonitoredUrlModel;
 
 class FetchMonitoredUrlsService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
-    public function __construct(
-        BuildQueryInterface $buildQuery
-    ) {
+    public function __construct(BuildQueryInterface $buildQuery)
+    {
         $this->buildQuery = $buildQuery;
     }
 
     /**
      * @return MonitoredUrlModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -33,7 +34,7 @@ class FetchMonitoredUrlsService
     /**
      * @return MonitoredUrlModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -68,11 +69,12 @@ class FetchMonitoredUrlsService
     }
 
     /**
-     * @param $params
      * @return MonitoredUrlRecord[]
      */
-    private function fetchResults($params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
-        return $this->buildQuery->build(MonitoredUrl::class, $params)->fetchRecords();
+        return $this->buildQuery
+            ->build(MonitoredUrl::class, $params)
+            ->fetchRecords();
     }
 }

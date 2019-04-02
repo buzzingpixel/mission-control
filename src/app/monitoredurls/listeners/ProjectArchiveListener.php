@@ -1,15 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\listeners;
 
 use corbomite\events\interfaces\EventInterface;
-use src\app\projects\events\ProjectBeforeArchiveEvent;
 use corbomite\events\interfaces\EventListenerInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\projects\events\ProjectBeforeArchiveEvent;
+use Throwable;
 
 class ProjectArchiveListener implements EventListenerInterface
 {
+    /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     public function __construct(MonitoredUrlsApiInterface $monitoredUrlsApi)
@@ -17,7 +20,10 @@ class ProjectArchiveListener implements EventListenerInterface
         $this->monitoredUrlsApi = $monitoredUrlsApi;
     }
 
-    public function call(EventInterface $event): void
+    /**
+     * @throws Throwable
+     */
+    public function call(EventInterface $event) : void
     {
         /** @var ProjectBeforeArchiveEvent $event */
 

@@ -1,33 +1,36 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\services;
 
-use Throwable;
-use DateTimeZone;
-use LogicException;
 use corbomite\twig\TwigEnvironment;
 use corbomite\user\interfaces\UserApiInterface;
+use DateTimeZone;
+use LogicException;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use Throwable;
+use function date_default_timezone_get;
+use function number_format;
 
 class RenderPipelineInnerComponents
 {
+    /** @var UserApiInterface */
     private $userApi;
-    private $pipelineApi;
+    /** @var TwigEnvironment */
     private $twigEnvironment;
-    private $requireLoginService;
+    /** @var PipelineApiInterface */
+    private $pipelineApi;
 
     public function __construct(
         UserApiInterface $userApi,
         TwigEnvironment $twigEnvironment,
-        PipelineApiInterface $pipelineApi,
-        RequireLoginService $requireLoginService
+        PipelineApiInterface $pipelineApi
     ) {
-        $this->userApi = $userApi;
-        $this->pipelineApi = $pipelineApi;
+        $this->userApi         = $userApi;
         $this->twigEnvironment = $twigEnvironment;
-        $this->requireLoginService = $requireLoginService;
+        $this->pipelineApi     = $pipelineApi;
     }
 
     /**
@@ -36,8 +39,10 @@ class RenderPipelineInnerComponents
     public function __invoke(
         PipelineModelInterface $pipelineModel,
         int $jobsLimit = 8
-    ) {
-        if (! $user = $this->userApi->fetchCurrentUser()) {
+    ) : string {
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
             throw new LogicException('An unknown error occurred');
         }
 
@@ -56,17 +61,17 @@ class RenderPipelineInnerComponents
                 $userTimeZone
             ));
 
-            $status = 'In queue';
+            $status       = 'In queue';
             $styledStatus = 'Inactive';
 
             if ($model->hasFailed()) {
-                $status = 'Failed';
+                $status       = 'Failed';
                 $styledStatus = 'Error';
             } elseif ($model->isFinished()) {
-                $status = 'Finished';
+                $status       = 'Finished';
                 $styledStatus = 'Good';
             } elseif ($model->hasStarted()) {
-                $status = 'In progress';
+                $status       = 'In progress';
                 $styledStatus = 'Caution';
             }
 
@@ -78,9 +83,7 @@ class RenderPipelineInnerComponents
                     'Percent Complete' => $status === 'Failed' || $status === 'Finished' ? '100%' :
                         number_format($model->percentComplete()) . '%',
                 ],
-                'colorStyledCols' => [
-                    'Status' => $styledStatus,
-                ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
@@ -99,7 +102,7 @@ class RenderPipelineInnerComponents
                         ],
                         'rows' => $rows,
                     ],
-                ]
+                ],
             ],
         ]);
     }

@@ -1,17 +1,12 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 class AddIsAdminUserColumn extends AbstractMigration
 {
-    public function change(): void
+    public function change() : void
     {
         $table = $this->table('users');
 

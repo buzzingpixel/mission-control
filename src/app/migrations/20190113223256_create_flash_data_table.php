@@ -1,42 +1,31 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 class CreateFlashDataTable extends AbstractMigration
 {
-    public function change(): void
+    public function change() : void
     {
         $this->table('flash_data', [
-                'id' => false,
-                'primary_key' => [
-                    'guid'
-                ]
-            ])
+            'id' => false,
+            'primary_key' => ['guid'],
+        ])
             ->addColumn('guid', 'binary', [
                 'limit' => 16,
                 'comment' => 'UUID generated in code and stored as binary',
             ])
             ->addColumn('name', 'text', [
                 'null' => true,
-                'comment' => 'Flash Data name'
+                'comment' => 'Flash Data name',
             ])
             ->addColumn('data', 'text', [
                 'null' => true,
                 'comment' => 'Flash Data stored as JSON',
             ])
-            ->addColumn('added_at', 'datetime', [
-                'comment' => 'The datetime representation of when the flash data was added',
-            ])
-            ->addColumn('added_at_time_zone', 'string', [
-                'comment' => 'The timezone added_at was set with',
-            ])
+            ->addColumn('added_at', 'datetime', ['comment' => 'The datetime representation of when the flash data was added'])
+            ->addColumn('added_at_time_zone', 'string', ['comment' => 'The timezone added_at was set with'])
             ->create();
     }
 }

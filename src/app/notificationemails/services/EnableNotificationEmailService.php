@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notificationemails\services;
@@ -11,7 +12,9 @@ use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
 
 class EnableNotificationEmailService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
 
     public function __construct(
@@ -22,12 +25,12 @@ class EnableNotificationEmailService
         $this->ormFactory = $ormFactory;
     }
 
-    public function __invoke(NotificationEmailModelInterface $model): void
+    public function __invoke(NotificationEmailModelInterface $model) : void
     {
         $this->enable($model);
     }
 
-    public function enable(NotificationEmailModelInterface $model): void
+    public function enable(NotificationEmailModelInterface $model) : void
     {
         $record = $this->fetchRecord($model);
 
@@ -36,10 +39,11 @@ class EnableNotificationEmailService
         $this->ormFactory->makeOrm()->persist($record);
     }
 
-    private function fetchRecord(NotificationEmailModelInterface $model): NotificationEmailRecord
+    private function fetchRecord(NotificationEmailModelInterface $model) : NotificationEmailRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(NotificationEmail::class, $params)->fetchRecord();
     }
 }

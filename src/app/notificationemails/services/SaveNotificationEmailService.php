@@ -1,20 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notificationemails\services;
 
+use Atlas\Table\Exception as AtlasTableException;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\interfaces\BuildQueryInterface;
-use Atlas\Table\Exception as AtlasTableException;
 use src\app\data\NotificationEmail\NotificationEmail;
 use src\app\data\NotificationEmail\NotificationEmailRecord;
-use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
-use \src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
 use src\app\notificationemails\exceptions\InvalidNotificationEmailModelException;
+use src\app\notificationemails\exceptions\NotificationEmailNotUniqueException;
+use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
 
 class SaveNotificationEmailService
 {
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
     public function __construct(
@@ -29,7 +32,7 @@ class SaveNotificationEmailService
      * @throws InvalidNotificationEmailModelException
      * @throws NotificationEmailNotUniqueException
      */
-    public function __invoke(NotificationEmailModelInterface $model)
+    public function __invoke(NotificationEmailModelInterface $model) : void
     {
         $this->save($model);
     }
@@ -38,7 +41,7 @@ class SaveNotificationEmailService
      * @throws InvalidNotificationEmailModelException
      * @throws NotificationEmailNotUniqueException
      */
-    public function save(NotificationEmailModelInterface $model): void
+    public function save(NotificationEmailModelInterface $model) : void
     {
         if (! $model->emailAddress()) {
             throw new InvalidNotificationEmailModelException();
@@ -61,12 +64,13 @@ class SaveNotificationEmailService
 
         if (! $existingRecord) {
             $this->saveNew($model);
+
             return;
         }
         $this->finalSave($model, $existingRecord);
     }
 
-    private function saveNew(NotificationEmailModelInterface $model): void
+    private function saveNew(NotificationEmailModelInterface $model) : void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -80,8 +84,8 @@ class SaveNotificationEmailService
     private function finalSave(
         NotificationEmailModelInterface $model,
         NotificationEmailRecord $record
-    ): void {
-        $record->is_active = $model->isActive();
+    ) : void {
+        $record->is_active     = $model->isActive();
         $record->email_address = $model->emailAddress();
 
         try {

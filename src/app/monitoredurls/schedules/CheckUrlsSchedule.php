@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\schedules;
 
-use src\app\monitoredurls\tasks\CheckUrlTask;
-use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
+use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\monitoredurls\tasks\CheckUrlTask;
+use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
 
 class CheckUrlsSchedule
 {
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(QueueApiInterface $queueApi)
@@ -20,7 +22,7 @@ class CheckUrlsSchedule
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectUrlsForQueueTask::BATCH_NAME);

@@ -1,14 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\events;
 
-use src\app\monitoredurls\MonitoredUrlsApi;
 use corbomite\events\interfaces\EventInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\MonitoredUrlsApi;
 
 class MonitoredUrlBeforeDeleteEvent implements EventInterface
 {
+    /** @var MonitoredUrlModelInterface */
     private $monitoredUrlModel;
 
     public function __construct(
@@ -17,24 +19,25 @@ class MonitoredUrlBeforeDeleteEvent implements EventInterface
         $this->monitoredUrlModel = $monitoredUrlModel;
     }
 
-    public function monitoredUrlModel(): MonitoredUrlModelInterface
+    public function monitoredUrlModel() : MonitoredUrlModelInterface
     {
         return $this->monitoredUrlModel;
     }
 
-    public function provider(): string
+    public function provider() : string
     {
         return MonitoredUrlsApi::class;
     }
 
-    public function name(): string
+    public function name() : string
     {
         return 'MonitoredUrlBeforeDelete';
     }
 
+    /** @var bool */
     private $stop = false;
 
-    public function stopPropagation(?bool $stop = null): bool
+    public function stopPropagation(?bool $stop = null) : bool
     {
         return $this->stop = $stop ?? $this->stop;
     }

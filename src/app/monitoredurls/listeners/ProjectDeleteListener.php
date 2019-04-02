@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\listeners;
 
 use corbomite\events\interfaces\EventInterface;
-use src\app\projects\events\ProjectBeforeDeleteEvent;
 use corbomite\events\interfaces\EventListenerInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\projects\events\ProjectBeforeDeleteEvent;
 
 class ProjectDeleteListener implements EventListenerInterface
 {
+    /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     public function __construct(MonitoredUrlsApiInterface $monitoredUrlsApi)
@@ -17,7 +19,7 @@ class ProjectDeleteListener implements EventListenerInterface
         $this->monitoredUrlsApi = $monitoredUrlsApi;
     }
 
-    public function call(EventInterface $event): void
+    public function call(EventInterface $event) : void
     {
         /** @var ProjectBeforeDeleteEvent $event */
 

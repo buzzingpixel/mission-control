@@ -1,16 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\http\twigextensions;
 
-use Twig_Markup;
-use Twig_Function;
-use Twig_Extension;
 use Ramsey\Uuid\UuidFactory;
+use Twig_Extension;
+use Twig_Function;
+use Twig_Markup;
+use function uniqid;
 
 class UtilitiesTwigExtension extends Twig_Extension
 {
-    public function getFunctions()
+    public function getFunctions() : array
     {
         return [
             new Twig_Function('createUniqueId', [$this, 'createUniqueId']),
@@ -21,7 +23,7 @@ class UtilitiesTwigExtension extends Twig_Extension
         ];
     }
 
-    public function createUniqueId($prefix = '', $moreEntropy = false): Twig_Markup
+    public function createUniqueId($prefix = '', $moreEntropy = false) : Twig_Markup
     {
         return new Twig_Markup(
             uniqid($prefix, $moreEntropy),
@@ -29,7 +31,7 @@ class UtilitiesTwigExtension extends Twig_Extension
         );
     }
 
-    public function createUuidV1($node = null, $clockSeq = null): Twig_Markup
+    public function createUuidV1($node = null, $clockSeq = null) : Twig_Markup
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return new Twig_Markup(
@@ -38,7 +40,7 @@ class UtilitiesTwigExtension extends Twig_Extension
         );
     }
 
-    public function createUuidV3($ns, $name): Twig_Markup
+    public function createUuidV3($ns, $name) : Twig_Markup
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return new Twig_Markup(
@@ -47,7 +49,7 @@ class UtilitiesTwigExtension extends Twig_Extension
         );
     }
 
-    public function createUuidV4(): Twig_Markup
+    public function createUuidV4() : Twig_Markup
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return new Twig_Markup(
@@ -56,7 +58,7 @@ class UtilitiesTwigExtension extends Twig_Extension
         );
     }
 
-    public function createUuidV5($ns, $name): Twig_Markup
+    public function createUuidV5($ns, $name) : Twig_Markup
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return new Twig_Markup(

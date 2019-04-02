@@ -1,24 +1,17 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 class CreatePipelineItemsTable extends AbstractMigration
 {
-    public function change(): void
+    public function change() : void
     {
         $this->table('pipeline_items', [
-                'id' => false,
-                'primary_key' => [
-                    'guid'
-                ]
-            ])
+            'id' => false,
+            'primary_key' => ['guid'],
+        ])
             ->addColumn('guid', 'binary', [
                 'limit' => 16,
                 'comment' => 'UUID generated in code and stored as binary',
@@ -28,16 +21,12 @@ class CreatePipelineItemsTable extends AbstractMigration
                 'limit' => 16,
                 'comment' => 'Associated pipeline UUID stored as binary',
             ])
-            ->addColumn('order', 'integer', [
-                'comment' => 'The order of the items in the pipeline',
-            ])
+            ->addColumn('order', 'integer', ['comment' => 'The order of the items in the pipeline'])
             ->addColumn('description', 'string', [
                 'null' => true,
                 'comment' => 'Optional description',
             ])
-            ->addColumn('script', 'text', [
-                'comment' => 'The script this item executes',
-            ])
+            ->addColumn('script', 'text', ['comment' => 'The script this item executes'])
             ->create();
     }
 }

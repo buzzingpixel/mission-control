@@ -1,24 +1,17 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 class CreatePipelineJobsTable extends AbstractMigration
 {
-    public function change()
+    public function change() : void
     {
         $this->table('pipeline_jobs', [
-                'id' => false,
-                'primary_key' => [
-                    'guid'
-                ]
-            ])
+            'id' => false,
+            'primary_key' => ['guid'],
+        ])
             ->addColumn('guid', 'binary', [
                 'limit' => 16,
                 'comment' => 'UUID generated in code and stored as binary',

@@ -1,34 +1,23 @@
 <?php
-declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
 class CreateActionQueueBatchTable extends AbstractMigration
 {
-    public function change(): void
+    public function change() : void
     {
         $this->table('action_queue_batch', [
-                'id' => false,
-                'primary_key' => [
-                    'guid'
-                ]
-            ])
+            'id' => false,
+            'primary_key' => ['guid'],
+        ])
             ->addColumn('guid', 'binary', [
                 'limit' => 16,
                 'comment' => 'UUID generated in code and stored as binary',
             ])
-            ->addColumn('name', 'string', [
-                'comment' => 'The name of the batch for programmatic use',
-            ])
-            ->addColumn('title', 'string', [
-                'comment' => 'The title of the batch for display purposes',
-            ])
+            ->addColumn('name', 'string', ['comment' => 'The name of the batch for programmatic use'])
+            ->addColumn('title', 'string', ['comment' => 'The title of the batch for display purposes'])
             ->addColumn('has_started', 'boolean', [
                 'default' => 0,
                 'comment' => 'Whether this batch has started or not',
@@ -45,12 +34,8 @@ class CreateActionQueueBatchTable extends AbstractMigration
                 'default' => 0,
                 'comment' => 'The percentage of the batch completed',
             ])
-            ->addColumn('added_at', 'datetime', [
-                'comment' => 'The datetime representation of when the batch was added',
-            ])
-            ->addColumn('added_at_time_zone', 'string', [
-                'comment' => 'The timezone added_at was set with',
-            ])
+            ->addColumn('added_at', 'datetime', ['comment' => 'The datetime representation of when the batch was added'])
+            ->addColumn('added_at_time_zone', 'string', ['comment' => 'The timezone added_at was set with'])
             ->addColumn('finished_at', 'datetime', [
                 'null' => true,
                 'comment' => 'The datetime representation of when the batch was finished',

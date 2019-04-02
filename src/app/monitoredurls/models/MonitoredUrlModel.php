@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\models;
 
 use DateTime;
 use DateTimeZone;
-use src\app\support\traits\ModelErrorsTrait;
-use src\app\support\traits\ModelAddedAtTrait;
-use src\app\support\traits\StandardModelTrait;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\support\traits\ModelAddedAtTrait;
+use src\app\support\traits\ModelErrorsTrait;
+use src\app\support\traits\StandardModelTrait;
 
 class MonitoredUrlModel implements MonitoredUrlModelInterface
 {
@@ -16,9 +17,10 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
     use ModelAddedAtTrait;
     use StandardModelTrait;
 
+    /** @var string */
     private $url = '';
 
-    public function url(?string $val = null): string
+    public function url(?string $val = null) : string
     {
         return $this->url = $val ?? $this->url;
     }
@@ -26,7 +28,7 @@ class MonitoredUrlModel implements MonitoredUrlModelInterface
     /** @var DateTime|null */
     private $checkedAt;
 
-    public function checkedAt(?DateTime $val = null): DateTime
+    public function checkedAt(?DateTime $val = null) : DateTime
     {
         if (! $val && ! $this->checkedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */

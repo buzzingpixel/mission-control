@@ -1,29 +1,30 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notificationemails\services;
 
-use corbomite\db\interfaces\QueryModelInterface;
 use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use src\app\data\NotificationEmail\NotificationEmail;
 use src\app\data\NotificationEmail\NotificationEmailRecord;
-use src\app\notificationemails\models\NotificationEmailModel;
 use src\app\notificationemails\interfaces\NotificationEmailModelInterface;
+use src\app\notificationemails\models\NotificationEmailModel;
 
 class FetchNotificationEmailService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
-    public function __construct(
-        BuildQueryInterface $buildQuery
-    ) {
+    public function __construct(BuildQueryInterface $buildQuery)
+    {
         $this->buildQuery = $buildQuery;
     }
 
     /**
      * @return NotificationEmailModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -31,7 +32,7 @@ class FetchNotificationEmailService
     /**
      * @return NotificationEmailModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -49,10 +50,9 @@ class FetchNotificationEmailService
     }
 
     /**
-     * @param $params
      * @return NotificationEmailRecord[]
      */
-    private function fetchResults(QueryModelInterface $params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
         return $this->buildQuery->build(NotificationEmail::class, $params)->fetchRecords();
     }

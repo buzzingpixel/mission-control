@@ -1,24 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\monitoredurls\tasks;
 
-use DateTime;
-use Throwable;
-use DateTimeZone;
-use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
-use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
-use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use DateTime;
+use DateTimeZone;
 use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\support\extensions\GuzzleClientNoHttpErrors;
+use Throwable;
+use function getenv;
 
 class CheckUrlTask
 {
-    public const BATCH_NAME = 'checkUrls';
+    public const BATCH_NAME  = 'checkUrls';
     public const BATCH_TITLE = 'Check URLs';
 
+    /** @var EmailApiInterface */
     private $emailApi;
+    /** @var GuzzleClientNoHttpErrors */
     private $guzzleClient;
+    /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     public function __construct(
@@ -26,14 +31,15 @@ class CheckUrlTask
         GuzzleClientNoHttpErrors $guzzleClient,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->emailApi = $emailApi;
-        $this->guzzleClient = $guzzleClient;
+        $this->emailApi         = $emailApi;
+        $this->guzzleClient     = $guzzleClient;
         $this->monitoredUrlsApi = $monitoredUrlsApi;
     }
 
+    /** @var ?string */
     private $url;
 
-    public function __invoke(array $context): void
+    public function __invoke(array $context) : void
     {
         try {
             $this->innerRun($context);
@@ -46,7 +52,7 @@ class CheckUrlTask
         }
     }
 
-    private function sendErrorEmail(Throwable $e): void
+    private function sendErrorEmail(Throwable $e) : void
     {
         try {
             $emailModel = $this->emailApi->createEmailModel();
@@ -69,7 +75,7 @@ class CheckUrlTask
     /**
      * @throws Throwable
      */
-    private function innerRun(array $context): void
+    private function innerRun(array $context) : void
     {
         $model = $this->getModel($context['guid']);
 
@@ -91,8 +97,8 @@ class CheckUrlTask
             $message = 'The URL ' . $model->url() . ' returned a status code of ' . $statusCode;
         } catch (Throwable $e) {
             $statusCode = '';
-            $hasError = true;
-            $message = 'A Guzzle Exception Occurred: ' . $e->getMessage();
+            $hasError   = true;
+            $message    = 'A Guzzle Exception Occurred: ' . $e->getMessage();
         }
 
         $model->checkedAt(new DateTime('now', new DateTimeZone('UTC')));
@@ -167,19 +173,21 @@ class CheckUrlTask
         $this->monitoredUrlsApi->save($model);
     }
 
-    private function getModel(string $guid): MonitoredUrlModelInterface
+    private function getModel(string $guid) : MonitoredUrlModelInterface
     {
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
         $queryModel->addWhere('guid', $this->monitoredUrlsApi->uuidToBytes($guid));
+
         return $this->monitoredUrlsApi->fetchOne($queryModel);
     }
 
-    private function getLastIncident(string $urlGuid): ?MonitoredUrlIncidentModelInterface
+    private function getLastIncident(string $urlGuid) : ?MonitoredUrlIncidentModelInterface
     {
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
         $queryModel->addWhere('monitored_url_guid', $this->monitoredUrlsApi->uuidToBytes($urlGuid));
         $queryModel->addOrder('event_at');
         $queryModel->limit(1);
+
         return $this->monitoredUrlsApi->fetchIncidents($queryModel)[0] ?? null;
     }
 }
