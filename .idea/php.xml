@@ -164,6 +164,18 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/annotations" />
       <path value="$PROJECT_DIR$/vendor/php-cs-fixer/diff" />
       <path value="$PROJECT_DIR$/vendor/friendsofphp/php-cs-fixer" />
+      <path value="$PROJECT_DIR$/vendor/nikic/fast-route" />
+      <path value="$PROJECT_DIR$/vendor/zendframework/zend-httphandlerrunner" />
+      <path value="$PROJECT_DIR$/vendor/buzzingpixel/corbomite-http" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-server-middleware" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-server-handler" />
+      <path value="$PROJECT_DIR$/vendor/middlewares/whoops" />
+      <path value="$PROJECT_DIR$/vendor/middlewares/request-handler" />
+      <path value="$PROJECT_DIR$/vendor/relay/relay" />
+      <path value="$PROJECT_DIR$/vendor/grafikart/psr15-csrf-middleware" />
+      <path value="$PROJECT_DIR$/vendor/middlewares/utils" />
+      <path value="$PROJECT_DIR$/vendor/middlewares/fast-route" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
