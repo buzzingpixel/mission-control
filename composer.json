@@ -13,7 +13,7 @@
         "buzzingpixel/corbomite-di": "^1.0.1",
         "buzzingpixel/corbomite-events": "^2.0",
         "buzzingpixel/corbomite-flash-data": "^1.1.0",
-        "buzzingpixel/corbomite-http": "^2.0",
+        "buzzingpixel/corbomite-http": "^2.2",
         "buzzingpixel/corbomite-mailer": "^1.0",
         "buzzingpixel/corbomite-migrations": "^1.0.1",
         "buzzingpixel/corbomite-queue": "^1.2.0",
@@ -31,7 +31,6 @@
         "cocur/slugify": "^3.1",
         "guzzlehttp/guzzle": "^6.3",
         "phpseclib/phpseclib": "^2.0",
-        "relay/relay": "2.x@dev",
         "symfony/var-dumper": "^4.2",
         "timostamm/text-truncation": "dev-master"
     },
