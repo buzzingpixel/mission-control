@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\support\interfaces;
@@ -9,26 +10,23 @@ interface HasProjectGuidInterface extends HasGuidInterface
 {
     /**
      * Returns the value. Sets value if incoming argument is set.
-     * @param string|null $val
-     * @return string|null
      */
-    public function projectGuid(?string $val = null): ?string;
+    public function projectGuid(?string $val = null) : ?string;
 
     /**
      * Gets the UuidModel for the project GUID
-     * @return UuidModelInterface
      */
-    public function projectGuidAsModel(): ?UuidModelInterface;
+    public function projectGuidAsModel() : ?UuidModelInterface;
 
     /**
      * Gets the project GUID as bytes for saving to the database in binary
-     * @return string
      */
-    public function getProjectGuidAsBytes(): ?string;
+    public function getProjectGuidAsBytes() : ?string;
 
     /**
      * Sets the project GUID from bytes coming from the database binary column
-     * @param string $bytes
+     *
+     * @return mixed
      */
     public function setProjectGuidAsBytes(string $bytes);
 }

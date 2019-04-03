@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
+use corbomite\user\exceptions\UserExistsException;
 use corbomite\user\UserApi;
 use Phinx\Seed\AbstractSeed;
-use corbomite\user\exceptions\UserExistsException;
 
 class CreateUsers extends AbstractSeed
 {
-    public function run()
+    public function run() : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -22,14 +23,14 @@ class CreateUsers extends AbstractSeed
         if (! count($userNames) ||
             ! count($passwords)
         ) {
-            throw new \LogicException(
+            throw new LogicException(
                 'SEEDER_USER_NAMES and SEEDER_USER_PASSWORDS not set appropriately'
             );
         }
 
         foreach (array_keys($userNames) as $key) {
             if (! $userNames[$key] || ! $passwords[$key]) {
-                throw new \LogicException(
+                throw new LogicException(
                     'SEEDER_USER_NAMES and SEEDER_USER_PASSWORDS not set appropriately'
                 );
             }

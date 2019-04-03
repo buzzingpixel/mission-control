@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\support\traits;
@@ -11,7 +12,7 @@ trait ModelAddedAtTrait
     /** @var DateTime */
     private $addedAt;
 
-    public function addedAt(?DateTime $val = null): DateTime
+    public function addedAt(?DateTime $val = null) : DateTime
     {
         if (! $val && ! $this->addedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */

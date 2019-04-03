@@ -1,15 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
-/**
- * @author TJ Draper <tj@buzzingpixel.com>
- * @copyright 2019 BuzzingPixel, LLC
- * @license Apache-2.0
- */
-
+use src\app\cli\actions\DemoteUserFromAdminAction;
 use src\app\cli\actions\DevUtilityAction;
 use src\app\cli\actions\PromoteUserToAdminAction;
-use src\app\cli\actions\DemoteUserFromAdminAction;
 
 return [
     'control' => [

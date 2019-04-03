@@ -1,27 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\projects\services;
 
-use DateTimeZone;
-use Cocur\Slugify\Slugify;
-use src\app\data\Project\Project;
-use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as OrmFactory;
-use src\app\data\Project\ProjectRecord;
-use corbomite\db\interfaces\BuildQueryInterface;
 use Atlas\Table\Exception as AtlasTableException;
+use Cocur\Slugify\Slugify;
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\EventDispatcher;
+use DateTimeZone;
+use src\app\data\Project\Project;
+use src\app\data\Project\ProjectRecord;
 use src\app\projects\events\ProjectAfterSaveEvent;
 use src\app\projects\events\ProjectBeforeSaveEvent;
-use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\projects\exceptions\InvalidProjectModelException;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
+use src\app\projects\interfaces\ProjectModelInterface;
 
 class SaveProjectService
 {
+    /** @var Slugify */
     private $slugify;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
     private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -30,9 +35,9 @@ class SaveProjectService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->slugify = $slugify;
-        $this->ormFactory = $ormFactory;
-        $this->buildQuery = $buildQuery;
+        $this->slugify         = $slugify;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -40,7 +45,7 @@ class SaveProjectService
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
-    public function __invoke(ProjectModelInterface $model)
+    public function __invoke(ProjectModelInterface $model) : void
     {
         $this->save($model);
     }
@@ -49,7 +54,7 @@ class SaveProjectService
      * @throws InvalidProjectModelException
      * @throws ProjectNameNotUniqueException
      */
-    public function save(ProjectModelInterface $model): void
+    public function save(ProjectModelInterface $model) : void
     {
         if (! $model->title()) {
             throw new InvalidProjectModelException();
@@ -86,12 +91,14 @@ class SaveProjectService
 
         $this->eventDispatcher->dispatch(new ProjectBeforeSaveEvent($model));
 
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpParamsInspection */
         $this->finalSave($model, $existingRecord);
 
         $this->eventDispatcher->dispatch(new ProjectAfterSaveEvent($model));
     }
 
-    private function saveNewProject(ProjectModelInterface $model): void
+    private function saveNewProject(ProjectModelInterface $model) : void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -99,19 +106,20 @@ class SaveProjectService
 
         $record->guid = $model->getGuidAsBytes();
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->finalSave($model, $record);
     }
 
-    private function finalSave(ProjectModelInterface $model, ProjectRecord $record): void
+    private function finalSave(ProjectModelInterface $model, ProjectRecord $record) : void
     {
         $addedAt = $model->addedAt();
         $addedAt->setTimezone(new DateTimeZone('UTC'));
 
-        $record->is_active = $model->isActive();
-        $record->title = $model->title();
-        $record->slug = $model->slug();
-        $record->description = $model->description();
-        $record->added_at = $addedAt->format('Y-m-d H:i:s');
+        $record->is_active          = $model->isActive();
+        $record->title              = $model->title();
+        $record->slug               = $model->slug();
+        $record->description        = $model->description();
+        $record->added_at           = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
         try {
@@ -121,6 +129,7 @@ class SaveProjectService
                 return;
             }
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             throw $e;
         }
     }

@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
+use Psr\Container\ContainerInterface;
 use src\app\notificationemails\NotificationEmailsApi;
-use src\app\notificationemails\services\SaveNotificationEmailService;
-use src\app\notificationemails\services\FetchNotificationEmailService;
 use src\app\notificationemails\services\DeleteNotificationEmailService;
-use src\app\notificationemails\services\EnableNotificationEmailService;
 use src\app\notificationemails\services\DisableNotificationEmailService;
+use src\app\notificationemails\services\EnableNotificationEmailService;
+use src\app\notificationemails\services\FetchNotificationEmailService;
+use src\app\notificationemails\services\SaveNotificationEmailService;
 
 return [
     NotificationEmailsApi::class => static function (ContainerInterface $di) {

@@ -1,43 +1,43 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\interfaces;
 
 use corbomite\db\interfaces\QueryModelInterface;
-use src\app\servers\exceptions\TitleNotUniqueException;
 use src\app\servers\exceptions\InvalidServerModelException;
 use src\app\servers\exceptions\InvalidSSHKeyModelException;
+use src\app\servers\exceptions\TitleNotUniqueException;
 
 interface ServerApiInterface
 {
     /**
      * Creates a Server Model
-     * @return ServerModelInterface
      */
-    public function createModel(): ServerModelInterface;
+    public function createModel() : ServerModelInterface;
 
     /**
      * Creates an SSH Key Model
-     * @return SSHKeyModelInterface
      */
-    public function createSShKeyModel(): SSHKeyModelInterface;
+    public function createSShKeyModel() : SSHKeyModelInterface;
 
     /**
      * Converts a UUID to bytes for database queries
-     * @param string $string
-     * @return string
      */
-    public function uuidToBytes(string $string): string;
+    public function uuidToBytes(string $string) : string;
 
     /**
      * Creates a Fetch Data Params instance
-     * @return QueryModelInterface
      */
-    public function makeQueryModel(): QueryModelInterface;
+    public function makeQueryModel() : QueryModelInterface;
 
     /**
      * Saves a Server Model
+     *
      * @param ServerModelInterface $serverModel
+     *
+     * @return mixed
+     *
      * @throws InvalidServerModelException
      * @throws TitleNotUniqueException
      */
@@ -45,7 +45,11 @@ interface ServerApiInterface
 
     /**
      * Saves an SSH Key Model
+     *
      * @param SSHKeyModelInterface $serverModel
+     *
+     * @return mixed
+     *
      * @throws InvalidSSHKeyModelException
      * @throws TitleNotUniqueException
      */
@@ -53,105 +57,110 @@ interface ServerApiInterface
 
     /**
      * Archives a server
-     * @param ServerModelInterface $model
+     *
+     * @return mixed
      */
     public function archive(ServerModelInterface $model);
 
     /**
      * Archives a server
-     * @param SSHKeyModelInterface $model
+     *
+     * @return mixed
      */
     public function archiveSSHKey(SSHKeyModelInterface $model);
 
     /**
      * Un-archives a server
-     * @param ServerModelInterface $model
+     *
+     * @return mixed
      */
     public function unArchive(ServerModelInterface $model);
 
     /**
      * Un-archives an ssh key
-     * @param SSHKeyModelInterface $model
+     *
+     * @return mixed
      */
     public function unArchiveSSHKey(SSHKeyModelInterface $model);
 
     /**
      * Deletes a server
-     * @param ServerModelInterface $model
+     *
+     * @return mixed
      */
     public function delete(ServerModelInterface $model);
 
     /**
      * Deletes an ssh key
-     * @param SSHKeyModelInterface $model
+     *
+     * @return mixed
      */
     public function deleteSSHKey(SSHKeyModelInterface $model);
 
     /**
      * Fetches one server model result based on params
-     * @param QueryModelInterface $params
-     * @return ServerModelInterface|null
      */
     public function fetchOne(
         ?QueryModelInterface $params = null
-    ): ?ServerModelInterface;
+    ) : ?ServerModelInterface;
 
     /**
      * Fetches one ssh key model result based on params
-     * @param QueryModelInterface $params
-     * @return SSHKeyModelInterface|null
      */
     public function fetchOneSSHKey(
         ?QueryModelInterface $params = null
-    ): ?SSHKeyModelInterface;
+    ) : ?SSHKeyModelInterface;
 
     /**
      * Fetches all server model results based on params
-     * @param QueryModelInterface $params
+     *
      * @return ServerModelInterface[]
      */
-    public function fetchAll(?QueryModelInterface $params = null): array;
+    public function fetchAll(?QueryModelInterface $params = null) : array;
 
     /**
      * Fetches all ssh key model results based on params
-     * @param QueryModelInterface $params
+     *
      * @return SSHKeyModelInterface[]
      */
-    public function fetchAllSSHKeys(?QueryModelInterface $params = null): array;
+    public function fetchAllSSHKeys(?QueryModelInterface $params = null) : array;
 
     /**
      * Fetch servers as select array
-     * @param QueryModelInterface|null $params
+     *
      * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
-     * @return array [
+     *
+     * @return string[] [
      *     'server-slug' => 'Server Name',
      *     'another-server-slug' => 'Another Server Name',
      * ]
      */
     public function fetchAsSelectArray(
         ?QueryModelInterface $params = null,
-        $keyIsSlug = false
-    ): array;
+        bool $keyIsSlug = false
+    ) : array;
 
     /**
      * Fetch SSH Keys as select array
-     * @param QueryModelInterface|null $params
+     *
      * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
-     * @return array [
+     *
+     * @return string[] [
      *     'ssh-key-slug' => 'SSH Key Name',
      *     'another-ssh-key-slug' => 'Another SSH Key Name',
      * ]
      */
     public function fetchSSHKeysAsSelectArray(
         ?QueryModelInterface $params = null,
-        $keyIsSlug = false
-    ): array;
+        bool $keyIsSlug = false
+    ) : array;
 
     /**
      * Generates an SSH key and returns an array with two keys:
      *     - publickey
      *     - privatekey
-     * @return array
+     *
+     * @return string[]
      */
-    public function generateSSHKey(): array;
+    public function generateSSHKey() : array;
 }

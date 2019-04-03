@@ -1,61 +1,58 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\interfaces;
 
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\pipelines\exceptions\InvalidPipelineJobModel;
 use src\app\pipelines\exceptions\InvalidPipelineModel;
 use src\app\servers\exceptions\TitleNotUniqueException;
-use src\app\pipelines\exceptions\InvalidPipelineJobModel;
 
 interface PipelineApiInterface
 {
     /**
      * Creates a Pipeline Model
-     * @return PipelineModelInterface
      */
-    public function createPipelineModel(): PipelineModelInterface;
+    public function createPipelineModel() : PipelineModelInterface;
 
     /**
      * Creates a Pipeline Item Model
-     * @return PipelineItemModelInterface
      */
-    public function createPipelineItemModel(): PipelineItemModelInterface;
+    public function createPipelineItemModel() : PipelineItemModelInterface;
 
     /**
      * Creates a Pipeline Job Model
-     * @return PipelineJobModelInterface
      */
-    public function createPipelineJobModel(): PipelineJobModelInterface;
+    public function createPipelineJobModel() : PipelineJobModelInterface;
 
     /**
      * Creates a Pipeline Job Item Model
-     * @return PipelineJobItemModelInterface
      */
-    public function createPipelineJobItemModel(): PipelineJobItemModelInterface;
+    public function createPipelineJobItemModel() : PipelineJobItemModelInterface;
 
     /**
      * Creates a Pipeline Job from a Pipeline Model
+     *
+     * @return mixed
      */
     public function initJobFromPipelineModel(PipelineModelInterface $pipelineModel);
 
     /**
      * Converts a UUID to bytes for database queries
-     * @param string $string
-     * @return string
      */
-    public function uuidToBytes(string $string): string;
+    public function uuidToBytes(string $string) : string;
 
     /**
      * Creates a Fetch Data Params instance
-     * @return QueryModelInterface
      */
-    public function makeQueryModel(): QueryModelInterface;
+    public function makeQueryModel() : QueryModelInterface;
 
     /**
      * Saves a Pipeline
-     * @param PipelineModelInterface $model
+     *
      * @return mixed
+     *
      * @throws InvalidPipelineModel
      * @throws TitleNotUniqueException
      */
@@ -63,66 +60,64 @@ interface PipelineApiInterface
 
     /**
      * Saves a Pipeline Job
-     * @param PipelineJobModelInterface $model
+     *
+     * @return mixed
+     *
      * @throws InvalidPipelineJobModel
      */
     public function saveJob(PipelineJobModelInterface $model);
 
     /**
      * Archives a Pipeline
-     * @param PipelineModelInterface $model
+     *
+     * @return mixed
      */
     public function archive(PipelineModelInterface $model);
 
     /**
      * Un-archives a Pipeline
-     * @param PipelineModelInterface $model
+     *
+     * @return mixed
      */
     public function unArchive(PipelineModelInterface $model);
 
     /**
      * Deletes a Pipeline
-     * @param PipelineModelInterface $model
+     *
      * @return mixed
      */
     public function delete(PipelineModelInterface $model);
 
     /**
      * Fetches one Pipeline model result based on params
-     * @param QueryModelInterface $params
-     * @return PipelineModelInterface|null
      */
     public function fetchOne(
         ?QueryModelInterface $params = null
-    ): ?PipelineModelInterface;
+    ) : ?PipelineModelInterface;
 
     /**
      * Fetches all Pipeline models based on params
-     * @param QueryModelInterface $params
+     *
      * @return PipelineModelInterface[]
      */
-    public function fetchAll(?QueryModelInterface $params = null): array;
+    public function fetchAll(?QueryModelInterface $params = null) : array;
 
     /**
      * Fetches one Pipeline job model result based on params
-     * @param QueryModelInterface|null $params
-     * @return PipelineJobModelInterface|null
      */
     public function fetchOneJob(
         ?QueryModelInterface $params = null
-    ): ?PipelineJobModelInterface;
+    ) : ?PipelineJobModelInterface;
 
     /**
      * Fetches all Pipeline job models based on params
-     * @param QueryModelInterface|null $params
+     *
      * @return PipelineJobModelInterface[]
      */
-    public function fetchAllJobs(?QueryModelInterface $params = null): array;
+    public function fetchAllJobs(?QueryModelInterface $params = null) : array;
 
     /**
      * Fetches one Pipeline Job Item model based on params
-     * @param QueryModelInterface|null $params
-     * @return PipelineJobItemModelInterface|null
      */
-    public function fetchOneJobItem(?QueryModelInterface $params = null): ?PipelineJobItemModelInterface;
+    public function fetchOneJobItem(?QueryModelInterface $params = null) : ?PipelineJobItemModelInterface;
 }

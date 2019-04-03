@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\services;
 
-use src\app\data\Reminder\Reminder;
-use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
-use src\app\data\Reminder\ReminderRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
-use src\app\reminders\interfaces\ReminderModelInterface;
+use corbomite\events\EventDispatcher;
+use src\app\data\Reminder\Reminder;
+use src\app\data\Reminder\ReminderRecord;
 use src\app\reminders\events\ReminderAfterUnArchiveEvent;
 use src\app\reminders\events\ReminderBeforeUnArchiveEvent;
+use src\app\reminders\interfaces\ReminderModelInterface;
 
 class UnArchiveReminderService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class UnArchiveReminderService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(ReminderModelInterface $model): void
+    public function __invoke(ReminderModelInterface $model) : void
     {
         $this->unArchive($model);
     }
 
-    public function unArchive(ReminderModelInterface $model): void
+    public function unArchive(ReminderModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new ReminderBeforeUnArchiveEvent($model));
 
@@ -46,10 +50,11 @@ class UnArchiveReminderService
         $this->eventDispatcher->dispatch(new ReminderAfterUnArchiveEvent($model));
     }
 
-    private function fetchRecord(ReminderModelInterface $model): ReminderRecord
+    private function fetchRecord(ReminderModelInterface $model) : ReminderRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(Reminder::class, $params)->fetchRecord();
     }
 }

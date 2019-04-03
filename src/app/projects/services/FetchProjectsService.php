@@ -1,19 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\projects\services;
 
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use DateTime;
 use DateTimeZone;
 use src\app\data\Project\Project;
 use src\app\data\Project\ProjectRecord;
-use src\app\projects\models\ProjectModel;
-use corbomite\db\interfaces\BuildQueryInterface;
-use corbomite\db\interfaces\QueryModelInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
+use src\app\projects\models\ProjectModel;
 
 class FetchProjectsService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
     public function __construct(
@@ -25,7 +27,7 @@ class FetchProjectsService
     /**
      * @return ProjectModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -33,7 +35,7 @@ class FetchProjectsService
     /**
      * @return ProjectModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -58,10 +60,9 @@ class FetchProjectsService
     }
 
     /**
-     * @param $params
      * @return ProjectRecord[]
      */
-    private function fetchResults($params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
         return $this->buildQuery->build(Project::class, $params)->fetchRecords();
     }

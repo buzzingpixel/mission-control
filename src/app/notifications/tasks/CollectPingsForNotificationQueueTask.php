@@ -1,32 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
-use src\app\pings\interfaces\PingApiInterface;
-use corbomite\queue\interfaces\QueueApiInterface;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
+use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\pings\interfaces\PingApiInterface;
 
 class CollectPingsForNotificationQueueTask
 {
-    public const BATCH_NAME = 'collectPingsForNotificationQueue';
+    public const BATCH_NAME  = 'collectPingsForNotificationQueue';
     public const BATCH_TITLE = 'Collect Pings for Notification Queue';
 
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(
         PingApiInterface $pingApi,
         QueueApiInterface $queueApi
     ) {
-        $this->pingApi = $pingApi;
+        $this->pingApi  = $pingApi;
         $this->queueApi = $queueApi;
     }
 
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CheckPingForNotificationTask::BATCH_NAME);

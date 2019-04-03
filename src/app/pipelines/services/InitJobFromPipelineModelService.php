@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\services;
@@ -8,6 +9,7 @@ use src\app\pipelines\interfaces\PipelineModelInterface;
 
 class InitJobFromPipelineModelService
 {
+    /** @var PipelineApiInterface */
     private $pipelineApi;
 
     public function __construct(PipelineApiInterface $pipelineApi)
@@ -15,12 +17,12 @@ class InitJobFromPipelineModelService
         $this->pipelineApi = $pipelineApi;
     }
 
-    public function __invoke(PipelineModelInterface $pipeline): void
+    public function __invoke(PipelineModelInterface $pipeline) : void
     {
         $this->init($pipeline);
     }
 
-    public function init(PipelineModelInterface $pipeline): void
+    public function init(PipelineModelInterface $pipeline) : void
     {
         $job = $this->pipelineApi->createPipelineJobModel();
 
@@ -34,6 +36,7 @@ class InitJobFromPipelineModelService
             $job->addPipelineJobItem($jobItem);
         }
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->pipelineApi->saveJob($job);
     }
 }

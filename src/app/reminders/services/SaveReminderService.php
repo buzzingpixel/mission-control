@@ -1,27 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\services;
 
-use DateTimeZone;
-use Cocur\Slugify\Slugify;
-use src\app\data\Reminder\Reminder;
-use corbomite\db\Factory as OrmFactory;
-use src\app\data\Reminder\ReminderRecord;
-use corbomite\db\interfaces\BuildQueryInterface;
 use Atlas\Table\Exception as AtlasTableException;
+use Cocur\Slugify\Slugify;
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\interfaces\EventDispatcherInterface;
+use DateTimeZone;
+use src\app\data\Reminder\Reminder;
+use src\app\data\Reminder\ReminderRecord;
 use src\app\reminders\events\ReminderAfterSaveEvent;
 use src\app\reminders\events\ReminderBeforeSaveEvent;
-use src\app\reminders\interfaces\ReminderModelInterface;
-use corbomite\events\interfaces\EventDispatcherInterface;
 use src\app\reminders\exceptions\InvalidReminderModelException;
 use src\app\reminders\exceptions\ReminderNameNotUniqueException;
+use src\app\reminders\interfaces\ReminderModelInterface;
 
 class SaveReminderService
 {
+    /** @var Slugify */
     private $slugify;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
     private $buildQuery;
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
@@ -30,9 +35,9 @@ class SaveReminderService
         BuildQueryInterface $buildQuery,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->slugify = $slugify;
-        $this->ormFactory = $ormFactory;
-        $this->buildQuery = $buildQuery;
+        $this->slugify         = $slugify;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -40,7 +45,7 @@ class SaveReminderService
      * @throws InvalidReminderModelException
      * @throws ReminderNameNotUniqueException
      */
-    public function __invoke(ReminderModelInterface $model)
+    public function __invoke(ReminderModelInterface $model) : void
     {
         $this->save($model);
     }
@@ -49,7 +54,7 @@ class SaveReminderService
      * @throws InvalidReminderModelException
      * @throws ReminderNameNotUniqueException
      */
-    public function save(ReminderModelInterface $model): void
+    public function save(ReminderModelInterface $model) : void
     {
         if (! $model->title() || ! $model->startRemindingOn()) {
             throw new InvalidReminderModelException();
@@ -86,12 +91,14 @@ class SaveReminderService
 
         $this->eventDispatcher->dispatch(new ReminderBeforeSaveEvent($model));
 
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpParamsInspection */
         $this->finalSave($model, $existingRecord);
 
         $this->eventDispatcher->dispatch(new ReminderAfterSaveEvent($model));
     }
 
-    private function saveNew(ReminderModelInterface $model): void
+    private function saveNew(ReminderModelInterface $model) : void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -99,40 +106,41 @@ class SaveReminderService
 
         $record->guid = $model->getGuidAsBytes();
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->finalSave($model, $record);
     }
 
     private function finalSave(
         ReminderModelInterface $model,
         ReminderRecord $record
-    ): void {
+    ) : void {
         $startRemindingOn = $model->startRemindingOn();
         $lastReminderSent = $model->lastReminderSent();
-        $addedAt = $model->addedAt();
+        $addedAt          = $model->addedAt();
 
         $startRemindingOn->setTimezone(new DateTimeZone('UTC'));
         $addedAt->setTimezone(new DateTimeZone('UTC'));
 
-        $record->project_guid = $model->getProjectGuidAsBytes();
-        $record->is_active = $model->isActive();
-        $record->title = $model->title();
-        $record->slug = $model->slug();
-        $record->message = $model->message();
-        $record->start_reminding_on = $startRemindingOn->format('Y-m-d H:i:s');
+        $record->project_guid                 = $model->getProjectGuidAsBytes();
+        $record->is_active                    = $model->isActive();
+        $record->title                        = $model->title();
+        $record->slug                         = $model->slug();
+        $record->message                      = $model->message();
+        $record->start_reminding_on           = $startRemindingOn->format('Y-m-d H:i:s');
         $record->start_reminding_on_time_zone = $startRemindingOn->getTimezone()->getName();
 
         if ($lastReminderSent) {
             $lastReminderSent->setTimezone(new DateTimeZone('UTC'));
-            $record->last_reminder_sent = $lastReminderSent->format('Y-m-d H:i:s');
+            $record->last_reminder_sent           = $lastReminderSent->format('Y-m-d H:i:s');
             $record->last_reminder_sent_time_zone = $lastReminderSent->getTimezone()->getName();
         }
 
         if (! $lastReminderSent) {
-            $record->last_reminder_sent = null;
+            $record->last_reminder_sent           = null;
             $record->last_reminder_sent_time_zone = null;
         }
 
-        $record->added_at = $addedAt->format('Y-m-d H:i:s');
+        $record->added_at           = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
         try {
@@ -142,6 +150,7 @@ class SaveReminderService
                 return;
             }
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             throw $e;
         }
     }

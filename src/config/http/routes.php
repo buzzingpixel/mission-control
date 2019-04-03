@@ -1,52 +1,54 @@
 <?php
+
 declare(strict_types=1);
 
 /**
  * @see https://github.com/nikic/FastRoute
  */
 
-/** @var \FastRoute\RouteCollector $r */
-/** @var \FastRoute\RouteCollector $routeCollector */
-
-use src\app\http\controllers\TestController;
-use src\app\http\controllers\AdminController;
+use FastRoute\RouteCollector;
 use src\app\http\controllers\AccountController;
-use src\app\http\controllers\EditPingController;
-use src\app\http\controllers\ViewPingController;
-use src\app\http\controllers\PingIndexController;
-use src\app\http\controllers\EditServerController;
+use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\AdminController;
+use src\app\http\controllers\ChangePasswordController;
+use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\CreatePingController;
-use src\app\http\controllers\EditSSHKeyController;
-use src\app\http\controllers\ViewServerController;
-use src\app\http\controllers\ViewSSHKeyController;
-use src\app\http\controllers\CreateUserController;
-use src\app\http\controllers\RunPipelineController;
-use src\app\http\controllers\SSHKeyIndexController;
-use src\app\http\controllers\EditProjectController;
-use src\app\http\controllers\PingCheckinController;
-use src\app\http\controllers\ViewProjectController;
-use src\app\http\controllers\ViewReminderController;
-use src\app\http\controllers\EditPipelineController;
-use src\app\http\controllers\ServersIndexController;
-use src\app\http\controllers\ViewPipelineController;
-use src\app\http\controllers\EditReminderController;
+use src\app\http\controllers\CreatePipelineController;
+use src\app\http\controllers\CreateProjectController;
+use src\app\http\controllers\CreateReminderController;
 use src\app\http\controllers\CreateServerController;
 use src\app\http\controllers\CreateSSHKeyController;
+use src\app\http\controllers\CreateUserController;
+use src\app\http\controllers\EditMonitoredUrlController;
+use src\app\http\controllers\EditPingController;
+use src\app\http\controllers\EditPipelineController;
+use src\app\http\controllers\EditProjectController;
+use src\app\http\controllers\EditReminderController;
+use src\app\http\controllers\EditServerController;
+use src\app\http\controllers\EditSSHKeyController;
+use src\app\http\controllers\ForgotPasswordController;
+use src\app\http\controllers\MonitoredUrlIndexController;
+use src\app\http\controllers\PasswordResetController;
+use src\app\http\controllers\PingCheckinController;
+use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\PipelineIndexController;
 use src\app\http\controllers\ProjectsIndexController;
-use src\app\http\controllers\PasswordResetController;
-use src\app\http\controllers\CreateProjectController;
-use src\app\http\controllers\ChangePasswordController;
-use src\app\http\controllers\CreatePipelineController;
-use src\app\http\controllers\CreateReminderController;
-use src\app\http\controllers\ForgotPasswordController;
 use src\app\http\controllers\RemindersIndexController;
-use src\app\http\controllers\EditMonitoredUrlController;
+use src\app\http\controllers\RunPipelineController;
+use src\app\http\controllers\ServersIndexController;
+use src\app\http\controllers\SSHKeyIndexController;
+use src\app\http\controllers\TestController;
 use src\app\http\controllers\ViewMonitoredUrlController;
-use src\app\http\controllers\MonitoredUrlIndexController;
-use src\app\http\controllers\CreateMonitoredUrlController;
-use src\app\http\controllers\AddNotificationEmailController;
+use src\app\http\controllers\ViewPingController;
+use src\app\http\controllers\ViewPipelineController;
 use src\app\http\controllers\ViewPipelineJobDetailsController;
+use src\app\http\controllers\ViewProjectController;
+use src\app\http\controllers\ViewReminderController;
+use src\app\http\controllers\ViewServerController;
+use src\app\http\controllers\ViewSSHKeyController;
+
+/** @var RouteCollector $r */
+/** @var RouteCollector $routeCollector */
 
 // Testing
 if (getenv('DEV_MODE') === 'true') {

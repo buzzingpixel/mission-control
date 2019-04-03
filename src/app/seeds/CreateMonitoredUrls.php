@@ -1,28 +1,30 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
 use Phinx\Seed\AbstractSeed;
-use src\app\projects\ProjectsApi;
 use src\app\monitoredurls\MonitoredUrlsApi;
+use src\app\projects\ProjectsApi;
 
 class CreateMonitoredUrls extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateProjects',
-        ];
+        return ['CreateProjects'];
     }
 
-    public function run()
+    public function run() : void
     {
         $this->createMonitoredUrl('BuzzingPixel', 'https://buzzingpixel.com');
         $this->createMonitoredUrl('NightOwl', 'https://nightowl.fm');
         $this->createMonitoredUrl('DuBose Web', 'https://www.duboseweb.com');
     }
 
-    private function createMonitoredUrl(string $title, string $url)
+    private function createMonitoredUrl(string $title, string $url) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -52,7 +54,7 @@ class CreateMonitoredUrls extends AbstractSeed
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $monitoredUrlApi->save($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

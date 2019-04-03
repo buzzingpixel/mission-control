@@ -1,29 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\services;
 
-use DateTimeZone;
+use Atlas\Table\Exception as AtlasTableException;
 use Cocur\Slugify\Slugify;
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\interfaces\EventDispatcherInterface;
+use DateTimeZone;
+use Ramsey\Uuid\UuidFactoryInterface;
 use src\app\data\Ping\Ping;
 use src\app\data\Ping\PingRecord;
-use Ramsey\Uuid\UuidFactoryInterface;
-use corbomite\db\Factory as OrmFactory;
 use src\app\pings\events\PingAfterSaveEvent;
 use src\app\pings\events\PingBeforeSaveEvent;
-use src\app\pings\interfaces\PingModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
-use Atlas\Table\Exception as AtlasTableException;
 use src\app\pings\exceptions\InvalidPingModelException;
 use src\app\pings\exceptions\PingNameNotUniqueException;
-use corbomite\events\interfaces\EventDispatcherInterface;
+use src\app\pings\interfaces\PingModelInterface;
 
 class SavePingService
 {
+    /** @var Slugify */
     private $slugify;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
     private $buildQuery;
+    /** @var UuidFactoryInterface */
     private $uuidFactory;
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
@@ -33,10 +39,10 @@ class SavePingService
         UuidFactoryInterface $uuidFactory,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->slugify = $slugify;
-        $this->ormFactory = $ormFactory;
-        $this->buildQuery = $buildQuery;
-        $this->uuidFactory = $uuidFactory;
+        $this->slugify         = $slugify;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
+        $this->uuidFactory     = $uuidFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -44,7 +50,7 @@ class SavePingService
      * @throws InvalidPingModelException
      * @throws PingNameNotUniqueException
      */
-    public function __invoke(PingModelInterface $model)
+    public function __invoke(PingModelInterface $model) : void
     {
         $this->save($model);
     }
@@ -53,7 +59,7 @@ class SavePingService
      * @throws InvalidPingModelException
      * @throws PingNameNotUniqueException
      */
-    public function save(PingModelInterface $model): void
+    public function save(PingModelInterface $model) : void
     {
         if (! $model->title() || ! $model->expectEvery() || ! $model->warnAfter()) {
             throw new InvalidPingModelException();
@@ -95,7 +101,7 @@ class SavePingService
         $this->eventDispatcher->dispatch(new PingAfterSaveEvent($model));
     }
 
-    private function saveNew(PingModelInterface $model): void
+    private function saveNew(PingModelInterface $model) : void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -112,37 +118,41 @@ class SavePingService
     private function finalSave(
         PingModelInterface $model,
         PingRecord $record
-    ): void {
-        $record->project_guid = $model->getProjectGuidAsBytes();
-        $record->is_active = $model->isActive();
-        $record->title = $model->title();
-        $record->slug = $model->slug();
-        $record->pending_error = $model->pendingError();
-        $record->has_error = $model->hasError();
-        $record->expect_every = $model->expectEvery();
-        $record->warn_after = $model->warnAfter();
-        $record->last_ping_at = null;
+    ) : void {
+        $record->project_guid           = $model->getProjectGuidAsBytes();
+        $record->is_active              = $model->isActive();
+        $record->title                  = $model->title();
+        $record->slug                   = $model->slug();
+        $record->pending_error          = $model->pendingError();
+        $record->has_error              = $model->hasError();
+        $record->expect_every           = $model->expectEvery();
+        $record->warn_after             = $model->warnAfter();
+        $record->last_ping_at           = null;
         $record->last_ping_at_time_zone = null;
 
-        if ($lastPingAt = $model->lastPingAt()) {
+        $lastPingAt = $model->lastPingAt();
+
+        if ($lastPingAt) {
             $lastPingAt->setTimezone(new DateTimeZone('UTC'));
-            $record->last_ping_at = $lastPingAt->format('Y-m-d H:i:s');
+            $record->last_ping_at           = $lastPingAt->format('Y-m-d H:i:s');
             $record->last_ping_at_time_zone = $lastPingAt->getTimezone()->getName();
         }
 
-        $record->last_notification_at = null;
+        $record->last_notification_at           = null;
         $record->last_notification_at_time_zone = null;
 
-        if ($lastNotificationAt = $model->lastNotificationAt()) {
+        $lastNotificationAt = $model->lastNotificationAt();
+
+        if ($lastNotificationAt) {
             $lastNotificationAt->setTimezone(new DateTimeZone('UTC'));
-            $record->last_notification_at = $lastNotificationAt->format('Y-m-d H:i:s');
+            $record->last_notification_at           = $lastNotificationAt->format('Y-m-d H:i:s');
             $record->last_notification_at_time_zone = $lastNotificationAt->getTimezone()->getName();
         }
 
         $addedAt = $model->addedAt();
         $addedAt->setTimezone(new DateTimeZone('UTC'));
 
-        $record->added_at = $addedAt->format('Y-m-d H:i:s');
+        $record->added_at           = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 
         try {

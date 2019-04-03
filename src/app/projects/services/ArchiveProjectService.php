@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\projects\services;
 
-use src\app\data\Project\Project;
-use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
-use src\app\data\Project\ProjectRecord;
 use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\EventDispatcher;
+use src\app\data\Project\Project;
+use src\app\data\Project\ProjectRecord;
 use src\app\projects\events\ProjectAfterArchiveEvent;
 use src\app\projects\events\ProjectBeforeArchiveEvent;
 use src\app\projects\interfaces\ProjectModelInterface;
 
 class ArchiveProjectService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class ArchiveProjectService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(ProjectModelInterface $model): void
+    public function __invoke(ProjectModelInterface $model) : void
     {
         $this->archive($model);
     }
 
-    public function archive(ProjectModelInterface $model): void
+    public function archive(ProjectModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new ProjectBeforeArchiveEvent($model));
 
@@ -46,10 +50,11 @@ class ArchiveProjectService
         $this->eventDispatcher->dispatch(new ProjectAfterArchiveEvent($model));
     }
 
-    private function fetchRecord(ProjectModelInterface $model): ProjectRecord
+    private function fetchRecord(ProjectModelInterface $model) : ProjectRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(Project::class, $params)->fetchRecord();
     }
 }

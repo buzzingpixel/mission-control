@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
@@ -7,14 +8,15 @@ use Phinx\Seed\AbstractSeed;
 
 class PromoteUsers extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateUsers',
-        ];
+        return ['CreateUsers'];
     }
 
-    public function run()
+    public function run() : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();

@@ -1,25 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
-use src\app\pings\PingApi;
-use Cocur\Slugify\Slugify;
-use corbomite\queue\QueueApi;
-use corbomite\events\EventDispatcher;
-use Psr\Container\ContainerInterface;
-use src\app\pings\tasks\CheckPingTask;
-use corbomite\db\Factory as OrmFactory;
 use buzzingpixel\corbomitemailer\EmailApi;
-use src\app\pings\services\SavePingService;
+use Cocur\Slugify\Slugify;
+use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
-use src\app\pings\services\FetchPingService;
-use src\app\pings\services\DeletePingService;
-use src\app\pings\services\ArchivePingService;
-use src\app\pings\schedules\CheckPingsSchedule;
-use src\app\pings\services\UnArchivePingService;
-use src\app\pings\tasks\CollectPingsForQueueTask;
-use src\app\pings\listeners\ProjectDeleteListener;
+use corbomite\events\EventDispatcher;
+use corbomite\queue\QueueApi;
+use Psr\Container\ContainerInterface;
 use src\app\pings\listeners\ProjectArchiveListener;
+use src\app\pings\listeners\ProjectDeleteListener;
 use src\app\pings\listeners\ProjectUnArchiveListener;
+use src\app\pings\PingApi;
+use src\app\pings\schedules\CheckPingsSchedule;
+use src\app\pings\services\ArchivePingService;
+use src\app\pings\services\DeletePingService;
+use src\app\pings\services\FetchPingService;
+use src\app\pings\services\SavePingService;
+use src\app\pings\services\UnArchivePingService;
+use src\app\pings\tasks\CheckPingTask;
+use src\app\pings\tasks\CollectPingsForQueueTask;
 
 return [
     PingApi::class => static function (ContainerInterface $di) {

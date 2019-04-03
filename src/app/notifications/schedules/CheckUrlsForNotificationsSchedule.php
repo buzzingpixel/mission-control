@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\schedules;
 
+use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\notifications\tasks\CheckUrlForNotificationTask;
-use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
 
 class CheckUrlsForNotificationsSchedule
 {
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(QueueApiInterface $queueApi)
@@ -20,7 +22,7 @@ class CheckUrlsForNotificationsSchedule
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectUrlsForNotificationQueueTask::BATCH_NAME);

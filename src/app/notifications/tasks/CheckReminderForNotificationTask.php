@@ -1,18 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
 use DateTime;
+use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\reminders\interfaces\ReminderModelInterface;
-use src\app\notifications\interfaces\SendNotificationAdapterInterface;
+use function getenv;
+use function time;
 
 class CheckReminderForNotificationTask
 {
-    public const BATCH_NAME = 'checkRemindersForNotifications';
+    public const BATCH_NAME  = 'checkRemindersForNotifications';
     public const BATCH_TITLE = 'Check Reminders for Notifications';
 
+    /** @var ReminderApiInterface */
     private $reminderApi;
 
     /** @var SendNotificationAdapterInterface[] */
@@ -22,11 +26,11 @@ class CheckReminderForNotificationTask
         ReminderApiInterface $reminderApi,
         array $sendNotificationAdapters = []
     ) {
-        $this->reminderApi = $reminderApi;
+        $this->reminderApi              = $reminderApi;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
-    public function __invoke(array $context): void
+    public function __invoke(array $context) : void
     {
         $model = $this->getModel($context['guid']);
 
@@ -55,7 +59,7 @@ class CheckReminderForNotificationTask
         $lastReminderSentTimestampPlus22 = 0;
 
         if ($last = $model->lastReminderSent()) {
-            $twentyTwoHoursInSeconds = 79200;
+            $twentyTwoHoursInSeconds         = 79200;
             $lastReminderSentTimestampPlus22 = $last->getTimestamp() + $twentyTwoHoursInSeconds;
         }
 
@@ -81,7 +85,8 @@ class CheckReminderForNotificationTask
                 'urls' => [[
                     'content' => 'View Reminder',
                     'href' => $reminderUrl,
-                ]],
+                ],
+                ],
             ]);
         }
 
@@ -92,10 +97,11 @@ class CheckReminderForNotificationTask
         $this->reminderApi->save($model);
     }
 
-    private function getModel(string $guid): ReminderModelInterface
+    private function getModel(string $guid) : ReminderModelInterface
     {
         $queryModel = $this->reminderApi->makeQueryModel();
         $queryModel->addWhere('guid', $this->reminderApi->uuidToBytes($guid));
+
         return $this->reminderApi->fetchOne($queryModel);
     }
 }

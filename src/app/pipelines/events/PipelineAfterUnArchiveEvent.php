@@ -1,14 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\events;
 
-use src\app\pipelines\PipelineApi;
 use corbomite\events\interfaces\EventInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use src\app\pipelines\PipelineApi;
 
 class PipelineAfterUnArchiveEvent implements EventInterface
 {
+    /** @var PipelineModelInterface */
     private $model;
 
     public function __construct(PipelineModelInterface $model)
@@ -16,24 +18,25 @@ class PipelineAfterUnArchiveEvent implements EventInterface
         $this->model = $model;
     }
 
-    public function model(): PipelineModelInterface
+    public function model() : PipelineModelInterface
     {
         return $this->model;
     }
 
-    public function provider(): string
+    public function provider() : string
     {
         return PipelineApi::class;
     }
 
-    public function name(): string
+    public function name() : string
     {
         return 'PipelineAfterUnArchive';
     }
 
+    /** @var bool */
     private $stop = false;
 
-    public function stopPropagation(?bool $stop = null): bool
+    public function stopPropagation(?bool $stop = null) : bool
     {
         return $this->stop = $stop ?? $this->stop;
     }

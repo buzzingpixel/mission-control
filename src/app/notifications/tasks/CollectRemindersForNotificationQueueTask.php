@@ -1,32 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
+use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
-use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 
 class CollectRemindersForNotificationQueueTask
 {
-    public const BATCH_NAME = 'collectRemindersForNotificationQueue';
+    public const BATCH_NAME  = 'collectRemindersForNotificationQueue';
     public const BATCH_TITLE = 'Collect Reminders for Notification Queue';
 
+    /** @var QueueApiInterface */
     private $queueApi;
+    /** @var ReminderApiInterface */
     private $reminderApi;
 
     public function __construct(
         QueueApiInterface $queueApi,
         ReminderApiInterface $reminderApi
     ) {
-        $this->queueApi = $queueApi;
+        $this->queueApi    = $queueApi;
         $this->reminderApi = $reminderApi;
     }
 
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CheckReminderForNotificationTask::BATCH_NAME);

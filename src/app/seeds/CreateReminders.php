@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
@@ -8,21 +9,22 @@ use src\app\reminders\ReminderApi;
 
 class CreateReminders extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateProjects',
-        ];
+        return ['CreateProjects'];
     }
 
-    public function run()
+    public function run() : void
     {
         $this->createReminder('Test Reminder 1', 'Test Message 1', '2019-03-01');
         $this->createReminder('Test Reminder 2', 'Test Message 2', '2019-03-02');
         $this->createReminder('Test Reminder 3', 'Test Message 3', '2019-03-03');
     }
 
-    private function createReminder(string $title, string $msg, string $start)
+    private function createReminder(string $title, string $msg, string $start) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -58,7 +60,7 @@ class CreateReminders extends AbstractSeed
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $reminderApi->save($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

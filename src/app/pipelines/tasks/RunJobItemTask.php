@@ -1,12 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\tasks;
 
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use function dd;
 
 class RunJobItemTask
 {
+    /** @var PipelineApiInterface */
     private $pipelineApi;
 
     public function __construct(PipelineApiInterface $pipelineApi)
@@ -14,7 +17,10 @@ class RunJobItemTask
         $this->pipelineApi = $pipelineApi;
     }
 
-    public function __invoke(array $context = [])
+    /**
+     * @param mixed[] $context
+     */
+    public function __invoke(array $context = []) : void
     {
         $jobItemGuid = $context['jobItemGuid'] ?? '';
 

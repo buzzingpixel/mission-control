@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\utilities;
@@ -132,12 +133,18 @@ class TimeZoneListUtility
         'Pacific/Tongatapu' => "Nuku'alofa",
     ];
 
-    public function __invoke(): array
+    /**
+     * @return string[]
+     */
+    public function __invoke() : array
     {
         return $this->listTimeZones();
     }
 
-    public function listTimeZones(): array
+    /**
+     * @return string[]
+     */
+    public function listTimeZones() : array
     {
         $return = [];
 

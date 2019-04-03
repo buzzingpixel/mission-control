@@ -1,15 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\models;
 
 use DateTime;
 use DateTimeZone;
-
-use src\app\support\traits\ModelErrorsTrait;
-use src\app\support\traits\ModelAddedAtTrait;
-use src\app\support\traits\StandardModelTrait;
 use src\app\pings\interfaces\PingModelInterface;
+use src\app\support\traits\ModelAddedAtTrait;
+use src\app\support\traits\ModelErrorsTrait;
+use src\app\support\traits\StandardModelTrait;
 
 class PingModel implements PingModelInterface
 {
@@ -17,9 +17,10 @@ class PingModel implements PingModelInterface
     use ModelAddedAtTrait;
     use StandardModelTrait;
 
+    /** @var string */
     private $pingId = '';
 
-    public function pingId(?string $val = null): string
+    public function pingId(?string $val = null) : string
     {
         return $this->pingId = $val ?? $this->pingId;
     }
@@ -27,7 +28,7 @@ class PingModel implements PingModelInterface
     /** @var int|null */
     private $expectEvery;
 
-    public function expectEvery(?int $val = null): ?int
+    public function expectEvery(?int $val = null) : ?int
     {
         return $this->expectEvery = $val ?? $this->expectEvery;
     }
@@ -35,7 +36,7 @@ class PingModel implements PingModelInterface
     /** @var int|null */
     private $warnAfter;
 
-    public function warnAfter(?int $val = null): ?int
+    public function warnAfter(?int $val = null) : ?int
     {
         return $this->warnAfter = $val ?? $this->warnAfter;
     }
@@ -43,7 +44,7 @@ class PingModel implements PingModelInterface
     /** @var DateTime|null */
     private $lastPingAt;
 
-    public function lastPingAt(?DateTime $val = null): DateTime
+    public function lastPingAt(?DateTime $val = null) : DateTime
     {
         if (! $val && ! $this->addedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */
@@ -53,14 +54,15 @@ class PingModel implements PingModelInterface
         return $this->lastPingAt = $val ?? $this->lastPingAt;
     }
 
+    /** @var ?DateTime */
     private $lastNotificationAt;
 
-    public function lastNotificationAt(?DateTime $val = null): ?DateTime
+    public function lastNotificationAt(?DateTime $val = null) : ?DateTime
     {
         return $this->lastNotificationAt = $val ?? $this->lastNotificationAt;
     }
 
-    public function clearLastNotificationAt()
+    public function clearLastNotificationAt() : void
     {
         $this->lastNotificationAt = null;
     }

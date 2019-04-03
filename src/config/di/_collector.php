@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
-$directory = new RecursiveDirectoryIterator(__DIR__);
-$iterator = new RecursiveIteratorIterator($directory);
+$directory     = new RecursiveDirectoryIterator(__DIR__);
+$iterator      = new RecursiveIteratorIterator($directory);
 $finalIterator = new RegexIterator(
     $iterator,
     '/^.+\.php$/i',

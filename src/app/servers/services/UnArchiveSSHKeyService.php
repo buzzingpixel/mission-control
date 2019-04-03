@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\services;
 
-use src\app\data\SshKey\SshKey;
-use src\app\data\SshKey\SshKeyRecord;
-use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\interfaces\BuildQueryInterface;
-use src\app\servers\interfaces\SSHKeyModelInterface;
+use corbomite\events\EventDispatcher;
+use src\app\data\SshKey\SshKey;
+use src\app\data\SshKey\SshKeyRecord;
 use src\app\servers\events\SSHKeyAfterUnArchiveEvent;
 use src\app\servers\events\SSHKeyBeforeUnArchiveEvent;
+use src\app\servers\interfaces\SSHKeyModelInterface;
 
 class UnArchiveSSHKeyService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class UnArchiveSSHKeyService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(SSHKeyModelInterface $model): void
+    public function __invoke(SSHKeyModelInterface $model) : void
     {
         $this->unArchive($model);
     }
 
-    public function unArchive(SSHKeyModelInterface $model): void
+    public function unArchive(SSHKeyModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new SSHKeyBeforeUnArchiveEvent($model));
 
@@ -46,10 +50,11 @@ class UnArchiveSSHKeyService
         $this->eventDispatcher->dispatch(new SSHKeyAfterUnArchiveEvent($model));
     }
 
-    private function fetchRecord(SSHKeyModelInterface $model): SshKeyRecord
+    private function fetchRecord(SSHKeyModelInterface $model) : SshKeyRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(SshKey::class, $params)->fetchRecord();
     }
 }

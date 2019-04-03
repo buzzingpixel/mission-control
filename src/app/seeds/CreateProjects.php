@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
@@ -7,7 +8,7 @@ use src\app\projects\ProjectsApi;
 
 class CreateProjects extends AbstractSeed
 {
-    public function run()
+    public function run() : void
     {
         $desc = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra porttitor felis vitae molestie. Aliquam erat volutpat. Vestibulum ut euismod mauris.';
 
@@ -16,7 +17,7 @@ class CreateProjects extends AbstractSeed
         $this->createProject('Test Project 3', $desc);
     }
 
-    private function createProject(string $name, string $desc)
+    private function createProject(string $name, string $desc) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -34,7 +35,7 @@ class CreateProjects extends AbstractSeed
         // just what we want. We don't want to duplicate
         try {
             $projectApi->save($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

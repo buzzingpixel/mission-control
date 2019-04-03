@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\support\extensions;
@@ -9,8 +10,6 @@ class GuzzleClientNoHttpErrors extends Client
 {
     public function __construct()
     {
-        parent::__construct([
-            'http_errors' => false,
-        ]);
+        parent::__construct(['http_errors' => false]);
     }
 }

@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
+use corbomite\cli\services\CliQuestionService;
 use corbomite\user\UserApi;
 use Psr\Container\ContainerInterface;
-use corbomite\cli\services\CliQuestionService;
-use src\app\cli\actions\PromoteUserToAdminAction;
 use src\app\cli\actions\DemoteUserFromAdminAction;
+use src\app\cli\actions\PromoteUserToAdminAction;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 return [

@@ -1,26 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\services;
 
+use Atlas\Table\Exception as AtlasTableException;
 use Cocur\Slugify\Slugify;
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\interfaces\EventDispatcherInterface;
 use src\app\data\SshKey\SshKey;
 use src\app\data\SshKey\SshKeyRecord;
-use corbomite\db\Factory as OrmFactory;
 use src\app\servers\events\SSHKeyAfterSaveEvent;
-use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\servers\events\SSHKeyBeforeSaveEvent;
-use Atlas\Table\Exception as AtlasTableException;
-use src\app\servers\interfaces\SSHKeyModelInterface;
-use src\app\servers\exceptions\TitleNotUniqueException;
-use corbomite\events\interfaces\EventDispatcherInterface;
 use src\app\servers\exceptions\InvalidSSHKeyModelException;
+use src\app\servers\exceptions\TitleNotUniqueException;
+use src\app\servers\interfaces\SSHKeyModelInterface;
 
 class SaveSSHKeyService
 {
+    /** @var Slugify */
     private $slugify;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
     private $buildQuery;
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
@@ -29,9 +34,9 @@ class SaveSSHKeyService
         BuildQueryInterface $buildQuery,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->slugify = $slugify;
-        $this->ormFactory = $ormFactory;
-        $this->buildQuery = $buildQuery;
+        $this->slugify         = $slugify;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -39,7 +44,7 @@ class SaveSSHKeyService
      * @throws InvalidSSHKeyModelException
      * @throws TitleNotUniqueException
      */
-    public function __invoke(SSHKeyModelInterface $model): void
+    public function __invoke(SSHKeyModelInterface $model) : void
     {
         $this->save($model);
     }
@@ -48,7 +53,7 @@ class SaveSSHKeyService
      * @throws InvalidSSHKeyModelException
      * @throws TitleNotUniqueException
      */
-    public function save(SSHKeyModelInterface $model): void
+    public function save(SSHKeyModelInterface $model) : void
     {
         if (! $model->title() ||
             ! $model->public() ||
@@ -80,12 +85,14 @@ class SaveSSHKeyService
 
         $this->eventDispatcher->dispatch(new SSHKeyBeforeSaveEvent($model, $isNew));
 
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection PhpParamsInspection */
         $isNew ? $this->saveNew($model) : $this->finalSave($model, $existingRecord);
 
         $this->eventDispatcher->dispatch(new SSHKeyAfterSaveEvent($model, $isNew));
     }
 
-    private function saveNew(SSHKeyModelInterface $model): void
+    private function saveNew(SSHKeyModelInterface $model) : void
     {
         $orm = $this->ormFactory->makeOrm();
 
@@ -93,16 +100,17 @@ class SaveSSHKeyService
 
         $record->guid = $model->getGuidAsBytes();
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->finalSave($model, $record);
     }
 
-    private function finalSave(SSHKeyModelInterface $model, SshKeyRecord $record): void
+    private function finalSave(SSHKeyModelInterface $model, SshKeyRecord $record) : void
     {
         $record->is_active = $model->isActive();
-        $record->title = $model->title();
-        $record->slug = $model->slug();
-        $record->public = $model->public();
-        $record->private = $model->private();
+        $record->title     = $model->title();
+        $record->slug      = $model->slug();
+        $record->public    = $model->public();
+        $record->private   = $model->private();
 
         try {
             $this->ormFactory->makeOrm()->persist($record);
@@ -111,6 +119,7 @@ class SaveSSHKeyService
                 return;
             }
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             throw $e;
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
@@ -7,21 +8,22 @@ use src\app\servers\ServerApi;
 
 class CreateSshKeys extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateProjects',
-        ];
+        return ['CreateProjects'];
     }
 
-    public function run()
+    public function run() : void
     {
         $this->createSshKey('Test Key 1');
         $this->createSshKey('Test Key 2');
         $this->createSshKey('Test Key 3');
     }
 
-    private function createSshKey(string $title)
+    private function createSshKey(string $title) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -44,7 +46,7 @@ class CreateSshKeys extends AbstractSeed
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $serverApi->saveSSHKey($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

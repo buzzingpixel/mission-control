@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
-use src\app\projects\ProjectsApi;
-use src\app\pipelines\PipelineApi;
-use src\app\monitoredurls\MonitoredUrlsApi;
-use src\app\pipelines\listeners\SavePipelineJobListener;
-use src\app\monitoredurls\listeners\ProjectDeleteListener;
-use src\app\monitoredurls\listeners\ProjectArchiveListener;
-use src\app\monitoredurls\listeners\ProjectUnArchiveListener;
-use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
 use corbomite\events\interfaces\EventListenerRegistrationInterface;
-use src\app\pings\listeners\ProjectDeleteListener as PingProjectDeleteListener;
+use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
+use src\app\monitoredurls\listeners\ProjectArchiveListener;
+use src\app\monitoredurls\listeners\ProjectDeleteListener;
+use src\app\monitoredurls\listeners\ProjectUnArchiveListener;
+use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\pings\listeners\ProjectArchiveListener as PingProjectArchiveListener;
+use src\app\pings\listeners\ProjectDeleteListener as PingProjectDeleteListener;
 use src\app\pings\listeners\ProjectUnArchiveListener as PingProjectUnArchiveListener;
-use src\app\reminders\listeners\ProjectDeleteListener as ReminderProjectDeleteListener;
+use src\app\pipelines\listeners\SavePipelineJobListener;
+use src\app\pipelines\PipelineApi;
+use src\app\projects\ProjectsApi;
 use src\app\reminders\listeners\ProjectArchiveListener as ReminderProjectArchiveListener;
+use src\app\reminders\listeners\ProjectDeleteListener as ReminderProjectDeleteListener;
 use src\app\reminders\listeners\ProjectUnArchiveListener as ReminderProjectUnArchiveListener;
 
 /** @var EventListenerRegistrationInterface $r */

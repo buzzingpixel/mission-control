@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 use Cocur\Slugify\Slugify;
-use src\app\projects\ProjectsApi;
-use corbomite\events\EventDispatcher;
-use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
-use src\app\projects\services\SaveProjectService;
+use corbomite\events\EventDispatcher;
+use Psr\Container\ContainerInterface;
+use src\app\projects\ProjectsApi;
+use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\services\DeleteProjectService;
 use src\app\projects\services\FetchProjectsService;
-use src\app\projects\services\ArchiveProjectService;
+use src\app\projects\services\SaveProjectService;
 use src\app\projects\services\UnArchiveProjectService;
 
 return [

@@ -1,19 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\services;
 
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use DateTime;
 use DateTimeZone;
 use src\app\data\Reminder\Reminder;
 use src\app\data\Reminder\ReminderRecord;
-use src\app\reminders\models\ReminderModel;
-use corbomite\db\interfaces\QueryModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\reminders\interfaces\ReminderModelInterface;
+use src\app\reminders\models\ReminderModel;
 
 class FetchReminderService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
     public function __construct(
@@ -25,7 +27,7 @@ class FetchReminderService
     /**
      * @return ReminderModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -33,7 +35,7 @@ class FetchReminderService
     /**
      * @return ReminderModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -80,10 +82,9 @@ class FetchReminderService
     }
 
     /**
-     * @param $params
      * @return ReminderRecord[]
      */
-    private function fetchResults($params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
         return $this->buildQuery->build(Reminder::class, $params)->fetchRecords();
     }

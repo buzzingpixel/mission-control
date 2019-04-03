@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\listeners;
 
 use corbomite\events\interfaces\EventInterface;
-use src\app\reminders\interfaces\ReminderApiInterface;
 use corbomite\events\interfaces\EventListenerInterface;
 use src\app\projects\events\ProjectBeforeUnArchiveEvent;
+use src\app\reminders\interfaces\ReminderApiInterface;
 
 class ProjectUnArchiveListener implements EventListenerInterface
 {
+    /** @var ReminderApiInterface */
     private $reminderApi;
 
     public function __construct(ReminderApiInterface $reminderApi)
@@ -17,7 +19,7 @@ class ProjectUnArchiveListener implements EventListenerInterface
         $this->reminderApi = $reminderApi;
     }
 
-    public function call(EventInterface $event): void
+    public function call(EventInterface $event) : void
     {
         /** @var ProjectBeforeUnArchiveEvent $event */
 
@@ -30,6 +32,8 @@ class ProjectUnArchiveListener implements EventListenerInterface
             }
 
             $model->isActive(true);
+
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->reminderApi->save($model);
         }
     }

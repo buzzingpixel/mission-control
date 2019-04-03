@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\services;
 
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\EventDispatcher;
 use src\app\data\Ping\Ping;
 use src\app\data\Ping\PingRecord;
-use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as OrmFactory;
 use src\app\pings\events\PingAfterDeleteEvent;
 use src\app\pings\events\PingBeforeDeleteEvent;
 use src\app\pings\interfaces\PingModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
 
 class DeletePingService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class DeletePingService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(PingModelInterface $model): void
+    public function __invoke(PingModelInterface $model) : void
     {
         $this->delete($model);
     }
 
-    public function delete(PingModelInterface $model): void
+    public function delete(PingModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new PingBeforeDeleteEvent($model));
 
@@ -42,10 +46,11 @@ class DeletePingService
         $this->eventDispatcher->dispatch(new PingAfterDeleteEvent($model));
     }
 
-    private function fetchRecord(PingModelInterface $model): PingRecord
+    private function fetchRecord(PingModelInterface $model) : PingRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(Ping::class, $params)->fetchRecord();
     }
 }

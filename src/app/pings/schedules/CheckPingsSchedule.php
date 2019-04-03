@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\schedules;
 
-use src\app\pings\tasks\CheckPingTask;
-use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\pings\tasks\CollectPingsForQueueTask;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
+use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\pings\tasks\CheckPingTask;
+use src\app\pings\tasks\CollectPingsForQueueTask;
 
 class CheckPingsSchedule
 {
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(QueueApiInterface $queueApi)
@@ -20,7 +22,7 @@ class CheckPingsSchedule
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke()
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectPingsForQueueTask::BATCH_NAME);

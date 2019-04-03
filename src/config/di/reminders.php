@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 use Cocur\Slugify\Slugify;
-use src\app\reminders\ReminderApi;
-use corbomite\events\EventDispatcher;
-use Psr\Container\ContainerInterface;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
-use src\app\reminders\services\SaveReminderService;
-use src\app\reminders\services\FetchReminderService;
-use src\app\reminders\services\DeleteReminderService;
-use src\app\reminders\services\ArchiveReminderService;
-use src\app\reminders\listeners\ProjectDeleteListener;
+use corbomite\events\EventDispatcher;
+use Psr\Container\ContainerInterface;
 use src\app\reminders\listeners\ProjectArchiveListener;
-use src\app\reminders\services\UnArchiveReminderService;
+use src\app\reminders\listeners\ProjectDeleteListener;
 use src\app\reminders\listeners\ProjectUnArchiveListener;
+use src\app\reminders\ReminderApi;
+use src\app\reminders\services\ArchiveReminderService;
+use src\app\reminders\services\DeleteReminderService;
+use src\app\reminders\services\FetchReminderService;
+use src\app\reminders\services\SaveReminderService;
+use src\app\reminders\services\UnArchiveReminderService;
 
 return [
     ReminderApi::class => static function (ContainerInterface $di) {

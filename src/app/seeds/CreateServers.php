@@ -1,28 +1,30 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
 use Phinx\Seed\AbstractSeed;
-use src\app\servers\ServerApi;
 use src\app\projects\ProjectsApi;
+use src\app\servers\ServerApi;
 
 class CreateServers extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateProjects',
-        ];
+        return ['CreateProjects'];
     }
 
-    public function run()
+    public function run() : void
     {
         $this->createServer('Test Server 1', '123.456.78.9');
         $this->createServer('Test Server 2', '987.654.32.1');
         $this->createServer('Test Server 3', '998.7.22.14');
     }
 
-    private function createServer(string $title, string $addr)
+    private function createServer(string $title, string $addr) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -64,7 +66,7 @@ class CreateServers extends AbstractSeed
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $serverApi->save($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

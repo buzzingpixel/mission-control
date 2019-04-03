@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -8,8 +9,9 @@ declare(strict_types=1);
 namespace src\app\notifications\notificationadapters;
 
 use GuzzleHttp\RequestOptions;
-use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use src\app\notifications\interfaces\SendNotificationAdapterInterface;
+use src\app\support\extensions\GuzzleClientNoHttpErrors;
+use function time;
 
 class SlackNotificationAdapter implements SendNotificationAdapterInterface
 {
@@ -20,11 +22,11 @@ class SlackNotificationAdapter implements SendNotificationAdapterInterface
         GuzzleClientNoHttpErrors $guzzleClient,
         ?string $slackWebookUrl
     ) {
-        $this->guzzleClient = $guzzleClient;
+        $this->guzzleClient   = $guzzleClient;
         $this->slackWebookUrl = $slackWebookUrl;
     }
 
-    public function send(string $subject, string $message, array $context = [])
+    public function send(string $subject, string $message, array $context = []) : void
     {
         if (! $this->slackWebookUrl) {
             return;
@@ -84,7 +86,7 @@ class SlackNotificationAdapter implements SendNotificationAdapterInterface
                         // 'footer' => '',
                         // 'footer_icon' => '',
                         'ts' => time(),
-                    ]
+                    ],
                 ],
             ],
         ]);

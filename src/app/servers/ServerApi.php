@@ -1,34 +1,36 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers;
 
+use corbomite\db\interfaces\QueryModelInterface;
 use Psr\Container\ContainerInterface;
+use src\app\pings\services\DeleteServerService;
+use src\app\pings\services\DeleteSSHKeyService;
+use src\app\servers\interfaces\ServerApiInterface;
+use src\app\servers\interfaces\ServerModelInterface;
+use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\models\ServerModel;
 use src\app\servers\models\SSHKeyModel;
-use src\app\support\traits\UuidToBytesTrait;
-use src\app\support\traits\MakeQueryModelTrait;
-use src\app\servers\services\SaveServerService;
-use src\app\pings\services\DeleteServerService;
-use src\app\servers\services\SaveSSHKeyService;
-use corbomite\db\interfaces\QueryModelInterface;
-use src\app\servers\services\FetchSSHKeyService;
-use src\app\servers\services\FetchServerService;
-use src\app\pings\services\DeleteSSHKeyService;
 use src\app\servers\services\ArchiveServerService;
-use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\FetchServerService;
+use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
-use src\app\servers\services\UnArchiveSSHKeyService;
-use src\app\servers\interfaces\SSHKeyModelInterface;
-use src\app\servers\interfaces\ServerModelInterface;
+use src\app\servers\services\SaveServerService;
+use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
+use src\app\servers\services\UnArchiveSSHKeyService;
+use src\app\support\traits\MakeQueryModelTrait;
+use src\app\support\traits\UuidToBytesTrait;
 
 class ServerApi implements ServerApiInterface
 {
     use UuidToBytesTrait;
     use MakeQueryModelTrait;
 
+    /** @var ContainerInterface */
     private $di;
 
     public function __construct(ContainerInterface $di)
@@ -36,92 +38,96 @@ class ServerApi implements ServerApiInterface
         $this->di = $di;
     }
 
-    public function createModel(): ServerModelInterface
+    public function createModel() : ServerModelInterface
     {
         return new ServerModel();
     }
 
-    public function createSShKeyModel(): SSHKeyModelInterface
+    public function createSShKeyModel() : SSHKeyModelInterface
     {
         return new SSHKeyModel();
     }
 
-    public function save(ServerModelInterface $model): void
+    public function save(ServerModelInterface $model) : void
     {
         $service = $this->di->get(SaveServerService::class);
         $service->save($model);
     }
 
-    public function saveSSHKey(SSHKeyModelInterface $model): void
+    public function saveSSHKey(SSHKeyModelInterface $model) : void
     {
         $service = $this->di->get(SaveSSHKeyService::class);
         $service->save($model);
     }
 
-    public function archive(ServerModelInterface $model): void
+    public function archive(ServerModelInterface $model) : void
     {
         $service = $this->di->get(ArchiveServerService::class);
         $service->archive($model);
     }
 
-    public function archiveSSHKey(SSHKeyModelInterface $model): void
+    public function archiveSSHKey(SSHKeyModelInterface $model) : void
     {
         $service = $this->di->get(ArchiveSSHKeyService::class);
         $service->archive($model);
     }
 
-    public function unArchive(ServerModelInterface $model): void
+    public function unArchive(ServerModelInterface $model) : void
     {
         $service = $this->di->get(UnArchiveServerService::class);
         $service->unArchive($model);
     }
 
-    public function unArchiveSSHKey(SSHKeyModelInterface $model): void
+    public function unArchiveSSHKey(SSHKeyModelInterface $model) : void
     {
         $service = $this->di->get(UnArchiveSSHKeyService::class);
         $service->unArchive($model);
     }
 
-    public function delete(ServerModelInterface $model): void
+    public function delete(ServerModelInterface $model) : void
     {
         $service = $this->di->get(DeleteServerService::class);
         $service->delete($model);
     }
 
-    public function deleteSSHKey(SSHKeyModelInterface $model): void
+    public function deleteSSHKey(SSHKeyModelInterface $model) : void
     {
         $service = $this->di->get(DeleteSSHKeyService::class);
         $service->delete($model);
     }
 
+    /** @var ?int */
     private $serverLimit;
 
     public function fetchOne(
         ?QueryModelInterface $params = null
-    ): ?ServerModelInterface {
+    ) : ?ServerModelInterface {
         $this->serverLimit = 1;
-        $result = $this->fetchAll($params)[0] ?? null;
+        $result            = $this->fetchAll($params)[0] ?? null;
         $this->serverLimit = null;
+
         return $result;
     }
 
+    /** @var ?int */
     private $sshKeyLimit;
 
     public function fetchOneSSHKey(
         ?QueryModelInterface $params = null
-    ): ?SSHKeyModelInterface {
+    ) : ?SSHKeyModelInterface {
         $this->sshKeyLimit = 1;
-        $result = $this->fetchAllSSHKeys($params)[0] ?? null;
+        $result            = $this->fetchAllSSHKeys($params)[0] ?? null;
         $this->sshKeyLimit = null;
+
         return $result;
     }
 
     /**
      * Fetches all server model results based on params
-     * @param QueryModelInterface $params
+     *
      * @return ServerModelInterface[]
      */
-    public function fetchAll(?QueryModelInterface $params = null): array
+    public function fetchAll(?QueryModelInterface $params = null) : array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->get(FetchServerService::class);
@@ -142,7 +148,7 @@ class ServerApi implements ServerApiInterface
     /**
      * @return SSHKeyModelInterface[]
      */
-    public function fetchAllSSHKeys(?QueryModelInterface $params = null): array
+    public function fetchAllSSHKeys(?QueryModelInterface $params = null) : array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $service = $this->di->get(FetchSSHKeyService::class);
@@ -160,41 +166,61 @@ class ServerApi implements ServerApiInterface
         return $service->fetch($params);
     }
 
+    /**
+     * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
+     *
+     * @return string[] [
+     *     'server-slug' => 'Server Name',
+     *     'another-server-slug' => 'Another Server Name',
+     * ]
+     */
     public function fetchAsSelectArray(
         ?QueryModelInterface $params = null,
-        $keyIsSlug = false
-    ): array {
+        bool $keyIsSlug = false
+    ) : array {
         $models = $this->fetchAll($params);
 
         $items = [];
 
         foreach ($models as $model) {
-            $key = $keyIsSlug ? $model->slug() : $model->guid();
+            $key         = $keyIsSlug ? $model->slug() : $model->guid();
             $items[$key] = $model->title();
         }
 
         return $items;
     }
 
+    /**
+     * @param bool $keyIsSlug Set true to use slugs instead of GUIDs as keys
+     *
+     * @return string[] [
+     *     'ssh-key-slug' => 'SSH Key Name',
+     *     'another-ssh-key-slug' => 'Another SSH Key Name',
+     * ]
+     */
     public function fetchSSHKeysAsSelectArray(
         ?QueryModelInterface $params = null,
-        $keyIsSlug = false
-    ): array {
+        bool $keyIsSlug = false
+    ) : array {
         $models = $this->fetchAllSSHKeys($params);
 
         $items = [];
 
         foreach ($models as $model) {
-            $key = $keyIsSlug ? $model->slug() : $model->guid();
+            $key         = $keyIsSlug ? $model->slug() : $model->guid();
             $items[$key] = $model->title();
         }
 
         return $items;
     }
 
-    public function generateSSHKey(): array
+    /**
+     * @return string[]
+     */
+    public function generateSSHKey() : array
     {
         $service = $this->di->get(GenerateSSHKeyService::class);
+
         return $service->generate();
     }
 }

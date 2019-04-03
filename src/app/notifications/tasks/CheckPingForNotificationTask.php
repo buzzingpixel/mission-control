@@ -1,18 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
 use DateTime;
+use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\pings\interfaces\PingApiInterface;
 use src\app\pings\interfaces\PingModelInterface;
-use src\app\notifications\interfaces\SendNotificationAdapterInterface;
+use function getenv;
+use function time;
 
 class CheckPingForNotificationTask
 {
-    public const BATCH_NAME = 'checkPingsForNotifications';
+    public const BATCH_NAME  = 'checkPingsForNotifications';
     public const BATCH_TITLE = 'Check Pings for Notifications';
 
+    /** @var PingApiInterface */
     private $pingApi;
 
     /** @var SendNotificationAdapterInterface[] */
@@ -22,11 +26,11 @@ class CheckPingForNotificationTask
         PingApiInterface $pingApi,
         array $sendNotificationAdapters = []
     ) {
-        $this->pingApi = $pingApi;
+        $this->pingApi                  = $pingApi;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
-    public function __invoke(array $context): void
+    public function __invoke(array $context) : void
     {
         $pingModel = $this->getModel($context['guid']);
 
@@ -38,6 +42,7 @@ class CheckPingForNotificationTask
         // If no error, we want to notify that everything is good now
         if (! $pingModel->hasError()) {
             $this->sendUpNotification($pingModel);
+
             return;
         }
 
@@ -46,6 +51,7 @@ class CheckPingForNotificationTask
         // If there's no last notification we can send the notification
         if (! $pingModel->lastNotificationAt()) {
             $this->sendMissingNotification($pingModel);
+
             return;
         }
 
@@ -56,7 +62,7 @@ class CheckPingForNotificationTask
         // If there's already been a down notification, we'll wait one hour
         if ($pingModel->lastNotificationAt()) {
             $oneHourInSeconds = 3600;
-            $timestamp = $pingModel->lastNotificationAt()->getTimestamp() + $oneHourInSeconds;
+            $timestamp        = $pingModel->lastNotificationAt()->getTimestamp() + $oneHourInSeconds;
         }
 
         // It's less than an hour we can stop
@@ -67,7 +73,7 @@ class CheckPingForNotificationTask
         $this->sendMissingReminder($pingModel);
     }
 
-    private function sendUpNotification(PingModelInterface $pingModel)
+    private function sendUpNotification(PingModelInterface $pingModel) : void
     {
         $message = 'The Ping ' . $pingModel->title() . ' is now healthy';
 
@@ -77,7 +83,8 @@ class CheckPingForNotificationTask
                 'urls' => [[
                     'content' => 'View Ping',
                     'href' => getenv('SITE_URL') . '/pings/view/' . $pingModel->slug(),
-                ]]
+                ],
+                ],
             ]);
         }
 
@@ -86,7 +93,7 @@ class CheckPingForNotificationTask
         $this->pingApi->save($pingModel);
     }
 
-    private function sendMissingNotification(PingModelInterface $pingModel)
+    private function sendMissingNotification(PingModelInterface $pingModel) : void
     {
         $message = 'The Ping ' . $pingModel->title() . ' is missing';
 
@@ -96,14 +103,15 @@ class CheckPingForNotificationTask
                 'urls' => [[
                     'content' => 'View Ping',
                     'href' => getenv('SITE_URL') . '/pings/view/' . $pingModel->slug(),
-                ]]
+                ],
+                ],
             ]);
         }
 
         $this->saveLastNotificationAt($pingModel);
     }
 
-    private function sendMissingReminder(PingModelInterface $pingModel)
+    private function sendMissingReminder(PingModelInterface $pingModel) : void
     {
         $message = 'REMINDER: The Ping ' . $pingModel->title() . ' is missing';
 
@@ -113,23 +121,25 @@ class CheckPingForNotificationTask
                 'urls' => [[
                     'content' => 'View Ping',
                     'href' => getenv('SITE_URL') . '/pings/view/' . $pingModel->slug(),
-                ]]
+                ],
+                ],
             ]);
         }
 
         $this->saveLastNotificationAt($pingModel);
     }
 
-    private function saveLastNotificationAt(PingModelInterface $pingModel)
+    private function saveLastNotificationAt(PingModelInterface $pingModel) : void
     {
         $pingModel->lastNotificationAt(new DateTime());
         $this->pingApi->save($pingModel);
     }
 
-    private function getModel(string $guid): PingModelInterface
+    private function getModel(string $guid) : PingModelInterface
     {
         $queryModel = $this->pingApi->makeQueryModel();
         $queryModel->addWhere('guid', $this->pingApi->uuidToBytes($guid));
+
         return $this->pingApi->fetchOne($queryModel);
     }
 }

@@ -1,14 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\events;
 
-use src\app\reminders\ReminderApi;
 use corbomite\events\interfaces\EventInterface;
 use src\app\reminders\interfaces\ReminderModelInterface;
+use src\app\reminders\ReminderApi;
 
 class ReminderBeforeUnArchiveEvent implements EventInterface
 {
+    /** @var ReminderModelInterface */
     private $reminderModel;
 
     public function __construct(ReminderModelInterface $reminderModel)
@@ -16,24 +18,25 @@ class ReminderBeforeUnArchiveEvent implements EventInterface
         $this->reminderModel = $reminderModel;
     }
 
-    public function pingModel(): ReminderModelInterface
+    public function pingModel() : ReminderModelInterface
     {
         return $this->reminderModel;
     }
 
-    public function provider(): string
+    public function provider() : string
     {
         return ReminderApi::class;
     }
 
-    public function name(): string
+    public function name() : string
     {
         return 'ReminderBeforeUnArchive';
     }
 
+    /** @var bool */
     private $stop = false;
 
-    public function stopPropagation(?bool $stop = null): bool
+    public function stopPropagation(?bool $stop = null) : bool
     {
         return $this->stop = $stop ?? $this->stop;
     }

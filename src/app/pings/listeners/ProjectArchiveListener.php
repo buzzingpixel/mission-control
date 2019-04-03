@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\listeners;
 
-use src\app\pings\interfaces\PingApiInterface;
 use corbomite\events\interfaces\EventInterface;
-use src\app\projects\events\ProjectBeforeArchiveEvent;
 use corbomite\events\interfaces\EventListenerInterface;
+use src\app\pings\interfaces\PingApiInterface;
+use src\app\projects\events\ProjectBeforeArchiveEvent;
 
 class ProjectArchiveListener implements EventListenerInterface
 {
+    /** @var PingApiInterface */
     private $pingApi;
 
     public function __construct(PingApiInterface $pingApi)
@@ -17,7 +19,7 @@ class ProjectArchiveListener implements EventListenerInterface
         $this->pingApi = $pingApi;
     }
 
-    public function call(EventInterface $event): void
+    public function call(EventInterface $event) : void
     {
         /** @var ProjectBeforeArchiveEvent $event */
 

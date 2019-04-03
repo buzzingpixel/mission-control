@@ -1,23 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\transformers;
 
-use Traversable;
 use Atlas\Mapper\Record;
+use corbomite\db\Factory as OrmFactory;
 use Psr\Container\ContainerInterface;
 use src\app\data\Server\ServerRecord;
-use src\app\servers\models\SSHKeyModel;
-use src\app\servers\models\ServerModel;
-use corbomite\db\Factory as OrmFactory;
-use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\interfaces\ServerModelInterface;
-use function is_array;
+use src\app\servers\models\ServerModel;
+use src\app\servers\models\SSHKeyModel;
+use src\app\servers\services\FetchSSHKeyService;
+use Traversable;
 use function array_map;
+use function is_array;
 use function iterator_to_array;
 
 class ServerRecordModelTransformer
 {
+    /** @var ContainerInterface */
     private $di;
 
     public function __construct(ContainerInterface $di)
@@ -27,9 +29,10 @@ class ServerRecordModelTransformer
 
     /**
      * @param Traversable|iterable|array|Record $recordSet
-     * @return array
+     *
+     * @return SSHKeyModel[]
      */
-    public function transformRecordSet($recordSet): array
+    public function transformRecordSet($recordSet) : array
     {
         if ($recordSet === null) {
             return [];
@@ -39,7 +42,7 @@ class ServerRecordModelTransformer
             $recordSet :
             iterator_to_array($recordSet);
 
-        $sshKeyIds = array_map(function (ServerRecord $record) {
+        $sshKeyIds = array_map(static function (ServerRecord $record) {
             return $record->ssh_key_guid;
         }, $recordArray);
 
@@ -54,14 +57,12 @@ class ServerRecordModelTransformer
     }
 
     /**
-     * @param ServerRecord $record
-     * @param SSHKeyModel[]|null $sshKeyModels
-     * @return ServerModelInterface
+     * @param SSHKeyModel|null $sshKeyModels
      */
     public function transformRecord(
         ServerRecord $record,
         ?array $sshKeyModels = null
-    ): ServerModelInterface {
+    ) : ServerModelInterface {
         if ($sshKeyModels === null) {
             $sshKeyModels = $this->getSSHKeyModels([$record->ssh_key_guid]);
         }
@@ -95,10 +96,11 @@ class ServerRecordModelTransformer
     }
 
     /**
-     * @param array $sshKeyIds
+     * @param mixed[] $sshKeyIds
+     *
      * @return SSHKeyModel[]
      */
-    private function getSSHKeyModels(array $sshKeyIds): array
+    private function getSSHKeyModels(array $sshKeyIds) : array
     {
         $fetchSSHKeys = $this->di->get(FetchSSHKeyService::class);
 
@@ -111,7 +113,7 @@ class ServerRecordModelTransformer
         $sshKeyModels = [];
 
         array_map(
-            function (SSHKeyModel $model) use (&$sshKeyModels) {
+            static function (SSHKeyModel $model) use (&$sshKeyModels) : void {
                 $sshKeyModels[$model->getGuidAsBytes()] = $model;
             },
             $fetchSSHKeys->fetch($queryModel)

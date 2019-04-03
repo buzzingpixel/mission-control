@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\reminders\listeners;
 
 use corbomite\events\interfaces\EventInterface;
+use corbomite\events\interfaces\EventListenerInterface;
 use src\app\projects\events\ProjectBeforeDeleteEvent;
 use src\app\reminders\interfaces\ReminderApiInterface;
-use corbomite\events\interfaces\EventListenerInterface;
 
 class ProjectDeleteListener implements EventListenerInterface
 {
+    /** @var ReminderApiInterface */
     private $reminderApi;
 
     public function __construct(ReminderApiInterface $reminderApi)
@@ -17,7 +19,7 @@ class ProjectDeleteListener implements EventListenerInterface
         $this->reminderApi = $reminderApi;
     }
 
-    public function call(EventInterface $event): void
+    public function call(EventInterface $event) : void
     {
         /** @var ProjectBeforeDeleteEvent $event */
 

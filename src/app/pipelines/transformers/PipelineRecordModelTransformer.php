@@ -1,16 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\transformers;
 
-use Traversable;
 use Atlas\Mapper\Record;
 use src\app\data\Pipeline\PipelineRecord;
-use src\app\pipelines\models\PipelineModel;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use src\app\pipelines\models\PipelineModel;
+use Traversable;
+use function array_map;
+use function is_array;
+use function iterator_to_array;
 
 class PipelineRecordModelTransformer
 {
+    /** @var PipelineItemRecordModelTransformer */
     private $pipelineItemRecordModelTransformer;
 
     public function __construct(
@@ -21,9 +26,10 @@ class PipelineRecordModelTransformer
 
     /**
      * @param Traversable|iterable|array|Record $recordSet
+     *
      * @return array
      */
-    public function transformRecordSet($recordSet): array
+    public function transformRecordSet($recordSet) : array
     {
         if ($recordSet === null) {
             return [];
@@ -36,7 +42,7 @@ class PipelineRecordModelTransformer
         return array_map(
             [
                 $this,
-                'transformRecord'
+                'transformRecord',
             ],
             $recordArray
         );
@@ -44,7 +50,7 @@ class PipelineRecordModelTransformer
 
     public function transformRecord(
         PipelineRecord $pipelineRecord
-    ): PipelineModelInterface {
+    ) : PipelineModelInterface {
         $pipeline = new PipelineModel();
 
         $pipeline->setGuidAsBytes($pipelineRecord->guid);

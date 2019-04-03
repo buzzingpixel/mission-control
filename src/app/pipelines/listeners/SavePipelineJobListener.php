@@ -1,16 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\listeners;
 
-use src\app\pipelines\tasks\RunJobItemTask;
 use corbomite\events\interfaces\EventInterface;
+use corbomite\events\interfaces\EventListenerInterface;
 use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\pipelines\events\PipelineJobAfterSaveEvent;
-use corbomite\events\interfaces\EventListenerInterface;
+use src\app\pipelines\tasks\RunJobItemTask;
 
 class SavePipelineJobListener implements EventListenerInterface
 {
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(QueueApiInterface $queueApi)
@@ -18,7 +20,7 @@ class SavePipelineJobListener implements EventListenerInterface
         $this->queueApi = $queueApi;
     }
 
-    public function call(EventInterface $event)
+    public function call(EventInterface $event) : void
     {
         /** @var PipelineJobAfterSaveEvent $event */
 
@@ -46,6 +48,7 @@ class SavePipelineJobListener implements EventListenerInterface
             $batch->addItem($item);
         }
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->queueApi->addToQueue($batch);
     }
 }

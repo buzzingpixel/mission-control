@@ -1,32 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
-use corbomite\queue\interfaces\QueueApiInterface;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
+use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 
 class CollectUrlsForNotificationQueueTask
 {
-    public const BATCH_NAME = 'collectUrlsForNotificationQueue';
+    public const BATCH_NAME  = 'collectUrlsForNotificationQueue';
     public const BATCH_TITLE = 'Collect URLs for Notification Queue';
 
+    /** @var QueueApiInterface */
     private $queueApi;
+    /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     public function __construct(
         QueueApiInterface $queueApi,
         MonitoredUrlsApiInterface $monitoredUrlsApi
     ) {
-        $this->queueApi = $queueApi;
+        $this->queueApi         = $queueApi;
         $this->monitoredUrlsApi = $monitoredUrlsApi;
     }
 
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CheckUrlForNotificationTask::BATCH_NAME);

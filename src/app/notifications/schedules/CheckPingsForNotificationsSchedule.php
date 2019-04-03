@@ -1,15 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\schedules;
 
-use corbomite\queue\interfaces\QueueApiInterface;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
+use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\notifications\tasks\CheckPingForNotificationTask;
 use src\app\notifications\tasks\CollectPingsForNotificationQueueTask;
 
 class CheckPingsForNotificationsSchedule
 {
+    /** @var QueueApiInterface */
     private $queueApi;
 
     public function __construct(QueueApiInterface $queueApi)
@@ -20,7 +22,7 @@ class CheckPingsForNotificationsSchedule
     /**
      * @throws InvalidActionQueueBatchModel
      */
-    public function __invoke(): void
+    public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectPingsForNotificationQueueTask::BATCH_NAME);

@@ -1,19 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\transformers;
 
-use DateTime;
-use Traversable;
-use DateTimeZone;
 use Atlas\Mapper\Record;
-use src\app\pipelines\models\PipelineJobItemModel;
+use DateTime;
+use DateTimeZone;
 use src\app\data\PipelineJobItem\PipelineJobItemRecord;
-use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
+use src\app\pipelines\interfaces\PipelineJobModelInterface;
+use src\app\pipelines\models\PipelineJobItemModel;
+use Traversable;
+use function array_map;
+use function is_array;
+use function iterator_to_array;
 
 class PipelineJobItemRecordModelTransformer
 {
+    /** @var PipelineItemRecordModelTransformer */
     private $pipelineItemRecordModelTransformer;
 
     public function __construct(
@@ -24,12 +29,13 @@ class PipelineJobItemRecordModelTransformer
 
     /**
      * @param Traversable|iterable|array|Record $recordSet
+     *
      * @return array
      */
     public function transformRecordSet(
         $recordSet,
         PipelineJobModelInterface $jobModel
-    ): array {
+    ) : array {
         if ($recordSet === null) {
             return [];
         }
@@ -49,7 +55,7 @@ class PipelineJobItemRecordModelTransformer
     public function transformRecord(
         PipelineJobItemRecord $itemRecord,
         PipelineJobModelInterface $jobModel
-    ): PipelineJobItemModelInterface {
+    ) : PipelineJobItemModelInterface {
         $itemModel = new PipelineJobItemModel();
 
         $itemModel->setGuidAsBytes($itemRecord->guid);
@@ -71,7 +77,9 @@ class PipelineJobItemRecordModelTransformer
 
         $itemModel->logContent($itemRecord->log_content);
 
-        if ($finishedAt = $itemRecord->finished_at) {
+        $finishedAt = $itemRecord->finished_at;
+
+        if ($finishedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */
             $itemModel->finishedAt(new DateTime(
                 $finishedAt,

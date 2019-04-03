@@ -1,17 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\services;
 
-use src\app\data\SshKey\SshKey;
-use src\app\data\SshKey\SshKeyRecord;
-use src\app\servers\models\SSHKeyModel;
 use corbomite\db\interfaces\BuildQueryInterface;
 use corbomite\db\interfaces\QueryModelInterface;
+use src\app\data\SshKey\SshKey;
+use src\app\data\SshKey\SshKeyRecord;
 use src\app\servers\interfaces\SSHKeyModelInterface;
+use src\app\servers\models\SSHKeyModel;
 
 class FetchSSHKeyService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
     public function __construct(
@@ -23,7 +25,7 @@ class FetchSSHKeyService
     /**
      * @return SSHKeyModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -31,7 +33,7 @@ class FetchSSHKeyService
     /**
      * @return SSHKeyModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -52,10 +54,9 @@ class FetchSSHKeyService
     }
 
     /**
-     * @param QueryModelInterface $params
      * @return SshKeyRecord[]
      */
-    private function fetchResults(QueryModelInterface $params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
         return $this->buildQuery->build(SshKey::class, $params)->fetchRecords();
     }

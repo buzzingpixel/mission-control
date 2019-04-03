@@ -1,22 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
-use phpseclib\Crypt\RSA;
 use Cocur\Slugify\Slugify;
-use src\app\servers\ServerApi;
-use Psr\Container\ContainerInterface;
-use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
-use src\app\servers\services\SaveServerService;
-use src\app\pings\services\DeleteSSHKeyService;
-use src\app\servers\services\SaveSSHKeyService;
+use corbomite\events\EventDispatcher;
+use phpseclib\Crypt\RSA;
+use Psr\Container\ContainerInterface;
 use src\app\pings\services\DeleteServerService;
-use src\app\servers\services\FetchSSHKeyService;
-use src\app\servers\services\FetchServerService;
+use src\app\pings\services\DeleteSSHKeyService;
+use src\app\servers\ServerApi;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
+use src\app\servers\services\FetchServerService;
+use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
+use src\app\servers\services\SaveServerService;
+use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
 use src\app\servers\services\UnArchiveSSHKeyService;
 use src\app\servers\transformers\ServerRecordModelTransformer;
@@ -46,7 +47,7 @@ return [
             $di->get(EventDispatcher::class)
         );
     },
-    DeleteSSHKeyService:: class => static function (ContainerInterface $di) {
+    DeleteSSHKeyService::class => static function (ContainerInterface $di) {
         return new DeleteSSHKeyService(
             new OrmFactory(),
             $di->get(BuildQueryService::class),
@@ -99,5 +100,5 @@ return [
     },
     ServerRecordModelTransformer::class => static function (ContainerInterface $di) {
         return new ServerRecordModelTransformer($di);
-    }
+    },
 ];

@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\servers\services;
 
-use src\app\data\Server\Server;
-use src\app\data\Server\ServerRecord;
-use corbomite\events\EventDispatcher;
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\EventDispatcher;
+use src\app\data\Server\Server;
+use src\app\data\Server\ServerRecord;
 use src\app\servers\events\ServerAfterArchiveEvent;
-use src\app\servers\interfaces\ServerModelInterface;
 use src\app\servers\events\ServerBeforeArchiveEvent;
+use src\app\servers\interfaces\ServerModelInterface;
 
 class ArchiveServerService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class ArchiveServerService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(ServerModelInterface $model): void
+    public function __invoke(ServerModelInterface $model) : void
     {
         $this->archive($model);
     }
 
-    public function archive(ServerModelInterface $model): void
+    public function archive(ServerModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new ServerAfterArchiveEvent($model));
 
@@ -46,10 +50,11 @@ class ArchiveServerService
         $this->eventDispatcher->dispatch(new ServerBeforeArchiveEvent($model));
     }
 
-    private function fetchRecord(ServerModelInterface $model): ServerRecord
+    private function fetchRecord(ServerModelInterface $model) : ServerRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(Server::class, $params)->fetchRecord();
     }
 }

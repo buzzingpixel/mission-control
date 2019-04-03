@@ -1,19 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
 use DateTime;
-use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
-use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
-use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
+use src\app\notifications\interfaces\SendNotificationAdapterInterface;
+use function getenv;
+use function time;
 
 class CheckUrlForNotificationTask
 {
-    public const BATCH_NAME = 'checkUrlsForNotifications';
+    public const BATCH_NAME  = 'checkUrlsForNotifications';
     public const BATCH_TITLE = 'Check URLs for Notifications';
 
+    /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     /** @var SendNotificationAdapterInterface[] */
@@ -23,13 +27,13 @@ class CheckUrlForNotificationTask
         MonitoredUrlsApiInterface $monitoredUrlsApi,
         array $sendNotificationAdapters = []
     ) {
-        $this->monitoredUrlsApi = $monitoredUrlsApi;
+        $this->monitoredUrlsApi         = $monitoredUrlsApi;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
-    public function __invoke(array $context): void
+    public function __invoke(array $context) : void
     {
-        $incidentModel = $this->getIncidentModel($context['guid']);
+        $incidentModel         = $this->getIncidentModel($context['guid']);
         $previousIncidentModel = $this->getIncidentModel($context['guid'], true);
 
         if (! $incidentModel) {
@@ -62,7 +66,7 @@ class CheckUrlForNotificationTask
         // If there's already been a down notification, we'll wait one hour
         if ($incidentModel->lastNotificationAt()) {
             $oneHourInSeconds = 3600;
-            $timestamp = $incidentModel->lastNotificationAt()->getTimestamp() + $oneHourInSeconds;
+            $timestamp        = $incidentModel->lastNotificationAt()->getTimestamp() + $oneHourInSeconds;
         }
 
         if (time() < $timestamp) {
@@ -80,7 +84,7 @@ class CheckUrlForNotificationTask
         $subject .= $urlModel->title() . ' (' . $urlModel->url() . ') is ';
         $subject .= $incidentModel->eventType();
 
-        $message = 'URL Title: ' . $urlModel->title() . "\n";
+        $message  = 'URL Title: ' . $urlModel->title() . "\n";
         $message .= 'URL: ' . $urlModel->url() . "\n";
         $message .= 'Status Code: ' . $incidentModel->statusCode() . "\n";
         $message .= 'Message: ' . $incidentModel->message();
@@ -109,7 +113,7 @@ class CheckUrlForNotificationTask
         string $eventType,
         string $urlSlug,
         string $url
-    ) {
+    ) : void {
         $status = '';
 
         if ($eventType === 'down') {
@@ -126,25 +130,26 @@ class CheckUrlForNotificationTask
                 'urls' => [
                     [
                         'content' => 'View Incidents',
-                        'href' => getenv('SITE_URL') . '/monitored-urls/view/' . $urlSlug
+                        'href' => getenv('SITE_URL') . '/monitored-urls/view/' . $urlSlug,
                     ],
                     [
                         'content' => 'Go To URL',
-                        'href' => $url
+                        'href' => $url,
                     ],
                 ],
             ]
         );
     }
 
-    private function getUrlModel(string $guid): MonitoredUrlModelInterface
+    private function getUrlModel(string $guid) : MonitoredUrlModelInterface
     {
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
         $queryModel->addWhere('guid', $this->monitoredUrlsApi->uuidToBytes($guid));
+
         return $this->monitoredUrlsApi->fetchOne($queryModel);
     }
 
-    private function getIncidentModel(string $urlGuid, bool $previous = false): ?MonitoredUrlIncidentModelInterface
+    private function getIncidentModel(string $urlGuid, bool $previous = false) : ?MonitoredUrlIncidentModelInterface
     {
         $queryModel = $this->monitoredUrlsApi->makeQueryModel();
 

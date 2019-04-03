@@ -1,28 +1,30 @@
 <?php
+
 declare(strict_types=1);
 
 use corbomite\di\Di;
-use src\app\pings\PingApi;
 use Phinx\Seed\AbstractSeed;
+use src\app\pings\PingApi;
 use src\app\projects\ProjectsApi;
 
 class CreatePings extends AbstractSeed
 {
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies() : array
     {
-        return [
-            'CreateProjects',
-        ];
+        return ['CreateProjects'];
     }
 
-    public function run()
+    public function run() : void
     {
         $this->createPing('Test Ping 1', 2, 3);
         $this->createPing('Test Ping 2', 5, 6);
         $this->createPing('Test Ping 3', 1440, 60);
     }
 
-    private function createPing(string $title, int $expect, int $warn)
+    private function createPing(string $title, int $expect, int $warn) : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -54,7 +56,7 @@ class CreatePings extends AbstractSeed
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $pingApi->save($model);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
     }
 }

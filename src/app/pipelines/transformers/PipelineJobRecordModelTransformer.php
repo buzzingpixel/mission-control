@@ -1,34 +1,41 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pipelines\transformers;
 
-use DateTime;
-use Traversable;
-use DateTimeZone;
 use Atlas\Mapper\Record;
-use src\app\pipelines\models\PipelineJobModel;
+use DateTime;
+use DateTimeZone;
 use src\app\data\PipelineJob\PipelineJobRecord;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
+use src\app\pipelines\models\PipelineJobModel;
+use Traversable;
+use function array_map;
+use function is_array;
+use function iterator_to_array;
 
 class PipelineJobRecordModelTransformer
 {
+    /** @var PipelineRecordModelTransformer */
     private $pipelineRecordModelTransformer;
+    /** @var PipelineJobItemRecordModelTransformer */
     private $pipelineJobItemRecordModelTransformer;
 
     public function __construct(
         PipelineRecordModelTransformer $pipelineRecordModelTransformer,
         PipelineJobItemRecordModelTransformer $pipelineJobItemRecordModelTransformer
     ) {
-        $this->pipelineRecordModelTransformer = $pipelineRecordModelTransformer;
+        $this->pipelineRecordModelTransformer        = $pipelineRecordModelTransformer;
         $this->pipelineJobItemRecordModelTransformer = $pipelineJobItemRecordModelTransformer;
     }
 
     /**
      * @param Traversable|iterable|array|Record $recordSet
+     *
      * @return array
      */
-    public function transformRecordSet($recordSet): array
+    public function transformRecordSet($recordSet) : array
     {
         if ($recordSet === null) {
             return [];
@@ -41,7 +48,7 @@ class PipelineJobRecordModelTransformer
         return array_map(
             [
                 $this,
-                'transformRecord'
+                'transformRecord',
             ],
             $recordArray
         );
@@ -49,7 +56,7 @@ class PipelineJobRecordModelTransformer
 
     public function transformRecord(
         PipelineJobRecord $jobRecord
-    ): PipelineJobModelInterface {
+    ) : PipelineJobModelInterface {
         $jobModel = new PipelineJobModel();
 
         $jobModel->setGuidAsBytes($jobRecord->guid);
@@ -80,7 +87,9 @@ class PipelineJobRecordModelTransformer
             new DateTimeZone($jobRecord->job_added_at_time_zone)
         ));
 
-        if ($jobFinishedAt = $jobRecord->job_finished_at) {
+        $jobFinishedAt = $jobRecord->job_finished_at;
+
+        if ($jobFinishedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */
             $jobModel->jobFinishedAt(new DateTime(
                 $jobFinishedAt,

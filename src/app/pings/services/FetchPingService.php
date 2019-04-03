@@ -1,19 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\services;
 
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\db\interfaces\QueryModelInterface;
 use DateTime;
 use DateTimeZone;
 use src\app\data\Ping\Ping;
 use src\app\data\Ping\PingRecord;
-use src\app\pings\models\PingModel;
 use src\app\pings\interfaces\PingModelInterface;
-use corbomite\db\interfaces\QueryModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
+use src\app\pings\models\PingModel;
 
 class FetchPingService
 {
+    /** @var BuildQueryInterface */
     private $buildQuery;
 
     public function __construct(
@@ -25,7 +27,7 @@ class FetchPingService
     /**
      * @return PingModelInterface[]
      */
-    public function __invoke(QueryModelInterface $params): array
+    public function __invoke(QueryModelInterface $params) : array
     {
         return $this->fetch($params);
     }
@@ -33,7 +35,7 @@ class FetchPingService
     /**
      * @return PingModelInterface[]
      */
-    public function fetch(QueryModelInterface $params): array
+    public function fetch(QueryModelInterface $params) : array
     {
         $models = [];
 
@@ -53,7 +55,9 @@ class FetchPingService
             $model->expectEvery($record->expect_every);
             $model->warnAfter($record->warn_after);
 
-            if ($lastPingAt = $record->last_ping_at) {
+            $lastPingAt = $record->last_ping_at;
+
+            if ($lastPingAt) {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 $model->lastPingAt(new DateTime(
                     $lastPingAt,
@@ -61,7 +65,9 @@ class FetchPingService
                 ));
             }
 
-            if ($lastNotificationAt = $record->last_notification_at) {
+            $lastNotificationAt = $record->last_notification_at;
+
+            if ($lastNotificationAt) {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 $model->lastNotificationAt(new DateTime(
                     $lastNotificationAt,
@@ -82,10 +88,9 @@ class FetchPingService
     }
 
     /**
-     * @param $params
      * @return PingRecord[]
      */
-    private function fetchResults($params): array
+    private function fetchResults(QueryModelInterface $params) : array
     {
         return $this->buildQuery->build(Ping::class, $params)->fetchRecords();
     }

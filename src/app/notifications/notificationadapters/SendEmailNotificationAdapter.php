@@ -1,30 +1,33 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\notifications\notificationadapters;
 
-use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
-use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use buzzingpixel\corbomitemailer\exceptions\InvalidEmailModelException;
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
+use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 
 class SendEmailNotificationAdapter implements SendNotificationAdapterInterface
 {
+    /** @var EmailApiInterface */
     private $emailApi;
+    /** @var NotificationEmailsApiInterface */
     private $notificationEmailsApi;
 
     public function __construct(
         EmailApiInterface $emailApi,
         NotificationEmailsApiInterface $notificationEmailsApi
     ) {
-        $this->emailApi = $emailApi;
+        $this->emailApi              = $emailApi;
         $this->notificationEmailsApi = $notificationEmailsApi;
     }
 
     /**
      * @throws InvalidEmailModelException
      */
-    public function send(string $subject, string $message, array $context = [])
+    public function send(string $subject, string $message, array $context = []) : void
     {
         $queryModel = $this->notificationEmailsApi->makeQueryModel();
         $queryModel->addWhere('is_active', '1');
@@ -42,7 +45,7 @@ class SendEmailNotificationAdapter implements SendNotificationAdapterInterface
         string $emailAddress,
         string $subject,
         string $message
-    ) {
+    ) : void {
         $emailModel = $this->emailApi->createEmailModel();
 
         $emailModel->toEmail($emailAddress);

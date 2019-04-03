@@ -1,30 +1,35 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\tasks;
 
-use Throwable;
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use src\app\pings\interfaces\PingApiInterface;
 use src\app\pings\interfaces\PingModelInterface;
-use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
+use Throwable;
+use function getenv;
+use function time;
 
 class CheckPingTask
 {
-    public const BATCH_NAME = 'checkPings';
+    public const BATCH_NAME  = 'checkPings';
     public const BATCH_TITLE = 'Check Pings';
 
+    /** @var PingApiInterface */
     private $pingApi;
+    /** @var EmailApiInterface */
     private $emailApi;
 
     public function __construct(
         PingApiInterface $pingApi,
         EmailApiInterface $emailApi
     ) {
-        $this->pingApi = $pingApi;
+        $this->pingApi  = $pingApi;
         $this->emailApi = $emailApi;
     }
 
-    public function __invoke(array $context): void
+    public function __invoke(array $context) : void
     {
         try {
             $this->innerRun($context);
@@ -37,7 +42,7 @@ class CheckPingTask
         }
     }
 
-    private function sendErrorEmail(Throwable $e): void
+    private function sendErrorEmail(Throwable $e) : void
     {
         try {
             $emailModel = $this->emailApi->createEmailModel();
@@ -59,23 +64,24 @@ class CheckPingTask
     /**
      * @throws Throwable
      */
-    private function innerRun(array $context): void
+    private function innerRun(array $context) : void
     {
         $model = $this->getModel($context['guid']);
 
-        $time = time();
+        $time               = time();
         $expectEverySeconds = $model->expectEvery() * 60;
-        $warnAfterSeconds = $model->warnAfter() * 60;
-        $expectTime = $model->lastPingAt()->getTimestamp() + $expectEverySeconds;
-        $warnTime = $expectTime + $warnAfterSeconds;
+        $warnAfterSeconds   = $model->warnAfter() * 60;
+        $expectTime         = $model->lastPingAt()->getTimestamp() + $expectEverySeconds;
+        $warnTime           = $expectTime + $warnAfterSeconds;
 
         $pingPastWarning = $time > $warnTime;
-        $pingPastExpect = $time > $expectTime;
+        $pingPastExpect  = $time > $expectTime;
 
         if ($pingPastWarning) {
             $model->pendingError(true);
             $model->hasError(true);
             $this->pingApi->save($model);
+
             return;
         }
 
@@ -83,6 +89,7 @@ class CheckPingTask
             $model->pendingError(true);
             $model->hasError(false);
             $this->pingApi->save($model);
+
             return;
         }
 
@@ -91,10 +98,11 @@ class CheckPingTask
         $this->pingApi->save($model);
     }
 
-    private function getModel(string $guid): PingModelInterface
+    private function getModel(string $guid) : PingModelInterface
     {
         $queryModel = $this->pingApi->makeQueryModel();
         $queryModel->addWhere('guid', $this->pingApi->uuidToBytes($guid));
+
         return $this->pingApi->fetchOne($queryModel);
     }
 }

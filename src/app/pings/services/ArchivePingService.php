@@ -1,21 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 namespace src\app\pings\services;
 
+use corbomite\db\Factory as OrmFactory;
+use corbomite\db\interfaces\BuildQueryInterface;
+use corbomite\events\EventDispatcher;
 use src\app\data\Ping\Ping;
 use src\app\data\Ping\PingRecord;
-use corbomite\events\EventDispatcher;
-use corbomite\db\Factory as OrmFactory;
 use src\app\pings\events\PingAfterArchiveEvent;
-use src\app\pings\interfaces\PingModelInterface;
-use corbomite\db\interfaces\BuildQueryInterface;
 use src\app\pings\events\PingBeforeArchiveEvent;
+use src\app\pings\interfaces\PingModelInterface;
 
 class ArchivePingService
 {
-    private $buildQuery;
+    /** @var OrmFactory */
     private $ormFactory;
+    /** @var BuildQueryInterface */
+    private $buildQuery;
+    /** @var EventDispatcher */
     private $eventDispatcher;
 
     public function __construct(
@@ -23,17 +27,17 @@ class ArchivePingService
         BuildQueryInterface $buildQuery,
         EventDispatcher $eventDispatcher
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->ormFactory = $ormFactory;
+        $this->ormFactory      = $ormFactory;
+        $this->buildQuery      = $buildQuery;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(PingModelInterface $model): void
+    public function __invoke(PingModelInterface $model) : void
     {
         $this->archive($model);
     }
 
-    public function archive(PingModelInterface $model): void
+    public function archive(PingModelInterface $model) : void
     {
         $this->eventDispatcher->dispatch(new PingBeforeArchiveEvent($model));
 
@@ -46,10 +50,11 @@ class ArchivePingService
         $this->eventDispatcher->dispatch(new PingAfterArchiveEvent($model));
     }
 
-    private function fetchRecord(PingModelInterface $model): PingRecord
+    private function fetchRecord(PingModelInterface $model) : PingRecord
     {
         $params = $this->ormFactory->makeQueryModel();
         $params->addWhere('guid', $model->getGuidAsBytes());
+
         return $this->buildQuery->build(Ping::class, $params)->fetchRecord();
     }
 }

@@ -1,25 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
-use src\app\pings\PingApi;
-use corbomite\queue\QueueApi;
-use src\app\reminders\ReminderApi;
-use Psr\Container\ContainerInterface;
 use buzzingpixel\corbomitemailer\EmailApi;
+use corbomite\queue\QueueApi;
+use Psr\Container\ContainerInterface;
 use src\app\monitoredurls\MonitoredUrlsApi;
 use src\app\notificationemails\NotificationEmailsApi;
-use src\app\support\extensions\GuzzleClientNoHttpErrors;
-use src\app\notifications\tasks\CheckUrlForNotificationTask;
+use src\app\notifications\notificationadapters\SendEmailNotificationAdapter;
+use src\app\notifications\notificationadapters\SlackNotificationAdapter;
+use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
+use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
+use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
 use src\app\notifications\tasks\CheckPingForNotificationTask;
 use src\app\notifications\tasks\CheckReminderForNotificationTask;
-use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
+use src\app\notifications\tasks\CheckUrlForNotificationTask;
 use src\app\notifications\tasks\CollectPingsForNotificationQueueTask;
-use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
-use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
-use src\app\notifications\notificationadapters\SlackNotificationAdapter;
 use src\app\notifications\tasks\CollectRemindersForNotificationQueueTask;
-use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
-use src\app\notifications\notificationadapters\SendEmailNotificationAdapter;
+use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
+use src\app\pings\PingApi;
+use src\app\reminders\ReminderApi;
+use src\app\support\extensions\GuzzleClientNoHttpErrors;
 
 return [
     'NotificationAdaptersArray' => static function (ContainerInterface $di) {
