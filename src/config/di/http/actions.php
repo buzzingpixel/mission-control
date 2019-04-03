@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-use buzzingpixel\corbomitemailer\EmailApi;
-use corbomite\flashdata\FlashDataApi;
-use corbomite\http\RequestHelper;
-use corbomite\requestdatastore\DataStore;
-use corbomite\user\UserApi;
-use Psr\Container\ContainerInterface;
 use src\app\http\actions\AddEmailNotificationAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\ChangePasswordAction;
@@ -38,294 +32,37 @@ use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
 use src\app\http\actions\SSHKeyListActions;
 use src\app\http\actions\UpdateAccountAction;
-use src\app\monitoredurls\MonitoredUrlsApi;
-use src\app\notificationemails\NotificationEmailsApi;
-use src\app\pings\PingApi;
-use src\app\pipelines\PipelineApi;
-use src\app\projects\ProjectsApi;
-use src\app\reminders\ReminderApi;
-use src\app\servers\ServerApi;
-use Zend\Diactoros\Response;
+use function DI\autowire;
 
 return [
-    AddEmailNotificationAction::class => static function (ContainerInterface $di) {
-        return new AddEmailNotificationAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class),
-            $di->get(NotificationEmailsApi::class)
-        );
-    },
-    AdminUserActions::class => static function (ContainerInterface $di) {
-        return new AdminUserActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    ChangePasswordAction::class => static function (ContainerInterface $di) {
-        return new ChangePasswordAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateMonitoredUrlAction::class => static function (ContainerInterface $di) {
-        return new CreateMonitoredUrlAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    CreatePingAction::class => static function (ContainerInterface $di) {
-        return new CreatePingAction(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreatePipelineAction::class => static function (ContainerInterface $di) {
-        return new CreatePipelineAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(PipelineApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateProjectAction::class => static function (ContainerInterface $di) {
-        return new CreateProjectAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ProjectsApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateReminderAction::class => static function (ContainerInterface $di) {
-        return new CreateReminderAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ReminderApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateServerAction::class => static function (ContainerInterface $di) {
-        return new CreateServerAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateSSHKeyAction::class => static function (ContainerInterface $di) {
-        return new CreateSSHKeyAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    CreateUserAction::class => static function (ContainerInterface $di) {
-        return new CreateUserAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditMonitoredUrlAction::class => static function (ContainerInterface $di) {
-        return new EditMonitoredUrlAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    EditPingAction::class => static function (ContainerInterface $di) {
-        return new EditPingAction(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditPipelineAction::class => static function (ContainerInterface $di) {
-        return new EditPipelineAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(PipelineApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditProjectAction::class => static function (ContainerInterface $di) {
-        return new EditProjectAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ProjectsApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditReminderAction::class => static function (ContainerInterface $di) {
-        return new EditReminderAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ReminderApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditServerAction::class => static function (ContainerInterface $di) {
-        return new EditServerAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    EditSSHKeyAction::class => static function (ContainerInterface $di) {
-        return new EditSSHKeyAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    LogOutAction::class => static function (ContainerInterface $di) {
-        return new LogOutAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class)
-        );
-    },
-    MonitoredUrlActions::class => static function (ContainerInterface $di) {
-        return new MonitoredUrlActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    NotificationEmailListActions::class => static function (ContainerInterface $di) {
-        return new NotificationEmailListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class),
-            $di->get(NotificationEmailsApi::class)
-        );
-    },
-    PingListActions::class => static function (ContainerInterface $di) {
-        return new PingListActions(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    PipelineListActions::class => static function (ContainerInterface $di) {
-        return new PipelineListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(PipelineApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    ProjectListActions::class => static function (ContainerInterface $di) {
-        return new ProjectListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ProjectsApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    ReminderListActions::class => static function (ContainerInterface $di) {
-        return new ReminderListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ReminderApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    ResetPasswordAction::class => static function (ContainerInterface $di) {
-        return new ResetPasswordAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(FlashDataApi::class)
-        );
-    },
-    SendPasswordResetEmailAction::class => static function (ContainerInterface $di) {
-        return new SendPasswordResetEmailAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(EmailApi::class)
-        );
-    },
-    ServerListActions::class => static function (ContainerInterface $di) {
-        return new ServerListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    SSHKeyListActions::class => static function (ContainerInterface $di) {
-        return new SSHKeyListActions(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
-    UpdateAccountAction::class => static function (ContainerInterface $di) {
-        return new UpdateAccountAction(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(DataStore::class),
-            $di->get(FlashDataApi::class),
-            $di->get(RequestHelper::class)
-        );
-    },
+    AddEmailNotificationAction::class => autowire(),
+    AdminUserActions::class => autowire(),
+    ChangePasswordAction::class => autowire(),
+    CreateMonitoredUrlAction::class => autowire(),
+    CreatePingAction::class => autowire(),
+    CreatePipelineAction::class => autowire(),
+    CreateProjectAction::class => autowire(),
+    CreateReminderAction::class => autowire(),
+    CreateServerAction::class => autowire(),
+    CreateSSHKeyAction::class => autowire(),
+    CreateUserAction::class => autowire(),
+    EditMonitoredUrlAction::class => autowire(),
+    EditPingAction::class => autowire(),
+    EditPipelineAction::class => autowire(),
+    EditProjectAction::class => autowire(),
+    EditReminderAction::class => autowire(),
+    EditServerAction::class => autowire(),
+    EditSSHKeyAction::class => autowire(),
+    LogOutAction::class => autowire(),
+    MonitoredUrlActions::class => autowire(),
+    NotificationEmailListActions::class => autowire(),
+    PingListActions::class => autowire(),
+    PipelineListActions::class => autowire(),
+    ProjectListActions::class => autowire(),
+    ReminderListActions::class => autowire(),
+    ResetPasswordAction::class => autowire(),
+    SendPasswordResetEmailAction::class => autowire(),
+    ServerListActions::class => autowire(),
+    SSHKeyListActions::class => autowire(),
+    UpdateAccountAction::class => autowire(),
 ];

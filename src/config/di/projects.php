@@ -7,6 +7,7 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use corbomite\events\EventDispatcher;
 use Psr\Container\ContainerInterface;
+use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\projects\ProjectsApi;
 use src\app\projects\services\ArchiveProjectService;
 use src\app\projects\services\DeleteProjectService;
@@ -17,6 +18,9 @@ use src\app\projects\services\UnArchiveProjectService;
 return [
     ProjectsApi::class => static function (ContainerInterface $di) {
         return new ProjectsApi($di);
+    },
+    ProjectsApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(ProjectsApi::class);
     },
     ArchiveProjectService::class => static function (ContainerInterface $di) {
         return new ArchiveProjectService(

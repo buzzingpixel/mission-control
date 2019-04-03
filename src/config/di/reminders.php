@@ -7,6 +7,7 @@ use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use corbomite\events\EventDispatcher;
 use Psr\Container\ContainerInterface;
+use src\app\reminders\interfaces\ReminderApiInterface;
 use src\app\reminders\listeners\ProjectArchiveListener;
 use src\app\reminders\listeners\ProjectDeleteListener;
 use src\app\reminders\listeners\ProjectUnArchiveListener;
@@ -20,6 +21,9 @@ use src\app\reminders\services\UnArchiveReminderService;
 return [
     ReminderApi::class => static function (ContainerInterface $di) {
         return new ReminderApi($di);
+    },
+    ReminderApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(ReminderApi::class);
     },
     ArchiveReminderService::class => static function (ContainerInterface $di) {
         return new ArchiveReminderService(

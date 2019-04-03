@@ -9,6 +9,7 @@ use corbomite\db\services\BuildQueryService;
 use corbomite\events\EventDispatcher;
 use corbomite\queue\QueueApi;
 use Psr\Container\ContainerInterface;
+use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\listeners\SavePipelineJobListener;
 use src\app\pipelines\PipelineApi;
 use src\app\pipelines\services\ArchivePipelineService;
@@ -28,6 +29,9 @@ use src\app\pipelines\transformers\PipelineRecordModelTransformer;
 return [
     PipelineApi::class => static function (ContainerInterface $di) {
         return new PipelineApi($di);
+    },
+    PipelineApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(PipelineApi::class);
     },
     ArchivePipelineService::class => static function (ContainerInterface $di) {
         return new ArchivePipelineService(

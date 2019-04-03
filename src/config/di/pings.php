@@ -9,6 +9,7 @@ use corbomite\db\services\BuildQueryService;
 use corbomite\events\EventDispatcher;
 use corbomite\queue\QueueApi;
 use Psr\Container\ContainerInterface;
+use src\app\pings\interfaces\PingApiInterface;
 use src\app\pings\listeners\ProjectArchiveListener;
 use src\app\pings\listeners\ProjectDeleteListener;
 use src\app\pings\listeners\ProjectUnArchiveListener;
@@ -25,6 +26,9 @@ use src\app\pings\tasks\CollectPingsForQueueTask;
 return [
     PingApi::class => static function (ContainerInterface $di) {
         return new PingApi($di);
+    },
+    PingApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(PingApi::class);
     },
     ArchivePingService::class => static function (ContainerInterface $di) {
         return new ArchivePingService(

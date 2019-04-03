@@ -10,6 +10,7 @@ use phpseclib\Crypt\RSA;
 use Psr\Container\ContainerInterface;
 use src\app\pings\services\DeleteServerService;
 use src\app\pings\services\DeleteSSHKeyService;
+use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\ServerApi;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
@@ -25,6 +26,9 @@ use src\app\servers\transformers\ServerRecordModelTransformer;
 return [
     ServerApi::class => static function (ContainerInterface $di) {
         return new ServerApi($di);
+    },
+    ServerApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(ServerApi::class);
     },
     ArchiveServerService::class => static function (ContainerInterface $di) {
         return new ArchiveServerService(

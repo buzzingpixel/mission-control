@@ -10,6 +10,7 @@ use corbomite\db\services\BuildQueryService;
 use corbomite\events\EventDispatcher;
 use corbomite\queue\QueueApi;
 use Psr\Container\ContainerInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\monitoredurls\listeners\MonitoredUrlDeleteListener;
 use src\app\monitoredurls\listeners\ProjectArchiveListener;
 use src\app\monitoredurls\listeners\ProjectDeleteListener;
@@ -30,6 +31,9 @@ use src\app\support\extensions\GuzzleClientNoHttpErrors;
 return [
     MonitoredUrlsApi::class => static function (ContainerInterface $di) {
         return new MonitoredUrlsApi($di);
+    },
+    MonitoredUrlsApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(MonitoredUrlsApi::class);
     },
     ArchiveMonitoredUrlService::class => static function (ContainerInterface $di) {
         return new ArchiveMonitoredUrlService(

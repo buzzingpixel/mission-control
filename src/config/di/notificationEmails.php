@@ -5,6 +5,7 @@ declare(strict_types=1);
 use corbomite\db\Factory as OrmFactory;
 use corbomite\db\services\BuildQueryService;
 use Psr\Container\ContainerInterface;
+use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\NotificationEmailsApi;
 use src\app\notificationemails\services\DeleteNotificationEmailService;
 use src\app\notificationemails\services\DisableNotificationEmailService;
@@ -15,6 +16,9 @@ use src\app\notificationemails\services\SaveNotificationEmailService;
 return [
     NotificationEmailsApi::class => static function (ContainerInterface $di) {
         return new NotificationEmailsApi($di);
+    },
+    NotificationEmailsApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(NotificationEmailsApi::class);
     },
     DeleteNotificationEmailService::class => static function (ContainerInterface $di) {
         return new DeleteNotificationEmailService(
