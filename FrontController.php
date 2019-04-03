@@ -40,7 +40,7 @@ if (PHP_SAPI === 'cli') {
     require __DIR__ . '/src/config/devMode.php';
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    Di::get(CliKernel::class)($argv);
+    Di::diContainer()->get(CliKernel::class)($argv);
     exit();
 }
 
@@ -49,5 +49,5 @@ if (getenv('DEV_MODE') === 'true') {
 }
 
 /** @noinspection PhpUnhandledExceptionInspection */
-Di::get(HttpKernel::class)(ErrorPagesMiddleware::class);
+Di::diContainer()->get(HttpKernel::class)(ErrorPagesMiddleware::class);
 exit();
