@@ -10,7 +10,7 @@
         "buzzingpixel/cookie-api": "^1.1.1",
         "buzzingpixel/corbomite-cli": "^1.0.4",
         "buzzingpixel/corbomite-db": "^1.2.1",
-        "buzzingpixel/corbomite-di": "^1.0.1",
+        "buzzingpixel/corbomite-di": "^1.2",
         "buzzingpixel/corbomite-events": "^2.0",
         "buzzingpixel/corbomite-flash-data": "^1.1.0",
         "buzzingpixel/corbomite-http": "^2.2",

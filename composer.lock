@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87720953936bd01bce3bf1752d8c4c92",
+    "content-hash": "5ec4782ba8543ffd74d08addbeab723a",
     "packages": [
         {
             "name": "2bj/phanybar",
@@ -605,20 +605,20 @@
         },
         {
             "name": "buzzingpixel/corbomite-di",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-di.git",
-                "reference": "fba23cc59399d7cc709e34899d786cced86022cd"
+                "reference": "e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-di/zipball/fba23cc59399d7cc709e34899d786cced86022cd",
-                "reference": "fba23cc59399d7cc709e34899d786cced86022cd",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-di/zipball/e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78",
+                "reference": "e8ef39e88bf5d2ff4893f14c0ba42e192c90fd78",
                 "shasum": ""
             },
             "require": {
-                "buzzingpixel/corbomite-config-collector": "^1.0.1",
+                "buzzingpixel/corbomite-config-collector": "^1.1",
                 "ext-json": "*",
                 "php": ">=7.2",
                 "php-di/php-di": "^6.0"
@@ -640,7 +640,7 @@
             ],
             "description": "Corbomite DI",
             "homepage": "https://buzzingpixel.com/",
-            "time": "2019-02-25T03:44:40+00:00"
+            "time": "2019-03-30T20:16:02+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-events",
