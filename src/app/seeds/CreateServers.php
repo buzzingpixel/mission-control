@@ -22,10 +22,10 @@ class CreateServers extends AbstractSeed
         $this->createServer('Test Server 1', '123.456.78.9');
         $this->createServer('Test Server 2', '987.654.32.1');
         $this->createServer('Test Server 3', '998.7.22.14');
-        $this->createServer('buzzingpixel-do-utility-lemp', '165.227.207.4');
+        $this->createServer('buzzingpixel-do-utility-lemp', '165.227.207.4', 'buzzingpixel');
     }
 
-    private function createServer(string $title, string $addr) : void
+    private function createServer(string $title, string $addr, string $sshUserName = 'test') : void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $di = Di::diContainer();
@@ -56,7 +56,7 @@ class CreateServers extends AbstractSeed
 
         $model->sshPort(22);
 
-        $model->sshUserName('test');
+        $model->sshUserName($sshUserName);
 
         $model->sshKeyModel($sshKeyModel);
 
