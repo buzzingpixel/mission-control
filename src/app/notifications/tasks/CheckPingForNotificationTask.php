@@ -18,10 +18,12 @@ class CheckPingForNotificationTask
 
     /** @var PingApiInterface */
     private $pingApi;
-
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
+    /**
+     * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
+     */
     public function __construct(
         PingApiInterface $pingApi,
         array $sendNotificationAdapters = []
@@ -80,10 +82,11 @@ class CheckPingForNotificationTask
         foreach ($this->sendNotificationAdapters as $adapter) {
             $adapter->send($message, $message, [
                 'status' => 'good',
-                'urls' => [[
-                    'content' => 'View Ping',
-                    'href' => getenv('SITE_URL') . '/pings/view/' . $pingModel->slug(),
-                ],
+                'urls' => [
+                    [
+                        'content' => 'View Ping',
+                        'href' => getenv('SITE_URL') . '/pings/view/' . $pingModel->slug(),
+                    ],
                 ],
             ]);
         }

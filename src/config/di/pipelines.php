@@ -34,5 +34,9 @@ return [
         ),
     UnArchivePipelineService::class => autowire(),
     SavePipelineJobListener::class => autowire(),
-    RunJobItemTask::class => autowire(),
+    RunJobItemTask::class => autowire()
+        ->constructorParameter(
+            'sendNotificationAdapters',
+            DI\get('NotificationAdaptersArray')
+        ),
 ];
