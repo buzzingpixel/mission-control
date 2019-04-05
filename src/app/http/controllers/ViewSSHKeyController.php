@@ -95,7 +95,8 @@ class ViewSSHKeyController
         $keyValueItems = [
             [
                 'key' => 'Public Key',
-                'value' => '<pre>' . $model->public() . '</pre>',
+                'value' => $model->public(),
+                'showInTextArea' => true,
             ],
         ];
 
@@ -109,7 +110,9 @@ class ViewSSHKeyController
 
             $keyValueItems[] = [
                 'key' => 'Private Key',
-                'value' => '<pre>' . $model->private() . '</pre>',
+                'value' => $model->private(),
+                'showInTextArea' => true,
+                'textAreaRows' => 27,
             ];
         }
 

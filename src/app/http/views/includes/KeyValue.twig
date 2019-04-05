@@ -21,7 +21,20 @@
                 {% for item in keyValueItems %}
                     <div class="KeyValue__Item">
                         <dt class="KeyValue__Key">{{ item.key|smartypants }}</dt>
-                        <dd class="KeyValue__Value">{{ item.value|smartypants }}</dd>
+                        <dd class="KeyValue__Value">
+                            {% if item['showInTextArea'] is defined and item['showInTextArea'] %}
+                                <textarea
+                                    class="textarea"
+                                    rows="{{ item['textAreaRows'] ?? 5 }}"
+                                    autocomplete="off"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+                                >{{ item.value }}</textarea>
+                            {% else %}
+                                {{ item.value|smartypants }}
+                            {% endif %}
+                        </dd>
                     </div>
                 {% endfor %}
             </dl>
