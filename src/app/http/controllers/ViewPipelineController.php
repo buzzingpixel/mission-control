@@ -99,6 +99,12 @@ class ViewPipelineController
 
         $pageControlButtons = [];
 
+        $fetchParams = $this->pipelineApi->makeQueryModel();
+        $fetchParams->addWhere('pipeline_guid', $model->getGuidAsBytes());
+        $fetchParams->addWhere('is_finished', 0);
+        $fetchParams->addWhere('has_failed', 0);
+        $activeJob = $this->pipelineApi->fetchOneJob($fetchParams);
+
         if ($isAdmin) {
             $pageControlButtons[] = [
                 'href' => '/pipelines/edit/' . $model->slug(),
@@ -122,7 +128,7 @@ class ViewPipelineController
                 'innerComponentsHtml' => ($this->renderPipelineInnerComponents)(
                     $model
                 ),
-                'ajaxInnerRefreshUrl' => '/ajax/pipelines/view/' . $model->slug(),
+                'ajaxInnerRefreshUrl' => $activeJob ? '/pipelines/view/' . $model->slug() : null,
             ])
         );
 

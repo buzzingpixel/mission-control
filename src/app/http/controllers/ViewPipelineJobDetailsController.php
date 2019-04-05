@@ -174,6 +174,7 @@ class ViewPipelineJobDetailsController
                         ],
                     ],
                 ],
+                'ajaxInnerRefreshUrl' => $jobModel->isFinished() || $jobModel->hasFailed() ? null : '/pipelines/view/' . $pipelineModel->slug() . '/job-details/' . $jobModel->guid(),
             ])
         );
 

@@ -71,6 +71,12 @@ function runMain(F, W) {
             el: this
         });
     });
+
+    $('.JS-AjaxRefreshInner').each(function() {
+        F.controller.construct('AjaxRefreshInner', {
+            el: this
+        });
+    });
 }
 
 runMain(window.FAB, window);
