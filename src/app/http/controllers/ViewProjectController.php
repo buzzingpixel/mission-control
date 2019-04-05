@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\pings\interfaces\PingApiInterface;
+use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\projects\interfaces\ProjectModelInterface;
 use src\app\projects\interfaces\ProjectsApiInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
@@ -42,6 +43,8 @@ class ViewProjectController
     private $requireLoginService;
     /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
+    /** @var PipelineApiInterface */
+    private $pipelineApi;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -52,7 +55,8 @@ class ViewProjectController
         ProjectsApiInterface $projectsApi,
         ReminderApiInterface $reminderApi,
         RequireLoginService $requireLoginService,
-        MonitoredUrlsApiInterface $monitoredUrlsApi
+        MonitoredUrlsApiInterface $monitoredUrlsApi,
+        PipelineApiInterface $pipelineApi
     ) {
         $this->userApi             = $userApi;
         $this->pingApi             = $pingApi;
@@ -63,6 +67,7 @@ class ViewProjectController
         $this->reminderApi         = $reminderApi;
         $this->requireLoginService = $requireLoginService;
         $this->monitoredUrlsApi    = $monitoredUrlsApi;
+        $this->pipelineApi         = $pipelineApi;
     }
 
     /** @var bool */
@@ -148,7 +153,8 @@ class ViewProjectController
                     $this->getMonitoredUrls(),
                     $this->getPings(),
                     $this->getReminders(),
-                    $this->getServers()
+                    $this->getServers(),
+                    $this->getPipelines()
                 ),
             ])
         );
@@ -159,9 +165,7 @@ class ViewProjectController
     private function getMonitoredUrls() : array
     {
         $params = $this->monitoredUrlsApi->makeQueryModel();
-        $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
-            $this->projectModel->guid()
-        ));
+        $params->addWhere('project_guid', $this->projectModel->getGuidAsBytes());
         $params->addOrder('title', 'asc');
 
         $monitoredUrlModels = $this->monitoredUrlsApi->fetchAll($params);
@@ -245,9 +249,7 @@ class ViewProjectController
     private function getPings() : array
     {
         $params = $this->monitoredUrlsApi->makeQueryModel();
-        $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
-            $this->projectModel->guid()
-        ));
+        $params->addWhere('project_guid', $this->projectModel->getGuidAsBytes());
         $params->addOrder('title', 'asc');
 
         $models = $this->pingApi->fetchAll($params);
@@ -326,9 +328,7 @@ class ViewProjectController
     private function getReminders() : array
     {
         $params = $this->reminderApi->makeQueryModel();
-        $params->addWhere('project_guid', $this->projectsApi->uuidToBytes(
-            $this->projectModel->guid()
-        ));
+        $params->addWhere('project_guid', $this->projectModel->getGuidAsBytes());
         $params->addOrder('title', 'asc');
 
         $models = $this->reminderApi->fetchAll($params);
@@ -402,12 +402,14 @@ class ViewProjectController
     private function getServers() : array
     {
         $fetchParams = $this->serverApi->makeQueryModel();
-        $fetchParams->addWhere('project_guid', $this->projectsApi->uuidToBytes(
-            $this->projectModel->guid()
-        ));
+        $fetchParams->addWhere('project_guid', $this->projectModel->getGuidAsBytes());
         $fetchParams->addOrder('title', 'asc');
 
-        $servers = $this->serverApi->fetchAll($fetchParams);
+        try {
+            $servers = $this->serverApi->fetchAll($fetchParams);
+        } catch (Throwable $e) {
+            return [];
+        }
 
         if (! $servers) {
             return [];
@@ -453,6 +455,58 @@ class ViewProjectController
                         'SSH Port',
                         'SSH Key',
                         'SSH User Name',
+                    ],
+                    'rows' => $rows,
+                ],
+            ],
+        ];
+    }
+
+    private function getPipelines() : array
+    {
+        $fetchParams = $this->pipelineApi->makeQueryModel();
+        $fetchParams->addWhere('project_guid', $this->projectModel->getGuidAsBytes());
+        $fetchParams->addOrder('title', 'asc');
+
+        $pipelines = $this->pipelineApi->fetchAll($fetchParams);
+
+        if (! $pipelines) {
+            return [];
+        }
+
+        $rows = [];
+
+        foreach ($pipelines as $model) {
+            $rows[] = [
+                'inputValue' => $model->guid(),
+                'actionButtonLink' => '/pipelines/view/' . $model->slug(),
+                'cols' => [
+                    'Title' => $model->title(),
+                    'Description' => $model->description(),
+                ],
+            ];
+        }
+
+        $actions = [];
+
+        if ($this->isAdmin) {
+            $actions['unArchive'] = 'Un-Archive Selected';
+            $actions['archive']   = 'Archive Selected';
+            $actions['delete']    = 'Delete Selected';
+        }
+
+        return [
+            [
+                'template' => 'forms/TableListForm.twig',
+                'formTitle' => 'Pipelines',
+                'actionParam' => 'pipelineListActions',
+                'actions' => $actions,
+                'actionColButtonContent' => 'View&nbsp;Pipeline&nbsp;Details',
+                'table' => [
+                    'inputsName' => 'guids[]',
+                    'headings' => [
+                        'Title',
+                        'Description',
                     ],
                     'rows' => $rows,
                 ],
