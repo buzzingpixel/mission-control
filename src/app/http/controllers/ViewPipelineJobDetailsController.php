@@ -11,7 +11,6 @@ use DateTimeZone;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use src\app\http\services\RenderPipelineInnerComponents;
 use src\app\http\services\RequireLoginService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use Throwable;
@@ -29,23 +28,19 @@ class ViewPipelineJobDetailsController
     private $pipelineApi;
     /** @var RequireLoginService */
     private $requireLoginService;
-    /** @var RenderPipelineInnerComponents */
-    private $renderPipelineInnerComponents;
 
     public function __construct(
         UserApiInterface $userApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
         PipelineApiInterface $pipelineApi,
-        RequireLoginService $requireLoginService,
-        RenderPipelineInnerComponents $renderPipelineInnerComponents
+        RequireLoginService $requireLoginService
     ) {
-        $this->userApi                       = $userApi;
-        $this->response                      = $response;
-        $this->twigEnvironment               = $twigEnvironment;
-        $this->pipelineApi                   = $pipelineApi;
-        $this->requireLoginService           = $requireLoginService;
-        $this->renderPipelineInnerComponents = $renderPipelineInnerComponents;
+        $this->userApi             = $userApi;
+        $this->response            = $response;
+        $this->twigEnvironment     = $twigEnvironment;
+        $this->pipelineApi         = $pipelineApi;
+        $this->requireLoginService = $requireLoginService;
     }
 
     /**
@@ -121,25 +116,25 @@ class ViewPipelineJobDetailsController
                 $jobItem->finishedAt()->setTimezone(new DateTimeZone($userTimeZone));
             }
 
-            $status       = 'In queue';
-            $styledStatus = 'Inactive';
+            $jobStatus       = $status === 'Failed' ? 'Aborted' : 'In queue';
+            $jobStyledStatus = 'Inactive';
 
             if ($jobItem->hasFailed()) {
-                $status       = 'Failed';
-                $styledStatus = 'Error';
+                $jobStatus       = 'Failed';
+                $jobStyledStatus = 'Error';
             } elseif ($jobItem->finishedAt()) {
-                $status       = 'Finished';
-                $styledStatus = 'Good';
+                $jobStatus       = 'Finished';
+                $jobStyledStatus = 'Good';
             }
 
             $rows[] = [
                 'cols' => [
                     'Description' => $jobItem->pipelineItem()->description(),
-                    'Status' => $status,
+                    'Status' => $jobStatus,
                     'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
                     'Log' => $jobItem->logContent(),
                 ],
-                'colorStyledCols' => ['Status' => $styledStatus],
+                'colorStyledCols' => ['Status' => $jobStyledStatus],
             ];
         }
 
