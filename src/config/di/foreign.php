@@ -6,6 +6,8 @@ use buzzingpixel\corbomitemailer\EmailApi;
 use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use corbomite\db\interfaces\BuildQueryInterface;
 use corbomite\db\services\BuildQueryService;
+use corbomite\events\EventDispatcher;
+use corbomite\events\interfaces\EventDispatcherInterface;
 use corbomite\flashdata\FlashDataApi;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
@@ -27,6 +29,7 @@ return [
     BuildQueryInterface::class => autowire(BuildQueryService::class),
     DataStoreInterface::class => autowire(DataStore::class),
     EmailApiInterface::class => autowire(EmailApi::class),
+    EventDispatcherInterface::class => autowire(EventDispatcher::class),
     FlashDataApiInterface::class => autowire(FlashDataApi::class),
     OutputInterface::class => autowire(ConsoleOutput::class),
     QueueApiInterface::class => autowire(QueueApi::class),
