@@ -8,6 +8,8 @@ use corbomite\flashdata\FlashDataApi;
 use corbomite\flashdata\interfaces\FlashDataApiInterface;
 use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\http\RequestHelper;
+use corbomite\queue\interfaces\QueueApiInterface;
+use corbomite\queue\QueueApi;
 use corbomite\requestdatastore\DataStore;
 use corbomite\requestdatastore\DataStoreInterface;
 use corbomite\user\interfaces\UserApiInterface;
@@ -30,6 +32,9 @@ return [
     },
     OutputInterface::class => static function () {
         return new ConsoleOutput();
+    },
+    QueueApiInterface::class => static function (ContainerInterface $di) {
+        return $di->get(QueueApi::class);
     },
     RequestHelperInterface::class => static function (ContainerInterface $di) {
         return $di->get(RequestHelper::class);

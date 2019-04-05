@@ -2,11 +2,6 @@
 
 declare(strict_types=1);
 
-use corbomite\flashdata\FlashDataApi;
-use corbomite\queue\QueueApi;
-use corbomite\twig\TwigEnvironment;
-use corbomite\user\UserApi;
-use Psr\Container\ContainerInterface;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\AddNotificationEmailController;
 use src\app\http\controllers\AdminController;
@@ -46,366 +41,46 @@ use src\app\http\controllers\ViewProjectController;
 use src\app\http\controllers\ViewReminderController;
 use src\app\http\controllers\ViewServerController;
 use src\app\http\controllers\ViewSSHKeyController;
-use src\app\http\services\RenderPipelineInnerComponents;
-use src\app\http\services\RequireLoginService;
-use src\app\monitoredurls\MonitoredUrlsApi;
-use src\app\notificationemails\NotificationEmailsApi;
-use src\app\pings\PingApi;
-use src\app\pipelines\PipelineApi;
-use src\app\projects\ProjectsApi;
-use src\app\reminders\ReminderApi;
-use src\app\servers\ServerApi;
-use src\app\utilities\TimeZoneListUtility;
-use Zend\Diactoros\Response;
+use function DI\autowire;
 
 return [
-    AccountController::class => static function (ContainerInterface $di) {
-        return new AccountController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class),
-            $di->get(TimeZoneListUtility::class)
-        );
-    },
-    AddNotificationEmailController::class => static function (ContainerInterface $di) {
-        return new AddNotificationEmailController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    AdminController::class => static function (ContainerInterface $di) {
-        return new AdminController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(QueueApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class),
-            $di->get(NotificationEmailsApi::class)
-        );
-    },
-    ChangePasswordController::class => static function (ContainerInterface $di) {
-        return new ChangePasswordController(
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateMonitoredUrlController::class => static function (ContainerInterface $di) {
-        return new CreateMonitoredUrlController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreatePingController::class => static function (ContainerInterface $di) {
-        return new CreatePingController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreatePipelineController::class => static function (ContainerInterface $di) {
-        return new CreatePipelineController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditPipelineController::class => static function (ContainerInterface $di) {
-        return new EditPipelineController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(PipelineApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateProjectController::class => static function (ContainerInterface $di) {
-        return new CreateProjectController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateReminderController::class => static function (ContainerInterface $di) {
-        return new CreateReminderController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateServerController::class => static function (ContainerInterface $di) {
-        return new CreateServerController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateSSHKeyController::class => static function (ContainerInterface $di) {
-        return new CreateSSHKeyController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    CreateUserController::class => static function (ContainerInterface $di) {
-        return new CreateUserController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditMonitoredUrlController::class => static function (ContainerInterface $di) {
-        return new EditMonitoredUrlController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    EditPingController::class => static function (ContainerInterface $di) {
-        return new EditPingController(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditProjectController::class => static function (ContainerInterface $di) {
-        return new EditProjectController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditReminderController::class => static function (ContainerInterface $di) {
-        return new EditReminderController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(ReminderApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditServerController::class => static function (ContainerInterface $di) {
-        return new EditServerController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    EditSSHKeyController::class => static function (ContainerInterface $di) {
-        return new EditSSHKeyController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ForgotPasswordController::class => static function (ContainerInterface $di) {
-        return new ForgotPasswordController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class)
-        );
-    },
-    MonitoredUrlIndexController::class => static function (ContainerInterface $di) {
-        return new MonitoredUrlIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    PasswordResetController::class => static function (ContainerInterface $di) {
-        return new PasswordResetController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class)
-        );
-    },
-    PingCheckinController::class => static function (ContainerInterface $di) {
-        return new PingCheckinController(
-            $di->get(PingApi::class),
-            new Response()
-        );
-    },
-    PingIndexController::class => static function (ContainerInterface $di) {
-        return new PingIndexController(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    PipelineIndexController::class => static function (ContainerInterface $di) {
-        return new PipelineIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(PipelineApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ProjectsIndexController::class => static function (ContainerInterface $di) {
-        return new ProjectsIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    RemindersIndexController::class => static function (ContainerInterface $di) {
-        return new RemindersIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ReminderApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    RenderErrorPageController::class => static function (ContainerInterface $di) {
-        return new RenderErrorPageController(
-            $di->get(TwigEnvironment::class),
-            new Response()
-        );
-    },
-    RunPipelineController::class => static function (ContainerInterface $di) {
-        return new RunPipelineController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(PipelineApi::class),
-            $di->get(FlashDataApi::class)
-        );
-    },
-    ServersIndexController::class => static function (ContainerInterface $di) {
-        return new ServersIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    SSHKeyIndexController::class => static function (ContainerInterface $di) {
-        return new SSHKeyIndexController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ViewMonitoredUrlController::class => static function (ContainerInterface $di) {
-        return new ViewMonitoredUrlController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    ViewPingController::class => static function (ContainerInterface $di) {
-        return new ViewPingController(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ViewPipelineController::class => static function (ContainerInterface $di) {
-        return new ViewPipelineController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(PipelineApi::class),
-            $di->get(RequireLoginService::class),
-            $di->get(RenderPipelineInnerComponents::class)
-        );
-    },
-    ViewPipelineJobDetailsController::class => static function (ContainerInterface $di) {
-        return new ViewPipelineJobDetailsController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(PipelineApi::class),
-            $di->get(RequireLoginService::class),
-            $di->get(RenderPipelineInnerComponents::class)
-        );
-    },
-    ViewProjectController::class => static function (ContainerInterface $di) {
-        return new ViewProjectController(
-            $di->get(UserApi::class),
-            $di->get(PingApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(ProjectsApi::class),
-            $di->get(ReminderApi::class),
-            $di->get(RequireLoginService::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    ViewReminderController::class => static function (ContainerInterface $di) {
-        return new ViewReminderController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(TwigEnvironment::class),
-            $di->get(ReminderApi::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ViewServerController::class => static function (ContainerInterface $di) {
-        return new ViewServerController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
-    ViewSSHKeyController::class => static function (ContainerInterface $di) {
-        return new ViewSSHKeyController(
-            $di->get(UserApi::class),
-            new Response(),
-            $di->get(ServerApi::class),
-            $di->get(TwigEnvironment::class),
-            $di->get(RequireLoginService::class)
-        );
-    },
+    AccountController::class => autowire(),
+    AddNotificationEmailController::class => autowire(),
+    AdminController::class => autowire(),
+    ChangePasswordController::class => autowire(),
+    CreateMonitoredUrlController::class => autowire(),
+    CreatePingController::class => autowire(),
+    CreatePipelineController::class => autowire(),
+    CreateProjectController::class => autowire(),
+    CreateReminderController::class => autowire(),
+    CreateServerController::class => autowire(),
+    CreateSSHKeyController::class => autowire(),
+    CreateUserController::class => autowire(),
+    EditMonitoredUrlController::class => autowire(),
+    EditPingController::class => autowire(),
+    EditPipelineController::class => autowire(),
+    EditProjectController::class => autowire(),
+    EditReminderController::class => autowire(),
+    EditServerController::class => autowire(),
+    EditSSHKeyController::class => autowire(),
+    ForgotPasswordController::class => autowire(),
+    MonitoredUrlIndexController::class => autowire(),
+    PasswordResetController::class => autowire(),
+    PingCheckinController::class => autowire(),
+    PingIndexController::class => autowire(),
+    PipelineIndexController::class => autowire(),
+    ProjectsIndexController::class => autowire(),
+    RemindersIndexController::class => autowire(),
+    RenderErrorPageController::class => autowire(),
+    RunPipelineController::class => autowire(),
+    ServersIndexController::class => autowire(),
+    SSHKeyIndexController::class => autowire(),
+    ViewMonitoredUrlController::class => autowire(),
+    ViewPingController::class => autowire(),
+    ViewPipelineController::class => autowire(),
+    ViewPipelineJobDetailsController::class => autowire(),
+    ViewProjectController::class => autowire(),
+    ViewReminderController::class => autowire(),
+    ViewServerController::class => autowire(),
+    ViewSSHKeyController::class => autowire(),
 ];
