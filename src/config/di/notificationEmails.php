@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use corbomite\db\Factory as OrmFactory;
-use corbomite\db\services\BuildQueryService;
-use Psr\Container\ContainerInterface;
 use src\app\notificationemails\interfaces\NotificationEmailsApiInterface;
 use src\app\notificationemails\NotificationEmailsApi;
 use src\app\notificationemails\services\DeleteNotificationEmailService;
@@ -12,41 +9,14 @@ use src\app\notificationemails\services\DisableNotificationEmailService;
 use src\app\notificationemails\services\EnableNotificationEmailService;
 use src\app\notificationemails\services\FetchNotificationEmailService;
 use src\app\notificationemails\services\SaveNotificationEmailService;
+use function DI\autowire;
 
 return [
-    NotificationEmailsApi::class => static function (ContainerInterface $di) {
-        return new NotificationEmailsApi($di);
-    },
-    NotificationEmailsApiInterface::class => static function (ContainerInterface $di) {
-        return $di->get(NotificationEmailsApi::class);
-    },
-    DeleteNotificationEmailService::class => static function (ContainerInterface $di) {
-        return new DeleteNotificationEmailService(
-            new OrmFactory(),
-            $di->get(BuildQueryService::class)
-        );
-    },
-    DisableNotificationEmailService::class => static function (ContainerInterface $di) {
-        return new DisableNotificationEmailService(
-            new OrmFactory(),
-            $di->get(BuildQueryService::class)
-        );
-    },
-    EnableNotificationEmailService::class => static function (ContainerInterface $di) {
-        return new EnableNotificationEmailService(
-            new OrmFactory(),
-            $di->get(BuildQueryService::class)
-        );
-    },
-    FetchNotificationEmailService::class => static function (ContainerInterface $di) {
-        return new FetchNotificationEmailService(
-            $di->get(BuildQueryService::class)
-        );
-    },
-    SaveNotificationEmailService::class => static function (ContainerInterface $di) {
-        return new SaveNotificationEmailService(
-            new OrmFactory(),
-            $di->get(BuildQueryService::class)
-        );
-    },
+    NotificationEmailsApi::class => autowire(),
+    NotificationEmailsApiInterface::class => autowire(NotificationEmailsApi::class),
+    DeleteNotificationEmailService::class => autowire(),
+    DisableNotificationEmailService::class => autowire(),
+    EnableNotificationEmailService::class => autowire(),
+    FetchNotificationEmailService::class => autowire(),
+    SaveNotificationEmailService::class => autowire(),
 ];
