@@ -38,7 +38,7 @@ VarDumper::setHandler(static function ($var) use ($cloner, $dumper, $varStore) :
         print '<pre style="margin-bottom: -16px;">';
     }
 
-    print $traceItem['file'] . ':' . $traceItem['line'];
+    print $traceItem['file'] . ':' . $traceItem['line'] . ': ';
 
     if (PHP_SAPI !== 'cli') {
         print '</pre>';
