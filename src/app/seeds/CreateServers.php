@@ -22,6 +22,7 @@ class CreateServers extends AbstractSeed
         $this->createServer('Test Server 1', '123.456.78.9');
         $this->createServer('Test Server 2', '987.654.32.1');
         $this->createServer('Test Server 3', '998.7.22.14');
+        $this->createServer('buzzingpixel-do-utility-lemp', '165.227.207.4');
     }
 
     private function createServer(string $title, string $addr) : void
@@ -64,7 +65,6 @@ class CreateServers extends AbstractSeed
         // Will throw an error if title already exists in database, which is
         // just what we want. We don't want to duplicate
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $serverApi->save($model);
         } catch (Throwable $e) {
         }

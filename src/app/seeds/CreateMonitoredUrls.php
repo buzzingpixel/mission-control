@@ -52,7 +52,6 @@ class CreateMonitoredUrls extends AbstractSeed
         // Will throw an error if title already exists in database, which is
         // just what we want. We don't want to duplicate
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $monitoredUrlApi->save($model);
         } catch (Throwable $e) {
         }

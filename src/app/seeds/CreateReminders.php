@@ -58,7 +58,6 @@ class CreateReminders extends AbstractSeed
         // Will throw an error if title already exists in database, which is
         // just what we want. We don't want to duplicate
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $reminderApi->save($model);
         } catch (Throwable $e) {
         }
