@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace src\app\servers\services;
 
-use phpseclib\Crypt\RSA;
+use src\app\utilities\RSAFactory;
 
 class GenerateSSHKeyService
 {
-    /** @var RSA */
-    private $rsa;
+    /** @var RSAFactory */
+    private $rsaFactory;
 
-    public function __construct(RSA $rsa)
+    public function __construct(RSAFactory $rsaFactory)
     {
-        $this->rsa = $rsa;
+        $this->rsaFactory = $rsaFactory;
     }
 
     public function __invoke() : void
@@ -26,6 +26,6 @@ class GenerateSSHKeyService
      */
     public function generate() : array
     {
-        return $this->rsa->createKey(2048);
+        return $this->rsaFactory->make()->createKey(2048);
     }
 }
