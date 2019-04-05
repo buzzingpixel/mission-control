@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-use buzzingpixel\corbomitemailer\EmailApi;
-use corbomite\queue\QueueApi;
 use Psr\Container\ContainerInterface;
 use src\app\monitoredurls\MonitoredUrlsApi;
-use src\app\notificationemails\NotificationEmailsApi;
 use src\app\notifications\notificationadapters\SendEmailNotificationAdapter;
 use src\app\notifications\notificationadapters\SlackNotificationAdapter;
 use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
@@ -21,6 +18,7 @@ use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
 use src\app\pings\PingApi;
 use src\app\reminders\ReminderApi;
 use src\app\support\extensions\GuzzleClientNoHttpErrors;
+use function DI\autowire;
 
 return [
     'NotificationAdaptersArray' => static function (ContainerInterface $di) {
@@ -29,21 +27,9 @@ return [
             $di->get(SlackNotificationAdapter::class),
         ];
     },
-    CheckPingsForNotificationsSchedule::class => static function (ContainerInterface $di) {
-        return new CheckPingsForNotificationsSchedule(
-            $di->get(QueueApi::class)
-        );
-    },
-    CheckRemindersForNotificationsSchedule::class => static function (ContainerInterface $di) {
-        return new CheckRemindersForNotificationsSchedule(
-            $di->get(QueueApi::class)
-        );
-    },
-    CheckUrlsForNotificationsSchedule::class => static function (ContainerInterface $di) {
-        return new CheckUrlsForNotificationsSchedule(
-            $di->get(QueueApi::class)
-        );
-    },
+    CheckPingsForNotificationsSchedule::class => autowire(),
+    CheckRemindersForNotificationsSchedule::class => autowire(),
+    CheckUrlsForNotificationsSchedule::class => autowire(),
     CheckPingForNotificationTask::class => static function (ContainerInterface $di) {
         return new CheckPingForNotificationTask(
             $di->get(PingApi::class),
@@ -62,30 +48,10 @@ return [
             $di->get('NotificationAdaptersArray')
         );
     },
-    CollectPingsForNotificationQueueTask::class => static function (ContainerInterface $di) {
-        return new CollectPingsForNotificationQueueTask(
-            $di->get(PingApi::class),
-            $di->get(QueueApi::class)
-        );
-    },
-    CollectRemindersForNotificationQueueTask::class => static function (ContainerInterface $di) {
-        return new CollectRemindersForNotificationQueueTask(
-            $di->get(QueueApi::class),
-            $di->get(ReminderApi::class)
-        );
-    },
-    CollectUrlsForNotificationQueueTask::class => static function (ContainerInterface $di) {
-        return new CollectUrlsForNotificationQueueTask(
-            $di->get(QueueApi::class),
-            $di->get(MonitoredUrlsApi::class)
-        );
-    },
-    SendEmailNotificationAdapter::class => static function (ContainerInterface $di) {
-        return new SendEmailNotificationAdapter(
-            $di->get(EmailApi::class),
-            $di->get(NotificationEmailsApi::class)
-        );
-    },
+    CollectPingsForNotificationQueueTask::class => autowire(),
+    CollectRemindersForNotificationQueueTask::class => autowire(),
+    CollectUrlsForNotificationQueueTask::class => autowire(),
+    SendEmailNotificationAdapter::class => autowire(),
     SlackNotificationAdapter::class => static function (ContainerInterface $di) {
         return new SlackNotificationAdapter(
             new GuzzleClientNoHttpErrors(),
