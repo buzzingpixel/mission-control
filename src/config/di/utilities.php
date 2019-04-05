@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use src\app\utilities\TimeZoneListUtility;
+use function DI\autowire;
 
 return [
-    TimeZoneListUtility::class => static function () {
-        return new TimeZoneListUtility();
-    },
+    TimeZoneListUtility::class => autowire(),
 ];
