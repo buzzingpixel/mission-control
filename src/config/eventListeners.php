@@ -12,6 +12,7 @@ use src\app\pings\listeners\ProjectArchiveListener as PingProjectArchiveListener
 use src\app\pings\listeners\ProjectDeleteListener as PingProjectDeleteListener;
 use src\app\pings\listeners\ProjectUnArchiveListener as PingProjectUnArchiveListener;
 use src\app\pipelines\listeners\ProjectArchiveListener as PipelinesProjectArchiveListener;
+use src\app\pipelines\listeners\ProjectDeleteListener as PipelinesProjectDeleteListener;
 use src\app\pipelines\listeners\SavePipelineJobListener;
 use src\app\pipelines\PipelineApi;
 use src\app\projects\ProjectsApi;
@@ -42,3 +43,4 @@ $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', ReminderProjectUnArch
 // Pipeline Listeners
 $r->register(PipelineApi::class, 'PipelineJobAfterSave', SavePipelineJobListener::class);
 $r->register(ProjectsApi::class, 'ProjectBeforeArchive', PipelinesProjectArchiveListener::class);
+$r->register(ProjectsApi::class, 'ProjectBeforeDelete', PipelinesProjectDeleteListener::class);
