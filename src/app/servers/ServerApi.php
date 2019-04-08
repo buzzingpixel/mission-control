@@ -20,13 +20,13 @@ use src\app\servers\services\FetchServerService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
 use src\app\servers\services\ListServerAuthorizedKeys;
+use src\app\servers\services\RemoveServerAuthorizedKey;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
 use src\app\servers\services\UnArchiveSSHKeyService;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\support\traits\UuidToBytesTrait;
-use function dd;
 
 class ServerApi implements ServerApiInterface
 {
@@ -236,7 +236,6 @@ class ServerApi implements ServerApiInterface
 
     public function removeServerAuthorizedKey(string $key, ServerModelInterface $model) : void
     {
-        // TODO: Implement removeServerAuthorizedKey() method.
-        dd('TODO: Implement removeServerAuthorizedKey() method.');
+        $this->di->get(RemoveServerAuthorizedKey::class)->remove($key, $model);
     }
 }

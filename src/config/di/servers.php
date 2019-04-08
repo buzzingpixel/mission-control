@@ -17,6 +17,7 @@ use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
 use src\app\servers\services\GetLoggedInServerSshConnection;
 use src\app\servers\services\ListServerAuthorizedKeys;
+use src\app\servers\services\RemoveServerAuthorizedKey;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
@@ -38,6 +39,7 @@ return [
     ProjectArchiveListener::class => autowire(),
     ProjectDeleteListener::class => autowire(),
     ProjectUnArchiveListener::class => autowire(),
+    RemoveServerAuthorizedKey::class => autowire(),
     SaveServerService::class => autowire(),
     SaveSSHKeyService::class => autowire(),
     ServerApi::class => autowire(),
