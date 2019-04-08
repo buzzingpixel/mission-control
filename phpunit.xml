@@ -11,7 +11,7 @@
          verbose="true">
     <testsuites>
         <testsuite name="Mission Control">
-            <directory suffix="Test.php">src\tests</directory>
+            <directory suffix="Test.php">src/tests</directory>
         </testsuite>
     </testsuites>
 
