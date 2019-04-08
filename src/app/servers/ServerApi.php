@@ -18,6 +18,7 @@ use src\app\servers\services\ArchiveSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
+use src\app\servers\services\ListServerAuthorizedKeys;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
 use src\app\servers\services\UnArchiveServerService;
@@ -219,10 +220,12 @@ class ServerApi implements ServerApiInterface
         return $service->generate();
     }
 
+    /**
+     * @return string[]
+     */
     public function listServerAuthorizedKeys(ServerModelInterface $model) : array
     {
-        // TODO: Implement listServerAuthorizedKeys() method.
-        dd('TODO: Implement listServerAuthorizedKeys() method.');
+        return $this->di->get(ListServerAuthorizedKeys::class)->list($model);
     }
 
     public function addServerAuthorizedKey(string $key, ServerModelInterface $model) : void
