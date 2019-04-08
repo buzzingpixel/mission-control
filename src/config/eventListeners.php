@@ -21,6 +21,7 @@ use src\app\reminders\listeners\ProjectArchiveListener as ReminderProjectArchive
 use src\app\reminders\listeners\ProjectDeleteListener as ReminderProjectDeleteListener;
 use src\app\reminders\listeners\ProjectUnArchiveListener as ReminderProjectUnArchiveListener;
 use src\app\servers\listeners\ProjectArchiveListener as ServerProjectArchiveListener;
+use src\app\servers\listeners\ProjectUnArchiveListener as ServerProjectUnArchiveListener;
 
 /** @var EventListenerRegistrationInterface $r */
 
@@ -50,3 +51,4 @@ $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', PipelinesProjectUnArc
 
 // Server listeners
 $r->register(ProjectsApi::class, 'ProjectBeforeArchive', ServerProjectArchiveListener::class);
+$r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', ServerProjectUnArchiveListener::class);

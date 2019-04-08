@@ -6,6 +6,7 @@ use src\app\pings\services\DeleteServerService;
 use src\app\pings\services\DeleteSSHKeyService;
 use src\app\servers\interfaces\ServerApiInterface;
 use src\app\servers\listeners\ProjectArchiveListener;
+use src\app\servers\listeners\ProjectUnArchiveListener;
 use src\app\servers\ServerApi;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
@@ -28,6 +29,7 @@ return [
     FetchSSHKeyService::class => autowire(),
     GenerateSSHKeyService::class => autowire(),
     ProjectArchiveListener::class => autowire(),
+    ProjectUnArchiveListener::class => autowire(),
     SaveServerService::class => autowire(),
     SaveSSHKeyService::class => autowire(),
     ServerApi::class => autowire(),
