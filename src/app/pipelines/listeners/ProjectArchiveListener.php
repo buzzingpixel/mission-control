@@ -33,7 +33,7 @@ class ProjectArchiveListener implements EventListenerInterface
         $queryModel = $this->pipelineApi->makeQueryModel();
         $queryModel->addWhere('project_guid', $event->projectModel()->getGuidAsBytes());
 
-        $relatedPipelines = $this->pipelineApi->fetchAll();
+        $relatedPipelines = $this->pipelineApi->fetchAll($queryModel);
 
         array_walk($relatedPipelines, [$this, 'archive']);
     }
