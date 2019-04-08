@@ -102,6 +102,10 @@ class ServerRecordModelTransformer
      */
     private function getSSHKeyModels(array $sshKeyIds) : array
     {
+        if (! $sshKeyIds) {
+            return [];
+        }
+
         $fetchSSHKeys = $this->di->get(FetchSSHKeyService::class);
 
         $ormFactory = $this->di->get(OrmFactory::class);
