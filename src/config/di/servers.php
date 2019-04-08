@@ -9,11 +9,13 @@ use src\app\servers\listeners\ProjectArchiveListener;
 use src\app\servers\listeners\ProjectDeleteListener;
 use src\app\servers\listeners\ProjectUnArchiveListener;
 use src\app\servers\ServerApi;
+use src\app\servers\services\AddServerAuthorizedKey;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
 use src\app\servers\services\FetchServerService;
 use src\app\servers\services\FetchSSHKeyService;
 use src\app\servers\services\GenerateSSHKeyService;
+use src\app\servers\services\GetLoggedInServerSshConnection;
 use src\app\servers\services\ListServerAuthorizedKeys;
 use src\app\servers\services\SaveServerService;
 use src\app\servers\services\SaveSSHKeyService;
@@ -23,6 +25,7 @@ use src\app\servers\transformers\ServerRecordModelTransformer;
 use function DI\autowire;
 
 return [
+    AddServerAuthorizedKey::class => autowire(),
     ArchiveServerService::class => autowire(),
     ArchiveSSHKeyService::class => autowire(),
     DeleteServerService::class => autowire(),
@@ -30,6 +33,7 @@ return [
     FetchServerService::class => autowire(),
     FetchSSHKeyService::class => autowire(),
     GenerateSSHKeyService::class => autowire(),
+    GetLoggedInServerSshConnection::class => autowire(),
     ListServerAuthorizedKeys::class => autowire(),
     ProjectArchiveListener::class => autowire(),
     ProjectDeleteListener::class => autowire(),

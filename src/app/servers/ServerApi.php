@@ -13,6 +13,7 @@ use src\app\servers\interfaces\ServerModelInterface;
 use src\app\servers\interfaces\SSHKeyModelInterface;
 use src\app\servers\models\ServerModel;
 use src\app\servers\models\SSHKeyModel;
+use src\app\servers\services\AddServerAuthorizedKey;
 use src\app\servers\services\ArchiveServerService;
 use src\app\servers\services\ArchiveSSHKeyService;
 use src\app\servers\services\FetchServerService;
@@ -230,8 +231,7 @@ class ServerApi implements ServerApiInterface
 
     public function addServerAuthorizedKey(string $key, ServerModelInterface $model) : void
     {
-        // TODO: Implement addServerAuthorizedKey() method.
-        dd('TODO: Implement addServerAuthorizedKey() method.');
+        $this->di->get(AddServerAuthorizedKey::class)->add($key, $model);
     }
 
     public function removeServerAuthorizedKey(string $key, ServerModelInterface $model) : void
