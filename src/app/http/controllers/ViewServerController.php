@@ -125,6 +125,11 @@ class ViewServerController
 
         if ($isAdmin) {
             $pageControlButtons[] = [
+                'href' => '/servers/authorized-keys/' . $model->slug(),
+                'content' => 'Manage Authorized Keys',
+            ];
+
+            $pageControlButtons[] = [
                 'href' => '/servers/edit/' . $model->slug(),
                 'content' => 'Edit Server',
             ];
