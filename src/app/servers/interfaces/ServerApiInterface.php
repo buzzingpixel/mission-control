@@ -163,4 +163,25 @@ interface ServerApiInterface
      * @return string[]
      */
     public function generateSSHKey() : array;
+
+    /**
+     * Lists the servers authorized keys
+     *
+     * @return string[]
+     */
+    public function listServerAuthorizedKeys(ServerModelInterface $model) : array;
+
+    /**
+     * Adds an authorized key to a server
+     *
+     * @return mixed
+     */
+    public function addServerAuthorizedKey(string $key, ServerModelInterface $model);
+
+    /**
+     * Removes an authorized key from a server
+     *
+     * @return mixed
+     */
+    public function removeServerAuthorizedKey(string $key, ServerModelInterface $model);
 }

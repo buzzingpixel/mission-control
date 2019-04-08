@@ -24,6 +24,7 @@ use src\app\servers\services\UnArchiveServerService;
 use src\app\servers\services\UnArchiveSSHKeyService;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\support\traits\UuidToBytesTrait;
+use function dd;
 
 class ServerApi implements ServerApiInterface
 {
@@ -99,9 +100,8 @@ class ServerApi implements ServerApiInterface
     /** @var ?int */
     private $serverLimit;
 
-    public function fetchOne(
-        ?QueryModelInterface $params = null
-    ) : ?ServerModelInterface {
+    public function fetchOne(?QueryModelInterface $params = null) : ?ServerModelInterface
+    {
         $this->serverLimit = 1;
         $result            = $this->fetchAll($params)[0] ?? null;
         $this->serverLimit = null;
@@ -112,9 +112,8 @@ class ServerApi implements ServerApiInterface
     /** @var ?int */
     private $sshKeyLimit;
 
-    public function fetchOneSSHKey(
-        ?QueryModelInterface $params = null
-    ) : ?SSHKeyModelInterface {
+    public function fetchOneSSHKey(?QueryModelInterface $params = null) : ?SSHKeyModelInterface
+    {
         $this->sshKeyLimit = 1;
         $result            = $this->fetchAllSSHKeys($params)[0] ?? null;
         $this->sshKeyLimit = null;
@@ -174,10 +173,8 @@ class ServerApi implements ServerApiInterface
      *     'another-server-slug' => 'Another Server Name',
      * ]
      */
-    public function fetchAsSelectArray(
-        ?QueryModelInterface $params = null,
-        bool $keyIsSlug = false
-    ) : array {
+    public function fetchAsSelectArray(?QueryModelInterface $params = null, bool $keyIsSlug = false) : array
+    {
         $models = $this->fetchAll($params);
 
         $items = [];
@@ -198,10 +195,8 @@ class ServerApi implements ServerApiInterface
      *     'another-ssh-key-slug' => 'Another SSH Key Name',
      * ]
      */
-    public function fetchSSHKeysAsSelectArray(
-        ?QueryModelInterface $params = null,
-        bool $keyIsSlug = false
-    ) : array {
+    public function fetchSSHKeysAsSelectArray(?QueryModelInterface $params = null, bool $keyIsSlug = false) : array
+    {
         $models = $this->fetchAllSSHKeys($params);
 
         $items = [];
@@ -222,5 +217,23 @@ class ServerApi implements ServerApiInterface
         $service = $this->di->get(GenerateSSHKeyService::class);
 
         return $service->generate();
+    }
+
+    public function listServerAuthorizedKeys(ServerModelInterface $model) : array
+    {
+        // TODO: Implement listServerAuthorizedKeys() method.
+        dd('TODO: Implement listServerAuthorizedKeys() method.');
+    }
+
+    public function addServerAuthorizedKey(string $key, ServerModelInterface $model) : void
+    {
+        // TODO: Implement addServerAuthorizedKey() method.
+        dd('TODO: Implement addServerAuthorizedKey() method.');
+    }
+
+    public function removeServerAuthorizedKey(string $key, ServerModelInterface $model) : void
+    {
+        // TODO: Implement removeServerAuthorizedKey() method.
+        dd('TODO: Implement removeServerAuthorizedKey() method.');
     }
 }
