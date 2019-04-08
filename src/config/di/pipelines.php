@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use src\app\pipelines\interfaces\PipelineApiInterface;
+use src\app\pipelines\listeners\ProjectArchiveListener;
 use src\app\pipelines\listeners\SavePipelineJobListener;
 use src\app\pipelines\PipelineApi;
 use src\app\pipelines\services\ArchivePipelineService;
@@ -26,6 +27,7 @@ return [
     FetchPipelineJobService::class => autowire(),
     FetchPipelineService::class => autowire(),
     InitJobFromPipelineModelService::class => autowire(),
+    ProjectArchiveListener::class => autowire(),
     SavePipelineJobService::class => autowire(),
     SavePipelineService::class => autowire()
         ->constructorParameter(
