@@ -6,5 +6,4 @@ if "%1" == "" (
     set ENV=%1
 )
 
-docker-compose up -d
 docker exec -it --user root %ENV%-mission-control bash
