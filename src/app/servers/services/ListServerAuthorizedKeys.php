@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace src\app\servers\services;
 
-use LogicException;
 use src\app\servers\interfaces\ServerModelInterface;
-use src\app\utilities\RSAFactory;
-use src\app\utilities\SSH2Factory;
 use function explode;
 use function trim;
 
 class ListServerAuthorizedKeys
 {
-    /** @var SSH2Factory */
-    private $ssh2Factory;
-    /** @var RSAFactory */
-    private $rsaFactory;
+    /** @var GetLoggedInServerSshConnection */
+    private $getConnection;
 
-    public function __construct(SSH2Factory $ssh2Factory, RSAFactory $rsaFactory)
+    public function __construct(GetLoggedInServerSshConnection $getConnection)
     {
-        $this->ssh2Factory = $ssh2Factory;
-        $this->rsaFactory  = $rsaFactory;
+        $this->getConnection = $getConnection;
     }
 
     /**
@@ -37,24 +31,11 @@ class ListServerAuthorizedKeys
      */
     public function list(ServerModelInterface $server) : array
     {
-        $ssh = $this->ssh2Factory->make(
-            $server->address(),
-            $server->sshPort()
-        );
+        $ssh = $this->getConnection->get($server);
 
-        $sshKeyModel = $server->sshKeyModel();
+        $keysString = $ssh->exec('cat ~/.ssh/authorized_keys');
 
-        $key = $this->rsaFactory->make(
-            $sshKeyModel->private(),
-            $sshKeyModel->public()
-        );
-
-        if (! $ssh->login($server->sshUserName(), $key)) {
-            // dd($ssh->getErrors());
-            throw new LogicException('Unable to log in to SSH Server');
-        }
-
-        $keysString = trim($ssh->exec('cat ~/.ssh/authorized_keys'));
+        $keysString = trim($keysString);
 
         return explode("\n", $keysString);
     }
