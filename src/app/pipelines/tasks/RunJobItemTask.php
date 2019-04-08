@@ -11,6 +11,7 @@ use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
+use src\app\servers\services\GetLoggedInServerSshConnection;
 use src\app\utilities\RSAFactory;
 use src\app\utilities\SSH2Factory;
 use Throwable;
@@ -26,6 +27,8 @@ class RunJobItemTask
     protected $ssh2Factory;
     /** @var RSAFactory */
     protected $rsaFactory;
+    /** @var GetLoggedInServerSshConnection */
+    private $getConnection;
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
@@ -36,11 +39,13 @@ class RunJobItemTask
         PipelineApiInterface $pipelineApi,
         SSH2Factory $ssh2Factory,
         RSAFactory $rsaFactory,
+        GetLoggedInServerSshConnection $getConnection,
         array $sendNotificationAdapters = []
     ) {
         $this->pipelineApi              = $pipelineApi;
         $this->ssh2Factory              = $ssh2Factory;
         $this->rsaFactory               = $rsaFactory;
+        $this->getConnection            = $getConnection;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
@@ -176,20 +181,7 @@ class RunJobItemTask
         array_walk(
             $servers,
             static function (ServerModelInterface $server) use ($task, $pipelineItem, $jobItem) : void {
-                $ssh = $task->ssh2Factory->make(
-                    $server->address(),
-                    $server->sshPort()
-                );
-
-                $key = $task->rsaFactory->make(
-                    $server->sshKeyModel()->private(),
-                    $server->sshKeyModel()->public()
-                );
-
-                if (! $ssh->login($server->sshUserName(), $key)) {
-                    // dd($ssh->getErrors());
-                    throw new LogicException('Unable to log in to SSH Server');
-                }
+                $ssh = $task->getConnection->get($server);
 
                 $jobItem->logContent((string) $ssh->exec($pipelineItem->script()));
 
