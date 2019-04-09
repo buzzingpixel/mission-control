@@ -1,0 +1,69 @@
+{% set items = items ?? [] %}
+{% set addActionParam = addActionParam ?? false %}
+{% set removeActionParam = removeActionParam ?? false %}
+{% set returnUrl = returnUrl ?? false %}
+{% set csrfInput = getCsrfInput() %}
+
+<div class="AuthorizedKeys">
+    <div class="AuthorizedKeys__Inner">
+        {% if items|length %}
+            <div class="AuthorizedKeys__Items">
+                {% for item in items %}
+                    <form class="AuthorizedKeys__Item">
+                        {{ csrfInput }}
+                        {% if removeActionParam %}
+                            <input type="hidden" name="action" value="{{ removeActionParam }}">
+                        {% endif %}
+                        {% if returnUrl %}
+                            <input type="hidden" name="return_url" value="{{ returnUrl }}">
+                        {% endif %}
+                        <div class="AuthorizedKeys__ItemKey">
+                            <textarea
+                                name="key"
+                                class="textarea AuthorizedKeys__TextArea"
+                                rows="5"
+                                autocomplete="off"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                spellcheck="false"
+                            >{{ item }}</textarea>
+                        </div>
+                        <div class="AuthorizedKeys__ItemControls">
+                            <input
+                                type="submit"
+                                class="button button--colored AuthorizedKeys__SubmitInput"
+                                value="Remove"
+                            >
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+            <form class="AuthorizedKeys__AddNew">
+                {{ csrfInput }}
+                {% if addActionParam %}
+                    <input type="hidden" name="action" value="{{ addActionParam }}">
+                {% endif %}
+                {% if returnUrl %}
+                    <input type="hidden" name="return_url" value="{{ returnUrl }}">
+                {% endif %}
+                <div class="AuthorizedKeys__AddNewTitle">Add new key</div>
+                <textarea
+                    name="key"
+                    class="textarea AuthorizedKeys__TextArea"
+                    rows="5"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                ></textarea>
+                <div class="AuthorizedKeys__ItemControls">
+                    <input
+                        type="submit"
+                        class="button AuthorizedKeys__SubmitInput"
+                        value="Add Key"
+                    >
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>

@@ -35,6 +35,7 @@ use src\app\http\controllers\PipelineIndexController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RunPipelineController;
+use src\app\http\controllers\ServerManageAuthorizedKeys;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\TestController;
@@ -90,6 +91,7 @@ $r->addRoute(['GET', 'POST'], '/servers[/{archives:archives}]', ServersIndexCont
 $r->addRoute(['GET', 'POST'], '/servers/create', CreateServerController::class);
 $r->addRoute(['GET', 'POST'], '/servers/view/{slug}', ViewServerController::class);
 $r->addRoute(['GET', 'POST'], '/servers/edit/{slug}', EditServerController::class);
+$r->addRoute(['GET', 'POST'], '/servers/authorized-keys/{slug}', ServerManageAuthorizedKeys::class);
 
 // SSH Keys
 $r->addRoute(['GET', 'POST'], '/ssh-keys[/{archives:archives}]', SSHKeyIndexController::class);

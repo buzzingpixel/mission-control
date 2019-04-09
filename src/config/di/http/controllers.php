@@ -31,6 +31,7 @@ use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RenderErrorPageController;
 use src\app\http\controllers\RunPipelineController;
+use src\app\http\controllers\ServerManageAuthorizedKeys;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\ViewMonitoredUrlController;
@@ -73,6 +74,7 @@ return [
     RemindersIndexController::class => autowire(),
     RenderErrorPageController::class => autowire(),
     RunPipelineController::class => autowire(),
+    ServerManageAuthorizedKeys::class => autowire(),
     ServersIndexController::class => autowire(),
     SSHKeyIndexController::class => autowire(),
     ViewMonitoredUrlController::class => autowire(),
