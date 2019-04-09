@@ -43,7 +43,7 @@
                     </form>
                 {% endfor %}
             </div>
-            <form class="AuthorizedKeys__AddNew">
+            <form method="post" accept-charset="UTF-8" class="AuthorizedKeys__AddNew">
                 {{ csrfInput }}
                 {% if addActionParam %}
                     <input type="hidden" name="action" value="{{ addActionParam }}">

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use src\app\http\actions\AddAuthorizedKeyToServer;
 use src\app\http\actions\AddEmailNotificationAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\ChangePasswordAction;
@@ -35,6 +36,7 @@ use src\app\http\actions\UpdateAccountAction;
 use function DI\autowire;
 
 return [
+    AddAuthorizedKeyToServer::class => autowire(),
     AddEmailNotificationAction::class => autowire(),
     AdminUserActions::class => autowire(),
     ChangePasswordAction::class => autowire(),

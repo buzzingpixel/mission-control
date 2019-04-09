@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use src\app\http\actions\AddAuthorizedKeyToServer;
 use src\app\http\actions\AddEmailNotificationAction;
 use src\app\http\actions\AdminUserActions;
 use src\app\http\actions\ChangePasswordAction;
@@ -34,6 +35,7 @@ use src\app\http\actions\SSHKeyListActions;
 use src\app\http\actions\UpdateAccountAction;
 
 return [
+    'addAuthorizedKeyToServer' => AddAuthorizedKeyToServer::class,
     'addNotificationEmail' => AddEmailNotificationAction::class,
     'adminUserActions' => AdminUserActions::class,
     'changePassword' => ChangePasswordAction::class,
