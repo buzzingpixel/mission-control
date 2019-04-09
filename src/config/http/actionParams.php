@@ -28,6 +28,7 @@ use src\app\http\actions\PingListActions;
 use src\app\http\actions\PipelineListActions;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\ReminderListActions;
+use src\app\http\actions\RemoveAuthorizedKeyToServer;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
@@ -61,6 +62,7 @@ return [
     'pipelineListActions' => PipelineListActions::class,
     'projectListActions' => ProjectListActions::class,
     'reminderListActions' => ReminderListActions::class,
+    'removeAuthorizedKeyFromServer' => RemoveAuthorizedKeyToServer::class,
     'resetPassword' => ResetPasswordAction::class,
     'sendPasswordResetEmail' => SendPasswordResetEmailAction::class,
     'serverListActions' => ServerListActions::class,

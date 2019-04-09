@@ -28,6 +28,7 @@ use src\app\http\actions\PingListActions;
 use src\app\http\actions\PipelineListActions;
 use src\app\http\actions\ProjectListActions;
 use src\app\http\actions\ReminderListActions;
+use src\app\http\actions\RemoveAuthorizedKeyToServer;
 use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
@@ -62,6 +63,7 @@ return [
     PipelineListActions::class => autowire(),
     ProjectListActions::class => autowire(),
     ReminderListActions::class => autowire(),
+    RemoveAuthorizedKeyToServer::class => autowire(),
     ResetPasswordAction::class => autowire(),
     SendPasswordResetEmailAction::class => autowire(),
     ServerListActions::class => autowire(),
