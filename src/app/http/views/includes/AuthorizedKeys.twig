@@ -1,7 +1,9 @@
 {% set items = items ?? [] %}
+{% set serverGuid = serverGuid ?? false %}
 {% set addActionParam = addActionParam ?? false %}
 {% set removeActionParam = removeActionParam ?? false %}
 {% set returnUrl = returnUrl ?? false %}
+
 {% set csrfInput = getCsrfInput() %}
 
 <div class="AuthorizedKeys">
@@ -9,13 +11,16 @@
         {% if items|length %}
             <div class="AuthorizedKeys__Items">
                 {% for item in items %}
-                    <form class="AuthorizedKeys__Item">
+                    <form method="post" accept-charset="UTF-8" class="AuthorizedKeys__Item">
                         {{ csrfInput }}
                         {% if removeActionParam %}
                             <input type="hidden" name="action" value="{{ removeActionParam }}">
                         {% endif %}
                         {% if returnUrl %}
                             <input type="hidden" name="return_url" value="{{ returnUrl }}">
+                        {% endif %}
+                        {% if serverGuid %}
+                            <input type="hidden" name="server_guid" value="{{ serverGuid }}">
                         {% endif %}
                         <div class="AuthorizedKeys__ItemKey">
                             <textarea
@@ -45,6 +50,9 @@
                 {% endif %}
                 {% if returnUrl %}
                     <input type="hidden" name="return_url" value="{{ returnUrl }}">
+                {% endif %}
+                {% if serverGuid %}
+                    <input type="hidden" name="server_guid" value="{{ serverGuid }}">
                 {% endif %}
                 <div class="AuthorizedKeys__AddNewTitle">Add new key</div>
                 <textarea

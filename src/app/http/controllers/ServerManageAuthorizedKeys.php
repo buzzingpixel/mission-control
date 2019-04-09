@@ -121,6 +121,10 @@ class ServerManageAuthorizedKeys
                     [
                         'template' => 'includes/AuthorizedKeys.twig',
                         'items' => $items,
+                        'serverGuid' => $model->guid(),
+                        'addActionParam' => 'addAuthorizedKeyToServer',
+                        'removeActionParam' => 'removeAuthorizedKeyFromServer',
+                        'returnUrl' => '/servers/authorized-keys/' . $model->slug(),
                     ],
                 ],
             ])
