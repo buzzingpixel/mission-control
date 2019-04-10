@@ -10,11 +10,11 @@ services:
     environment:
       HOSTNAME: utility-mission-control
     volumes:
-      - .:/app:delegated
-      - cache-volume:/cache-volume:delegated
-      - db-volume:/db-volume:delegated
-      - node-modules-volume:/node-modules-volume:delegated
-      - vendor-volume:/vendor-volume:delegated
+      - .:/app
+      - cache-volume:/cache-volume
+      - db-volume:/db-volume
+      - node-modules-volume:/node-modules-volume
+      - vendor-volume:/vendor-volume
     command: bash -c "chmod +x /app/scripts/dev/devUtilityScript.sh && /app/scripts/dev/devUtilityScript.sh"
     networks:
       common:
@@ -27,23 +27,23 @@ services:
     environment:
       HOSTNAME: nginx-mission-control
     ports:
-      - "${DOCKER_NGINX_PORT}:80"
+      - 7783:80
     volumes:
       - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - ${DOCKER_NGINX_CONF_FILE}:/etc/nginx/conf.d/site.conf:delegated
+      - ./serverConfig/nginx/dev.conf:/etc/nginx/conf.d/dev.conf:delegated
       - .:/app-www:delegated
       - cache-volume:/app-www/cache:delegated
       - vendor-volume:/app-www/vendor:delegated
     networks:
       common:
         aliases:
-          - ${SERVER_NAME_ALIAS}
+          - mission-control.test
   php:
     env_file:
       - .env
       - .env.override
-    image: buzzingpixel/php7.2:latest
+    image: buzzingpixel/php7.2:1.0.6
     container_name: php-mission-control
     environment:
       HOSTNAME: php-mission-control
@@ -51,7 +51,7 @@ services:
       - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
       - ./serverConfig/php/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
-      - ${DOCKER_PHP_ENV_INI_FILE}:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
+      - ./serverConfig/php/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
       - ./serverConfig/php/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
       - .:/app:delegated
       - .:/app-www:delegated
@@ -63,22 +63,18 @@ services:
     env_file:
       - .env
       - .env.override
-    image: buzzingpixel/mariadb:latest
+    image: buzzingpixel/mariadb:2.0.1
     container_name: db-mission-control
     restart: always
     environment:
       HOSTNAME: db-mission-control
-      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
     user: "1000:50"
     volumes:
       - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
       - db-volume:/var/lib/mysql:delegated
     ports:
-      - "${DOCKER_DB_PORT}:3306"
+      - 17417:3306
     networks:
       common:
   node:
@@ -88,8 +84,8 @@ services:
     image: node:11.12.0
     container_name: node-mission-control
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - 3000:3000
+      - 3001:3001
     volumes:
       - .:/app:delegated
       - node-modules-volume:/app/node_modules
