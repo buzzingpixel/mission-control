@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  php:
+    image: buzzingpixel/php7.2:1.0.6
+    environment:
+      COMPOSER_HOME: /composer-home-volume
+    volumes:
+      - ./serverConfig/php/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini
+      - ./serverConfig/php/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini
+      - .:/app:delegated
+      - composer-home-volume:/composer-home-volume
+    command: bash -c "cd /app && composer install --no-dev --optimize-autoloader"
+
+volumes:
+  composer-home-volume:

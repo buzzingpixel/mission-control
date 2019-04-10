@@ -47,6 +47,7 @@ services:
     container_name: php-mission-control
     environment:
       HOSTNAME: php-mission-control
+      COMPOSER_HOME: /composer-home-volume
     volumes:
       - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
       - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
@@ -56,6 +57,7 @@ services:
       - .:/app:delegated
       - .:/app-www:delegated
       - cache-volume:/app-www/cache:delegated
+      - composer-home-volume:/composer-home-volume:delegated
       - vendor-volume:/app-www/vendor:delegated
     networks:
       common:
@@ -96,6 +98,7 @@ services:
 
 volumes:
   cache-volume:
+  composer-home-volume:
   db-volume:
   node-modules-volume:
   vendor-volume:

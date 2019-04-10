@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  node:
+    image: node:11.12.0
+    volumes:
+      - .:/app
+      - node-modules-volume:/app/node_modules
+      - yarn-cache-volume:/usr/local/share/.cache/yarn
+    command: bash -c "cd /app && yarn && yarn run fab --build-only"
+
+volumes:
+  node-modules-volume:
+  yarn-cache-volume:

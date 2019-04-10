@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  utility:
+    env_file:
+      - .env
+      - .env.override
+    image: buzzingpixel/utility:1.1.0
+    restart: always
+    container_name: utility-mission-control
+    environment:
+      HOSTNAME: utility-mission-control
+    volumes:
+      - .:/app
+      - cache-volume:/cache-volume
+      - db-volume:/db-volume
+      - log-volume:/log-volume
+    command: bash -c "chmod +x /app/scripts/prod/utilityScript.sh && /app/scripts/prod/utilityScript.sh"
+    networks:
+      common:
+  web:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/nginx/Dockerfile-nginx-prod
+    restart: always
+    container_name: nginx-mission-control
+    environment:
+      HOSTNAME: nginx-mission-control
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - cache-volume:/app/cache
+    networks:
+      common:
+  php:
+    env_file:
+      - .env
+      - .env.override
+    image: buzzingpixel/php7.2:1.0.6
+    restart: always
+    container_name: php-mission-control
+    environment:
+      HOSTNAME: php-mission-control
+    volumes:
+      - cache-volume:/app-www/cache:delegated
+    networks:
+      common:
+  db:
+    env_file:
+      - .env
+      - .env.override
+    image: buzzingpixel/mariadb:2.0.1
+    restart: always
+    container_name: db-mission-control
+    environment:
+      HOSTNAME: db-mission-control
+    user: "1000:50"
+    volumes:
+      - db-volume:/var/lib/mysql:delegated
+    ports:
+      - 3306:3306
+    networks:
+      common:
+
+volumes:
+  cache-volume:
+  db-volume:
+  log-volume:
+
+networks:
+  common:
