@@ -1,0 +1,5 @@
+FROM buzzingpixel/php7.2:1.0.6
+COPY . /app
+COPY ./serverConfig/php-queue-runner/php-custom-config.ini /usr/local/etc/php/conf.d/php-custom-config.ini
+COPY ./serverConfig/php-queue-runner/php-config-prod.ini /usr/local/etc/php/conf.d/php-env-config.ini
+COPY ./serverConfig/php-queue-runner/fpm-www.conf /usr/local/etc/php-fpm.d/www.conf

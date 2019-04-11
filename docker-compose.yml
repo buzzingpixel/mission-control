@@ -61,6 +61,26 @@ services:
       - vendor-volume:/app-www/vendor:delegated
     networks:
       common:
+  php-queue-runner:
+    env_file:
+      - .env
+      - .env.override
+    image: buzzingpixel/php7.2:1.0.6
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
+      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
+      - ./serverConfig/php-queue-runner/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
+      - ./serverConfig/php-queue-runner/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
+      - ./serverConfig/php-queue-runner/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
+      - .:/app:delegated
+      - cache-volume:/app/cache:delegated
+      - vendor-volume:/app/vendor:delegated
+    command: bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh"
+    networks:
+      common:
   db:
     env_file:
       - .env
