@@ -21,6 +21,9 @@ services:
   certbot:
     image: certbot/certbot
     restart: always
+    container_name: certbot-mission-control
+    environment:
+      HOSTNAME: certbot-mission-control
     volumes:
       - certbot-conf-volume:/etc/letsencrypt
       - certbot-www-volume:/var/www/certbot
