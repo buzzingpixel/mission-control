@@ -1,0 +1,6 @@
+FROM buzzingpixel/php7.2:1.0.6
+COPY ./serverConfig/php-schedule-runner/mission-control-schedule /etc/cron.d/mission-control-schedule
+RUN chmod 0644 /etc/cron.d/mission-control-schedule
+RUN crontab /etc/cron.d/mission-control-schedule
+RUN touch /var/log/cron.log
+CMD ["cron", "-f"]
