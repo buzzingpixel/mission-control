@@ -5,6 +5,7 @@ COPY ./serverConfig/php-schedule-runner/php-config-prod.ini /usr/local/etc/php/c
 COPY ./serverConfig/php-schedule-runner/fpm-www.conf /usr/local/etc/php-fpm.d/www.conf
 ADD ./serverConfig/php-schedule-runner/mission-control-schedule /etc/cron.d/mission-control-schedule
 RUN chmod 0644 /etc/cron.d/mission-control-schedule
+RUN chmod +x /etc/cron.d/mission-control-schedule
 RUN crontab /etc/cron.d/mission-control-schedule
 RUN touch /var/log/cron.log
 CMD ["cron", "-f"]
