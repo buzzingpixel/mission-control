@@ -40,13 +40,15 @@ services:
     env_file:
       - .env
       - .env.override
-    image: buzzingpixel/php7.2:1.0.6
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php/Dockerfile-php-prod
     restart: always
     container_name: php-mission-control
     environment:
       HOSTNAME: php-mission-control
     volumes:
-      - cache-volume:/app-www/cache:delegated
+      - cache-volume:/app/cache:delegated
     networks:
       common:
   db:
