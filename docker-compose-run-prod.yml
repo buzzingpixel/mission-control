@@ -92,6 +92,7 @@ services:
       HOSTNAME: php-schedule-runner-mission-control
     volumes:
       - cache-volume:/app/cache:delegated
+    command: bash -c "cron -f"
     networks:
       common:
   db:

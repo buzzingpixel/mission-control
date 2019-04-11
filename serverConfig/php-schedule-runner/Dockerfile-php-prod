@@ -8,4 +8,3 @@ RUN chmod 0644 /etc/cron.d/mission-control-schedule
 RUN chmod +x /etc/cron.d/mission-control-schedule
 RUN crontab /etc/cron.d/mission-control-schedule
 RUN touch /var/log/cron.log
-CMD ["cron", "-f"]

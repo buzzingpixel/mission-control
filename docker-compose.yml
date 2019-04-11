@@ -100,6 +100,7 @@ services:
       - .:/app:delegated
       - cache-volume:/app/cache:delegated
       - vendor-volume:/app/vendor:delegated
+    command: bash -c "cron -f"
     networks:
       common:
   db:
