@@ -12,7 +12,9 @@ services:
       HOSTNAME: utility-mission-control
     volumes:
       - .:/app
+      - backups-home-volume:/backups-home-volume
       - cache-volume:/cache-volume
+      - db-mirror-volume:/db-mirror-volume
       - db-volume:/db-volume
       - log-volume:/log-volume
     command: bash -c "chmod +x /app/scripts/prod/utilityScript.sh && /app/scripts/prod/utilityScript.sh"
@@ -60,7 +62,7 @@ services:
     environment:
       HOSTNAME: php-mission-control
     volumes:
-      - cache-volume:/app/cache:delegated
+      - cache-volume:/app/cache
     networks:
       common:
   php-queue-runner:
@@ -75,7 +77,7 @@ services:
     environment:
       HOSTNAME: php-queue-runner-mission-control
     volumes:
-      - cache-volume:/app/cache:delegated
+      - cache-volume:/app/cache
     command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
     networks:
       common:
@@ -90,16 +92,38 @@ services:
       HOSTNAME: db-mission-control
     user: "1000:50"
     volumes:
-      - db-volume:/var/lib/mysql:delegated
+      - db-volume:/var/lib/mysql
     ports:
       - 3306:3306
     networks:
       common:
+  backups:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/backups/Dockerfile
+    restart: always
+    container_name: backups-mission-control
+    environment:
+      HOSTNAME: backups-mission-control
+    user: "1000:50"
+    volumes:
+      - .:/app
+      - backups-home-volume:/root
+      - db-mirror-volume:/var/lib/mysql
+      - db-volume:/db-volume
+    command: bash -c "sleep infinity && wait;"
+    networks:
+      common:
 
 volumes:
+  backups-home-volume:
   cache-volume:
   certbot-conf-volume:
   certbot-www-volume:
+  db-mirror-volume:
   db-volume:
   log-volume:
 
