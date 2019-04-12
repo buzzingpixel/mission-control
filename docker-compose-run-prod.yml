@@ -79,22 +79,6 @@ services:
     command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
     networks:
       common:
-  php-schedule-runner:
-    env_file:
-      - .env
-      - .env.override
-    build:
-      context: ./
-      dockerfile: ./serverConfig/php-schedule-runner/Dockerfile-php-prod
-    restart: always
-    container_name: php-schedule-runner-mission-control
-    environment:
-      HOSTNAME: php-schedule-runner-mission-control
-    volumes:
-      - cache-volume:/app/cache:delegated
-    command: bash -c "cron -f"
-    networks:
-      common:
   db:
     env_file:
       - .env

@@ -81,28 +81,6 @@ services:
     command: bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh"
     networks:
       common:
-  php-schedule-runner:
-    env_file:
-      - .env
-      - .env.override
-    build:
-      context: ./
-      dockerfile: ./serverConfig/php-schedule-runner/Dockerfile-php-dev
-    container_name: php-schedule-runner-mission-control
-    environment:
-      HOSTNAME: php-schedule-runner-mission-control
-    volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - ./serverConfig/php-schedule-runner/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
-      - ./serverConfig/php-schedule-runner/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
-      - ./serverConfig/php-schedule-runner/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
-      - .:/app:delegated
-      - cache-volume:/app/cache:delegated
-      - vendor-volume:/app/vendor:delegated
-    command: bash -c "cron -f"
-    networks:
-      common:
   db:
     env_file:
       - .env
