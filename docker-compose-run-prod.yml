@@ -14,7 +14,7 @@ services:
       - .:/app
       - backups-home-volume:/backups-home-volume
       - cache-volume:/cache-volume
-      - db-mirror-volume:/db-mirror-volume
+      - db-backups-volume:/db-backups-volume
       - db-volume:/db-volume
       - log-volume:/log-volume
     command: bash -c "chmod +x /app/scripts/prod/utilityScript.sh && /app/scripts/prod/utilityScript.sh"
@@ -112,7 +112,7 @@ services:
     volumes:
       - .:/app
       - backups-home-volume:/root
-      - db-mirror-volume:/var/lib/mysql
+      - db-backups-volume:/var/lib/mysql
       - db-volume:/db-volume
     command: bash -c "sleep infinity && wait;"
     networks:
@@ -123,7 +123,7 @@ volumes:
   cache-volume:
   certbot-conf-volume:
   certbot-www-volume:
-  db-mirror-volume:
+  db-backups-volume:
   db-volume:
   log-volume:
 

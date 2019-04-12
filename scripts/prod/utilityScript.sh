@@ -6,10 +6,10 @@ if [[ ! -f /db-volume/ib_buffer_pool ]]; then
     chmod -R 0777 /db-volume;
 fi
 
-if [[ ! -f /db-mirror-volume/ib_buffer_pool ]]; then
+if [[ ! -f /db-backups-volume/ib_buffer_pool ]]; then
     chmod -R 0777 /root/db-starter;
-    cp -R /root/db-starter/* /db-mirror-volume/;
-    chmod -R 0777 /db-mirror-volume;
+    cp -R /root/db-starter/* /db-backups-volume/;
+    chmod -R 0777 /db-backups-volume;
 fi
 
 while true; do
