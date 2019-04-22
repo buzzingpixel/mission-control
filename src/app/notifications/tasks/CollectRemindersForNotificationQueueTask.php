@@ -7,6 +7,7 @@ namespace src\app\notifications\tasks;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\reminders\interfaces\ReminderApiInterface;
+use src\app\reminders\interfaces\ReminderModelInterface;
 
 class CollectRemindersForNotificationQueueTask
 {
@@ -31,9 +32,28 @@ class CollectRemindersForNotificationQueueTask
      */
     public function __invoke() : void
     {
+        $queryModel = $this->reminderApi->makeQueryModel();
+        $queryModel->addOrder('title', 'asc');
+        $queryModel->addWhere('is_active', '1');
+
+        foreach ($this->reminderApi->fetchAll($queryModel) as $model) {
+            $this->processItem($model);
+        }
+    }
+
+    /**
+     * @throws InvalidActionQueueBatchModel
+     */
+    private function processItem(ReminderModelInterface $model) : void
+    {
+        $batchName = 'check_reminder_for_notification_' . $model->guid();
+
+        $batchTitle = 'Check Reminder For Notification: ' . $model->title();
+
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CheckReminderForNotificationTask::BATCH_NAME);
+        $queryModel->addWhere('name', $batchName);
         $queryModel->addWhere('is_finished', '0');
+
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
         if ($existingBatchItem) {
@@ -41,24 +61,20 @@ class CollectRemindersForNotificationQueueTask
         }
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CheckReminderForNotificationTask::BATCH_NAME);
-        $batch->title(CheckReminderForNotificationTask::BATCH_TITLE);
 
-        $queryModel = $this->reminderApi->makeQueryModel();
-        $queryModel->addOrder('title', 'asc');
-        $queryModel->addWhere('is_active', '1');
+        $batch->name($batchName);
 
-        foreach ($this->reminderApi->fetchAll($queryModel) as $model) {
-            $item = $this->queueApi->makeActionQueueItemModel();
+        $batch->title($batchTitle);
 
-            $item->context([
-                'guid' => $model->guid(),
-            ]);
+        $item = $this->queueApi->makeActionQueueItemModel();
 
-            $item->class(CheckReminderForNotificationTask::class);
+        $item->context([
+            'guid' => $model->guid(),
+        ]);
 
-            $batch->addItem($item);
-        }
+        $item->class(CheckReminderForNotificationTask::class);
+
+        $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);
     }

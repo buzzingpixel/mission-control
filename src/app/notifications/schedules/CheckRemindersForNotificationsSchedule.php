@@ -6,7 +6,6 @@ namespace src\app\notifications\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\notifications\tasks\CheckReminderForNotificationTask;
 use src\app\notifications\tasks\CollectRemindersForNotificationQueueTask;
 
 class CheckRemindersForNotificationsSchedule
@@ -26,8 +25,6 @@ class CheckRemindersForNotificationsSchedule
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectRemindersForNotificationQueueTask::BATCH_NAME);
-        $queryModel->addWhere('is_finished', '0');
-        $queryModel->addWhere('name', CheckReminderForNotificationTask::BATCH_NAME, '=', true);
         $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 

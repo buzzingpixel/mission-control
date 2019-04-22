@@ -13,15 +13,15 @@ use function time;
 
 class CheckReminderForNotificationTask
 {
-    public const BATCH_NAME  = 'checkRemindersForNotifications';
-    public const BATCH_TITLE = 'Check Reminders for Notifications';
-
     /** @var ReminderApiInterface */
     private $reminderApi;
 
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
+    /**
+     * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
+     */
     public function __construct(
         ReminderApiInterface $reminderApi,
         array $sendNotificationAdapters = []
@@ -30,6 +30,9 @@ class CheckReminderForNotificationTask
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
+    /**
+     * @param mixed[] $context
+     */
     public function __invoke(array $context) : void
     {
         $model = $this->getModel($context['guid']);
@@ -58,7 +61,9 @@ class CheckReminderForNotificationTask
 
         $lastReminderSentTimestampPlus22 = 0;
 
-        if ($last = $model->lastReminderSent()) {
+        $last = $model->lastReminderSent();
+
+        if ($last) {
             $twentyTwoHoursInSeconds         = 79200;
             $lastReminderSentTimestampPlus22 = $last->getTimestamp() + $twentyTwoHoursInSeconds;
         }
@@ -72,7 +77,9 @@ class CheckReminderForNotificationTask
         $sbj = 'The reminder ' . $model->title() . ' is due';
         $msg = '';
 
-        if ($tmpMsg = $model->message()) {
+        $tmpMsg = $model->message();
+
+        if ($tmpMsg) {
             $msg .= $tmpMsg . "\n";
         }
 
