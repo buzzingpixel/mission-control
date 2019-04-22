@@ -6,6 +6,7 @@ namespace src\app\monitoredurls\tasks;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 
 class CollectUrlsForQueueTask
@@ -31,9 +32,28 @@ class CollectUrlsForQueueTask
      */
     public function __invoke() : void
     {
+        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
+        $queryModel->addOrder('title', 'asc');
+        $queryModel->addWhere('is_active', '1');
+
+        foreach ($this->monitoredUrlsApi->fetchAll($queryModel) as $model) {
+            $this->processUrl($model);
+        }
+    }
+
+    /**
+     * @throws InvalidActionQueueBatchModel
+     */
+    private function processUrl(MonitoredUrlModelInterface $model) : void
+    {
+        $batchName = 'check_url_' . $model->guid();
+
+        $batchTitle = 'Check URL: ' . $model->title();
+
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CheckUrlTask::BATCH_NAME);
+        $queryModel->addWhere('name', $batchName);
         $queryModel->addWhere('is_finished', '0');
+
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
         if ($existingBatchItem) {
@@ -41,24 +61,20 @@ class CollectUrlsForQueueTask
         }
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CheckUrlTask::BATCH_NAME);
-        $batch->title(CheckUrlTask::BATCH_TITLE);
 
-        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
-        $queryModel->addOrder('title', 'asc');
-        $queryModel->addWhere('is_active', '1');
+        $batch->name($batchName);
 
-        foreach ($this->monitoredUrlsApi->fetchAll($queryModel) as $model) {
-            $item = $this->queueApi->makeActionQueueItemModel();
+        $batch->title($batchTitle);
 
-            $item->context([
-                'guid' => $model->guid(),
-            ]);
+        $item = $this->queueApi->makeActionQueueItemModel();
 
-            $item->class(CheckUrlTask::class);
+        $item->context([
+            'guid' => $model->guid(),
+        ]);
 
-            $batch->addItem($item);
-        }
+        $item->class(CheckUrlTask::class);
+
+        $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);
     }

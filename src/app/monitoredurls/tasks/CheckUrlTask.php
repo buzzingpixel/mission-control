@@ -16,9 +16,6 @@ use function getenv;
 
 class CheckUrlTask
 {
-    public const BATCH_NAME  = 'checkUrls';
-    public const BATCH_TITLE = 'Check URLs';
-
     /** @var EmailApiInterface */
     private $emailApi;
     /** @var GuzzleClientNoHttpErrors */
