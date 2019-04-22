@@ -117,6 +117,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-middleware" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/relay/relay" />
