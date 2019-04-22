@@ -13,9 +13,6 @@ use function time;
 
 class CheckPingTask
 {
-    public const BATCH_NAME  = 'checkPings';
-    public const BATCH_TITLE = 'Check Pings';
-
     /** @var PingApiInterface */
     private $pingApi;
     /** @var EmailApiInterface */

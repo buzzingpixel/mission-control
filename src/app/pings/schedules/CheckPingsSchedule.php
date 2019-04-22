@@ -27,8 +27,6 @@ class CheckPingsSchedule
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectPingsForQueueTask::BATCH_NAME);
         $queryModel->addWhere('is_finished', '0');
-        $queryModel->addWhere('name', CheckPingTask::BATCH_NAME, '=', true);
-        $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
         if ($existingBatchItem) {
