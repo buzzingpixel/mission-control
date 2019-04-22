@@ -8,14 +8,12 @@ use DateTime;
 use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\pings\interfaces\PingApiInterface;
 use src\app\pings\interfaces\PingModelInterface;
+use Throwable;
 use function getenv;
 use function time;
 
 class CheckPingForNotificationTask
 {
-    public const BATCH_NAME  = 'checkPingsForNotifications';
-    public const BATCH_TITLE = 'Check Pings for Notifications';
-
     /** @var PingApiInterface */
     private $pingApi;
     /** @var SendNotificationAdapterInterface[] */
@@ -32,6 +30,11 @@ class CheckPingForNotificationTask
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
+    /**
+     * @param mixed[] $context
+     *
+     * @throws Throwable
+     */
     public function __invoke(array $context) : void
     {
         $pingModel = $this->getModel($context['guid']);
@@ -75,6 +78,9 @@ class CheckPingForNotificationTask
         $this->sendMissingReminder($pingModel);
     }
 
+    /**
+     * @throws Throwable
+     */
     private function sendUpNotification(PingModelInterface $pingModel) : void
     {
         $message = 'The Ping ' . $pingModel->title() . ' is now healthy';
@@ -96,6 +102,9 @@ class CheckPingForNotificationTask
         $this->pingApi->save($pingModel);
     }
 
+    /**
+     * @throws Throwable
+     */
     private function sendMissingNotification(PingModelInterface $pingModel) : void
     {
         $message = 'The Ping ' . $pingModel->title() . ' is missing';
@@ -114,6 +123,9 @@ class CheckPingForNotificationTask
         $this->saveLastNotificationAt($pingModel);
     }
 
+    /**
+     * @throws Throwable
+     */
     private function sendMissingReminder(PingModelInterface $pingModel) : void
     {
         $message = 'REMINDER: The Ping ' . $pingModel->title() . ' is missing';
@@ -132,6 +144,9 @@ class CheckPingForNotificationTask
         $this->saveLastNotificationAt($pingModel);
     }
 
+    /**
+     * @throws Throwable
+     */
     private function saveLastNotificationAt(PingModelInterface $pingModel) : void
     {
         $pingModel->lastNotificationAt(new DateTime());

@@ -7,6 +7,7 @@ namespace src\app\notifications\tasks;
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
 use src\app\pings\interfaces\PingApiInterface;
+use src\app\pings\interfaces\PingModelInterface;
 
 class CollectPingsForNotificationQueueTask
 {
@@ -31,9 +32,28 @@ class CollectPingsForNotificationQueueTask
      */
     public function __invoke() : void
     {
+        $queryModel = $this->pingApi->makeQueryModel();
+        $queryModel->addOrder('title', 'asc');
+        $queryModel->addWhere('is_active', '1');
+
+        foreach ($this->pingApi->fetchAll($queryModel) as $model) {
+            $this->processItem($model);
+        }
+    }
+
+    /**
+     * @throws InvalidActionQueueBatchModel
+     */
+    private function processItem(PingModelInterface $model) : void
+    {
+        $batchName = 'check_ping_for_notification_' . $model->guid();
+
+        $batchTitle = 'Check Ping For Notification: ' . $model->title();
+
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CheckPingForNotificationTask::BATCH_NAME);
+        $queryModel->addWhere('name', $batchName);
         $queryModel->addWhere('is_finished', '0');
+
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
         if ($existingBatchItem) {
@@ -41,24 +61,20 @@ class CollectPingsForNotificationQueueTask
         }
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CheckUrlForNotificationTask::BATCH_NAME);
-        $batch->title(CheckUrlForNotificationTask::BATCH_TITLE);
 
-        $queryModel = $this->pingApi->makeQueryModel();
-        $queryModel->addOrder('title', 'asc');
-        $queryModel->addWhere('is_active', '1');
+        $batch->name($batchName);
 
-        foreach ($this->pingApi->fetchAll($queryModel) as $model) {
-            $item = $this->queueApi->makeActionQueueItemModel();
+        $batch->title($batchTitle);
 
-            $item->context([
-                'guid' => $model->guid(),
-            ]);
+        $item = $this->queueApi->makeActionQueueItemModel();
 
-            $item->class(CheckPingForNotificationTask::class);
+        $item->context([
+            'guid' => $model->guid(),
+        ]);
 
-            $batch->addItem($item);
-        }
+        $item->class(CheckPingForNotificationTask::class);
+
+        $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);
     }

@@ -6,7 +6,6 @@ namespace src\app\notifications\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\notifications\tasks\CheckPingForNotificationTask;
 use src\app\notifications\tasks\CollectPingsForNotificationQueueTask;
 
 class CheckPingsForNotificationsSchedule
@@ -26,8 +25,6 @@ class CheckPingsForNotificationsSchedule
     {
         $queryModel = $this->queueApi->makeQueryModel();
         $queryModel->addWhere('name', CollectPingsForNotificationQueueTask::BATCH_NAME);
-        $queryModel->addWhere('is_finished', '0');
-        $queryModel->addWhere('name', CheckPingForNotificationTask::BATCH_NAME, '=', true);
         $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
