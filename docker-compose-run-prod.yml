@@ -65,7 +65,87 @@ services:
       - cache-volume:/app/cache
     networks:
       common:
-  php-queue-runner:
+  php-queue-runner-1:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
+    restart: always
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - cache-volume:/app/cache
+    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
+    networks:
+      common:
+  php-queue-runner-2:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
+    restart: always
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - cache-volume:/app/cache
+    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
+    networks:
+      common:
+  php-queue-runner-3:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
+    restart: always
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - cache-volume:/app/cache
+    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
+    networks:
+      common:
+  php-queue-runner-4:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
+    restart: always
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - cache-volume:/app/cache
+    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
+    networks:
+      common:
+  php-queue-runner-5:
+    env_file:
+      - .env
+      - .env.override
+    build:
+      context: ./
+      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
+    restart: always
+    container_name: php-queue-runner-mission-control
+    environment:
+      HOSTNAME: php-queue-runner-mission-control
+    volumes:
+      - cache-volume:/app/cache
+    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
+    networks:
+      common:
+  php-queue-runner-6:
     env_file:
       - .env
       - .env.override
