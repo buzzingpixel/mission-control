@@ -9,20 +9,21 @@ use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 use src\app\notifications\interfaces\SendNotificationAdapterInterface;
+use Throwable;
 use function getenv;
 use function time;
 
 class CheckUrlForNotificationTask
 {
-    public const BATCH_NAME  = 'checkUrlsForNotifications';
-    public const BATCH_TITLE = 'Check URLs for Notifications';
-
     /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
 
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
+    /**
+     * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
+     */
     public function __construct(
         MonitoredUrlsApiInterface $monitoredUrlsApi,
         array $sendNotificationAdapters = []
@@ -31,6 +32,11 @@ class CheckUrlForNotificationTask
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
+    /**
+     * @param mixed[] $context
+     *
+     * @throws Throwable
+     */
     public function __invoke(array $context) : void
     {
         $incidentModel         = $this->getIncidentModel($context['guid']);

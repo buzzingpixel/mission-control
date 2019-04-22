@@ -6,6 +6,7 @@ namespace src\app\notifications\tasks;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
+use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlsApiInterface;
 
 class CollectUrlsForNotificationQueueTask
@@ -31,9 +32,28 @@ class CollectUrlsForNotificationQueueTask
      */
     public function __invoke() : void
     {
+        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
+        $queryModel->addOrder('title', 'asc');
+        $queryModel->addWhere('is_active', '1');
+
+        foreach ($this->monitoredUrlsApi->fetchAll($queryModel) as $model) {
+            $this->processItem($model);
+        }
+    }
+
+    /**
+     * @throws InvalidActionQueueBatchModel
+     */
+    private function processItem(MonitoredUrlModelInterface $model) : void
+    {
+        $batchName = 'check_url_for_notification_' . $model->guid();
+
+        $batchTitle = 'Check URL For Notification: ' . $model->title();
+
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CheckUrlForNotificationTask::BATCH_NAME);
+        $queryModel->addWhere('name', $batchName);
         $queryModel->addWhere('is_finished', '0');
+
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
         if ($existingBatchItem) {
@@ -41,24 +61,20 @@ class CollectUrlsForNotificationQueueTask
         }
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CheckUrlForNotificationTask::BATCH_NAME);
-        $batch->title(CheckUrlForNotificationTask::BATCH_TITLE);
 
-        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
-        $queryModel->addOrder('title', 'asc');
-        $queryModel->addWhere('is_active', '1');
+        $batch->name($batchName);
 
-        foreach ($this->monitoredUrlsApi->fetchAll($queryModel) as $model) {
-            $item = $this->queueApi->makeActionQueueItemModel();
+        $batch->title($batchTitle);
 
-            $item->context([
-                'guid' => $model->guid(),
-            ]);
+        $item = $this->queueApi->makeActionQueueItemModel();
 
-            $item->class(CheckUrlForNotificationTask::class);
+        $item->context([
+            'guid' => $model->guid(),
+        ]);
 
-            $batch->addItem($item);
-        }
+        $item->class(CheckUrlForNotificationTask::class);
+
+        $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);
     }
