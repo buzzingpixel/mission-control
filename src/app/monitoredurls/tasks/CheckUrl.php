@@ -41,10 +41,10 @@ class CheckUrl
         try {
             $this->innerRun($model);
         } catch (Throwable $e) {
-            if (getenv('DEV_MODE') === 'true') {
-                /** @noinspection PhpUnhandledExceptionInspection */
-                throw $e;
-            }
+            // if (getenv('DEV_MODE') === 'true') {
+            //     /** @noinspection PhpUnhandledExceptionInspection */
+            //     throw $e;
+            // }
 
             $this->sendErrorEmail($e);
         }
