@@ -6,7 +6,7 @@ namespace src\app\monitoredurls\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
+use src\app\monitoredurls\tasks\CheckUrlsTask;
 
 class CheckUrlsSchedule
 {
@@ -24,7 +24,7 @@ class CheckUrlsSchedule
     public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CollectUrlsForQueueTask::BATCH_NAME);
+        $queryModel->addWhere('name', CheckUrlsTask::BATCH_NAME);
         $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
@@ -33,11 +33,11 @@ class CheckUrlsSchedule
         }
 
         $item = $this->queueApi->makeActionQueueItemModel();
-        $item->class(CollectUrlsForQueueTask::class);
+        $item->class(CheckUrlsTask::class);
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CollectUrlsForQueueTask::BATCH_NAME);
-        $batch->title(CollectUrlsForQueueTask::BATCH_TITLE);
+        $batch->name(CheckUrlsTask::BATCH_NAME);
+        $batch->title(CheckUrlsTask::BATCH_TITLE);
         $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);

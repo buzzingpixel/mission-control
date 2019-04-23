@@ -16,8 +16,8 @@ use src\app\monitoredurls\services\FetchMonitoredUrlsService;
 use src\app\monitoredurls\services\SaveIncidentService;
 use src\app\monitoredurls\services\SaveMonitoredUrlService;
 use src\app\monitoredurls\services\UnArchiveMonitoredUrlService;
-use src\app\monitoredurls\tasks\CheckUrlTask;
-use src\app\monitoredurls\tasks\CollectUrlsForQueueTask;
+use src\app\monitoredurls\tasks\CheckUrl;
+use src\app\monitoredurls\tasks\CheckUrlsTask;
 use function DI\autowire;
 
 return [
@@ -35,6 +35,6 @@ return [
     ProjectUnArchiveListener::class => autowire(),
     ProjectDeleteListener::class => autowire(),
     CheckUrlsSchedule::class => autowire(),
-    CollectUrlsForQueueTask::class => autowire(),
-    CheckUrlTask::class => autowire(),
+    CheckUrlsTask::class => autowire(),
+    CheckUrl::class => autowire(),
 ];

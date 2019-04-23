@@ -14,7 +14,7 @@ use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use Throwable;
 use function getenv;
 
-class CheckUrlTask
+class CheckUrl
 {
     /** @var EmailApiInterface */
     private $emailApi;
@@ -36,12 +36,13 @@ class CheckUrlTask
     /** @var ?string */
     private $url;
 
-    public function __invoke(array $context) : void
+    public function checkUrl(MonitoredUrlModelInterface $model) : void
     {
         try {
-            $this->innerRun($context);
+            $this->innerRun($model);
         } catch (Throwable $e) {
             if (getenv('DEV_MODE') === 'true') {
+                /** @noinspection PhpUnhandledExceptionInspection */
                 throw $e;
             }
 
@@ -69,17 +70,8 @@ class CheckUrlTask
         }
     }
 
-    /**
-     * @throws Throwable
-     */
-    private function innerRun(array $context) : void
+    private function innerRun(MonitoredUrlModelInterface $model) : void
     {
-        $model = $this->getModel($context['guid']);
-
-        /**
-         * In case an unknown error is thrown, when the email is sent out we
-         * can know what URL we were checking
-         */
         $this->url = $model->url();
 
         try {
@@ -98,6 +90,7 @@ class CheckUrlTask
             $message    = 'A Guzzle Exception Occurred: ' . $e->getMessage();
         }
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $model->checkedAt(new DateTime('now', new DateTimeZone('UTC')));
 
         /**
@@ -106,6 +99,7 @@ class CheckUrlTask
          * update the time last checked
          */
         if ($hasError && $model->hasError()) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->save($model);
 
             return;
@@ -118,6 +112,7 @@ class CheckUrlTask
         $incident->monitoredUrlGuid($model->guid());
         $incident->statusCode((string) $statusCode);
         $incident->message($message);
+        /** @noinspection PhpUnhandledExceptionInspection */
         $incident->eventAt(new DateTime('now', new DateTimeZone('UTC')));
 
         /**
@@ -128,7 +123,9 @@ class CheckUrlTask
             $incident->eventType('pending');
             $model->pendingError(true);
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->saveIncident($incident);
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->save($model);
 
             return;
@@ -143,7 +140,9 @@ class CheckUrlTask
             $incident->eventType('down');
             $model->hasError(true);
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->saveIncident($incident);
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->save($model);
 
             return;
@@ -156,26 +155,20 @@ class CheckUrlTask
          * whether it has errors
          */
 
-        $lastIncident = $this->getLastIncident($context['guid']);
+        $lastIncident = $this->getLastIncident($model->guid());
 
         if ($lastIncident && $lastIncident->eventType() !== 'up') {
             $incident->eventType('up');
 
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->monitoredUrlsApi->saveIncident($incident);
         }
 
         $model->hasError(false);
         $model->pendingError(false);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->monitoredUrlsApi->save($model);
-    }
-
-    private function getModel(string $guid) : MonitoredUrlModelInterface
-    {
-        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->monitoredUrlsApi->uuidToBytes($guid));
-
-        return $this->monitoredUrlsApi->fetchOne($queryModel);
     }
 
     private function getLastIncident(string $urlGuid) : ?MonitoredUrlIncidentModelInterface
