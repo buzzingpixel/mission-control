@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-docker kill node-mission-control
-./up
-docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"

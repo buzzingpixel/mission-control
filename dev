@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+
+# Reset
+Reset="\033[0m"; # Text Reset
+
+# Regular Colors
+Black="\033[0;30m"; # Black
+Red="\033[0;31m"; # Red
+Green="\033[0;32m"; # Green
+Yellow="\033[0;33m"; # Yellow
+Blue="\033[0;34m"; # Blue
+Purple="\033[0;35m"; # Purple
+Cyan="\033[0;36m"; # Cyan
+White="\033[0;37m"; # White
+
+# Bold
+BBlack="\033[1;30m"; # Black
+BRed="\033[1;31m"; # Red
+BGreen="\033[1;32m"; # Green
+BYellow="\033[1;33m"; # Yellow
+BBlue="\033[1;34m"; # Blue
+BPurple="\033[1;35m"; # Purple
+BCyan="\033[1;36m"; # Cyan
+BWhite="\033[1;37m"; # White
+
+cmd=${1};
+allArgs=${@};
+allArgsExceptFirst=${@:2};
+secondArg=${2};
+valid=false;
+
+## If no command provided, list commands
+if [[ -z "${cmd}" ]]; then
+    valid=true;
+    printf "${Green}The following commands are available:\n${Yellow}";
+    printf "  ./dev up\n";
+    printf "  ./dev run\n";
+    printf "  ./dev down\n";
+    printf "  ./dev phpunit [args]\n"
+    printf "  ./dev yarn [args]\n"
+    printf "  ./dev queue\n"
+    printf "  ./dev cli [args]\n"
+    printf "  ./dev composer [args]\n"
+    printf "  ./dev login [args]${Reset}\n"
+fi
+
+## If command is up or run, we need to run the docker containers and install composer and yarn dependencies
+if [[ "${cmd}" = "up" ]] || [[ "${cmd}" = "run" ]]; then
+    valid=true;
+    touch .env.override
+    docker kill node-mission-control
+    docker-compose -f docker-compose.yml -p mission-control up -d
+    docker exec -it --user root --workdir /app php-mission-control bash -c "cd /app && composer install"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/*"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/phpmd/phpmd/src/bin/*"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/squizlabs/php_codesniffer/bin/*"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run"
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn"
+
+    ## If the command is not run, go ahead and do fab build only
+    if [[ "${cmd}" != "run" ]]; then
+        docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only"
+    fi
+fi
+
+## If the command is run, then we want to run the build process and watch for changes
+if [[ "${cmd}" = "run" ]]; then
+    valid=true;
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"
+fi
+
+## If the command is down, then we want to stop docker
+if [[ "${cmd}" = "down" ]]; then
+    valid=true;
+    docker-compose -f docker-compose.yml -p mission-control down
+fi
+
+## Run phpunit if requested
+if [[ "${cmd}" = "phpunit" ]]; then
+    valid=true;
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/phpunit && /app/vendor/bin/phpunit --configuration /app/phpunit.xml ${allArgsExceptFirst}"
+fi
+
+## Run yarn if requested
+if [[ "${cmd}" = "yarn" ]]; then
+    valid=true;
+    docker kill node-mission-control
+    docker-compose -f docker-compose.yml -p mission-control up -d
+    docker exec -it --user root --workdir /app node-mission-control bash -c "${allArgs}"
+fi
+
+## Run queue if requested
+if [[ "${cmd}" = "queue" ]]; then
+    valid=true;
+    docker exec -it --user root --workdir /app-www php-mission-control bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh"
+fi
+
+## Run cli if requested
+if [[ "${cmd}" = "cli" ]]; then
+    valid=true;
+    docker exec -it --user root --workdir /app-www php-mission-control bash -c "php app ${allArgsExceptFirst}"
+fi
+
+## Run composer if requested
+if [[ "${cmd}" = "composer" ]]; then
+    valid=true;
+    docker exec -it --user root --workdir /app php-mission-control bash -c "${allArgs}"
+fi
+
+## Login to a container if requested
+if [[ "${cmd}" = "login" ]]; then
+    valid=true;
+    docker exec -it --user root ${secondArg}-mission-control bash
+fi
+
+## If there was no valid command found, warn user
+if [[ "${valid}" != "true" ]]; then
+    printf "${Red}Specified command not found${Reset}\n";
+    exit 1;
+fi
+
+## Exit with no error
+exit 0;

@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-cmd="php "${@};
-
-docker exec -it --user root --workdir /app-www php-mission-control bash -c "${cmd}"
