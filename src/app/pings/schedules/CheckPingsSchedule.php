@@ -6,6 +6,8 @@ namespace src\app\pings\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
+use DateTime;
+use DateTimeZone;
 use src\app\pings\tasks\CheckPingsTask;
 
 class CheckPingsSchedule
@@ -39,6 +41,12 @@ class CheckPingsSchedule
         $batch->name(CheckPingsTask::BATCH_NAME);
         $batch->title(CheckPingsTask::BATCH_TITLE);
         $batch->addItem($item);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $batch->assumeDeadAfter(new DateTime(
+            '+20 minutes',
+            new DateTimeZone('UTC')
+        ));
 
         $this->queueApi->addToQueue($batch);
     }

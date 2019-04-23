@@ -6,6 +6,8 @@ namespace src\app\monitoredurls\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
+use DateTime;
+use DateTimeZone;
 use src\app\monitoredurls\tasks\CheckUrlsTask;
 
 class CheckUrlsSchedule
@@ -39,6 +41,12 @@ class CheckUrlsSchedule
         $batch->name(CheckUrlsTask::BATCH_NAME);
         $batch->title(CheckUrlsTask::BATCH_TITLE);
         $batch->addItem($item);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $batch->assumeDeadAfter(new DateTime(
+            '+20 minutes',
+            new DateTimeZone('UTC')
+        ));
 
         $this->queueApi->addToQueue($batch);
     }

@@ -7,6 +7,8 @@ namespace src\app\pipelines\listeners;
 use corbomite\events\interfaces\EventInterface;
 use corbomite\events\interfaces\EventListenerInterface;
 use corbomite\queue\interfaces\QueueApiInterface;
+use DateTime;
+use DateTimeZone;
 use src\app\pipelines\events\PipelineJobAfterSaveEvent;
 use src\app\pipelines\tasks\RunJobItemTask;
 
@@ -35,6 +37,12 @@ class SavePipelineJobListener implements EventListenerInterface
         $batch->name($job->pipeline()->slug());
 
         $batch->title($job->pipeline()->title());
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $batch->assumeDeadAfter(new DateTime(
+            '+20 minutes',
+            new DateTimeZone('UTC')
+        ));
 
         foreach ($job->pipelineJobItems() as $jobItem) {
             $item = $this->queueApi->makeActionQueueItemModel();
