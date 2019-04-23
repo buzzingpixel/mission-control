@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use DateTime;
 use src\app\notifications\interfaces\SendNotificationAdapterInterface;
 use src\app\pings\interfaces\PingApiInterface;
@@ -14,6 +15,8 @@ use function time;
 
 class CheckPingForNotification
 {
+    /** @var EmailApiInterface */
+    private $emailApi;
     /** @var PingApiInterface */
     private $pingApi;
     /** @var SendNotificationAdapterInterface[] */
@@ -23,17 +26,52 @@ class CheckPingForNotification
      * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
      */
     public function __construct(
+        EmailApiInterface $emailApi,
         PingApiInterface $pingApi,
         array $sendNotificationAdapters = []
     ) {
+        $this->emailApi                 = $emailApi;
         $this->pingApi                  = $pingApi;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
+    }
+
+    public function check(PingModelInterface $pingModel) : void
+    {
+        try {
+            $this->innerCheck($pingModel);
+        } catch (Throwable $e) {
+            // if (getenv('DEV_MODE') === 'true') {
+            //     /** @noinspection PhpUnhandledExceptionInspection */
+            //     throw $e;
+            // }
+
+            $this->sendErrorEmail($e);
+        }
+    }
+
+    private function sendErrorEmail(Throwable $e) : void
+    {
+        try {
+            $emailModel = $this->emailApi->createEmailModel();
+            $emailModel->toEmail(getenv('WEBMASTER_EMAIL_ADDRESS'));
+            $emailModel->subject('An exception was thrown checking a Ping for notification');
+            $emailModel->messagePlainText(
+                'While checking a Ping for notification ' .
+                "an exception was thrown.\n\n" .
+                'File: ' . $e->getFile() . "\n" .
+                'Line: ' . $e->getLine() . "\n" .
+                'Message: ' . $e->getMessage()
+            );
+
+            $this->emailApi->sendEmail($emailModel);
+        } catch (Throwable $e) {
+        }
     }
 
     /**
      * @throws Throwable
      */
-    public function check(PingModelInterface $pingModel) : void
+    public function innerCheck(PingModelInterface $pingModel) : void
     {
         // If there's no error and no last notification, we can stop here
         if (! $pingModel->hasError() && ! $pingModel->lastNotificationAt()) {

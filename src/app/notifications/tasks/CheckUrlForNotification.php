@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\app\notifications\tasks;
 
+use buzzingpixel\corbomitemailer\interfaces\EmailApiInterface;
 use DateTime;
 use src\app\monitoredurls\interfaces\MonitoredUrlIncidentModelInterface;
 use src\app\monitoredurls\interfaces\MonitoredUrlModelInterface;
@@ -15,9 +16,10 @@ use function time;
 
 class CheckUrlForNotification
 {
+    /** @var EmailApiInterface */
+    private $emailApi;
     /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
-
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
@@ -25,11 +27,46 @@ class CheckUrlForNotification
      * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
      */
     public function __construct(
+        EmailApiInterface $emailApi,
         MonitoredUrlsApiInterface $monitoredUrlsApi,
         array $sendNotificationAdapters = []
     ) {
+        $this->emailApi                 = $emailApi;
         $this->monitoredUrlsApi         = $monitoredUrlsApi;
         $this->sendNotificationAdapters = $sendNotificationAdapters;
+    }
+
+    public function check(MonitoredUrlModelInterface $urlModel) : void
+    {
+        try {
+            $this->innerCheck($urlModel);
+        } catch (Throwable $e) {
+            // if (getenv('DEV_MODE') === 'true') {
+            //     /** @noinspection PhpUnhandledExceptionInspection */
+            //     throw $e;
+            // }
+
+            $this->sendErrorEmail($e);
+        }
+    }
+
+    private function sendErrorEmail(Throwable $e) : void
+    {
+        try {
+            $emailModel = $this->emailApi->createEmailModel();
+            $emailModel->toEmail(getenv('WEBMASTER_EMAIL_ADDRESS'));
+            $emailModel->subject('An exception was thrown checking a URL for notification');
+            $emailModel->messagePlainText(
+                'While checking a URL for notification ' .
+                "an exception was thrown.\n\n" .
+                'File: ' . $e->getFile() . "\n" .
+                'Line: ' . $e->getLine() . "\n" .
+                'Message: ' . $e->getMessage()
+            );
+
+            $this->emailApi->sendEmail($emailModel);
+        } catch (Throwable $e) {
+        }
     }
 
     /**
@@ -37,7 +74,7 @@ class CheckUrlForNotification
      *
      * @throws Throwable
      */
-    public function check(MonitoredUrlModelInterface $urlModel) : void
+    public function innerCheck(MonitoredUrlModelInterface $urlModel) : void
     {
         $incidentModel         = $this->getIncidentModel($urlModel->guid());
         $previousIncidentModel = $this->getIncidentModel($urlModel->guid(), true);

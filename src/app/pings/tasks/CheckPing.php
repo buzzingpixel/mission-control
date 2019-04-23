@@ -31,10 +31,10 @@ class CheckPing
         try {
             $this->innerRun($model);
         } catch (Throwable $e) {
-            if (getenv('DEV_MODE') === 'true') {
-                /** @noinspection PhpUnhandledExceptionInspection */
-                throw $e;
-            }
+            // if (getenv('DEV_MODE') === 'true') {
+            //     /** @noinspection PhpUnhandledExceptionInspection */
+            //     throw $e;
+            // }
 
             $this->sendErrorEmail($e);
         }
@@ -45,9 +45,9 @@ class CheckPing
         try {
             $emailModel = $this->emailApi->createEmailModel();
             $emailModel->toEmail(getenv('WEBMASTER_EMAIL_ADDRESS'));
-            $emailModel->subject('An exception was thrown checking a PING');
+            $emailModel->subject('An exception was thrown checking a Ping');
             $emailModel->messagePlainText(
-                'While checking a PING ' .
+                'While checking a Ping ' .
                 "an exception was thrown.\n\n" .
                 'File: ' . $e->getFile() . "\n" .
                 'Line: ' . $e->getLine() . "\n" .
