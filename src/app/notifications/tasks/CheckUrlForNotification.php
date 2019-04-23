@@ -13,7 +13,7 @@ use Throwable;
 use function getenv;
 use function time;
 
-class CheckUrlForNotificationTask
+class CheckUrlForNotification
 {
     /** @var MonitoredUrlsApiInterface */
     private $monitoredUrlsApi;
@@ -37,10 +37,10 @@ class CheckUrlForNotificationTask
      *
      * @throws Throwable
      */
-    public function __invoke(array $context) : void
+    public function check(MonitoredUrlModelInterface $urlModel) : void
     {
-        $incidentModel         = $this->getIncidentModel($context['guid']);
-        $previousIncidentModel = $this->getIncidentModel($context['guid'], true);
+        $incidentModel         = $this->getIncidentModel($urlModel->guid());
+        $previousIncidentModel = $this->getIncidentModel($urlModel->guid(), true);
 
         if (! $incidentModel) {
             return;
@@ -78,8 +78,6 @@ class CheckUrlForNotificationTask
         if (time() < $timestamp) {
             return;
         }
-
-        $urlModel = $this->getUrlModel($context['guid']);
 
         $subject = '';
 
@@ -145,14 +143,6 @@ class CheckUrlForNotificationTask
                 ],
             ]
         );
-    }
-
-    private function getUrlModel(string $guid) : MonitoredUrlModelInterface
-    {
-        $queryModel = $this->monitoredUrlsApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->monitoredUrlsApi->uuidToBytes($guid));
-
-        return $this->monitoredUrlsApi->fetchOne($queryModel);
     }
 
     private function getIncidentModel(string $urlGuid, bool $previous = false) : ?MonitoredUrlIncidentModelInterface

@@ -6,7 +6,7 @@ namespace src\app\notifications\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
+use src\app\notifications\tasks\CheckUrlsForNotificationsTask;
 
 class CheckUrlsForNotificationsSchedule
 {
@@ -24,7 +24,7 @@ class CheckUrlsForNotificationsSchedule
     public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CollectUrlsForNotificationQueueTask::BATCH_NAME);
+        $queryModel->addWhere('name', CheckUrlsForNotificationsTask::BATCH_NAME);
         $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
@@ -33,11 +33,11 @@ class CheckUrlsForNotificationsSchedule
         }
 
         $item = $this->queueApi->makeActionQueueItemModel();
-        $item->class(CollectUrlsForNotificationQueueTask::class);
+        $item->class(CheckUrlsForNotificationsTask::class);
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CollectUrlsForNotificationQueueTask::BATCH_NAME);
-        $batch->title(CollectUrlsForNotificationQueueTask::BATCH_TITLE);
+        $batch->name(CheckUrlsForNotificationsTask::BATCH_NAME);
+        $batch->title(CheckUrlsForNotificationsTask::BATCH_TITLE);
         $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);

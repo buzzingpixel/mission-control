@@ -11,7 +11,7 @@ use src\app\reminders\interfaces\ReminderModelInterface;
 use function getenv;
 use function time;
 
-class CheckReminderForNotificationTask
+class CheckReminderForNotification
 {
     /** @var ReminderApiInterface */
     private $reminderApi;
@@ -30,13 +30,8 @@ class CheckReminderForNotificationTask
         $this->sendNotificationAdapters = $sendNotificationAdapters;
     }
 
-    /**
-     * @param mixed[] $context
-     */
-    public function __invoke(array $context) : void
+    public function check(ReminderModelInterface $model) : void
     {
-        $model = $this->getModel($context['guid']);
-
         // Sanity check
         if (! $model->isActive()) {
             return;
@@ -102,13 +97,5 @@ class CheckReminderForNotificationTask
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->reminderApi->save($model);
-    }
-
-    private function getModel(string $guid) : ReminderModelInterface
-    {
-        $queryModel = $this->reminderApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->reminderApi->uuidToBytes($guid));
-
-        return $this->reminderApi->fetchOne($queryModel);
     }
 }

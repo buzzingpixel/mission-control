@@ -8,12 +8,12 @@ use src\app\notifications\notificationadapters\SlackNotificationAdapter;
 use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
 use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
 use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
-use src\app\notifications\tasks\CheckPingForNotificationTask;
-use src\app\notifications\tasks\CheckReminderForNotificationTask;
-use src\app\notifications\tasks\CheckUrlForNotificationTask;
-use src\app\notifications\tasks\CollectPingsForNotificationQueueTask;
-use src\app\notifications\tasks\CollectRemindersForNotificationQueueTask;
-use src\app\notifications\tasks\CollectUrlsForNotificationQueueTask;
+use src\app\notifications\tasks\CheckPingForNotification;
+use src\app\notifications\tasks\CheckReminderForNotification;
+use src\app\notifications\tasks\CheckUrlForNotification;
+use src\app\notifications\tasks\CheckPingsForNotificationsTask;
+use src\app\notifications\tasks\CheckRemindersForNotificationsTask;
+use src\app\notifications\tasks\CheckUrlsForNotificationsTask;
 use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use function DI\autowire;
 
@@ -27,24 +27,24 @@ return [
     CheckPingsForNotificationsSchedule::class => autowire(),
     CheckRemindersForNotificationsSchedule::class => autowire(),
     CheckUrlsForNotificationsSchedule::class => autowire(),
-    CheckPingForNotificationTask::class => autowire()
+    CheckPingForNotification::class => autowire()
         ->constructorParameter(
             'sendNotificationAdapters',
             DI\get('NotificationAdaptersArray')
         ),
-    CheckReminderForNotificationTask::class => autowire()
+    CheckReminderForNotification::class => autowire()
         ->constructorParameter(
             'sendNotificationAdapters',
             DI\get('NotificationAdaptersArray')
         ),
-    CheckUrlForNotificationTask::class => autowire()
+    CheckUrlForNotification::class => autowire()
         ->constructorParameter(
             'sendNotificationAdapters',
             DI\get('NotificationAdaptersArray')
         ),
-    CollectPingsForNotificationQueueTask::class => autowire(),
-    CollectRemindersForNotificationQueueTask::class => autowire(),
-    CollectUrlsForNotificationQueueTask::class => autowire(),
+    CheckPingsForNotificationsTask::class => autowire(),
+    CheckRemindersForNotificationsTask::class => autowire(),
+    CheckUrlsForNotificationsTask::class => autowire(),
     SendEmailNotificationAdapter::class => autowire(),
     SlackNotificationAdapter::class => static function (ContainerInterface $di) {
         return new SlackNotificationAdapter(

@@ -12,7 +12,7 @@ use Throwable;
 use function getenv;
 use function time;
 
-class CheckPingForNotificationTask
+class CheckPingForNotification
 {
     /** @var PingApiInterface */
     private $pingApi;
@@ -31,14 +31,10 @@ class CheckPingForNotificationTask
     }
 
     /**
-     * @param mixed[] $context
-     *
      * @throws Throwable
      */
-    public function __invoke(array $context) : void
+    public function check(PingModelInterface $pingModel) : void
     {
-        $pingModel = $this->getModel($context['guid']);
-
         // If there's no error and no last notification, we can stop here
         if (! $pingModel->hasError() && ! $pingModel->lastNotificationAt()) {
             return;
@@ -151,13 +147,5 @@ class CheckPingForNotificationTask
     {
         $pingModel->lastNotificationAt(new DateTime());
         $this->pingApi->save($pingModel);
-    }
-
-    private function getModel(string $guid) : PingModelInterface
-    {
-        $queryModel = $this->pingApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->pingApi->uuidToBytes($guid));
-
-        return $this->pingApi->fetchOne($queryModel);
     }
 }
