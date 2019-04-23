@@ -13,8 +13,8 @@ use src\app\pings\services\DeletePingService;
 use src\app\pings\services\FetchPingService;
 use src\app\pings\services\SavePingService;
 use src\app\pings\services\UnArchivePingService;
-use src\app\pings\tasks\CheckPingTask;
-use src\app\pings\tasks\CollectPingsForQueueTask;
+use src\app\pings\tasks\CheckPing;
+use src\app\pings\tasks\CheckPingsTask;
 use function DI\autowire;
 
 return [
@@ -33,6 +33,6 @@ return [
     ProjectDeleteListener::class => autowire(),
     ProjectUnArchiveListener::class => autowire(),
     CheckPingsSchedule::class => autowire(),
-    CollectPingsForQueueTask::class => autowire(),
-    CheckPingTask::class => autowire(),
+    CheckPingsTask::class => autowire(),
+    CheckPing::class => autowire(),
 ];

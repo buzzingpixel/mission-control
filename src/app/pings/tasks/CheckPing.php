@@ -11,7 +11,7 @@ use Throwable;
 use function getenv;
 use function time;
 
-class CheckPingTask
+class CheckPing
 {
     /** @var PingApiInterface */
     private $pingApi;
@@ -26,12 +26,13 @@ class CheckPingTask
         $this->emailApi = $emailApi;
     }
 
-    public function __invoke(array $context) : void
+    public function checkPing(PingModelInterface $model) : void
     {
         try {
-            $this->innerRun($context);
+            $this->innerRun($model);
         } catch (Throwable $e) {
             if (getenv('DEV_MODE') === 'true') {
+                /** @noinspection PhpUnhandledExceptionInspection */
                 throw $e;
             }
 
@@ -61,10 +62,8 @@ class CheckPingTask
     /**
      * @throws Throwable
      */
-    private function innerRun(array $context) : void
+    private function innerRun(PingModelInterface $model) : void
     {
-        $model = $this->getModel($context['guid']);
-
         $time               = time();
         $expectEverySeconds = $model->expectEvery() * 60;
         $warnAfterSeconds   = $model->warnAfter() * 60;
@@ -93,13 +92,5 @@ class CheckPingTask
         $model->pendingError(false);
         $model->hasError(false);
         $this->pingApi->save($model);
-    }
-
-    private function getModel(string $guid) : PingModelInterface
-    {
-        $queryModel = $this->pingApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->pingApi->uuidToBytes($guid));
-
-        return $this->pingApi->fetchOne($queryModel);
     }
 }

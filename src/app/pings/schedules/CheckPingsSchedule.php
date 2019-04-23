@@ -6,8 +6,7 @@ namespace src\app\pings\schedules;
 
 use corbomite\queue\exceptions\InvalidActionQueueBatchModel;
 use corbomite\queue\interfaces\QueueApiInterface;
-use src\app\pings\tasks\CheckPingTask;
-use src\app\pings\tasks\CollectPingsForQueueTask;
+use src\app\pings\tasks\CheckPingsTask;
 
 class CheckPingsSchedule
 {
@@ -25,7 +24,7 @@ class CheckPingsSchedule
     public function __invoke() : void
     {
         $queryModel = $this->queueApi->makeQueryModel();
-        $queryModel->addWhere('name', CollectPingsForQueueTask::BATCH_NAME);
+        $queryModel->addWhere('name', CheckPingsTask::BATCH_NAME);
         $queryModel->addWhere('is_finished', '0');
         $existingBatchItem = $this->queueApi->fetchOneBatch($queryModel);
 
@@ -34,11 +33,11 @@ class CheckPingsSchedule
         }
 
         $item = $this->queueApi->makeActionQueueItemModel();
-        $item->class(CollectPingsForQueueTask::class);
+        $item->class(CheckPingsTask::class);
 
         $batch = $this->queueApi->makeActionQueueBatchModel();
-        $batch->name(CollectPingsForQueueTask::BATCH_NAME);
-        $batch->title(CollectPingsForQueueTask::BATCH_TITLE);
+        $batch->name(CheckPingsTask::BATCH_NAME);
+        $batch->title(CheckPingsTask::BATCH_TITLE);
         $batch->addItem($item);
 
         $this->queueApi->addToQueue($batch);
