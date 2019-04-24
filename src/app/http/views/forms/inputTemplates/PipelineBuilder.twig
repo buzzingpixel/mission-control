@@ -7,6 +7,7 @@
                 {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}
             </script>
             <div class="PipelineBuilder__Inner">
+                Use <code>{% verbatim %}{{timestamp}}{% endverbatim %}</code> to get the timestamp the job was added at
                 <div class="PipelineBuilder__Items JS-PipelineBuilder__Items">
                     {% for pipelineItem in pipelineItems %}
                         {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' with {

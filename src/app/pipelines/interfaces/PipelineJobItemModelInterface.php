@@ -44,4 +44,9 @@ interface PipelineJobItemModelInterface extends HasGuidInterface
      * Returns the value. Sets value if incoming argument is set.
      */
     public function finishedAt(?DateTime $val = null) : ?DateTime;
+
+    /**
+     * Gets script prepared for execution
+     */
+    public function getPreparedScriptForExecution() : string;
 }

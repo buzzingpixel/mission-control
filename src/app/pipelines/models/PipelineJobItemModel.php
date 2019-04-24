@@ -10,12 +10,13 @@ use src\app\pipelines\interfaces\PipelineItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use function str_replace;
 
 class PipelineJobItemModel implements PipelineJobItemModelInterface
 {
     use UuidTrait;
 
-    /** @var ?PipelineModelInterface */
+    /** @var PipelineModelInterface|null */
     private $pipeline;
 
     public function pipeline(
@@ -24,7 +25,7 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
         return $this->pipeline = $val ?? $this->pipeline;
     }
 
-    /** @var ?PipelineJobModelInterface */
+    /** @var PipelineJobModelInterface|null */
     private $pipelineJob;
 
     public function pipelineJob(
@@ -33,7 +34,7 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
         return $this->pipelineJob = $val ?? $this->pipelineJob;
     }
 
-    /** @var ?PipelineItemModelInterface */
+    /** @var PipelineItemModelInterface|null */
     private $pipelineItem;
 
     public function pipelineItem(
@@ -64,5 +65,14 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
     public function finishedAt(?DateTime $val = null) : ?DateTime
     {
         return $this->finishedAt = $val ?? $this->finishedAt;
+    }
+
+    public function getPreparedScriptForExecution() : string
+    {
+        return str_replace(
+            '{{timestamp}}',
+            $this->pipelineJob->jobAddedAt()->getTimestamp(),
+            $this->pipelineItem->getFullScriptForExecution()
+        );
     }
 }

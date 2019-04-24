@@ -180,10 +180,10 @@ class RunJobItemTask
 
         array_walk(
             $servers,
-            static function (ServerModelInterface $server) use ($task, $pipelineItem, $jobItem) : void {
+            static function (ServerModelInterface $server) use ($task, $jobItem) : void {
                 $ssh = $task->getConnection->get($server);
 
-                $jobItem->logContent((string) $ssh->exec($pipelineItem->getFullScriptForExecution()));
+                $jobItem->logContent((string) $ssh->exec($jobItem->getPreparedScriptForExecution()));
 
                 $jobItem->finishedAt(new DateTime('now', new DateTimeZone('UTC')));
 
