@@ -12,6 +12,8 @@ if "%cmd%" == "" (
     echo The following commands are available:
     echo   .\dev up
     echo   .\dev run
+    echo   .\dev watch
+    echo   .\dev build
     echo   .\dev down
     echo   .\dev phpunit [args]
     echo   .\dev yarn [args]
@@ -24,14 +26,26 @@ if "%cmd%" == "" (
 :: If command is up or run, we need to run the docker containers and install composer and yarn dependencies
 if "%1%" == "up" (
     set valid=true
-    call up
+    call :up
 )
 
 :: If the command is run, then we want to run the build process and watch for changes
 if "%1%" == "run" (
     set valid=true
-    call up
+    call :up
     docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"
+)
+
+:: If the command is watch, then we want to run the build process and watch for changes
+if "%1%" == "watch" (
+    set valid=true
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"
+)
+
+:: If the command is build, then we want to run the build process
+if "%1%" == "build" (
+    set valid=true
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only"
 )
 
 :: If the command is down, then we want to stop docker
