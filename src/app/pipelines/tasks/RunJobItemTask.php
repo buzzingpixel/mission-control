@@ -183,7 +183,7 @@ class RunJobItemTask
             static function (ServerModelInterface $server) use ($task, $pipelineItem, $jobItem) : void {
                 $ssh = $task->getConnection->get($server);
 
-                $jobItem->logContent((string) $ssh->exec($pipelineItem->script()));
+                $jobItem->logContent((string) $ssh->exec($pipelineItem->getFullScriptForExecution()));
 
                 $jobItem->finishedAt(new DateTime('now', new DateTimeZone('UTC')));
 

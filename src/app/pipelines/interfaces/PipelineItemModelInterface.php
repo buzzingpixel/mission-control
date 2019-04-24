@@ -27,6 +27,11 @@ interface PipelineItemModelInterface extends HasGuidInterface
     public function script(?string $val = null) : string;
 
     /**
+     * Gets full script to run including owning pipeline's runBeforeEveryItem
+     */
+    public function getFullScriptForExecution() : string;
+
+    /**
      * Returns the value. Sets value if incoming argument is set
      *
      * @param ServerModelInterface[]|null $val

@@ -13,7 +13,7 @@ class PipelineItemModel implements PipelineItemModelInterface
 {
     use UuidTrait;
 
-    /** @var ?PipelineModelInterface */
+    /** @var PipelineModelInterface|null */
     private $pipeline;
 
     public function pipeline(
@@ -36,6 +36,11 @@ class PipelineItemModel implements PipelineItemModelInterface
     public function script(?string $val = null) : string
     {
         return $this->script = $val ?? $this->script;
+    }
+
+    public function getFullScriptForExecution() : string
+    {
+        return $this->pipeline->runBeforeEveryItem() . "\n" . $this->script();
     }
 
     /** @var ServerModelInterface[] */
