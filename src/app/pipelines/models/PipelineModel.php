@@ -28,6 +28,14 @@ class PipelineModel implements PipelineModelInterface
         return $this->secretId = $val ?? $this->secretId;
     }
 
+    /** @var string */
+    private $runBeforeEveryItem = '';
+
+    public function runBeforeEveryItem(?string $val = null) : string
+    {
+        return $this->runBeforeEveryItem = $val ?? $this->runBeforeEveryItem;
+    }
+
     /** @var PipelineItemModelInterface[] */
     private $pipelineItems = [];
 

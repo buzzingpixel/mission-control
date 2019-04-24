@@ -69,6 +69,8 @@ class PipelineRecordModelTransformer
 
         $pipeline->secretId($pipelineRecord->secret_id);
 
+        $pipeline->runBeforeEveryItem($pipelineRecord->run_before_every_item);
+
         $pipeline->pipelineItems(
             $this->pipelineItemRecordModelTransformer->transformRecordSet(
                 $pipelineRecord->pipeline_items,

@@ -20,6 +20,11 @@ interface PipelineModelInterface extends StandardModelInterface
 
     /**
      * Returns the value. Sets value if incoming argument is set
+     */
+    public function runBeforeEveryItem(?string $val = null) : string;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
      *
      * @param PipelineItemModelInterface[]|null $val
      *
