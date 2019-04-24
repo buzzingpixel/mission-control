@@ -79,10 +79,11 @@ class EditPipelineAction
             throw new Http404Exception();
         }
 
-        $title       = trim($this->requestHelper->post('title'));
-        $description = trim($this->requestHelper->post('description'));
-        $projectGuid = trim($this->requestHelper->post('project_guid'));
-        $items       = $this->requestHelper->post('pipeline_items');
+        $title              = trim($this->requestHelper->post('title'));
+        $description        = trim($this->requestHelper->post('description'));
+        $projectGuid        = trim($this->requestHelper->post('project_guid'));
+        $runBeforeEveryItem = trim($this->requestHelper->post('run_before_every_item'));
+        $items              = $this->requestHelper->post('pipeline_items');
 
         $items = is_array($items) ? $items : [];
 
@@ -91,6 +92,7 @@ class EditPipelineAction
             'inputValues' => [
                 'title' => $title,
                 'description' => $description,
+                'run_before_every_item' => $runBeforeEveryItem,
                 'pipeline_items' => $items,
             ],
         ];
@@ -110,6 +112,8 @@ class EditPipelineAction
         $model->description($description);
 
         $model->projectGuid($projectGuid);
+
+        $model->runBeforeEveryItem($runBeforeEveryItem);
 
         $pipelineItemModels = [];
 
