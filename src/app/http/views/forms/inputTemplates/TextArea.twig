@@ -1,4 +1,5 @@
 {% set rows = rows|default('6') %}
+{% set codeEditor = codeEditor|default(false) %}
 
 {% embed 'forms/inputTemplates/_fieldset.twig' %}
     {% block input %}
@@ -6,7 +7,7 @@
             rows="{{ rows }}"
             name="{{ name }}"
             id="{{ name }}"
-            class="textarea StandardForm__TextArea {% if thisInputHasErrors %} StandardForm__TextInput--HasError{% endif %}"
+            class="textarea{% if codeEditor %} JS-CodeEditor {% endif %} StandardForm__TextArea {% if thisInputHasErrors %} StandardForm__TextInput--HasError{% endif %}"
         >{{ value }}</textarea>
     {% endblock %}
 {% endembed %}

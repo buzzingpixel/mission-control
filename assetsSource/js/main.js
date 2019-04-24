@@ -72,6 +72,12 @@ function runMain(F, W) {
         });
     });
 
+    $('.JS-CodeEditor').each(function() {
+        F.controller.construct('CodeEditor', {
+            el: this
+        });
+    });
+
     $('.JS-AjaxRefreshInner').each(function() {
         F.controller.construct('AjaxRefreshInner', {
             el: this

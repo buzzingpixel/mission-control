@@ -117,6 +117,12 @@ class CreatePipelineController
                                     ->fetchAsSelectArray(),
                             ],
                             [
+                                'template' => 'TextArea',
+                                'codeEditor' => true,
+                                'name' => 'run_before_every_item',
+                                'label' => 'Run Before Every Item',
+                            ],
+                            [
                                 'template' => 'PipelineBuilder',
                                 'name' => 'pipeline_items',
                                 'label' => 'Pipeline Items',

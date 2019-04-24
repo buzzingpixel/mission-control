@@ -182,6 +182,13 @@ class EditPipelineController
                                 'value' => $model->projectGuid(),
                             ],
                             [
+                                'template' => 'TextArea',
+                                'codeEditor' => true,
+                                'name' => 'run_before_every_item',
+                                'label' => 'Run Before Every Item',
+                                'value' => $model->runBeforeEveryItem(),
+                            ],
+                            [
                                 'template' => 'PipelineBuilder',
                                 'name' => 'pipeline_items',
                                 'label' => 'Pipeline Items',
