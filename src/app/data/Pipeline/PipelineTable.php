@@ -99,6 +99,17 @@ class PipelineTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'run_before_every_item' => [
+            'name' => 'run_before_every_item',
+            'type' => 'text',
+            'size' => 65535,
+            'scale' => null,
+            'notnull' => true,
+            'default' => null,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
     ];
 
     const COLUMN_NAMES = [
@@ -109,6 +120,7 @@ class PipelineTable extends Table
         'slug',
         'description',
         'secret_id',
+        'run_before_every_item',
     ];
 
     const COLUMN_DEFAULTS = [
@@ -119,6 +131,7 @@ class PipelineTable extends Table
         'slug' => null,
         'description' => null,
         'secret_id' => null,
+        'run_before_every_item' => null,
     ];
 
     const PRIMARY_KEY = [

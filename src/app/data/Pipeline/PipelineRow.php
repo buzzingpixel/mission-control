@@ -16,6 +16,7 @@ use Atlas\Table\Row;
  * @property mixed $slug varchar(255) NOT NULL
  * @property mixed $description varchar(255) NOT NULL
  * @property mixed $secret_id varchar(255) NOT NULL
+ * @property mixed $run_before_every_item text(65535) NOT NULL
  */
 class PipelineRow extends Row
 {
@@ -27,5 +28,6 @@ class PipelineRow extends Row
         'slug' => null,
         'description' => null,
         'secret_id' => null,
+        'run_before_every_item' => null,
     ];
 }
