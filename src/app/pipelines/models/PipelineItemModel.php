@@ -8,6 +8,8 @@ use corbomite\db\traits\UuidTrait;
 use src\app\pipelines\interfaces\PipelineItemModelInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
 use src\app\servers\interfaces\ServerModelInterface;
+use const PHP_EOL;
+use function preg_replace;
 
 class PipelineItemModel implements PipelineItemModelInterface
 {
@@ -40,7 +42,11 @@ class PipelineItemModel implements PipelineItemModelInterface
 
     public function getFullScriptForExecution() : string
     {
-        return $this->pipeline->runBeforeEveryItem() . "\n" . $this->script();
+        return preg_replace(
+            "/\r|\n/",
+            PHP_EOL,
+            $this->pipeline->runBeforeEveryItem() . "\n" . $this->script()
+        );
     }
 
     /** @var ServerModelInterface[] */
