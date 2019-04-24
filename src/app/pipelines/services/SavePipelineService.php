@@ -238,12 +238,13 @@ class SavePipelineService
             }
         }
 
-        $record->project_guid   = $model->getProjectGuidAsBytes();
-        $record->is_active      = $model->isActive();
-        $record->title          = $model->title();
-        $record->slug           = $model->slug();
-        $record->description    = $model->description();
-        $record->pipeline_items = $items;
+        $record->project_guid          = $model->getProjectGuidAsBytes();
+        $record->is_active             = $model->isActive();
+        $record->title                 = $model->title();
+        $record->slug                  = $model->slug();
+        $record->description           = $model->description();
+        $record->run_before_every_item = $model->runBeforeEveryItem();
+        $record->pipeline_items        = $items;
 
         try {
             $orm->persist($record);
