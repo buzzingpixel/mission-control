@@ -10,6 +10,9 @@ use src\app\pipelines\interfaces\PipelineItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
 use src\app\pipelines\interfaces\PipelineModelInterface;
+use const PREG_SET_ORDER;
+use function preg_match_all;
+use function preg_replace;
 use function str_replace;
 
 class PipelineJobItemModel implements PipelineJobItemModelInterface
@@ -69,10 +72,35 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
 
     public function getPreparedScriptForExecution() : string
     {
-        return str_replace(
+        $dateTime = $this->pipelineJob->jobAddedAt();
+
+        // Do {{timestamp}} replacement
+        $preparedString = str_replace(
             '{{timestamp}}',
-            $this->pipelineJob->jobAddedAt()->getTimestamp(),
+            $dateTime->getTimestamp(),
             $this->pipelineItem->getFullScriptForExecution()
         );
+
+        // Find instances of {{time "FORMAT_HERE"}} or {{time 'FORMAT_HERE'}}
+        preg_match_all(
+            '/{{time (?:"|\')(.+?)(?:"|\')}}/',
+            $preparedString,
+            $timeMatches,
+            PREG_SET_ORDER
+        );
+
+        // Do replacements
+        foreach ($timeMatches as $match) {
+            $replacement = $dateTime->format($match[1]);
+
+            $preparedString = preg_replace(
+                '/' . $match[0] . '/',
+                $replacement,
+                $preparedString,
+                1
+            );
+        }
+
+        return $preparedString;
     }
 }
