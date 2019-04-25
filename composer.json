@@ -71,10 +71,5 @@
         "twigTemplatesDirectories": {
             "": "src/app/http/views"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "@php -r \"file_exists('.env.override') || file_put_contents('.env.override', '');\""
-        ]
     }
 }
