@@ -57,47 +57,47 @@ class RunJobItemTask
      */
     public function __invoke(array $context = []) : void
     {
-        $jobItemGuid = $context['jobItemGuid'] ?? '';
-
-        if (! $jobItemGuid) {
-            return;
-        }
-
-        $queryModel = $this->pipelineApi->makeQueryModel();
-        $queryModel->addWhere('guid', $this->pipelineApi->uuidToBytes($jobItemGuid));
-        $jobItemTmp = $this->pipelineApi->fetchOneJobItem($queryModel);
-
-        if (! $jobItemTmp) {
-            return;
-        }
-
-        $queryModel = $this->pipelineApi->makeQueryModel();
-        $queryModel->addWhere('guid', $jobItemTmp->pipelineJob()->getGuidAsBytes());
-        $job = $this->pipelineApi->fetchOneJob($queryModel);
-
-        $jobItem = null;
-
-        foreach ($job->pipelineJobItems() as $jobItemLoop) {
-            if ($jobItemLoop->guid() !== $jobItemGuid) {
-                continue;
-            }
-
-            $jobItem = $jobItemLoop;
-
-            break;
-        }
-
-        if (! $jobItem) {
-            throw new LogicException('Something weird went wrong');
-        }
-
-        $job->hasStarted(true);
-
-        $this->pipelineApi->saveJob($job);
-
         $exception = null;
 
         try {
+            $jobItemGuid = $context['jobItemGuid'] ?? '';
+
+            if (! $jobItemGuid) {
+                throw new LogicException('$context[\'jobItemGuid\'] does not exist');
+            }
+
+            $queryModel = $this->pipelineApi->makeQueryModel();
+            $queryModel->addWhere('guid', $this->pipelineApi->uuidToBytes($jobItemGuid));
+            $jobItemTmp = $this->pipelineApi->fetchOneJobItem($queryModel);
+
+            if (! $jobItemTmp) {
+                throw new LogicException('Unable to locate job');
+            }
+
+            $queryModel = $this->pipelineApi->makeQueryModel();
+            $queryModel->addWhere('guid', $jobItemTmp->pipelineJob()->getGuidAsBytes());
+            $job = $this->pipelineApi->fetchOneJob($queryModel);
+
+            $jobItem = null;
+
+            foreach ($job->pipelineJobItems() as $jobItemLoop) {
+                if ($jobItemLoop->guid() !== $jobItemGuid) {
+                    continue;
+                }
+
+                $jobItem = $jobItemLoop;
+
+                break;
+            }
+
+            if (! $jobItem) {
+                throw new LogicException('Something weird went wrong (unable to locate job, which is weird because we did above)');
+            }
+
+            $job->hasStarted(true);
+
+            $this->pipelineApi->saveJob($job);
+
             $this->innerRun($jobItem);
 
             $totalJobs = count($job->pipelineJobItems());
@@ -138,19 +138,36 @@ class RunJobItemTask
         } catch (Throwable $e) {
             $exception = $e;
 
-            $jobItem->hasFailed(true);
-            $job->hasFailed(true);
+            if (isset($jobItem)) {
+                $jobItem->hasFailed(true);
+            }
+
+            if (isset($job)) {
+                $job->hasFailed(true);
+            }
 
             foreach ($this->sendNotificationAdapters as $adapter) {
+                if (! isset($job)) {
+                    $subject = $msg = 'An error occurred while running a pipeline';
+
+                    $msg .= ". Details: \n\n";
+
+                    $msg .= $e->getMessage();
+
+                    $adapter->send($subject, $msg, ['status' => 'bad']);
+
+                    continue;
+                }
+
                 $p = $job->pipeline();
 
-                $sub = $msg = $job->pipeline()->title() . ' failed while running';
+                $subject = $msg = $p->title() . ' failed while running';
 
                 $msg .= ". Details: \n\n";
 
                 $msg .= $e->getMessage();
 
-                $adapter->send($sub, $msg, [
+                $adapter->send($subject, $msg, [
                     'status' => 'bad',
                     'urls' => [
                         [
@@ -162,7 +179,9 @@ class RunJobItemTask
             }
         }
 
-        $this->pipelineApi->saveJob($job);
+        if (isset($job)) {
+            $this->pipelineApi->saveJob($job);
+        }
 
         if (! $exception) {
             return;
