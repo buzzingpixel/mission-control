@@ -15,6 +15,7 @@ use src\app\servers\services\GetLoggedInServerSshConnection;
 use src\app\utilities\RSAFactory;
 use src\app\utilities\SSH2Factory;
 use Throwable;
+use const PHP_EOL;
 use function array_walk;
 use function count;
 use function getenv;
@@ -176,6 +177,10 @@ class RunJobItemTask
 
         $servers = $pipelineItem->servers();
 
+        if (! $servers) {
+            $jobItem->logContent('No servers have been assigned to this item');
+        }
+
         $task = $this;
 
         array_walk(
@@ -183,9 +188,17 @@ class RunJobItemTask
             static function (ServerModelInterface $server) use ($task, $jobItem) : void {
                 $ssh = $task->getConnection->get($server);
 
-                $jobItem->logContent((string) $ssh->exec($jobItem->getPreparedScriptForExecution()));
+                $prevLogContent = $jobItem->logContent();
 
-                $jobItem->finishedAt(new DateTime('now', new DateTimeZone('UTC')));
+                if ($prevLogContent) {
+                    $prevLogContent .= PHP_EOL . PHP_EOL . '========================' . PHP_EOL . PHP_EOL;
+                }
+
+                $jobItem->logContent(
+                    $prevLogContent .
+                    'Running on ' . $server->title() . ':' . PHP_EOL .
+                    (string) $ssh->exec($jobItem->getPreparedScriptForExecution())
+                );
 
                 $exitStatus = $ssh->getExitStatus();
 
@@ -196,5 +209,8 @@ class RunJobItemTask
                 throw new LogicException($jobItem->logContent());
             }
         );
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $jobItem->finishedAt(new DateTime('now', new DateTimeZone('UTC')));
     }
 }
