@@ -127,9 +127,15 @@ class ViewPipelineJobDetailsController
                 $jobStyledStatus = 'Good';
             }
 
+            $pipelineItemDescription = '';
+
+            if ($jobItem->pipelineItem()) {
+                $pipelineItemDescription = $jobItem->pipelineItem()->description();
+            }
+
             $rows[] = [
                 'cols' => [
-                    'Description' => $jobItem->pipelineItem()->description(),
+                    'Description' => $pipelineItemDescription,
                     'Status' => $jobStatus,
                     'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
                     'Log' => '<pre>' . $jobItem->logContent() . '</pre>',

@@ -45,17 +45,26 @@ class PipelineItemRecordModelTransformer
 
         return array_map(
             function (PipelineItemRecord $itemRecord) use ($pipelineModel) {
-                return $this->transformRecord($itemRecord, $pipelineModel);
+                // TODO: Dang. Deleted pipeline items causes unexpected issues
+                if ($itemRecord instanceof PipelineItemRecord) {
+                    return $this->transformRecord($itemRecord, $pipelineModel);
+                }
+
+                return new PipelineItemModel();
             },
             $recordArray
         );
     }
 
     public function transformRecord(
-        PipelineItemRecord $itemRecord,
+        ?PipelineItemRecord $itemRecord,
         PipelineModelInterface $pipelineModel
     ) : PipelineItemModelInterface {
         $itemModel = new PipelineItemModel();
+
+        if (! $itemRecord) {
+            return $itemModel;
+        }
 
         $itemModel->setGuidAsBytes($itemRecord->guid);
 

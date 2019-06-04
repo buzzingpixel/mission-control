@@ -7,6 +7,7 @@ namespace src\app\pipelines\transformers;
 use Atlas\Mapper\Record;
 use DateTime;
 use DateTimeZone;
+use src\app\data\PipelineItem\PipelineItemRecord;
 use src\app\data\PipelineJobItem\PipelineJobItemRecord;
 use src\app\pipelines\interfaces\PipelineJobItemModelInterface;
 use src\app\pipelines\interfaces\PipelineJobModelInterface;
@@ -64,12 +65,14 @@ class PipelineJobItemRecordModelTransformer
 
         $itemModel->pipelineJob($jobModel);
 
-        $itemModel->pipelineItem(
-            $this->pipelineItemRecordModelTransformer->transformRecord(
-                $itemRecord->pipeline_item,
-                $itemModel->pipeline()
-            )
-        );
+        if ($itemRecord->pipeline_item instanceof PipelineItemRecord) {
+            $itemModel->pipelineItem(
+                $this->pipelineItemRecordModelTransformer->transformRecord(
+                    $itemRecord->pipeline_item,
+                    $itemModel->pipeline()
+                )
+            );
+        }
 
         $itemModel->hasFailed(
             $itemRecord->has_failed === 1 || $itemRecord->has_failed === '1'
