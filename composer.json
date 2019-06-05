@@ -16,7 +16,7 @@
         "buzzingpixel/corbomite-http": "^2.2",
         "buzzingpixel/corbomite-mailer": "^1.1.0",
         "buzzingpixel/corbomite-migrations": "^1.1.1",
-        "buzzingpixel/corbomite-queue": "^1.4.0",
+        "buzzingpixel/corbomite-queue": "^1.4.1",
         "buzzingpixel/corbomite-schedule": "^1.2.0",
         "buzzingpixel/corbomite-twig": "^1.2.0",
         "buzzingpixel/corbomite-user": "^3.1",

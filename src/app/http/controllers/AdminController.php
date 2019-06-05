@@ -169,10 +169,11 @@ class AdminController
                     ],
                     [
                         'template' => 'forms/TableListForm.twig',
-                        'tableControlButtons' => [[
-                            'href' => '/admin/create-user',
-                            'content' => 'Create User',
-                        ],
+                        'tableControlButtons' => [
+                            [
+                                'href' => '/admin/create-user',
+                                'content' => 'Create User',
+                            ],
                         ],
                         'formTitle' => 'Users',
                         'actionParam' => 'adminUserActions',
@@ -193,6 +194,12 @@ class AdminController
                     ],
                     [
                         'template' => 'forms/TableListForm.twig',
+                        'tableControlButtons' => [
+                            [
+                                'href' => '/admin/queue-failures',
+                                'content' => 'View Queue Failures',
+                            ],
+                        ],
                         'formTitle' => 'Batches Waiting in Queue',
                         'actionParam' => 'null',
                         'table' => [

@@ -10,6 +10,8 @@ use FastRoute\RouteCollector;
 use src\app\http\controllers\AccountController;
 use src\app\http\controllers\AddNotificationEmailController;
 use src\app\http\controllers\AdminController;
+use src\app\http\controllers\AdminQueueFailures;
+use src\app\http\controllers\AdminQueueFailureView;
 use src\app\http\controllers\ChangePasswordController;
 use src\app\http\controllers\CreateMonitoredUrlController;
 use src\app\http\controllers\CreatePingController;
@@ -111,6 +113,8 @@ $r->get('/pipelines/run/{slug}', RunPipelineController::class);
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);
 $r->addRoute(['GET', 'POST'], '/admin/create-user', CreateUserController::class);
 $r->addRoute(['GET', 'POST'], '/admin/add-notification-email', AddNotificationEmailController::class);
+$r->get('/admin/queue-failures', AdminQueueFailures::class);
+$r->get('/admin/queue-failures/{guid}', AdminQueueFailureView::class);
 
 // Password Reset routes
 $r->get('/iforgot', ForgotPasswordController::class);

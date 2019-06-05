@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f657d156ca795b4874926a039caa736",
+    "content-hash": "001b98f60b47778e39ccc4ef13c131b3",
     "packages": [
         {
             "name": "2bj/phanybar",
@@ -941,16 +941,16 @@
         },
         {
             "name": "buzzingpixel/corbomite-queue",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/buzzingpixel/corbomite-queue.git",
-                "reference": "9b3aacda57eb8ed86d7955cc8e2e4fa074a69742"
+                "reference": "f10f114276a87e8bb6143b5ba4087ccb9fb450a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/9b3aacda57eb8ed86d7955cc8e2e4fa074a69742",
-                "reference": "9b3aacda57eb8ed86d7955cc8e2e4fa074a69742",
+                "url": "https://api.github.com/repos/buzzingpixel/corbomite-queue/zipball/f10f114276a87e8bb6143b5ba4087ccb9fb450a3",
+                "reference": "f10f114276a87e8bb6143b5ba4087ccb9fb450a3",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +992,7 @@
                 }
             ],
             "description": "Corbomite queue",
-            "time": "2019-06-05T17:55:56+00:00"
+            "time": "2019-06-05T19:22:54+00:00"
         },
         {
             "name": "buzzingpixel/corbomite-schedule",
