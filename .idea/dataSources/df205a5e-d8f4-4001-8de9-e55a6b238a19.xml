@@ -2036,7 +2036,7 @@ server_guid</ColNames>
     <column id="447" parent="336" name="log_content">
       <Position>7</Position>
       <Comment>Log content</Comment>
-      <DataType>text|0s</DataType>
+      <DataType>longtext|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
