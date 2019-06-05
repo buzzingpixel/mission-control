@@ -129,22 +129,6 @@ services:
     command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
     networks:
       common:
-  php-queue-runner-5:
-    env_file:
-      - .env
-      - .env.override
-    build:
-      context: ./
-      dockerfile: ./serverConfig/php-queue-runner/Dockerfile-php-prod
-    restart: always
-    container_name: php-queue-runner-5-mission-control
-    environment:
-      HOSTNAME: php-queue-runner-5-mission-control
-    volumes:
-      - cache-volume:/app/cache
-    command: bash -c "chmod +x /app/scripts/prod/queueRunner.sh && /app/scripts/prod/queueRunner.sh"
-    networks:
-      common:
   db:
     env_file:
       - .env
