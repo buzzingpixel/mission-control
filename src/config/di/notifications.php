@@ -9,10 +9,10 @@ use src\app\notifications\schedules\CheckPingsForNotificationsSchedule;
 use src\app\notifications\schedules\CheckRemindersForNotificationsSchedule;
 use src\app\notifications\schedules\CheckUrlsForNotificationsSchedule;
 use src\app\notifications\tasks\CheckPingForNotification;
-use src\app\notifications\tasks\CheckReminderForNotification;
-use src\app\notifications\tasks\CheckUrlForNotification;
 use src\app\notifications\tasks\CheckPingsForNotificationsTask;
+use src\app\notifications\tasks\CheckReminderForNotification;
 use src\app\notifications\tasks\CheckRemindersForNotificationsTask;
+use src\app\notifications\tasks\CheckUrlForNotification;
 use src\app\notifications\tasks\CheckUrlsForNotificationsTask;
 use src\app\support\extensions\GuzzleClientNoHttpErrors;
 use function DI\autowire;
@@ -23,6 +23,9 @@ return [
             $di->get(SendEmailNotificationAdapter::class),
             $di->get(SlackNotificationAdapter::class),
         ];
+    },
+    'SlackNotificationAdapterOnlyArray' => static function (ContainerInterface $di) {
+        return [$di->get(SlackNotificationAdapter::class)];
     },
     CheckPingsForNotificationsSchedule::class => autowire(),
     CheckRemindersForNotificationsSchedule::class => autowire(),

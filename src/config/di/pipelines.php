@@ -43,6 +43,6 @@ return [
     RunJobItemTask::class => autowire()
         ->constructorParameter(
             'sendNotificationAdapters',
-            DI\get('NotificationAdaptersArray')
+            DI\get('SlackNotificationAdapterOnlyArray')
         ),
 ];
