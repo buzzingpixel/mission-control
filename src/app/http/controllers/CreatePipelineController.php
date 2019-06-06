@@ -113,8 +113,8 @@ class CreatePipelineController
                                 'template' => 'Select',
                                 'name' => 'project_guid',
                                 'label' => 'Project',
-                                'options' => $this->projectsApi
-                                    ->fetchAsSelectArray(),
+                                'options' => $this->projectsApi->fetchAsSelectArray(),
+                                'fieldsetStyle' => 'position: relative; z-index: 999',
                             ],
                             [
                                 'template' => 'TextArea',
