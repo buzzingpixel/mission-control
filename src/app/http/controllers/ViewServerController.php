@@ -117,7 +117,8 @@ class ViewServerController
             ],
             [
                 'key' => 'SSH Public Key',
-                'value' => '<pre>' . $key->public() . '</pre>',
+                'value' => $key->public(),
+                'showInTextArea' => true,
             ],
         ];
 
@@ -136,7 +137,9 @@ class ViewServerController
 
             $keyValueItems[] = [
                 'key' => 'SSH Private Key',
-                'value' => '<pre>' . $key->private() . '</pre>',
+                'value' => $key->private(),
+                'showInTextArea' => true,
+                'textAreaRows' => 27,
             ];
         }
 
