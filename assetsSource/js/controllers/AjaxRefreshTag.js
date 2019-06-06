@@ -1,17 +1,17 @@
 // Make sure FAB is defined
 window.FAB = window.FAB || {};
 
-function runAjaxRefreshInner(F) {
+function runAjaxRefreshTag(F) {
     'use strict';
 
     if (! window.jQuery || ! F.controller || ! F.model) {
         setTimeout(function() {
-            runAjaxRefreshInner(F);
+            runAjaxRefreshTag(F);
         }, 10);
         return;
     }
 
-    F.controller.make('AjaxRefreshInner', {
+    F.controller.make('AjaxRefreshTag', {
         runsSinceNoUrl: 0,
 
         init: function() {
@@ -35,10 +35,19 @@ function runAjaxRefreshInner(F) {
                 cache: false,
                 success: function(html) {
                     var $html = $(html);
-                    var $el = $html.find('.JS-AjaxRefreshInner');
+                    var $el = $html.find('.' + self.$el.data('ajaxUniqueClass'));
                     var refreshUrl = $el.data('ajaxRefreshUrl');
+                    var classes = $el.attr('class');
 
                     self.$el.html($el.html());
+
+                    if (classes) {
+                        self.$el.attr('class', '');
+
+                        $el.attr('class').split(' ').forEach(function(classString) {
+                            self.$el.addClass(classString);
+                        });
+                    }
 
                     if (! $el.data('ajaxRefreshUrl')) {
                         if (self.runsSinceNoUrl > 1) {
@@ -63,4 +72,4 @@ function runAjaxRefreshInner(F) {
     });
 }
 
-runAjaxRefreshInner(window.FAB);
+runAjaxRefreshTag(window.FAB);

@@ -1,0 +1,27 @@
+{% set tags = tags ?? [] %}
+
+{% if tags|length %}
+    <span class="StandardPage__Tags">
+        {% for tag in tags %}
+            {% set ajaxRefreshTagUrl = '' %}
+            {% if tag['ajaxRefreshTagUrl'] is defined and tag['ajaxRefreshTagUrl'] %}
+                {% set ajaxRefreshTagUrl = tag['ajaxRefreshTagUrl'] %}
+            {% endif %}
+            {% set ajaxRefreshTagUid = '' %}
+            {% if tag['ajaxRefreshTagUid'] is defined and tag['ajaxRefreshTagUid'] %}
+                {% set ajaxRefreshTagUid =  tag['ajaxRefreshTagUid'] %}
+            {% endif %}
+            <span
+                class="StyledTag{% if tag['style'] is defined and tag['style'] %} StyledTag--{{ tag['style'] }}{% endif %}{% if ajaxRefreshTagUrl %} JS-AjaxRefreshTag{% endif %}{% if ajaxRefreshTagUid %} JS-AjaxRefreshTag--{{ tag.ajaxRefreshTagUid }}{% endif %}"
+                {% if ajaxRefreshTagUid %}
+                data-ajax-unique-class="JS-AjaxRefreshTag--{{ tag.ajaxRefreshTagUid }}"
+                {% endif %}
+                {% if ajaxRefreshTagUrl %}
+                data-ajax-refresh-url="{{ ajaxRefreshTagUrl }}"
+                {% endif %}
+            >
+                {{ tag.content|smartypants }}
+            </span>
+        {% endfor %}
+    </span>
+{% endif %}

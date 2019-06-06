@@ -34,15 +34,7 @@
                     {% if subTitle %}
                         <span class="StandardPage__TitleSub">{{ subTitle|smartypants }}</span>
                     {% endif %}
-                    {% if tags|length %}
-                        <span class="StandardPage__Tags">
-                            {% for tag in tags %}
-                                <span class="StyledTag StyledTag--{{ tag.style }}">
-                                    {{ tag.content|smartypants }}
-                                </span>
-                            {% endfor %}
-                        </span>
-                    {% endif %}
+                    {% include 'partials/Tags.twig' %}
                 </h1>
                 <div class="StandardPage__ControlsButtons">
                     {% for button in pageControlButtons %}

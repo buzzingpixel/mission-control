@@ -7,17 +7,15 @@ namespace src\app\http\controllers;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
 use corbomite\user\interfaces\UserApiInterface;
-use DateTimeZone;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use Throwable;
-use function date_default_timezone_get;
 use function md5;
 
-class ViewPipelineJobDetailsController
+class ViewPipelineJobDetailsControllerBadge
 {
     /** @var UserApiInterface */
     private $userApi;
@@ -87,11 +85,6 @@ class ViewPipelineJobDetailsController
             );
         }
 
-        $userTimeZone = $user->getExtendedProperty('timezone') ?:
-            date_default_timezone_get();
-
-        $jobModel->jobAddedAt()->setTimezone(new DateTimeZone($userTimeZone));
-
         $status       = 'In queue';
         $styledStatus = 'Inactive';
 
@@ -106,45 +99,6 @@ class ViewPipelineJobDetailsController
             $styledStatus = 'Caution';
         }
 
-        $response = $this->response->withHeader('Content-Type', 'text/html');
-
-        $title = 'Pipeline "' . $pipelineModel->title() . '" Job at ' . $jobModel->jobAddedAt()->format('n/j/Y g:i a');
-
-        $rows = [];
-
-        foreach ($jobModel->pipelineJobItems() as $jobItem) {
-            if ($jobItem->finishedAt()) {
-                $jobItem->finishedAt()->setTimezone(new DateTimeZone($userTimeZone));
-            }
-
-            $jobStatus       = $status === 'Failed' ? 'Aborted' : 'In queue';
-            $jobStyledStatus = 'Inactive';
-
-            if ($jobItem->hasFailed()) {
-                $jobStatus       = 'Failed';
-                $jobStyledStatus = 'Error';
-            } elseif ($jobItem->finishedAt()) {
-                $jobStatus       = 'Finished';
-                $jobStyledStatus = 'Good';
-            }
-
-            $pipelineItemDescription = '';
-
-            if ($jobItem->pipelineItem()) {
-                $pipelineItemDescription = $jobItem->pipelineItem()->description();
-            }
-
-            $rows[] = [
-                'cols' => [
-                    'Description' => $pipelineItemDescription,
-                    'Status' => $jobStatus,
-                    'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
-                    'Log' => '<pre>' . $jobItem->logContent() . '</pre>',
-                ],
-                'colorStyledCols' => ['Status' => $jobStyledStatus],
-            ];
-        }
-
         $badgeUrl = '/pipelines/view/' . $pipelineModel->slug() . '/job-details/' . $jobModel->guid() . '/badge';
 
         $tags = [
@@ -154,40 +108,10 @@ class ViewPipelineJobDetailsController
             'ajaxRefreshTagUid' => md5($badgeUrl),
         ];
 
+        $response = $this->response->withHeader('Content-Type', 'text/html');
+
         $response->getBody()->write(
-            $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
-                'tags' => [$tags],
-                'metaTitle' => $title,
-                'title' =>$title,
-                'breadCrumbs' => [
-                    [
-                        'href' => '/pipelines',
-                        'content' => 'Pipelines',
-                    ],
-                    [
-                        'href' => '/pipelines/view/' . $pipelineSlug,
-                        'content' => $pipelineModel->title(),
-                    ],
-                    ['content' => 'Viewing Job'],
-                ],
-                'includes' => [
-                    [
-                        'template' => 'forms/TableListForm.twig',
-                        'includeSelectCol' => false,
-                        'includeFilter' => false,
-                        'table' => [
-                            'headings' => [
-                                'Description',
-                                'Status',
-                                'Finished At',
-                                'Log',
-                            ],
-                            'rows' => $rows,
-                        ],
-                    ],
-                ],
-                'ajaxInnerRefreshUrl' => $jobModel->isFinished() || $jobModel->hasFailed() ? null : '/pipelines/view/' . $pipelineModel->slug() . '/job-details/' . $jobModel->guid(),
-            ])
+            $this->twigEnvironment->renderAndMinify('partials/Tags.twig', ['tags' => [$tags]])
         );
 
         return $response;

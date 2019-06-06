@@ -83,6 +83,12 @@ function runMain(F, W) {
             el: this
         });
     });
+
+    $('.JS-AjaxRefreshTag').each(function() {
+        F.controller.construct('AjaxRefreshTag', {
+            el: this
+        });
+    });
 }
 
 runMain(window.FAB, window);
