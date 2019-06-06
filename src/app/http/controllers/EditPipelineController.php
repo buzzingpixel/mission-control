@@ -180,6 +180,7 @@ class EditPipelineController
                                 'label' => 'Project',
                                 'options' => $this->projectsApi->fetchAsSelectArray($selectParams),
                                 'value' => $model->projectGuid(),
+                                'fieldsetStyle' => 'position: relative; z-index: 999',
                             ],
                             [
                                 'template' => 'TextArea',

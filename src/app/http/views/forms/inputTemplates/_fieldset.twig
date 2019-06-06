@@ -6,7 +6,14 @@
 
 {% set value = inputValues[name]|default(value|default('')) %}
 
-<fieldset class="fieldset StandardForm__Fieldset">
+{% set fieldsetStyle = fieldsetStyle ?? '' %}
+
+<fieldset
+    class="fieldset StandardForm__Fieldset"
+    {% if fieldsetStyle %}
+    style="{{ fieldsetStyle|raw }}"
+    {% endif %}
+>
     <label
         for="{{ name }}"
         class="label StandardForm__Label"
