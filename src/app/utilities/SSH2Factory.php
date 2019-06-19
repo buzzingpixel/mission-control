@@ -13,7 +13,7 @@ class SSH2Factory
         return $this->make($host, $port, $timeout);
     }
 
-    public function make(string $host, int $port = 22, int $timeout = 10) : SSH2
+    public function make(string $host, int $port = 22, int $timeout = 0) : SSH2
     {
         return new SSH2($host, $port, $timeout);
     }
