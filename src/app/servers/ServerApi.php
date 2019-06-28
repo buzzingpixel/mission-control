@@ -53,6 +53,7 @@ class ServerApi implements ServerApiInterface
 
     public function save(ServerModelInterface $model) : void
     {
+        /** @var SaveServerService $service */
         $service = $this->di->get(SaveServerService::class);
         $service->save($model);
     }

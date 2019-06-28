@@ -14,7 +14,10 @@ class CreateServers extends AbstractSeed
      */
     public function getDependencies() : array
     {
-        return ['CreateProjects'];
+        return [
+            'CreateProjects',
+            'CreateSshKeys',
+        ];
     }
 
     public function run() : void
@@ -39,6 +42,7 @@ class CreateServers extends AbstractSeed
 
         $project = $projectApi->fetchOne($projectQuery);
 
+        /** @var ServerApi $serverApi */
         /** @noinspection PhpUnhandledExceptionInspection */
         $serverApi = $di->get(ServerApi::class);
 
@@ -67,6 +71,7 @@ class CreateServers extends AbstractSeed
         try {
             $serverApi->save($model);
         } catch (Throwable $e) {
+            dd($e);
         }
     }
 }
