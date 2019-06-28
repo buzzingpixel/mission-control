@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+export $(grep -v '^#' .env | xargs);
+export $(grep -v '^#' .env.override | xargs);
+
 # Reset
 Reset="\033[0m"; # Text Reset
 
@@ -49,83 +52,83 @@ fi
 ## If command is up or run, we need to run the docker containers and install composer and yarn dependencies
 if [[ "${cmd}" = "up" ]] || [[ "${cmd}" = "run" ]]; then
     valid=true;
-    touch .env.override
-    docker kill node-mission-control
-    docker-compose -f docker-compose.yml -p mission-control up -d
-    docker exec -it --user root --workdir /app php-mission-control bash -c "cd /app && composer install"
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/*"
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/phpmd/phpmd/src/bin/*"
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/squizlabs/php_codesniffer/bin/*"
-    docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up"
-    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run"
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn"
+    touch .env.override;
+    docker kill node-mission-control;
+    docker-compose -f docker-compose.yml -p mission-control up -d;
+    docker exec -it --user root --workdir /app php-mission-control bash -c "cd /app && composer install";
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/*";
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/phpmd/phpmd/src/bin/*";
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/squizlabs/php_codesniffer/bin/*";
+    docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up";
+    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run";
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn";
 
     ## If the command is not run, go ahead and do fab build only
     if [[ "${cmd}" != "run" ]]; then
-        docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only"
+        docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only";
     fi
 fi
 
 ## If the command is run, then we want to run the build process and watch for changes
 if [[ "${cmd}" = "run" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab";
 fi
 
 ## If the command is watch, then we want to run the build process and watch for changes
 if [[ "${cmd}" = "watch" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab"
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab";
 fi
 
 ## If the command is build, then we want to run the build process
 if [[ "${cmd}" = "build" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only"
+    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only";
 fi
 
 ## If the command is down, then we want to stop docker
 if [[ "${cmd}" = "down" ]]; then
     valid=true;
-    docker-compose -f docker-compose.yml -p mission-control down
+    docker-compose -f docker-compose.yml -p mission-control down;
 fi
 
 ## Run phpunit if requested
 if [[ "${cmd}" = "phpunit" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/phpunit && /app/vendor/bin/phpunit --configuration /app/phpunit.xml ${allArgsExceptFirst}"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/phpunit && /app/vendor/bin/phpunit --configuration /app/phpunit.xml ${allArgsExceptFirst}";
 fi
 
 ## Run yarn if requested
 if [[ "${cmd}" = "yarn" ]]; then
     valid=true;
-    docker kill node-mission-control
-    docker-compose -f docker-compose.yml -p mission-control up -d
-    docker exec -it --user root --workdir /app node-mission-control bash -c "${allArgs}"
+    docker kill node-mission-control;
+    docker-compose -f docker-compose.yml -p mission-control up -d;
+    docker exec -it --user root --workdir /app node-mission-control bash -c "${allArgs}";
 fi
 
 ## Run queue if requested
 if [[ "${cmd}" = "queue" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app-www php-mission-control bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh"
+    docker exec -it --user root --workdir /app-www php-mission-control bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh";
 fi
 
 ## Run cli if requested
 if [[ "${cmd}" = "cli" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app-www php-mission-control bash -c "php app ${allArgsExceptFirst}"
+    docker exec -it --user root --workdir /app-www php-mission-control bash -c "php app ${allArgsExceptFirst}";
 fi
 
 ## Run composer if requested
 if [[ "${cmd}" = "composer" ]]; then
     valid=true;
-    docker exec -it --user root --workdir /app php-mission-control bash -c "${allArgs}"
+    docker exec -it --user root --workdir /app php-mission-control bash -c "${allArgs}";
 fi
 
 ## Login to a container if requested
 if [[ "${cmd}" = "login" ]]; then
     valid=true;
-    docker exec -it --user root ${secondArg}-mission-control bash
+    docker exec -it --user root ${secondArg}-mission-control bash;
 fi
 
 ## If there was no valid command found, warn user

@@ -17,7 +17,7 @@ services:
       - vendor-volume:/vendor-volume
     command: bash -c "chmod +x /app/scripts/dev/devUtilityScript.sh && /app/scripts/dev/devUtilityScript.sh"
     networks:
-      common:
+      mission-control-network:
   web:
     env_file:
       - .env
@@ -27,18 +27,20 @@ services:
     environment:
       HOSTNAME: nginx-mission-control
     ports:
-      - 7783:80
+      - "${DOCKER_DEV_NGINX_PORT}:${DOCKER_DEV_NGINX_PORT_TO}"
     volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - ./serverConfig/nginx/dev.conf:/etc/nginx/conf.d/dev.conf:delegated
+      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa
+      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub
+      - ${DOCKER_DEV_NGINX_CONF}:/etc/nginx/conf.d/dev.conf
       - .:/app-www:delegated
-      - cache-volume:/app-www/cache:delegated
-      - vendor-volume:/app-www/vendor:delegated
+      - cache-volume:/app-www/cache
+      - vendor-volume:/app-www/vendor
+      - ${DOCKER_DEV_SSL_CERT}:/fullchain.pem
+      - ${DOCKER_DEV_SSL_KEY}:/privkey.pem
     networks:
-      common:
+      mission-control-network:
         aliases:
-          - mission-control.test
+          - ${DOCKER_DEV_NGINX_NETWORK_ALIAS}
   php:
     env_file:
       - .env
@@ -49,18 +51,18 @@ services:
       HOSTNAME: php-mission-control
       COMPOSER_HOME: /composer-home-volume
     volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - ./serverConfig/php/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
-      - ./serverConfig/php/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
-      - ./serverConfig/php/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
+      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa
+      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub
+      - ./serverConfig/php/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini
+      - ./serverConfig/php/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini
+      - ./serverConfig/php/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf
       - .:/app:delegated
       - .:/app-www:delegated
-      - cache-volume:/app-www/cache:delegated
-      - composer-home-volume:/composer-home-volume:delegated
-      - vendor-volume:/app-www/vendor:delegated
+      - cache-volume:/app-www/cache
+      - composer-home-volume:/composer-home-volume
+      - vendor-volume:/app-www/vendor
     networks:
-      common:
+      mission-control-network:
   php-queue-runner:
     env_file:
       - .env
@@ -70,17 +72,17 @@ services:
     environment:
       HOSTNAME: php-queue-runner-mission-control
     volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - ./serverConfig/php-queue-runner/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini:delegated
-      - ./serverConfig/php-queue-runner/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini:delegated
-      - ./serverConfig/php-queue-runner/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf:delegated
+      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa
+      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub
+      - ./serverConfig/php-queue-runner/php-custom-config.ini:/usr/local/etc/php/conf.d/php-custom-config.ini
+      - ./serverConfig/php-queue-runner/php-config-dev.ini:/usr/local/etc/php/conf.d/php-env-config.ini
+      - ./serverConfig/php-queue-runner/fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf
       - .:/app:delegated
-      - cache-volume:/app/cache:delegated
-      - vendor-volume:/app/vendor:delegated
+      - cache-volume:/app/cache
+      - vendor-volume:/app/vendor
     command: bash -c "chmod +x /app/scripts/dev/queueRunner.sh && /app/scripts/dev/queueRunner.sh"
     networks:
-      common:
+      mission-control-network:
   db:
     env_file:
       - .env
@@ -92,13 +94,13 @@ services:
       HOSTNAME: db-mission-control
     user: "1000:50"
     volumes:
-      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa:delegated
-      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub:delegated
-      - db-volume:/var/lib/mysql:delegated
+      - ${DOCKER_RSA_FILE}:/tmp/.ssh/id_rsa
+      - ${DOCKER_RSA_PUB_FILE}:/tmp/.ssh/id_rsa.pub
+      - db-volume:/var/lib/mysql
     ports:
       - 17417:3306
     networks:
-      common:
+      mission-control-network:
   node:
     env_file:
       - .env
@@ -114,7 +116,7 @@ services:
       - yarn-cache-volume:/usr/local/share/.cache/yarn
     command: bash -c "sleep infinity & wait"
     networks:
-      common:
+      mission-control-network:
 
 volumes:
   cache-volume:
@@ -125,4 +127,4 @@ volumes:
   yarn-cache-volume:
 
 networks:
-  common:
+  mission-control-network:
