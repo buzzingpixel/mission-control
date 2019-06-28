@@ -18,7 +18,11 @@
             {
                 "match": "src\\/.*?\\.php$",
                 "cmd": "${workspaceRoot}/vendor/bin/phpcbf ${file} --standard=${workspaceRoot}/phpcs.xml"
-            }
+            },
+            // {
+            //     "match": "src\\/.*?\\.php$",
+            //     "cmd": "${workspaceRoot}/vendor/bin/phpcs ${file} --standard=${workspaceRoot}/phpcs.xml"
+            // },
         ],
     },
 }

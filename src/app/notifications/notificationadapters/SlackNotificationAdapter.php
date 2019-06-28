@@ -15,7 +15,9 @@ use function time;
 
 class SlackNotificationAdapter implements SendNotificationAdapterInterface
 {
+    /** @var GuzzleClientNoHttpErrors */
     private $guzzleClient;
+    /** @var string|null */
     private $slackWebookUrl;
 
     public function __construct(
@@ -26,6 +28,9 @@ class SlackNotificationAdapter implements SendNotificationAdapterInterface
         $this->slackWebookUrl = $slackWebookUrl;
     }
 
+    /**
+     * @param mixed[] $context
+     */
     public function send(string $subject, string $message, array $context = []) : void
     {
         if (! $this->slackWebookUrl) {
