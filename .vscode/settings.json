@@ -1,0 +1,24 @@
+{
+    // General
+    "editor.renderIndentGuides": true,
+    "editor.rulers": [80, 120],
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+
+    // PHPMD
+    "phpmd.rules": "${workspaceFolder}/phpmd.xml",
+
+    // Tasks on save
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "src\\/.*?\\.php$",
+                "cmd": "${workspaceRoot}/vendor/bin/php-cs-fixer fix ${file} --using-cache=no --config=${workspaceRoot}/.php_cs"
+            },
+            {
+                "match": "src\\/.*?\\.php$",
+                "cmd": "${workspaceRoot}/vendor/bin/phpcbf ${file} --standard=${workspaceRoot}/phpcs.xml"
+            }
+        ],
+    },
+}
