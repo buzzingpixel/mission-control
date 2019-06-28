@@ -25,6 +25,8 @@ class SendEmailNotificationAdapter implements SendNotificationAdapterInterface
     }
 
     /**
+     * @param mixed[] $context
+     *
      * @throws InvalidEmailModelException
      */
     public function send(string $subject, string $message, array $context = []) : void
