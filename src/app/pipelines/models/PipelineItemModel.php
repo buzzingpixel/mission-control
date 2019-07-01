@@ -41,7 +41,7 @@ class PipelineItemModel implements PipelineItemModelInterface
     }
 
     /** @var bool */
-    private $runAfterFail;
+    private $runAfterFail = false;
 
     public function runAfterFail(?bool $val = null) : bool
     {
