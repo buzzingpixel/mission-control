@@ -74,6 +74,8 @@ class PipelineItemRecordModelTransformer
 
         $itemModel->script($itemRecord->script);
 
+        $itemModel->runAfterFail($itemRecord->run_after_fail);
+
         $itemModel->servers(
             $this->serverRecordModelTransformer->transformRecordSet(
                 $itemRecord->servers
