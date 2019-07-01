@@ -218,6 +218,7 @@ class SavePipelineService
                 'order' => $order,
                 'description' => $item->description(),
                 'script' => $item->script(),
+                'run_after_fail' => $item->runAfterFail(),
             ];
 
             if ($itemRecord) {
