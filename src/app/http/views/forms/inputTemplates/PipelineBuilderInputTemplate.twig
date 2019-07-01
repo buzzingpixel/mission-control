@@ -62,7 +62,7 @@
         </div>
         <div class="PipelineBuilder__Option">
             {% include "forms/inputTemplates/Checkbox.twig" with {
-                name: name ~ '[' ~ uniqueId ~ '][uuid]',
+                name: name ~ '[' ~ uniqueId ~ '][run_after_failure]',
                 label: 'Run after failure?',
             } only %}
         </div>
