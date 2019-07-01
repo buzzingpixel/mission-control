@@ -71,7 +71,6 @@ class CreateServers extends AbstractSeed
         try {
             $serverApi->save($model);
         } catch (Throwable $e) {
-            dd($e);
         }
     }
 }
