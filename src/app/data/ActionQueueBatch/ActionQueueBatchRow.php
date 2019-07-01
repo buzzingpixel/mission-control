@@ -20,6 +20,7 @@ use Atlas\Table\Row;
  * @property mixed $initial_assume_dead_after_time_zone varchar(255) NOT NULL
  * @property mixed $is_finished tinyint(3,0) NOT NULL
  * @property mixed $finished_due_to_error tinyint(3,0) NOT NULL
+ * @property mixed $error_message text(65535)
  * @property mixed $percent_complete float(12) NOT NULL
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
@@ -41,6 +42,7 @@ class ActionQueueBatchRow extends Row
         'initial_assume_dead_after_time_zone' => null,
         'is_finished' => 0,
         'finished_due_to_error' => 0,
+        'error_message' => 'NULL',
         'percent_complete' => 0.0,
         'added_at' => null,
         'added_at_time_zone' => null,

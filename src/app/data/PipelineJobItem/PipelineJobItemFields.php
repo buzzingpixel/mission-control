@@ -13,7 +13,7 @@ namespace src\app\data\PipelineJobItem;
  * @property mixed $pipeline_item_guid binary(16)
  * @property mixed $order int(10,0) NOT NULL
  * @property mixed $has_failed tinyint(3,0) NOT NULL
- * @property mixed $log_content text(65535) NOT NULL
+ * @property mixed $log_content longtext(4294967295) NOT NULL
  * @property mixed $finished_at datetime
  * @property mixed $finished_at_time_zone varchar(255)
  * @property null|false|\src\app\data\Pipeline\PipelineRecord $pipeline

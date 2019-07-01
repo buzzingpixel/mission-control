@@ -77,6 +77,17 @@ class PipelineItemTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'run_after_fail' => [
+            'name' => 'run_after_fail',
+            'type' => 'tinyint',
+            'size' => 3,
+            'scale' => 0,
+            'notnull' => true,
+            'default' => 0,
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
     ];
 
     const COLUMN_NAMES = [
@@ -85,6 +96,7 @@ class PipelineItemTable extends Table
         'order',
         'description',
         'script',
+        'run_after_fail',
     ];
 
     const COLUMN_DEFAULTS = [
@@ -93,6 +105,7 @@ class PipelineItemTable extends Table
         'order' => null,
         'description' => 'NULL',
         'script' => null,
+        'run_after_fail' => 0,
     ];
 
     const PRIMARY_KEY = [
