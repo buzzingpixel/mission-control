@@ -60,6 +60,12 @@
                 {% endfor %}
             </select>
         </div>
+        <div class="PipelineBuilder__Option">
+            {% include "forms/inputTemplates/Checkbox.twig" with {
+                name: name ~ '[' ~ uniqueId ~ '][uuid]',
+                label: 'Run after failure?',
+            } only %}
+        </div>
     </div>
 </div>
 {% endspaceless %}
