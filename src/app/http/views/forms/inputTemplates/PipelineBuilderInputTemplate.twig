@@ -3,6 +3,7 @@
 {% set uuid = uuid|default('') %}
 {% set description = description|default('') %}
 {% set script = script|default('') %}
+{% set runAfterFail = runAfterFail|default('') %}
 {% set serverGuids = serverGuids|default([]) %}
 
 {% spaceless %}
@@ -64,6 +65,7 @@
             {% include "forms/inputTemplates/Checkbox.twig" with {
                 name: name ~ '[' ~ uniqueId ~ '][run_after_failure]',
                 label: 'Run after failure?',
+                value: runAfterFail ? 'true' : '',
             } only %}
         </div>
     </div>
