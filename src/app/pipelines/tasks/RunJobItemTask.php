@@ -55,8 +55,10 @@ class RunJobItemTask
      *
      * @throws Throwable
      */
-    public function __invoke(array $context = []) : void
+    public function __invoke(array $context = []) : ?PipelineJobItemModelInterface
     {
+        $failureCondition = isset($context['failureCondition']) && $context['failureCondition'] === true;
+
         $exception = null;
 
         try {
@@ -94,9 +96,11 @@ class RunJobItemTask
                 throw new LogicException('Something weird went wrong (unable to locate job, which is weird because we did above)');
             }
 
-            $job->hasStarted(true);
+            if (! $failureCondition) {
+                $job->hasStarted(true);
 
-            $this->pipelineApi->saveJob($job);
+                $this->pipelineApi->saveJob($job);
+            }
 
             $this->innerRun($jobItem);
 
@@ -144,6 +148,33 @@ class RunJobItemTask
 
             if (isset($job)) {
                 $job->hasFailed(true);
+
+                if (! $failureCondition) {
+                    foreach ($job->pipelineJobItems() as $thisItem) {
+                        if (isset($jobItem) && $thisItem->guid() === $jobItem->guid()) {
+                            continue;
+                        }
+
+                        if ($thisItem->finishedAt() ||
+                            ! $thisItem->pipelineItem()->runAfterFail()
+                        ) {
+                            continue;
+                        }
+
+                        $runJobItem = $this->__invoke([
+                            'jobItemGuid' => $thisItem->guid(),
+                            'failureCondition' => true,
+                        ]);
+
+                        if (! $runJobItem) {
+                            continue;
+                        }
+
+                        $thisItem->finishedAt($runJobItem->finishedAt());
+                        $thisItem->hasFailed($runJobItem->hasFailed());
+                        $thisItem->logContent($runJobItem->logContent());
+                    }
+                }
             }
 
             foreach ($this->sendNotificationAdapters as $adapter) {
@@ -184,7 +215,7 @@ class RunJobItemTask
         }
 
         if (! $exception) {
-            return;
+            return $jobItem ?? null;
         }
 
         throw $exception;
