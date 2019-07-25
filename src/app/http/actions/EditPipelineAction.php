@@ -122,6 +122,9 @@ class EditPipelineAction
                 continue;
             }
 
+            $runAfterFail = $item['run_after_failure'] ?? false;
+            $runAfterFail = $runAfterFail === 'true' || $runAfterFail === true || $runAfterFail === '1' || $runAfterFail === 1;
+
             $itemModel = $this->pipelineApi->createPipelineItemModel();
 
             $uuid = $item['uuid'] ?? null;
@@ -141,6 +144,8 @@ class EditPipelineAction
             $itemModel->description($item['description'] ?? '');
 
             $itemModel->script($item['script']);
+
+            $itemModel->runAfterFail($runAfterFail);
 
             $servers = $item['servers'] ?? [];
 

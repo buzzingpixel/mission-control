@@ -40,6 +40,14 @@ class PipelineItemModel implements PipelineItemModelInterface
         return $this->script = $val ?? $this->script;
     }
 
+    /** @var bool */
+    private $runAfterFail = false;
+
+    public function runAfterFail(?bool $val = null) : bool
+    {
+        return $this->runAfterFail = $val ?? $this->runAfterFail;
+    }
+
     public function getFullScriptForExecution() : string
     {
         return preg_replace(

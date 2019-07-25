@@ -128,6 +128,7 @@ class EditPipelineController
                 'uuid' => $item->guid(),
                 'description' => $item->description(),
                 'script' => $item->script(),
+                'runAfterFail' => $item->runAfterFail(),
                 'serverGuids' => $serverGuids,
             ];
         }

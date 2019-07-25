@@ -12,6 +12,7 @@ namespace src\app\data\PipelineItem;
  * @property mixed $order int(10,0) NOT NULL
  * @property mixed $description varchar(255)
  * @property mixed $script text(65535) NOT NULL
+ * @property mixed $run_after_fail tinyint(3,0) NOT NULL
  * @property null|false|\src\app\data\Pipeline\PipelineRecord $pipeline
  * @property null|\src\app\data\PipelineItemServer\PipelineItemServerRecordSet $pipeline_item_servers
  * @property null|false|\src\app\data\Server\ServerRecord $servers

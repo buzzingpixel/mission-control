@@ -90,8 +90,8 @@ class PipelineJobItemTable extends Table
         ],
         'log_content' => [
             'name' => 'log_content',
-            'type' => 'text',
-            'size' => 65535,
+            'type' => 'longtext',
+            'size' => 4294967295,
             'scale' => null,
             'notnull' => true,
             'default' => null,
