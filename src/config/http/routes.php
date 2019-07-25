@@ -41,6 +41,7 @@ use src\app\http\controllers\ServerManageAuthorizedKeys;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\TestController;
+use src\app\http\controllers\TicketIndexController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\ViewPipelineController;
@@ -122,3 +123,6 @@ $r->get('/admin/queue-failures/{guid}', AdminQueueFailureView::class);
 $r->get('/iforgot', ForgotPasswordController::class);
 $r->get('/iforgot/check-email', ForgotPasswordController::class);
 $r->get('/iforgot/reset/{token}', PasswordResetController::class);
+
+// Ticket routes
+$r->get('/tickets[/page/{page:\d+}]', TicketIndexController::class);
