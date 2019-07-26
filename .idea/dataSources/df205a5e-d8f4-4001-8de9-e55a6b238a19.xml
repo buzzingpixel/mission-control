@@ -2614,169 +2614,174 @@ server_guid</ColNames>
       <DataType>binary(16)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="538" parent="346" name="content">
+    <column id="538" parent="346" name="title">
       <Position>4</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="539" parent="346" name="status">
+    <column id="539" parent="346" name="content">
       <Position>5</Position>
+      <DataType>text|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="540" parent="346" name="status">
+      <Position>6</Position>
       <DataType>enum(&apos;new&apos;, &apos;in_progress&apos;, &apos;on_hold&apos;, &apos;resolved&apos;)|0e</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;new&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="540" parent="346" name="added_at_utc">
-      <Position>6</Position>
+    <column id="541" parent="346" name="added_at_utc">
+      <Position>7</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="541" parent="346" name="resolved_at_utc">
-      <Position>7</Position>
+    <column id="542" parent="346" name="resolved_at_utc">
+      <Position>8</Position>
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="542" parent="346" name="PRIMARY">
+    <key id="543" parent="346" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>guid</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="543" parent="347" name="guid">
+    <column id="544" parent="347" name="guid">
       <Position>1</Position>
       <Comment>UUID generated in code and stored as binary</Comment>
       <DataType>binary(16)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="544" parent="347" name="user_guid">
+    <column id="545" parent="347" name="user_guid">
       <Position>2</Position>
       <Comment>Associated user UUID stored as binary</Comment>
       <DataType>binary(16)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="545" parent="347" name="added_at">
+    <column id="546" parent="347" name="added_at">
       <Position>3</Position>
       <Comment>The datetime representation of when the password reset token was added</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="546" parent="347" name="added_at_time_zone">
+    <column id="547" parent="347" name="added_at_time_zone">
       <Position>4</Position>
       <Comment>The timezone added_at was set with</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="547" parent="347" name="PRIMARY">
+    <key id="548" parent="347" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>guid</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="548" parent="348" name="guid">
+    <column id="549" parent="348" name="guid">
       <Position>1</Position>
       <Comment>UUID generated in code and stored as binary</Comment>
       <DataType>binary(16)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="549" parent="348" name="user_guid">
+    <column id="550" parent="348" name="user_guid">
       <Position>2</Position>
       <Comment>Associated user UUID stored as binary</Comment>
       <DataType>binary(16)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="550" parent="348" name="added_at">
+    <column id="551" parent="348" name="added_at">
       <Position>3</Position>
       <Comment>The datetime representation of when the session was added</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="551" parent="348" name="added_at_time_zone">
+    <column id="552" parent="348" name="added_at_time_zone">
       <Position>4</Position>
       <Comment>The timezone added_at was set with</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="552" parent="348" name="last_touched_at">
+    <column id="553" parent="348" name="last_touched_at">
       <Position>5</Position>
       <Comment>The datetime representation of when the session was last active</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="553" parent="348" name="last_touched_at_time_zone">
+    <column id="554" parent="348" name="last_touched_at_time_zone">
       <Position>6</Position>
       <Comment>The timezone last_touched_at was set with</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="554" parent="348" name="PRIMARY">
+    <key id="555" parent="348" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>guid</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="555" parent="349" name="guid">
+    <column id="556" parent="349" name="guid">
       <Position>1</Position>
       <Comment>UUID generated in code and stored as binary</Comment>
       <DataType>binary(16)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="556" parent="349" name="email_address">
+    <column id="557" parent="349" name="email_address">
       <Position>2</Position>
       <Comment>User&apos;s email address</Comment>
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="557" parent="349" name="password_hash">
+    <column id="558" parent="349" name="password_hash">
       <Position>3</Position>
       <Comment>User&apos;s hashed password</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="558" parent="349" name="user_data">
+    <column id="559" parent="349" name="user_data">
       <Position>4</Position>
       <Comment>User data for app development stored as JSON</Comment>
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="559" parent="349" name="added_at">
+    <column id="560" parent="349" name="added_at">
       <Position>5</Position>
       <Comment>The datetime representation of when the user was added</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="560" parent="349" name="added_at_time_zone">
+    <column id="561" parent="349" name="added_at_time_zone">
       <Position>6</Position>
       <Comment>The timezone added_at was set with</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="561" parent="349" name="timezone">
+    <column id="562" parent="349" name="timezone">
       <Position>7</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="562" parent="349" name="is_admin">
+    <column id="563" parent="349" name="is_admin">
       <Position>8</Position>
       <DataType>tinyint(1)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="563" parent="349" name="PRIMARY">
+    <key id="564" parent="349" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>guid</ColNames>
       <Primary>1</Primary>

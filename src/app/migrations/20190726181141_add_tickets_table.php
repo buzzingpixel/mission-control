@@ -24,6 +24,7 @@ class AddTicketsTable extends AbstractMigration
                 'null' => true,
                 'limit' => 16,
             ])
+            ->addColumn('title', 'text', ['null' => true])
             ->addColumn('content', 'text', ['null' => true])
             ->addColumn('status', 'enum', [
                 'default' => 'new',

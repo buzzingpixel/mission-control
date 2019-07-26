@@ -12,6 +12,7 @@ use Atlas\Table\Row;
  * @property mixed $guid binary(16) NOT NULL
  * @property mixed $created_by_user_guid binary(16)
  * @property mixed $assigned_to_user_guid binary(16)
+ * @property mixed $title text(65535)
  * @property mixed $content text(65535)
  * @property mixed $status enum(11) NOT NULL
  * @property mixed $added_at_utc datetime NOT NULL
@@ -23,6 +24,7 @@ class TicketRow extends Row
         'guid' => null,
         'created_by_user_guid' => 'NULL',
         'assigned_to_user_guid' => 'NULL',
+        'title' => 'NULL',
         'content' => 'NULL',
         'status' => '\'new\'',
         'added_at_utc' => null,
