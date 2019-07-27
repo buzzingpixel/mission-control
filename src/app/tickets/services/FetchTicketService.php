@@ -21,13 +21,17 @@ class FetchTicketService
     private $buildQuery;
     /** @var UserApiInterface */
     private $userApi;
+    /** @var FetchThreadItemMinimalHydrationService */
+    private $fetchThreadItem;
 
     public function __construct(
         BuildQueryInterface $buildQuery,
-        UserApiInterface $userApi
+        UserApiInterface $userApi,
+        FetchThreadItemMinimalHydrationService $fetchThreadItem
     ) {
-        $this->buildQuery = $buildQuery;
-        $this->userApi    = $userApi;
+        $this->buildQuery      = $buildQuery;
+        $this->userApi         = $userApi;
+        $this->fetchThreadItem = $fetchThreadItem;
     }
 
     /**
@@ -41,9 +45,24 @@ class FetchTicketService
             return [];
         }
 
-        $models = [];
+        $models = $ticketIds = $userIds = $users = $threadItems = [];
 
-        $userIds = [];
+        foreach ($results as $record) {
+            $ticketIds[$record->guid] = $record->guid;
+        }
+
+        if ($ticketIds) {
+            $queryParams = $this->userApi->makeQueryModel();
+
+            $queryParams->addWhere('ticket_guid', $ticketIds);
+
+            $queryParams->addOrder('added_at_utc', 'asc');
+
+            foreach ($this->fetchThreadItem->fetch($queryParams) as $threadItemModel) {
+                $threadItems[$threadItemModel->ticketGuid][] = $threadItemModel;
+                $userIds[$threadItemModel->userGuid]         = $threadItemModel->userGuid;
+            }
+        }
 
         foreach ($results as $record) {
             $userIds[$record->created_by_user_guid] = $record->created_by_user_guid;
@@ -51,14 +70,12 @@ class FetchTicketService
             $userIds[$record->assigned_to_user_guid] = $record->assigned_to_user_guid;
         }
 
-        $userQueryParams = $this->userApi->makeQueryModel();
-
-        $users = [];
-
         if ($userIds) {
-            $userQueryParams->addWhere('guid', array_values($userIds));
+            $queryParams = $this->userApi->makeQueryModel();
 
-            foreach ($this->userApi->fetchAll($userQueryParams) as $userModel) {
+            $queryParams->addWhere('guid', array_values($userIds));
+
+            foreach ($this->userApi->fetchAll($queryParams) as $userModel) {
                 $users[$userModel->getGuidAsBytes()] = $userModel;
             }
         }
@@ -88,7 +105,15 @@ class FetchTicketService
                 $model->addedAt(new DateTimeImmutable($record->resolved_at_utc, new DateTimeZone('UTC')));
             }
 
-            // TODO: Thread Items
+            $thisThreadItems = $threadItems[$record->guid] ?? [];
+
+            foreach ($thisThreadItems as $threadModel) {
+                $threadModel->ticket($model);
+
+                $threadModel->user($users[$threadModel->userGuid] ?? null);
+
+                $model->addThreadItem($threadModel);
+            }
 
             // TODO: Watchers
 

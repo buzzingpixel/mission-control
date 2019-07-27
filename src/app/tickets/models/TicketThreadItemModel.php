@@ -17,6 +17,9 @@ class TicketThreadItemModel implements TicketThreadItemModelContract
     private const DATE_TIME_PRECISION_FORMAT = 'Y-m-d\TH:i:s.uP';
     use UuidTrait;
 
+    /** @var string */
+    public $ticketGuid = '';
+
     /** @var TicketModelContract */
     private $ticket;
 
@@ -24,6 +27,9 @@ class TicketThreadItemModel implements TicketThreadItemModelContract
     {
         return $this->ticket = $val ?? $this->ticket;
     }
+
+    /** @var string */
+    public $userGuid = '';
 
     /** @var UserModelInterface */
     private $user;
