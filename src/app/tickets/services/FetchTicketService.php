@@ -37,6 +37,10 @@ class FetchTicketService
     {
         $results = $this->fetchResults($params);
 
+        if (! $results) {
+            return [];
+        }
+
         $models = [];
 
         $userIds = [];
@@ -49,12 +53,14 @@ class FetchTicketService
 
         $userQueryParams = $this->userApi->makeQueryModel();
 
-        $userQueryParams->addWhere('guid', array_values($userIds));
-
         $users = [];
 
-        foreach ($this->userApi->fetchAll($userQueryParams) as $userModel) {
-            $users[$userModel->getGuidAsBytes()] = $userModel;
+        if ($userIds) {
+            $userQueryParams->addWhere('guid', array_values($userIds));
+
+            foreach ($this->userApi->fetchAll($userQueryParams) as $userModel) {
+                $users[$userModel->getGuidAsBytes()] = $userModel;
+            }
         }
 
         foreach ($results as $record) {
