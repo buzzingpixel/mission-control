@@ -31,4 +31,6 @@ interface TicketThreadItemModelContract extends HasGuidInterface
      * The constructor is probably the appropriate place to set initial value
      */
     public function modifiedAt(?DateTimeInterface $val = null) : DateTimeInterface;
+
+    public function clearModifiedAt() : void;
 }

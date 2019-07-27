@@ -78,7 +78,9 @@ class TicketThreadItemModel implements TicketThreadItemModelContract
     {
         if (! $val && ! $this->modifiedAt) {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $this->modifiedAt = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+            $this->modifiedAt = $this->addedAt();
+
+            return $this->modifiedAt;
         }
 
         if ($val) {
@@ -91,5 +93,10 @@ class TicketThreadItemModel implements TicketThreadItemModelContract
         }
 
         return $this->modifiedAt = $val ?? $this->modifiedAt;
+    }
+
+    public function clearModifiedAt() : void
+    {
+        $this->modifiedAt = null;
     }
 }
