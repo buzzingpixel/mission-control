@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\app\tickets;
 
+use corbomite\db\interfaces\QueryModelInterface;
 use Psr\Container\ContainerInterface;
 use src\app\support\traits\MakeQueryModelTrait;
 use src\app\support\traits\UuidToBytesTrait;
@@ -12,6 +13,7 @@ use src\app\tickets\interfaces\TicketModelContract;
 use src\app\tickets\interfaces\TicketThreadItemModelContract;
 use src\app\tickets\models\TicketModel;
 use src\app\tickets\models\TicketThreadItemModel;
+use src\app\tickets\services\FetchTicketService;
 use src\app\tickets\services\SaveTicketService;
 use src\app\tickets\services\SaveTicketThreadItemService;
 
@@ -51,5 +53,33 @@ class TicketApi implements interfaces\TicketApiContract
     {
         $service = $this->di->get(SaveTicketThreadItemService::class);
         $service->save($model);
+    }
+
+    /** @var ?int */
+    private $limit;
+
+    public function fetchOne(?QueryModelInterface $params = null) : ?TicketModelContract
+    {
+        $this->limit = 1;
+        $result      = $this->fetchAll($params)[0] ?? null;
+        $this->limit = null;
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAll(?QueryModelInterface $params = null) : array
+    {
+        $service = $this->di->get(FetchTicketService::class);
+
+        $params = $params ?? $this->makeQueryModel();
+
+        if ($this->limit) {
+            $params->limit($this->limit);
+        }
+
+        return $service->fetch($params);
     }
 }
