@@ -35,6 +35,10 @@ class AddTicketsTable extends AbstractMigration
                     'resolved',
                 ],
             ])
+            ->addColumn('watchers', 'text', [
+                'null' => true,
+                'comment' => 'Not using JSON column type because of broad compatibility issues',
+            ])
             ->addColumn('added_at_utc', 'datetime')
             ->addColumn('resolved_at_utc', 'datetime', ['null' => true])
             ->create();

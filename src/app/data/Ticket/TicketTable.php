@@ -94,6 +94,17 @@ class TicketTable extends Table
     3 => '\'resolved\'',
   ),
         ],
+        'watchers' => [
+            'name' => 'watchers',
+            'type' => 'text',
+            'size' => 65535,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'added_at_utc' => [
             'name' => 'added_at_utc',
             'type' => 'datetime',
@@ -125,6 +136,7 @@ class TicketTable extends Table
         'title',
         'content',
         'status',
+        'watchers',
         'added_at_utc',
         'resolved_at_utc',
     ];
@@ -136,6 +148,7 @@ class TicketTable extends Table
         'title' => 'NULL',
         'content' => 'NULL',
         'status' => '\'new\'',
+        'watchers' => 'NULL',
         'added_at_utc' => null,
         'resolved_at_utc' => 'NULL',
     ];
