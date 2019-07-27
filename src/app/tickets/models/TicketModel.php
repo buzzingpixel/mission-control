@@ -106,11 +106,10 @@ class TicketModel implements TicketModelContract
     /** @var DateTimeImmutable */
     private $resolvedAt;
 
-    public function resolvedAt(?DateTimeInterface $val = null) : DateTimeInterface
+    public function resolvedAt(?DateTimeInterface $val = null) : ?DateTimeInterface
     {
         if (! $val && ! $this->resolvedAt) {
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $this->resolvedAt = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+            return null;
         }
 
         if ($val) {

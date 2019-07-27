@@ -36,10 +36,9 @@ interface TicketModelContract extends HasGuidInterface
 
     /**
      * Returns the value. Sets value if incoming argument is set.
-     * If no DateTime has been set, it should return the current DateTime.
-     * The constructor is probably the appropriate place to set initial value
+     * If no DateTime has been set, it should return null
      */
-    public function resolvedAt(?DateTimeInterface $val = null) : DateTimeInterface;
+    public function resolvedAt(?DateTimeInterface $val = null) : ?DateTimeInterface;
 
     /**
      * @param TicketThreadItemModelContract[]|null $val
