@@ -11,6 +11,8 @@ interface TicketApiContract
 {
     public function createModel() : TicketModelContract;
 
+    public function createThreadItemModel() : TicketThreadItemModelContract;
+
     public function uuidToBytes(string $string) : string;
 
     public function makeQueryModel() : QueryModelInterface;

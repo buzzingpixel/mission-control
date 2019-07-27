@@ -12,7 +12,11 @@ interface TicketModelContract extends HasGuidInterface
 {
     public function createdByUser(?UserModelInterface $val = null) : ?UserModelInterface;
 
+    public function clearCreatedBy() : void;
+
     public function assignedToUser(?UserModelInterface $val = null) : ?UserModelInterface;
+
+    public function clearAssignedTo() : void;
 
     public function title(?string $val = null) : string;
 
@@ -44,7 +48,7 @@ interface TicketModelContract extends HasGuidInterface
      */
     public function threadItems(?array $val = null) : array;
 
-    public function addThreadItem(TicketThreadItemModelContract $model) : void;
+    public function addThreadItem(TicketThreadItemModelContract $val) : void;
 
     /**
      * @param UserModelInterface[]|null $val
