@@ -6,6 +6,7 @@ namespace src\app\tickets\services;
 
 use corbomite\db\interfaces\BuildQueryInterface;
 use corbomite\db\interfaces\QueryModelInterface;
+use corbomite\db\models\UuidModel;
 use corbomite\user\interfaces\UserApiInterface;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -14,6 +15,7 @@ use src\app\data\Ticket\TicketRecord;
 use src\app\tickets\interfaces\TicketModelContract;
 use src\app\tickets\models\TicketModel;
 use function array_values;
+use function json_decode;
 
 class FetchTicketService
 {
@@ -68,6 +70,13 @@ class FetchTicketService
             $userIds[$record->created_by_user_guid] = $record->created_by_user_guid;
 
             $userIds[$record->assigned_to_user_guid] = $record->assigned_to_user_guid;
+
+            $watchers = (array) json_decode((string) $record->watchers);
+
+            foreach ($watchers as $watcher) {
+                $id           = (new UuidModel($watcher))->toBytes();
+                $userIds[$id] = $id;
+            }
         }
 
         if ($userIds) {
@@ -115,7 +124,19 @@ class FetchTicketService
                 $model->addThreadItem($threadModel);
             }
 
-            // TODO: Watchers
+            $watchers = (array) json_decode((string) $record->watchers);
+
+            foreach ($watchers as $watcher) {
+                $id = (new UuidModel($watcher))->toBytes();
+
+                $watcherUserModel = $users[$id] ?? null;
+
+                if (! $watcherUserModel) {
+                    continue;
+                }
+
+                $model->addWatcher($watcherUserModel);
+            }
 
             $models[] = $model;
         }
