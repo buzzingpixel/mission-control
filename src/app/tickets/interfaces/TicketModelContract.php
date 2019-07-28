@@ -27,6 +27,8 @@ interface TicketModelContract extends HasGuidInterface
      */
     public function status(?string $val = null) : string;
 
+    public function humanStatus() : string;
+
     /**
      * Returns the value. Sets value if incoming argument is set.
      * If no DateTime has been set, it should return the current DateTime.

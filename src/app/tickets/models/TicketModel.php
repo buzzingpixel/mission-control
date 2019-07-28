@@ -17,7 +17,7 @@ class TicketModel implements TicketModelContract
 {
     use UuidTrait;
 
-    private const DATE_TIME_PRECISION_FORMAT = 'Y-m-d\TH:i:s.uP';
+    public const DATE_TIME_PRECISION_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     /** @var UserModelInterface */
     private $createdByUser;
@@ -79,6 +79,18 @@ class TicketModel implements TicketModelContract
         }
 
         return $this->status = $val;
+    }
+
+    public function humanStatus() : string
+    {
+        $humanStatuses = [
+            'new' => 'New',
+            'in_progress' => 'In Progress',
+            'on_hold' => 'On Hold',
+            'resolved' => 'Resolved',
+        ];
+
+        return $humanStatuses[$this->status] ?? '';
     }
 
     /** @var DateTimeImmutable */
