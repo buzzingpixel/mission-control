@@ -14,6 +14,7 @@ use src\app\tickets\events\TicketAfterSaveEvent;
 use src\app\tickets\events\TicketBeforeSaveEvent;
 use src\app\tickets\exceptions\InvalidModel;
 use src\app\tickets\interfaces\TicketModelContract;
+use function json_encode;
 
 class SaveTicketService
 {
@@ -116,6 +117,14 @@ class SaveTicketService
         if ($model->resolvedAt()) {
             $record->resolved_at_utc = $model->resolvedAt()->format('Y-m-d H:i:s');
         }
+
+        $watchers = [];
+
+        foreach ($model->watchers() as $userModel) {
+            $watchers[] = $userModel->guid();
+        }
+
+        $record->watchers = json_encode($watchers);
 
         try {
             $this->ormFactory->makeOrm()->persist($record);
