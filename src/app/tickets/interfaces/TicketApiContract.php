@@ -22,6 +22,9 @@ interface TicketApiContract
      */
     public function save(TicketModelContract $model) : void;
 
+    /**
+     * @throws InvalidModel
+     */
     public function saveThreadItem(TicketThreadItemModelContract $model) : void;
 
     public function fetchOne(?QueryModelInterface $params = null) : ?TicketModelContract;

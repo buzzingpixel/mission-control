@@ -49,6 +49,9 @@ class TicketApi implements interfaces\TicketApiContract
         $service->save($model);
     }
 
+    /**
+     * @throws InvalidModel
+     */
     public function saveThreadItem(TicketThreadItemModelContract $model) : void
     {
         $service = $this->di->get(SaveTicketThreadItemService::class);
