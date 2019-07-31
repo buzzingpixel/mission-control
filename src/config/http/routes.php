@@ -41,6 +41,7 @@ use src\app\http\controllers\ServerManageAuthorizedKeys;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\TestController;
+use src\app\http\controllers\TicketCreateController;
 use src\app\http\controllers\TicketIndexController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\ViewPingController;
@@ -126,3 +127,4 @@ $r->get('/iforgot/reset/{token}', PasswordResetController::class);
 
 // Ticket routes
 $r->get('/tickets[/page/{page:\d+}]', TicketIndexController::class);
+$r->get('/tickets/create', TicketCreateController::class);
