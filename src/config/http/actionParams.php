@@ -33,6 +33,7 @@ use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
 use src\app\http\actions\SSHKeyListActions;
+use src\app\http\actions\TicketCreateAction;
 use src\app\http\actions\UpdateAccountAction;
 
 return [
@@ -47,6 +48,7 @@ return [
     'createReminder' => CreateReminderAction::class,
     'createServer' => CreateServerAction::class,
     'createSshKey' => CreateSSHKeyAction::class,
+    'createTicket' => TicketCreateAction::class,
     'createUser' => CreateUserAction::class,
     'editMonitoredUrl' => EditMonitoredUrlAction::class,
     'editPing' => EditPingAction::class,

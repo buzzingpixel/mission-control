@@ -127,4 +127,4 @@ $r->get('/iforgot/reset/{token}', PasswordResetController::class);
 
 // Ticket routes
 $r->get('/tickets[/page/{page:\d+}]', TicketIndexController::class);
-$r->get('/tickets/create', TicketCreateController::class);
+$r->addRoute(['GET', 'POST'], '/tickets/create', TicketCreateController::class);
