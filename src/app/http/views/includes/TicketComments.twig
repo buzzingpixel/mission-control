@@ -1,0 +1,71 @@
+{# @var \src\app\tickets\interfaces\TicketThreadItemModelContract[] threadItems #}
+{% set threadItems = threadItems ?? [] %}
+
+{% set displayTimeZoneString = displayTimeZoneString ?? 'UTC' %}
+
+{% set currentUserGuid = currentUserGuid ?? '' %}
+
+{% set ticketGuid = ticketGuid ?? '' %}
+
+<section class="TicketComments">
+    <h2 class="TicketComments__SectionTitle">Comments</h2>
+    {% for item in threadItems %}
+        <div class="TicketComments__Comment">
+            <div class="TicketComments__CommentBody">
+                {{ item.content|markdownParse }}
+            </div>
+            <footer class="TicketComments__CommentFooter">
+                {% set addedAt = item.addedAt|date('F, j, Y g:ia', displayTimeZoneString) %}
+                {% set modifiedAt = item.modifiedAt|date('F, j, Y g:ia', displayTimeZoneString) %}
+                by {{ item.user.emailAddress }} on {{ addedAt }}
+                {% if addedAt != modifiedAt %}
+                    <br>(edited at {{ modifiedAt }})
+                {% endif %}
+                {% if currentUserGuid == item.user.guid %}
+                    <br><br><a href="/tickets/edit-comment/{{ item.guid }}">edit comment</a>
+                {% endif %}
+            </footer>
+        </div>
+    {% endfor %}
+    <div class="TicketComments__AddComment">
+        {% include 'forms/StandardForm.twig' with {
+            actionParam: 'ticketAddComment',
+            submitText: 'Add Comment',
+            isFullWidth: true,
+            inputs: [
+                {
+                    template: 'Hidden',
+                    name: 'ticketGuid',
+                    value: ticketGuid,
+                },
+                {
+                    template: 'TextArea',
+                    rows: 10,
+                    name: 'comment',
+                    label: 'Add comment (use markdown for formatting)',
+                },
+            ]
+        } only %}
+    </div>
+</section>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

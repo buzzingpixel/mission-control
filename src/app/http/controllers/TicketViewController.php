@@ -8,11 +8,13 @@ use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
 use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
+use Parsedown;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\tickets\interfaces\TicketApiContract;
 use Throwable;
+use function date_default_timezone_get;
 
 class TicketViewController
 {
@@ -26,19 +28,23 @@ class TicketViewController
     private $twigEnvironment;
     /** @var TicketApiContract */
     private $ticketApi;
+    /** @var Parsedown */
+    private $parsedown;
 
     public function __construct(
         RequireLoginService $requireLogin,
         UserApiInterface $userApi,
         ResponseInterface $response,
         TwigEnvironment $twigEnvironment,
-        TicketApiContract $ticketApi
+        TicketApiContract $ticketApi,
+        Parsedown $parsedown
     ) {
         $this->requireLogin    = $requireLogin;
         $this->userApi         = $userApi;
         $this->response        = $response;
         $this->twigEnvironment = $twigEnvironment;
         $this->ticketApi       = $ticketApi;
+        $this->parsedown       = $parsedown;
     }
 
     /**
@@ -101,6 +107,39 @@ class TicketViewController
             $styledStatus = 'Caution';
         }
 
+        $keyValueItems = [
+            [
+                'key' => 'Created By',
+                'value' => $ticket->createdByUser()->emailAddress(),
+            ],
+        ];
+
+        if ($ticket->assignedToUser()) {
+            $keyValueItems[] = [
+                'key' => 'Assigned To',
+                'value' => $ticket->assignedToUser()->emailAddress(),
+            ];
+        }
+
+        if ($ticket->watchers()) {
+            $watchers = '';
+
+            foreach ($ticket->watchers() as $watcher) {
+                $watchers .= $watchers ? ', ' : '';
+                $watchers .= $watcher->emailAddress();
+            }
+
+            $keyValueItems[] = [
+                'key' => 'Watchers',
+                'value' => $watchers,
+            ];
+        }
+
+        $keyValueItems[] = [
+            'key' => 'Content',
+            'value' => $this->parsedown->text($ticket->content()),
+        ];
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'tags' => [[
@@ -109,10 +148,33 @@ class TicketViewController
                 ],
                 ],
                 'metaTitle' => $ticket->title(),
-                // 'breadCrumbs' => $breadCrumbs,
+                'breadCrumbs' => [
+                    [
+                        'href' => '/tickets',
+                        'content' => 'Tickets',
+                    ],
+                    ['content' => 'Viewing'],
+                ],
                 'title' => $ticket->title(),
-            // 'pageControlButtons' => $pageControlButtons,
-                'includes' => [],
+                'pageControlButtons' => [
+                    [
+                        'href' => '/tickets/ticket/' . $ticket->guid() . '/edit',
+                        'content' => 'Edit Ticket',
+                    ],
+                ],
+                'includes' => [
+                    [
+                        'template' => 'includes/KeyValue.twig',
+                        'keyValueItems' => $keyValueItems,
+                    ],
+                    [
+                        'template' => 'includes/TicketComments.twig',
+                        'threadItems' => $ticket->threadItems(),
+                        'displayTimeZoneString' => $user->getExtendedProperty('timezone') ?: date_default_timezone_get(),
+                        'currentUserGuid' => $user->guid(),
+                        'ticketGuid' => $ticket->guid(),
+                    ],
+                ],
             ])
         );
 
