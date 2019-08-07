@@ -15,8 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\tickets\interfaces\TicketApiContract;
 use Throwable;
+use function array_values;
 use function date_default_timezone_get;
-use function explode;
 use function max;
 
 class TicketIndexController
@@ -98,15 +98,55 @@ class TicketIndexController
         $status = $query['status'] ?? null;
 
         $params = $this->ticketApi->makeQueryModel();
-        $params->addWhere('status', 'new');
         $params->addOrder('added_at_utc', 'desc');
         $params->limit($limit);
         $params->offset($offset);
 
-        if ($status) {
-            $status = explode('|', $status);
+        $pageControlButtons = [
+            'notResolved' => [
+                'href' => '/tickets',
+                'content' => 'Status: Not Resolved',
+            ],
+            'new' => [
+                'href' => '/tickets?status=new',
+                'content' => 'Status: New',
+            ],
+            'in_progress' => [
+                'href' => '/tickets?status=in_progress',
+                'content' => 'Status: In Progress',
+            ],
+            'on_hold' => [
+                'href' => '/tickets?status=on_hold',
+                'content' => 'Status: On Hold',
+            ],
+            'resolved' => [
+                'href' => '/tickets?status=resolved',
+                'content' => 'Status: Resolved',
+            ],
+            'createTicket' => [
+                'href' => '/tickets/create',
+                'content' => 'Create Ticket',
+            ],
+        ];
 
+        $tagStyle = 'Inactive';
+
+        if ($status) {
+            $statusTag = $pageControlButtons[$status]['content'];
+            unset($pageControlButtons[$status]);
             $params->addWhere('status', $status);
+
+            if ($status === 'resolved') {
+                $tagStyle = 'Good';
+            } elseif ($status === 'on_hold') {
+                $tagStyle = 'Error';
+            } elseif ($status === 'in_progress') {
+                $tagStyle = 'Caution';
+            }
+        } else {
+            $statusTag = $pageControlButtons['notResolved']['content'];
+            unset($pageControlButtons['notResolved']);
+            $params->addWhere('status', 'resolved', '!=');
         }
 
         $rows = [];
@@ -123,6 +163,17 @@ class TicketIndexController
                 $user->getExtendedProperty('timezone') ?: date_default_timezone_get()
             ));
 
+            $status       = $model->status();
+            $styledStatus = 'Inactive';
+
+            if ($status === 'resolved') {
+                $styledStatus = 'Good';
+            } elseif ($status === 'on_hold') {
+                $styledStatus = 'Error';
+            } elseif ($status === 'in_progress') {
+                $styledStatus = 'Caution';
+            }
+
             $rows[] = [
                 'inputValue' => '',
                 'actionButtonLink' => '/tickets/ticket/' . $model->guid(),
@@ -133,26 +184,27 @@ class TicketIndexController
                     'Assigned To' => $assignedTo ? $assignedTo->emailAddress() : '',
                     'Date Created' => $created->format('l, F j, Y g:ia'),
                 ],
+                'colorStyledCols' => ['Status' => $styledStatus],
             ];
         }
 
         $metaTitle = $title = 'Tickets';
 
-        $pageControlButtons = [
-            [
-                'href' => '/tickets/create',
-                'content' => 'Create Ticket',
-            ],
-        ];
-
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
+                'tags' => [
+                    [
+                        'content' => $statusTag,
+                        'style' => $tagStyle,
+                    ],
+                ],
                 'metaTitle' => $metaTitle,
                 'title' => $title,
-                'pageControlButtons' => $pageControlButtons,
+                'pageControlButtons' => array_values($pageControlButtons),
                 'includes' => [
                     [
                         'template' => 'forms/TableListForm.twig',
+                        'includeFilter' => false,
                         // 'actionParam' => 'serverListActions',
                         // 'actions' => $actions,
                         'actionColButtonContent' => 'View&nbsp;Ticket',
