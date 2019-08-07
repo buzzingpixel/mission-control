@@ -7,6 +7,7 @@ namespace src\app\http\controllers;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
 use corbomite\user\interfaces\UserApiInterface;
+use DateTimeZone;
 use LogicException;
 use Parsedown;
 use Psr\Http\Message\ResponseInterface;
@@ -96,6 +97,9 @@ class TicketViewController
             throw new Http404Exception();
         }
 
+        $userTimeZoneStr = $user->getExtendedProperty('timezone') ?: date_default_timezone_get();
+        $userTimeZone    = new DateTimeZone($userTimeZoneStr);
+
         $status       = $ticket->status();
         $styledStatus = 'Inactive';
 
@@ -112,7 +116,18 @@ class TicketViewController
                 'key' => 'Created By',
                 'value' => $ticket->createdByUser()->emailAddress(),
             ],
+            [
+                'key' => 'Created on',
+                'value' => $ticket->addedAt()->setTimezone($userTimeZone)->format('F, j, Y g:ia'),
+            ],
         ];
+
+        if ($ticket->resolvedAt()) {
+            $keyValueItems[] = [
+                'key' => 'Modified on',
+                'value' => $ticket->resolvedAt()->setTimezone($userTimeZone)->format('F, j, Y g:ia'),
+            ];
+        }
 
         if ($ticket->assignedToUser()) {
             $keyValueItems[] = [
