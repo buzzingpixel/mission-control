@@ -16,7 +16,6 @@ use src\app\tickets\events\TicketThreadItemAfterSaveEvent;
 use src\app\tickets\events\TicketThreadItemBeforeSaveEvent;
 use src\app\tickets\exceptions\InvalidModel;
 use src\app\tickets\interfaces\TicketThreadItemModelContract;
-use function dd;
 
 class SaveTicketThreadItemService
 {
@@ -78,8 +77,6 @@ class SaveTicketThreadItemService
         $this->finalSave($model, $existingRecord);
 
         $this->eventDispatcher->dispatch(new TicketThreadItemAfterSaveEvent($model));
-
-        dd('save existing record');
     }
 
     /**
