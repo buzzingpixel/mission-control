@@ -13,6 +13,7 @@ use src\app\tickets\interfaces\TicketModelContract;
 use src\app\tickets\interfaces\TicketThreadItemModelContract;
 use src\app\tickets\models\TicketModel;
 use src\app\tickets\models\TicketThreadItemModel;
+use src\app\tickets\services\FetchThreadItemsService;
 use src\app\tickets\services\FetchTicketService;
 use src\app\tickets\services\SaveTicketService;
 use src\app\tickets\services\SaveTicketThreadItemService;
@@ -81,6 +82,34 @@ class TicketApi implements interfaces\TicketApiContract
 
         if ($this->limit) {
             $params->limit($this->limit);
+        }
+
+        return $service->fetch($params);
+    }
+
+    /** @var ?int */
+    private $threadItemsLimit;
+
+    public function fetchOneThreadItem(?QueryModelInterface $params = null) : ?TicketThreadItemModelContract
+    {
+        $this->limit            = 1;
+        $result                 = $this->fetchAllThreadItems($params)[0] ?? null;
+        $this->threadItemsLimit = null;
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAllThreadItems(?QueryModelInterface $params = null) : array
+    {
+        $service = $this->di->get(FetchThreadItemsService::class);
+
+        $params = $params ?? $this->makeQueryModel();
+
+        if ($this->threadItemsLimit) {
+            $params->limit($this->threadItemsLimit);
         }
 
         return $service->fetch($params);

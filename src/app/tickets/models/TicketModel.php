@@ -17,6 +17,15 @@ class TicketModel implements TicketModelContract
 {
     use UuidTrait;
 
+    /** @var string */
+    public $createdByUserGuid = '';
+
+    /** @var string */
+    public $assignedToUserGuid = '';
+
+    /** @var string[] */
+    public $watcherGuids = [];
+
     public const DATE_TIME_PRECISION_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     /** @var UserModelInterface */
