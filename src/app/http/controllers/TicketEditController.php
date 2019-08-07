@@ -124,6 +124,11 @@ class TicketEditController
                         'actionParam' => 'editTicket',
                         'inputs' => [
                             [
+                                'template' => 'Hidden',
+                                'name' => 'guid',
+                                'value' => $ticket->guid(),
+                            ],
+                            [
                                 'template' => 'Select',
                                 'name' => 'assigned_to_user_guid',
                                 'label' => 'Assigned To',
