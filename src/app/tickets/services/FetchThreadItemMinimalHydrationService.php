@@ -62,7 +62,7 @@ class FetchThreadItemMinimalHydrationService
 
             if ($record->modified_at_utc) {
                 /** @noinspection PhpUnhandledExceptionInspection */
-                $model->addedAt(new DateTimeImmutable($record->modified_at_utc, new DateTimeZone('UTC')));
+                $model->modifiedAt(new DateTimeImmutable($record->modified_at_utc, new DateTimeZone('UTC')));
             }
 
             $models[] = $model;
