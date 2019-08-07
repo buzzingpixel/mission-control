@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use src\app\http\services\RequireLoginService;
 use src\app\tickets\interfaces\TicketApiContract;
 use Throwable;
+use function array_values;
 use function date_default_timezone_get;
 
 class TicketViewController
@@ -155,6 +156,31 @@ class TicketViewController
             'value' => $this->parsedown->text($ticket->content()),
         ];
 
+        $pageControlButtons = [
+            'new' => [
+                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/new',
+                'content' => 'Set Status "New"',
+            ],
+            'in_progress' => [
+                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/in_progress',
+                'content' => 'Set Status "In Progress"',
+            ],
+            'on_hold' => [
+                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/on_hold',
+                'content' => 'Set Status "On Hold"',
+            ],
+            'resolved' => [
+                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/resolved',
+                'content' => 'Set Status "Resolved"',
+            ],
+            'edit' => [
+                'href' => '/tickets/ticket/' . $ticket->guid() . '/edit',
+                'content' => 'Edit Ticket',
+            ],
+        ];
+
+        unset($pageControlButtons[$ticket->status()]);
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'tags' => [[
@@ -171,12 +197,7 @@ class TicketViewController
                     ['content' => 'Viewing'],
                 ],
                 'title' => $ticket->title(),
-                'pageControlButtons' => [
-                    [
-                        'href' => '/tickets/ticket/' . $ticket->guid() . '/edit',
-                        'content' => 'Edit Ticket',
-                    ],
-                ],
+                'pageControlButtons' => array_values($pageControlButtons),
                 'includes' => [
                     [
                         'template' => 'includes/KeyValue.twig',
