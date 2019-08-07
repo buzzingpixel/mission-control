@@ -33,6 +33,7 @@ use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
 use src\app\http\actions\SSHKeyListActions;
+use src\app\http\actions\TicketAddComment;
 use src\app\http\actions\TicketCreateAction;
 use src\app\http\actions\TicketEditAction;
 use src\app\http\actions\UpdateAccountAction;
@@ -71,5 +72,6 @@ return [
     'sendPasswordResetEmail' => SendPasswordResetEmailAction::class,
     'serverListActions' => ServerListActions::class,
     'sshKeyListActions' => SSHKeyListActions::class,
+    'ticketAddComment' => TicketAddComment::class,
     'updateAccount' => UpdateAccountAction::class,
 ];

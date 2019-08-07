@@ -101,7 +101,7 @@ class TicketCreateController
                             [
                                 'template' => 'TextArea',
                                 'name' => 'content',
-                                'label' => 'Content',
+                                'label' => 'Content (use markdown for formatting)',
                             ],
                             [
                                 'template' => 'Select',
