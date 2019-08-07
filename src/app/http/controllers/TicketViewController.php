@@ -83,13 +83,13 @@ class TicketViewController
         }
 
         try {
-            $guidButes = $this->ticketApi->uuidToBytes($guid);
+            $guidBytes = $this->ticketApi->uuidToBytes($guid);
         } catch (Throwable $e) {
             throw new Http404Exception();
         }
 
         $params = $this->ticketApi->makeQueryModel();
-        $params->addWhere('guid', $guidButes);
+        $params->addWhere('guid', $guidBytes);
         $ticket = $this->ticketApi->fetchOne($params);
 
         if (! $ticket) {
