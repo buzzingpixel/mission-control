@@ -1,0 +1,57 @@
+{# @var \src\app\common\Pagination pagination #}
+
+{% set pagination = pagination ?? null %}
+
+{% if pagination.totalPages() > 1 %}
+    <div class="Pagination">
+        <ul class="Pagination__Inner">
+            {% if pagination.firstPageLink() %}
+                <li class="Pagination__Item Pagination__Item--FirstPage">
+                    <a href="{{ pagination.firstPageLink() }}" class="Pagination__Link">
+                        <span class="Pagination__LinkCaretLeft Pagination__LinkCaretLeft--IsDouble">{% include 'svg/Caret.svg' only %}</span>
+                        <span class="Pagination__LinkCaretLeft Pagination__LinkCaretLeft--IsDouble">{% include 'svg/Caret.svg' only %}</span>
+                        <span class="Pagination__TextDisposable Pagination__TextDisposable--HasLeftArrows">First</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if pagination.prevPageLink() %}
+                <li class="Pagination__Item Pagination__Item--PrevPage">
+                    <a href="{{ pagination.prevPageLink() }}" class="Pagination__Link">
+                        <span class="Pagination__LinkCaretLeft">{% include 'svg/Caret.svg' only %}</span>
+                        <span class="Pagination__TextDisposable Pagination__TextDisposable--HasLeftArrows">Prev</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in pagination.pagesArray() %}
+                <li class="Pagination__Item{% if loop.first %} Pagination__Item--FirstActual{% endif %}{% if loop.last %} Pagination__Item--LastActual{% endif %}">
+                    {% if page.isActive %}
+                        <span class="Pagination__Active">
+                            {{ page.label }}
+                        </span>
+                    {% else %}
+                        <a href="{{ page.target }}" class="Pagination__Link">
+                            {{ page.label }}
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            {% if pagination.nextPageLink() %}
+                <li class="Pagination__Item Pagination__Item--NextPage">
+                    <a href="{{ pagination.nextPageLink() }}" class="Pagination__Link">
+                        <span class="Pagination__TextDisposable Pagination__TextDisposable--HasRightArrows">Next</span>
+                        <span class="Pagination__LinkCaretRight">{% include 'svg/Caret.svg' only %}</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if pagination.lastPageLink() %}
+                <li class="Pagination__Item Pagination__Item--LastPage">
+                    <a href="{{ pagination.lastPageLink() }}" class="Pagination__Link">
+                        <span class="Pagination__TextDisposable Pagination__TextDisposable--HasRightArrows">Last </span>
+                        <span class="Pagination__LinkCaretRight Pagination__LinkCaretRight--IsDouble">{% include 'svg/Caret.svg' only %}</span>
+                        <span class="Pagination__LinkCaretRight Pagination__LinkCaretRight--IsDouble">{% include 'svg/Caret.svg' only %}</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}

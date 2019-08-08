@@ -1,0 +1,72 @@
+.Pagination__Inner {
+    font-size: 18px;
+    font-weight: bold;
+    list-style: none;
+    margin: 40px;
+    text-align: center;
+    user-select: none;
+}
+
+.Pagination__Item {
+    display: inline-block;
+    margin: 4px;
+    vertical-align: middle;
+}
+
+.Pagination__TextDisposable {
+    display: none;
+    vertical-align: top;
+}
+
+.Pagination__TextDisposable--HasLeftArrows {
+    margin-left: -4px;
+}
+
+.Pagination__TextDisposable--HasRightArrows {
+    margin-right: -4px;
+}
+
+.Pagination__Link,
+.Pagination__Link:hover,
+.Pagination__Link:active {
+    text-decoration: none;
+}
+
+.Pagination__LinkCaretLeft,
+.Pagination__LinkCaretRight {
+    display: inline-block;
+    height: 7px;
+    margin: -4px 0 0 0;
+    position: relative;
+    width: 14px;
+    vertical-align: middle;
+}
+
+.Pagination__LinkCaretLeft--IsDouble:first-child {
+    margin-right: -12px;
+}
+
+.Pagination__LinkCaretRight--IsDouble:last-child {
+    margin-left: -12px;
+}
+
+.Pagination__LinkCaretLeft svg,
+.Pagination__LinkCaretRight svg {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.Pagination__LinkCaretLeft {
+    transform: rotate(-90deg);
+}
+
+.Pagination__LinkCaretRight {
+    transform: rotate(90deg);
+}
+
+.Pagination__Active {
+    color: var(--Lighter);
+}

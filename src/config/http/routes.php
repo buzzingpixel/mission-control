@@ -41,6 +41,12 @@ use src\app\http\controllers\ServerManageAuthorizedKeys;
 use src\app\http\controllers\ServersIndexController;
 use src\app\http\controllers\SSHKeyIndexController;
 use src\app\http\controllers\TestController;
+use src\app\http\controllers\TicketCommentEditController;
+use src\app\http\controllers\TicketCreateController;
+use src\app\http\controllers\TicketEditController;
+use src\app\http\controllers\TicketIndexController;
+use src\app\http\controllers\TicketViewController;
+use src\app\http\controllers\TicketWorkflowController;
 use src\app\http\controllers\ViewMonitoredUrlController;
 use src\app\http\controllers\ViewPingController;
 use src\app\http\controllers\ViewPipelineController;
@@ -122,3 +128,11 @@ $r->get('/admin/queue-failures/{guid}', AdminQueueFailureView::class);
 $r->get('/iforgot', ForgotPasswordController::class);
 $r->get('/iforgot/check-email', ForgotPasswordController::class);
 $r->get('/iforgot/reset/{token}', PasswordResetController::class);
+
+// Ticket routes
+$r->get('/tickets[/page/{page:\d+}]', TicketIndexController::class);
+$r->addRoute(['GET', 'POST'], '/tickets/create', TicketCreateController::class);
+$r->get('/tickets/ticket/{guid}', TicketViewController::class);
+$r->get('/tickets/ticket/{guid}/edit', TicketEditController::class);
+$r->get('/tickets/ticket/{guid}/workflow/{status}', TicketWorkflowController::class);
+$r->get('/tickets/edit-comment/{commentGuid}', TicketCommentEditController::class);

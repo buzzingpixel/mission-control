@@ -19,7 +19,13 @@
                 {% endif %}
             {% endif %}
             {% for val, option in options %}
-                <option value="{{ val }}"{% if value == val %} selected{% endif %}>
+                {% set selected = false %}
+                {% if value is iterable %}
+                    {% set selected = val in value %}
+                {% else %}
+                    {% set selected = value == val %}
+                {% endif %}
+                <option value="{{ val }}"{% if selected %} selected{% endif %}>
                     {{ option }}
                 </option>
             {% endfor %}

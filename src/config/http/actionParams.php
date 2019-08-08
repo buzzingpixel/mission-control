@@ -33,6 +33,10 @@ use src\app\http\actions\ResetPasswordAction;
 use src\app\http\actions\SendPasswordResetEmailAction;
 use src\app\http\actions\ServerListActions;
 use src\app\http\actions\SSHKeyListActions;
+use src\app\http\actions\TicketAddComment;
+use src\app\http\actions\TicketCommentEditAction;
+use src\app\http\actions\TicketCreateAction;
+use src\app\http\actions\TicketEditAction;
 use src\app\http\actions\UpdateAccountAction;
 
 return [
@@ -47,6 +51,7 @@ return [
     'createReminder' => CreateReminderAction::class,
     'createServer' => CreateServerAction::class,
     'createSshKey' => CreateSSHKeyAction::class,
+    'createTicket' => TicketCreateAction::class,
     'createUser' => CreateUserAction::class,
     'editMonitoredUrl' => EditMonitoredUrlAction::class,
     'editPing' => EditPingAction::class,
@@ -55,6 +60,8 @@ return [
     'editReminder' => EditReminderAction::class,
     'editServer' => EditServerAction::class,
     'editSshKey' => EditSSHKeyAction::class,
+    'editTicket' => TicketEditAction::class,
+    'editTicketComment' => TicketCommentEditAction::class,
     'logout' => LogOutAction::class,
     'monitoredUrlListActions' => MonitoredUrlActions::class,
     'notificationEmailsActions' => NotificationEmailListActions::class,
@@ -67,5 +74,6 @@ return [
     'sendPasswordResetEmail' => SendPasswordResetEmailAction::class,
     'serverListActions' => ServerListActions::class,
     'sshKeyListActions' => SSHKeyListActions::class,
+    'ticketAddComment' => TicketAddComment::class,
     'updateAccount' => UpdateAccountAction::class,
 ];
