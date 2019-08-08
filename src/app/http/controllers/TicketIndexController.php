@@ -12,6 +12,7 @@ use DateTimeZone;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use src\app\common\Pagination;
 use src\app\http\services\RequireLoginService;
 use src\app\tickets\interfaces\TicketApiContract;
 use Throwable;
@@ -82,7 +83,7 @@ class TicketIndexController
         }
 
         $page   = max(1, (int) $page);
-        $limit  = 100;
+        $limit  = 30;
         $offset = ($limit * $page) - $limit;
 
         /** @var string[] $body */
@@ -151,7 +152,13 @@ class TicketIndexController
 
         $rows = [];
 
-        foreach ($this->ticketApi->fetchAll($params) as $model) {
+        $tickets = $this->ticketApi->fetchAll($params);
+
+        if ($page > 1 && ! $tickets) {
+            throw new Http404Exception();
+        }
+
+        foreach ($tickets as $model) {
             $assignedTo = $model->assignedToUser();
 
             $created = DateTimeImmutable::createFromFormat(
@@ -188,7 +195,44 @@ class TicketIndexController
             ];
         }
 
+        $params->limit(0);
+        $params->offset(0);
+
         $metaTitle = $title = 'Tickets';
+
+        $includes = [
+            [
+                'template' => 'forms/TableListForm.twig',
+                'includeFilter' => false,
+                // 'actionParam' => 'serverListActions',
+                // 'actions' => $actions,
+                'actionColButtonContent' => 'View&nbsp;Ticket',
+                'table' => [
+                    'inputsName' => 'guids[]',
+                    'headings' => [
+                        'Title',
+                        'Status',
+                        'Created By',
+                        'Assigned To',
+                        'Date Created',
+                    ],
+                    'rows' => $rows,
+                ],
+            ],
+        ];
+
+        $pagination = (new Pagination())->withCurrentPage($page)
+            ->withPerPage($limit)
+            ->withTotalResults($this->ticketApi->countAll($params))
+            ->withBase('/tickets')
+            ->withQueryString($queryString);
+
+        if ($pagination->totalPages() > 1) {
+            $includes[] = [
+                'template' => 'components/Pagination.twig',
+                'pagination' => $pagination,
+            ];
+        }
 
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
@@ -201,26 +245,7 @@ class TicketIndexController
                 'metaTitle' => $metaTitle,
                 'title' => $title,
                 'pageControlButtons' => array_values($pageControlButtons),
-                'includes' => [
-                    [
-                        'template' => 'forms/TableListForm.twig',
-                        'includeFilter' => false,
-                        // 'actionParam' => 'serverListActions',
-                        // 'actions' => $actions,
-                        'actionColButtonContent' => 'View&nbsp;Ticket',
-                        'table' => [
-                            'inputsName' => 'guids[]',
-                            'headings' => [
-                                'Title',
-                                'Status',
-                                'Created By',
-                                'Assigned To',
-                                'Date Created',
-                            ],
-                            'rows' => $rows,
-                        ],
-                    ],
-                ],
+                'includes' => $includes,
             ])
         );
 

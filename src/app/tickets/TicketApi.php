@@ -13,6 +13,7 @@ use src\app\tickets\interfaces\TicketModelContract;
 use src\app\tickets\interfaces\TicketThreadItemModelContract;
 use src\app\tickets\models\TicketModel;
 use src\app\tickets\models\TicketThreadItemModel;
+use src\app\tickets\services\CountAllTickets;
 use src\app\tickets\services\FetchThreadItemsService;
 use src\app\tickets\services\FetchTicketService;
 use src\app\tickets\services\SaveTicketService;
@@ -85,6 +86,15 @@ class TicketApi implements interfaces\TicketApiContract
         }
 
         return $service->fetch($params);
+    }
+
+    public function countAll(?QueryModelInterface $params = null) : int
+    {
+        $service = $this->di->get(CountAllTickets::class);
+
+        $params = $params ?? $this->makeQueryModel();
+
+        return $service->count($params);
     }
 
     /** @var ?int */

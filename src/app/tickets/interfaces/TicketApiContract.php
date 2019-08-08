@@ -34,6 +34,8 @@ interface TicketApiContract
      */
     public function fetchAll(?QueryModelInterface $params = null) : array;
 
+    public function countAll(?QueryModelInterface $params = null) : int;
+
     public function fetchOneThreadItem(?QueryModelInterface $params = null) : ?TicketThreadItemModelContract;
 
     /**
