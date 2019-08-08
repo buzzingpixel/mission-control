@@ -23,6 +23,9 @@ use src\app\reminders\listeners\ProjectUnArchiveListener as ReminderProjectUnArc
 use src\app\servers\listeners\ProjectArchiveListener as ServerProjectArchiveListener;
 use src\app\servers\listeners\ProjectDeleteListener as ServerProjectDeleteListener;
 use src\app\servers\listeners\ProjectUnArchiveListener as ServerProjectUnArchiveListener;
+use src\app\tickets\listeners\TicketSaveListener;
+use src\app\tickets\listeners\TicketThreadItemSaveListener;
+use src\app\tickets\TicketApi;
 
 /** @var EventListenerRegistrationInterface $r */
 
@@ -54,3 +57,7 @@ $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', PipelinesProjectUnArc
 $r->register(ProjectsApi::class, 'ProjectBeforeDelete', ServerProjectDeleteListener::class);
 $r->register(ProjectsApi::class, 'ProjectBeforeArchive', ServerProjectArchiveListener::class);
 $r->register(ProjectsApi::class, 'ProjectBeforeUnArchive', ServerProjectUnArchiveListener::class);
+
+// Ticket listeners
+$r->register(TicketApi::class, 'TicketAfterSave', TicketSaveListener::class);
+$r->register(TicketApi::class, 'TicketThreadItemAfterSave', TicketThreadItemSaveListener::class);
