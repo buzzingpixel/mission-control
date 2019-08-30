@@ -11,11 +11,14 @@ use corbomite\http\interfaces\RequestHelperInterface;
 use corbomite\user\interfaces\UserApiInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
+use src\app\support\traits\UuidToBytesTrait;
 use Throwable;
 use function count;
 
 class AdminUserActions
 {
+    use UuidToBytesTrait;
+
     /** @var UserApiInterface */
     private $userApi;
     /** @var ResponseInterface */
@@ -25,8 +28,8 @@ class AdminUserActions
     /** @var RequestHelperInterface */
     private $requestHelper;
 
-    /** @var mixed */
-    private $guids;
+    /** @var string[] */
+    private $guids = [];
 
     public function __construct(
         UserApiInterface $userApi,
@@ -39,7 +42,15 @@ class AdminUserActions
         $this->flashDataApi  = $flashDataApi;
         $this->requestHelper = $requestHelper;
 
-        $this->guids = $this->requestHelper->post('guids');
+        $guids = $this->requestHelper->post('guids');
+
+        if (! $guids) {
+            return;
+        }
+
+        foreach ($guids as $guid) {
+            $this->guids[] = $this->uuidToBytes($guid);
+        }
     }
 
     /**
@@ -60,7 +71,7 @@ class AdminUserActions
         }
 
         if (! $this->guids) {
-            throw new Http500Exception('No projects specified');
+            throw new Http500Exception('No users specified');
         }
 
         $queryModel = $this->userApi->makeQueryModel();
