@@ -28,18 +28,22 @@ function runPipelineBuilder(F) {
                     .split(self.templateUniqueId)
                     .join(F.uuid.make());
                 var $template = $(template);
+                var codeEditor = $template.find('.JS-PipelineBuilder__CodeEditor').get(0);
+                var select = $template.find('.JS-PipelineBuilder__ServerSelect').get(0);
 
                 self.$itemsContainer.append($template);
 
                 self.sorter.addItems($template);
 
-                self.elToCodeMirror(
-                    $template.find('.JS-PipelineBuilder__CodeEditor').get(0)
-                );
+                if (codeEditor) {
+                    self.elToCodeMirror(codeEditor);
+                }
 
-                F.controller.construct('Select', {
-                    el: $template.find('.JS-PipelineBuilder__ServerSelect').get(0)
-                });
+                if (select) {
+                    F.controller.construct('Select', {
+                        el: select
+                    });
+                }
             },
             'click .JS-PipelineBuilder__AreaRemove': function(e) {
                 var $el = $(e.currentTarget);

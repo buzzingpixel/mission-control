@@ -1,0 +1,24 @@
+{% set keyValueItems = keyValueItems ?? [] %}
+
+{% embed 'forms/inputTemplates/_fieldset.twig' %}
+    {% block input %}
+        <div class="PipelineBuilder JS-PipelineBuilder">
+            <script type="text/template" class="JS-PipelineBuilder__InputTemplate">
+                {% include 'forms/inputTemplates/ProjectKeyValueBuilderInputTemplate.twig' %}
+            </script>
+            <div class="PipelineBuilder__Inner">
+                <div class="PipelineBuilder__Items JS-PipelineBuilder__Items">
+                    {# TODO: fill out existing items #}
+                    {# {% for item in keyValueItems %}
+                        {% include 'forms/inputTemplates/ProjectKeyValueBuilderInputTemplate.twig' with {} %}
+                    {% endfor %} #}
+                </div>
+                <div class="PipelineBuilder__AddItemWrapper">
+                    <span class="PipelineBuilder__AddItem JS-PipelineBuilder__AddItem">
+                        {% include 'svg/IconPlus.svg' %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endembed %}
