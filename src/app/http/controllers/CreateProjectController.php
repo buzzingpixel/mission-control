@@ -90,6 +90,11 @@ class CreateProjectController
                                 'name' => 'description',
                                 'label' => 'Description',
                             ],
+                            [
+                                'template' => 'ProjectKeyValueBuilder',
+                                'name' => 'keyValues',
+                                'label' => 'Key Values',
+                            ],
                         ],
                     ],
                 ],

@@ -77,6 +77,17 @@ class ProjectTable extends Table
             'primary' => false,
             'options' => null,
         ],
+        'key_value_items' => [
+            'name' => 'key_value_items',
+            'type' => 'text',
+            'size' => 65535,
+            'scale' => null,
+            'notnull' => false,
+            'default' => 'NULL',
+            'autoinc' => false,
+            'primary' => false,
+            'options' => null,
+        ],
         'added_at' => [
             'name' => 'added_at',
             'type' => 'datetime',
@@ -107,6 +118,7 @@ class ProjectTable extends Table
         'title',
         'slug',
         'description',
+        'key_value_items',
         'added_at',
         'added_at_time_zone',
     ];
@@ -117,6 +129,7 @@ class ProjectTable extends Table
         'title' => null,
         'slug' => null,
         'description' => null,
+        'key_value_items' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
     ];

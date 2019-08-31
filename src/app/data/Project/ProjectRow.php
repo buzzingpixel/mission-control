@@ -14,6 +14,7 @@ use Atlas\Table\Row;
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
  * @property mixed $description varchar(255) NOT NULL
+ * @property mixed $key_value_items text(65535)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */
@@ -25,6 +26,7 @@ class ProjectRow extends Row
         'title' => null,
         'slug' => null,
         'description' => null,
+        'key_value_items' => 'NULL',
         'added_at' => null,
         'added_at_time_zone' => null,
     ];

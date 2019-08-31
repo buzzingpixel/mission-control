@@ -52,6 +52,27 @@ interface ProjectModelInterface
     public function description(?string $description = null) : string;
 
     /**
+     * Returns value of keyValueItems. Sets value if incoming argument is set
+     *
+     * @param mixed[] $val
+     *
+     * @return mixed[]
+     */
+    public function keyValueItems(?array $val = null) : array;
+
+    public function clearKeyValueItems() : void;
+
+    /**
+     * @param mixed $val
+     */
+    public function setKeyValueItem(?string $key, $val) : void;
+
+    /**
+     * @return mixed
+     */
+    public function getKeyValueItem(?string $key);
+
+    /**
      * Returns the value of addedAt. Sets value if incoming argument is set.
      * If no DateTime has been set, it should return the current DateTime.
      * The constructor is probably the appropriate place to set initial value

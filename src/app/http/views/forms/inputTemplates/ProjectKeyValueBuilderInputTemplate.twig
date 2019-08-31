@@ -1,0 +1,38 @@
+{% set rows = rows|default('10') %}
+{% set uniqueId = createUuidV4() %}
+{% set key = key|default('') %}
+{% set value = value|default('') %}
+
+{% spaceless %}
+    <div class="PipelineBuilder__Area JS-PipelineBuilder__Area" data-unique-id="{{ uniqueId }}">
+        <div class="PipelineBuilder__AreaInner">
+            <div class="PipelineBuilder__AreaControls">
+            <span class="PipelineBuilder__AreaControlsDraggerWrap JS-PipelineBuilder__Dragger">
+                <span class="PipelineBuilder__AreaControlsDragger">
+                    {% include 'svg/IconSixDots.svg' %}
+                </span>
+            </span>
+                <span class="PipelineBuilder__AreaControlsRemove JS-PipelineBuilder__AreaRemove">
+                {% include 'svg/IconClose.svg' %}
+            </span>
+            </div>
+            <div class="PipelineBuilder__DescriptionWrapper">
+                <label for="{{ name }}[{{ uniqueId }}][key]" class="label">Key</label>
+                <input
+                    type="text"
+                    name="{{ name }}[{{ uniqueId }}][key]"
+                    id="{{ name }}[{{ uniqueId }}][key]"
+                    class="input"
+                    value="{{ key }}"
+                >
+            </div>
+            <label for="{{ name }}[{{ uniqueId }}][value]" class="label">Value <small>(Markdown allowed)</small></label>
+            <textarea
+                rows="{{ rows }}"
+                name="{{ name }}[{{ uniqueId }}][value]"
+                id="{{ name }}[{{ uniqueId }}][value]"
+                class="textarea PipelineBuilder__TextArea"
+            >{{ value }}</textarea>
+        </div>
+    </div>
+{% endspaceless %}

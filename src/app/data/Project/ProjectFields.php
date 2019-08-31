@@ -12,6 +12,7 @@ namespace src\app\data\Project;
  * @property mixed $title varchar(255) NOT NULL
  * @property mixed $slug varchar(255) NOT NULL
  * @property mixed $description varchar(255) NOT NULL
+ * @property mixed $key_value_items text(65535)
  * @property mixed $added_at datetime NOT NULL
  * @property mixed $added_at_time_zone varchar(255) NOT NULL
  */

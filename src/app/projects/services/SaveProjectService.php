@@ -17,6 +17,7 @@ use src\app\projects\events\ProjectBeforeSaveEvent;
 use src\app\projects\exceptions\InvalidProjectModelException;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
 use src\app\projects\interfaces\ProjectModelInterface;
+use function json_encode;
 
 class SaveProjectService
 {
@@ -119,6 +120,7 @@ class SaveProjectService
         $record->title              = $model->title();
         $record->slug               = $model->slug();
         $record->description        = $model->description();
+        $record->key_value_items    = json_encode($model->keyValueItems());
         $record->added_at           = $addedAt->format('Y-m-d H:i:s');
         $record->added_at_time_zone = $addedAt->getTimezone()->getName();
 

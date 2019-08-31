@@ -133,6 +133,12 @@ class EditProjectController
                                 'label' => 'Description',
                                 'value' => $model->description(),
                             ],
+                            [
+                                'template' => 'ProjectKeyValueBuilder',
+                                'name' => 'keyValues',
+                                'label' => 'Key Values',
+                                'keyValueItems' => $model->keyValueItems(),
+                            ],
                         ],
                     ],
                 ],

@@ -22,4 +22,36 @@ class ProjectModel implements ProjectModelInterface
     {
         return $this->description = $description ?? $this->description;
     }
+
+    /** @var mixed[] */
+    private $keyValueItems = [];
+
+    /**
+     * @inheritDoc
+     */
+    public function keyValueItems(?array $val = null) : array
+    {
+        return $this->keyValueItems = $val ?? $this->keyValueItems;
+    }
+
+    public function clearKeyValueItems() : void
+    {
+        $this->keyValueItems = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setKeyValueItem(?string $key, $val) : void
+    {
+        $this->keyValueItems[$key] = $val;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getKeyValueItem(?string $key)
+    {
+        return $this->keyValueItems[$key] ?? null;
+    }
 }
