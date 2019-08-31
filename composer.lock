@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b20a34566c51a79f392bb796a7c0da12",
+    "content-hash": "81ba3944bc2e699ce7e6659668f1e1f3",
     "packages": [
         {
             "name": "2bj/phanybar",
@@ -7676,6 +7676,59 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "buzzingpixel/twig-dumper",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buzzingpixel/TwigDumper.git",
+                "reference": "372806ed0f5729a8d3a54fd8c3742b0b8381842b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buzzingpixel/TwigDumper/zipball/372806ed0f5729a8d3a54fd8c3742b0b8381842b",
+                "reference": "372806ed0f5729a8d3a54fd8c3742b0b8381842b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "symfony/var-dumper": "^4.3",
+                "twig/twig": "^2.8"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.26.2",
+                "doctrine/coding-standard": "^6.0",
+                "friendsofphp/php-cs-fixer": "^2.15",
+                "phpstan/phpstan": "^0.11.12",
+                "phpstan/phpstan-deprecation-rules": "^0.11.2",
+                "phpunit/phpunit": "^8.3",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.4",
+                "thecodingmachine/phpstan-safe-rule": "^0.1.4",
+                "vimeo/psalm": "^3.4"
+            },
+            "type": "library",
+            "extra": {
+                "twigExtensions": [
+                    "BuzzingPixel\\TwigDumper\\TwigDumper"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "BuzzingPixel\\TwigDumper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "A Twig Dumper that uses the Symfony VarDumper component",
+            "time": "2019-08-26T17:09:55+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "1.5.0",
