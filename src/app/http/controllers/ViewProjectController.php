@@ -180,7 +180,7 @@ class ViewProjectController
 
         foreach ($items as $key => $value) {
             $keyValueItems[] = [
-                'key' => $key,
+                'key' => $this->githubMarkdown->parse($key),
                 'value' => $this->githubMarkdown->parse($value),
             ];
         }
