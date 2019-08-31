@@ -73,7 +73,10 @@ class ViewPipelineController
             throw new LogicException('Unknown Error');
         }
 
-        $isAdmin = $user->getExtendedProperty('is_admin') === 1;
+        $isAdmin     = $user->getExtendedProperty('is_admin') === 1;
+        $permissions = $user->userDataItem('permissions');
+        $run         = $isAdmin ? true : $permissions['pipelines'][$model->guid()]['run'] ?? false;
+        $edit        = $isAdmin ? true : $permissions['pipelines'][$model->guid()]['edit'] ?? false;
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
@@ -105,12 +108,14 @@ class ViewPipelineController
         $fetchParams->addWhere('has_failed', 0);
         $activeJob = $this->pipelineApi->fetchOneJob($fetchParams);
 
-        if ($isAdmin) {
+        if ($edit) {
             $pageControlButtons[] = [
                 'href' => '/pipelines/edit/' . $model->slug(),
                 'content' => 'Edit Pipeline',
             ];
+        }
 
+        if ($run) {
             $pageControlButtons[] = [
                 'href' => '/pipelines/run/' . $model->slug(),
                 'content' => 'Run Pipeline',

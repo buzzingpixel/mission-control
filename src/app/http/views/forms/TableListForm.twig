@@ -8,6 +8,8 @@
 {% set tableControlButtons = tableControlButtons|default([]) %}
 {% set includeSelectCol = includeSelectCol ?? true %}
 {% set includeFilter = includeFilter ?? true %}
+{% set hiddenInput = hiddenInput ?? null %}
+{% set forceIncludeSubmitButton = forceIncludeSubmitButton ?? false %}
 
 {% block content %}
     <form
@@ -21,6 +23,9 @@
         {{ getCsrfInput() }}
         {% if actionParam %}
             <input type="hidden" name="action" value="{{ actionParam }}">
+        {% endif %}
+        {% if hiddenInput %}
+            <input type="hidden" name="{{ hiddenInput.name }}" value="{{ hiddenInput.value }}">
         {% endif %}
         {% if formTitle or tableControlButtons|length %}
             <div class="TableList__Controls">
@@ -47,7 +52,7 @@
             </div>
         {% endif %}
         {% set cols =  includeSelectCol ? 1 : 0 %}
-        <table class="Table JS-TableSelects">
+        <table class="Table{% if includeSelectCol %} JS-TableSelects{% endif %}">
             <thead class="Table__Heading">
                 <tr class="Table__HeadingRow">
                     {% for heading in table.headings %}
@@ -70,7 +75,7 @@
                     {% endif %}
                     {% if includeSelectCol %}
                     <th class="Table__HeadingCol Table__HeadingCol--IsLast Table__HeadingCol--IsSelector">
-                        <input type="checkbox" class="JS-TableSelects__All">
+                        <input type="checkbox" class="{% if includeSelectCol %}JS-TableSelects__All{% endif %}">
                     </th>
                     {% endif %}
                 </tr>
@@ -95,12 +100,36 @@
                                 class="Table__Column{% if loop.first %} Table__Column--IsFirst{% endif %}"
                             >
                                 {% if link %}
-                                <a href="{{ link }}" target="_blank" class="JS-TableSelects__SelectEscape">
+                                <a href="{{ link }}" target="_blank" class="{% if includeSelectCol %}JS-TableSelects__SelectEscape{% endif %}">
                                 {% endif %}
                                 {% if styled %}
                                 <span class="StyledTag StyledTag--{{ styled }}">
                                 {% endif %}
-                                    {{ row.cols[col]|smartypants }}
+                                    {% set rowVal = row.cols[col] %}
+                                    {% if rowVal is iterable %}
+                                        {% if rowVal.type == 'checkbox' %}
+                                            <fieldset class="fieldset StandardForm__Fieldset StandardForm__Fieldset--ForCheckbox">
+                                                <label
+                                                    for="{{ rowVal.name }}"
+                                                    class="label StandardForm__Label StandardForm__Label--ForCheckbox"
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        name="{{ rowVal.name }}"
+                                                        value="true"
+                                                        id="{{ rowVal.name }}"
+                                                        class="checkbox StandardForm__Checkbox"
+                                                        {% if rowVal['checked'] is defined and rowVal['checked'] %}
+                                                        checked
+                                                        {% endif %}
+                                                    >
+                                                    <span class="StandardForm__CheckMark"></span>
+                                                </label>
+                                            </fieldset>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ rowVal|smartypants }}
+                                    {% endif %}
                                 {% if styled %}
                                 </span>
                                 {% endif %}
@@ -111,7 +140,7 @@
                         {% endfor %}
                         {% if actionColButtonContent %}
                             <td class="Table__Column">
-                                <a href="{{ row.actionButtonLink ?? '#' }}" class="button button--outlined JS-TableSelects__SelectEscape">
+                                <a href="{{ row.actionButtonLink ?? '#' }}" class="button button--outlined{% if includeSelectCol %} JS-TableSelects__SelectEscape{% endif %}">
                                     {{ actionColButtonContent|smartypants }}
                                 </a>
                             </td>
@@ -122,27 +151,29 @@
                                     type="checkbox"
                                     name="{{ table.inputsName }}"
                                     value="{{ row.inputValue }}"
-                                    class="JS-TableSelects__ItemSelector JS-TableSelects__SelectEscape"
+                                    class="JS-TableSelects__ItemSelector{% if includeSelectCol %} JS-TableSelects__SelectEscape{% endif %}"
                                 >
                             </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
-            {% if actions|length > 0 and table.rows|length > 0 %}
+            {% if (actions|length > 0 or forceIncludeSubmitButton) and table.rows|length > 0 %}
                 <tfoot class="Table__Footer">
                     <tr class="Table__FooterRow">
                         <td colspan="{{ cols }}" class="Table__FooterCol">
-                            <div class="fieldset Table__Fieldset">
-                                <select name="bulk_action" class="select select--inline Table__BulkSelect">
-                                    <option value="">-- Select an Action --</option>
-                                    {% for action, actionTitle in actions %}
-                                        <option value="{{ action }}">
-                                            {{ actionTitle|smartypants }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                            {% if actions|length > 0 %}
+                                <div class="fieldset Table__Fieldset">
+                                    <select name="bulk_action" class="select select--inline Table__BulkSelect">
+                                        <option value="">-- Select an Action --</option>
+                                        {% for action, actionTitle in actions %}
+                                            <option value="{{ action }}">
+                                                {{ actionTitle|smartypants }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
                             <div class="fieldset Table__Fieldset">
                                 <input
                                     type="submit"

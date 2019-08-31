@@ -109,6 +109,7 @@ class AdminController
 
             $userRows[] = [
                 'inputValue' => $userModel->guid(),
+                'actionButtonLink' => '/admin/user-permissions/' . $userModel->guid(),
                 'cols' => [
                     'Email' => $userModel->emailAddress(),
                     'Timezone' => $userModel->getExtendedProperty('timezone') ?: date_default_timezone_get(),
@@ -169,6 +170,7 @@ class AdminController
                     ],
                     [
                         'template' => 'forms/TableListForm.twig',
+                        'actionColButtonContent' => 'Permissions',
                         'tableControlButtons' => [
                             [
                                 'href' => '/admin/create-user',

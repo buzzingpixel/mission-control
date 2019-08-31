@@ -40,17 +40,25 @@ class RunPipelineController
      */
     public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $params = $this->pipelineApi->makeQueryModel();
         $params->addWhere('slug', $request->getAttribute('slug'));
         $model = $this->pipelineApi->fetchOne($params);
 
         if (! $model) {
+            throw new Http404Exception();
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
+            throw new Http404Exception();
+        }
+
+        $isAdmin     = $user->getExtendedProperty('is_admin') === 1;
+        $permissions = $user->userDataItem('permissions');
+        $run         = $isAdmin ? true : $permissions['pipelines'][$model->guid()]['run'] ?? false;
+
+        if (! $run) {
             throw new Http404Exception();
         }
 

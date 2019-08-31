@@ -37,6 +37,7 @@
         "timostamm/text-truncation": "dev-master"
     },
     "require-dev": {
+        "buzzingpixel/twig-dumper": "^1.0",
         "codedungeon/phpunit-result-printer": "^0.26.2",
         "doctrine/coding-standard": "^6.0",
         "friendsofphp/php-cs-fixer": "^2.14.2",
