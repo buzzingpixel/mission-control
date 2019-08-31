@@ -21,6 +21,7 @@ use src\app\http\actions\EditProjectAction;
 use src\app\http\actions\EditReminderAction;
 use src\app\http\actions\EditServerAction;
 use src\app\http\actions\EditSSHKeyAction;
+use src\app\http\actions\EditUserPermissionsAction;
 use src\app\http\actions\LogOutAction;
 use src\app\http\actions\MonitoredUrlActions;
 use src\app\http\actions\NotificationEmailListActions;
@@ -62,6 +63,7 @@ return [
     'editSshKey' => EditSSHKeyAction::class,
     'editTicket' => TicketEditAction::class,
     'editTicketComment' => TicketCommentEditAction::class,
+    'editUserPermissions' => EditUserPermissionsAction::class,
     'logout' => LogOutAction::class,
     'monitoredUrlListActions' => MonitoredUrlActions::class,
     'notificationEmailsActions' => NotificationEmailListActions::class,

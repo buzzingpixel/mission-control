@@ -81,18 +81,22 @@ class AdminUserPermissionsController
         $rows = [];
 
         foreach ($this->pipelineApi->fetchAll() as $pipeline) {
+            $permissions = $userToEdit->userDataItem('permissions');
+            $run         = $permissions['pipelines'][$pipeline->guid()]['run'] ?? false;
+            $edit        = $permissions['pipelines'][$pipeline->guid()]['edit'] ?? false;
+
             $rows[] = [
                 'cols' => [
                     'Pipeline' => $pipeline->title(),
                     'Run' => [
                         'type' => 'checkbox',
-                        'name' => 'permissions[pipeline][' . $pipeline->guid() . '][run]',
-                        'checked' => false,
+                        'name' => 'permissions[pipelines][' . $pipeline->guid() . '][run]',
+                        'checked' => $run,
                     ],
                     'Edit' => [
                         'type' => 'checkbox',
-                        'name' => 'permissions[pipeline][' . $pipeline->guid() . '][edit]',
-                        'checked' => false,
+                        'name' => 'permissions[pipelines][' . $pipeline->guid() . '][edit]',
+                        'checked' => $edit,
                     ],
                 ],
             ];
