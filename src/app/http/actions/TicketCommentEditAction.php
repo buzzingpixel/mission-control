@@ -54,10 +54,6 @@ class TicketCommentEditAction
 
         $user = $this->userApi->fetchCurrentUser();
 
-        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $commentGuid = trim($this->requestHelper->post('guid', ''));
         $content     = trim($this->requestHelper->post('content'));
 
@@ -76,6 +72,18 @@ class TicketCommentEditAction
         $comment = $this->ticketApi->fetchOneThreadItem($params);
 
         if (! $comment) {
+            throw new Http404Exception();
+        }
+
+        $hasCommentControl = false;
+
+        if ($user->getExtendedProperty('is_admin') === 1) {
+            $hasCommentControl = true;
+        } elseif ($comment->user()->guid() === $user->guid()) {
+            $hasCommentControl = true;
+        }
+
+        if (! $hasCommentControl) {
             throw new Http404Exception();
         }
 

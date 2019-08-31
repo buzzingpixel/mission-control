@@ -7,6 +7,10 @@
 
 {% set ticketGuid = ticketGuid ?? '' %}
 
+{% set hasTicketControl = hasTicketControl ?? false %}
+
+{% set userIsAdmin = userIsAdmin ?? false %}
+
 <section class="TicketComments">
     <h2 class="TicketComments__SectionTitle">Comments</h2>
     {% for item in threadItems %}
@@ -21,32 +25,34 @@
                 {% if addedAt != modifiedAt %}
                     <br>(edited at {{ modifiedAt }})
                 {% endif %}
-                {% if currentUserGuid == item.user.guid %}
+                {% if currentUserGuid == item.user.guid or userIsAdmin %}
                     <br><br><a href="/tickets/edit-comment/{{ item.guid }}">edit comment</a>
                 {% endif %}
             </footer>
         </div>
     {% endfor %}
-    <div class="TicketComments__AddComment">
-        {% include 'forms/StandardForm.twig' with {
-            actionParam: 'ticketAddComment',
-            submitText: 'Add Comment',
-            isFullWidth: true,
-            inputs: [
-                {
-                    template: 'Hidden',
-                    name: 'ticketGuid',
-                    value: ticketGuid,
-                },
-                {
-                    template: 'TextArea',
-                    rows: 10,
-                    name: 'comment',
-                    label: 'Add comment (use markdown for formatting)',
-                },
-            ]
-        } only %}
-    </div>
+    {% if hasTicketControl %}
+        <div class="TicketComments__AddComment">
+            {% include 'forms/StandardForm.twig' with {
+                actionParam: 'ticketAddComment',
+                submitText: 'Add Comment',
+                isFullWidth: true,
+                inputs: [
+                    {
+                        template: 'Hidden',
+                        name: 'ticketGuid',
+                        value: ticketGuid,
+                    },
+                    {
+                        template: 'TextArea',
+                        rows: 10,
+                        name: 'comment',
+                        label: 'Add comment (use markdown for formatting)',
+                    },
+                ]
+            } only %}
+        </div>
+    {% endif %}
 </section>
 <br>
 <br>

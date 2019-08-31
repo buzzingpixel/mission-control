@@ -66,16 +66,6 @@ class TicketIndexController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify(
-                    'account/Unauthorized.twig'
-                )
-            );
-
-            return $response;
-        }
-
         $page = $request->getAttribute('page');
 
         if ($page === '0' || $page === '1') {

@@ -59,10 +59,6 @@ class TicketAddComment
 
         $user = $this->userApi->fetchCurrentUser();
 
-        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $ticketGuid = trim($this->requestHelper->post('ticketGuid', ''));
         $comment    = trim($this->requestHelper->post('comment', ''));
 
@@ -81,6 +77,27 @@ class TicketAddComment
         $ticket = $this->ticketApi->fetchOne($params);
 
         if (! $ticket) {
+            throw new Http404Exception();
+        }
+
+        $hasTicketControl = false;
+
+        if ($user->getExtendedProperty('is_admin')) {
+            $hasTicketControl = true;
+        } elseif ($ticket->createdByUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->assignedToUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->watchers()) {
+            foreach ($ticket->watchers() as $watcher) {
+                if ($watcher->guid() === $user->guid()) {
+                    $hasTicketControl = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $hasTicketControl) {
             throw new Http404Exception();
         }
 

@@ -50,12 +50,6 @@ class TicketWorkflowController
      */
     public function __invoke(ServerRequestInterface $request) : ResponseInterface
     {
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $guid   = $request->getAttribute('guid');
         $status = $request->getAttribute('status');
 
@@ -74,6 +68,33 @@ class TicketWorkflowController
         $ticket = $this->ticketApi->fetchOne($params);
 
         if (! $ticket) {
+            throw new Http404Exception();
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
+            throw new Http404Exception();
+        }
+
+        $hasTicketControl = false;
+
+        if ($user->getExtendedProperty('is_admin') === 1) {
+            $hasTicketControl = true;
+        } elseif ($ticket->createdByUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->assignedToUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->watchers()) {
+            foreach ($ticket->watchers() as $watcher) {
+                if ($watcher->guid() === $user->guid()) {
+                    $hasTicketControl = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $hasTicketControl) {
             throw new Http404Exception();
         }
 
