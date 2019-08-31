@@ -65,17 +65,25 @@ class EditPipelineAction
             );
         }
 
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user || $user->getExtendedProperty('is_admin') !== 1) {
-            throw new Http404Exception();
-        }
-
         $params = $this->pipelineApi->makeQueryModel();
         $params->addWhere('guid', $this->pipelineApi->uuidToBytes($this->requestHelper->post('guid')));
         $model = $this->pipelineApi->fetchOne($params);
 
         if (! $model) {
+            throw new Http404Exception();
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
+            throw new Http404Exception();
+        }
+
+        $isAdmin     = $user->getExtendedProperty('is_admin') === 1;
+        $permissions = $user->userDataItem('permissions');
+        $edit        = $isAdmin ? true : $permissions['pipelines'][$model->guid()]['edit'] ?? false;
+
+        if (! $edit) {
             throw new Http404Exception();
         }
 

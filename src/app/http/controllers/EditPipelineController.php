@@ -62,24 +62,6 @@ class EditPipelineController
             return $requireLogin;
         }
 
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user) {
-            throw new LogicException('Unknown Error');
-        }
-
-        $response = $this->response->withHeader('Content-Type', 'text/html');
-
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify(
-                    'account/Unauthorized.twig'
-                )
-            );
-
-            return $response;
-        }
-
         $slug = $request->getAttribute('slug');
 
         $params = $this->pipelineApi->makeQueryModel();
@@ -88,6 +70,28 @@ class EditPipelineController
 
         if (! $model) {
             throw new Http404Exception('Pipeline with slug "' . $slug . '" not found');
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
+            throw new LogicException('Unknown Error');
+        }
+
+        $isAdmin     = $user->getExtendedProperty('is_admin') === 1;
+        $permissions = $user->userDataItem('permissions');
+        $edit        = $isAdmin ? true : $permissions['pipelines'][$model->guid()]['edit'] ?? false;
+
+        $response = $this->response->withHeader('Content-Type', 'text/html');
+
+        if (! $edit) {
+            $response->getBody()->write(
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
+            );
+
+            return $response;
         }
 
         $notification = false;
