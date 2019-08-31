@@ -45,7 +45,7 @@ class DemoteUserFromAdminAction
         $this->userApi->saveUser($user);
 
         $this->consoleOutput->writeln(
-            '<fg=green>User ' . $emailAddress . ' promoted to admin!</>'
+            '<fg=green>User ' . $emailAddress . ' demoted from admin.</>'
         );
     }
 }
