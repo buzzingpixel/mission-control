@@ -8,10 +8,9 @@
             </script>
             <div class="PipelineBuilder__Inner">
                 <div class="PipelineBuilder__Items JS-PipelineBuilder__Items">
-                    {# TODO: fill out existing items #}
-                    {# {% for item in keyValueItems %}
-                        {% include 'forms/inputTemplates/ProjectKeyValueBuilderInputTemplate.twig' with {} %}
-                    {% endfor %} #}
+                    {% for key,value in keyValueItems %}
+                        {% include 'forms/inputTemplates/ProjectKeyValueBuilderInputTemplate.twig' %}
+                    {% endfor %}
                 </div>
                 <div class="PipelineBuilder__AddItemWrapper">
                     <span class="PipelineBuilder__AddItem JS-PipelineBuilder__AddItem">

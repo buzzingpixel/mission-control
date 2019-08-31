@@ -13,6 +13,8 @@ use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use src\app\projects\exceptions\ProjectNameNotUniqueException;
 use src\app\projects\interfaces\ProjectsApiInterface;
+use function array_values;
+use function is_array;
 use function trim;
 
 class EditProjectAction
@@ -75,12 +77,20 @@ class EditProjectAction
 
         $title       = trim($this->requestHelper->post('title'));
         $description = trim($this->requestHelper->post('description'));
+        $keyValues   = $this->requestHelper->post('keyValues');
+
+        if (! is_array($keyValues)) {
+            $keyValues = [];
+        }
+
+        $keyValues = array_values($keyValues);
 
         $store = [
             'inputErrors' => [],
             'inputValues' => [
                 'title' => $title,
                 'description' => $description,
+                'keyValues' => $keyValues,
             ],
         ];
 
@@ -96,6 +106,15 @@ class EditProjectAction
 
         $model->title($title);
         $model->description($description);
+        $model->clearKeyValueItems();
+
+        foreach ($keyValues as $item) {
+            if (! isset($item['key']) || ! isset($item['value'])) {
+                continue;
+            }
+
+            $model->setKeyValueItem($item['key'], $item['value']);
+        }
 
         try {
             $this->projectsApi->save($model);
