@@ -17,6 +17,7 @@
     "fab.model": "^1.2.1",
     "fab.url": "^1.2.2",
     "fab.uuid": "^1.0.0",
+    "fabcss.code": "^1.3.1",
     "fabcss.forms-and-buttons": "^1.3.0",
     "fabcss.lists": "^1.3.0",
     "fabcss.reset": "^1.3.0",
