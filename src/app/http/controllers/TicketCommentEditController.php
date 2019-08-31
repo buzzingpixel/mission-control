@@ -60,16 +60,6 @@ class TicketCommentEditController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify(
-                    'account/Unauthorized.twig'
-                )
-            );
-
-            return $response;
-        }
-
         $commentGuid = $request->getAttribute('commentGuid');
 
         if (! $commentGuid) {
@@ -88,6 +78,24 @@ class TicketCommentEditController
 
         if (! $comment) {
             throw new Http404Exception();
+        }
+
+        $hasCommentControl = false;
+
+        if ($user->getExtendedProperty('is_admin') === 1) {
+            $hasCommentControl = true;
+        } elseif ($comment->user()->guid() === $user->guid()) {
+            $hasCommentControl = true;
+        }
+
+        if (! $hasCommentControl) {
+            $response->getBody()->write(
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
+            );
+
+            return $response;
         }
 
         $response->getBody()->write(

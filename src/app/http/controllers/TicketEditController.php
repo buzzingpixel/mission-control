@@ -57,24 +57,6 @@ class TicketEditController
             return $requireLogin;
         }
 
-        $user = $this->userApi->fetchCurrentUser();
-
-        if (! $user) {
-            throw new LogicException('An unknown error occurred');
-        }
-
-        $response = $this->response->withHeader('Content-Type', 'text/html');
-
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify(
-                    'account/Unauthorized.twig'
-                )
-            );
-
-            return $response;
-        }
-
         $guid = $request->getAttribute('guid');
 
         if (! $guid) {
@@ -93,6 +75,41 @@ class TicketEditController
 
         if (! $ticket) {
             throw new Http404Exception();
+        }
+
+        $user = $this->userApi->fetchCurrentUser();
+
+        if (! $user) {
+            throw new LogicException('An unknown error occurred');
+        }
+
+        $response = $this->response->withHeader('Content-Type', 'text/html');
+
+        $hasTicketControl = false;
+
+        if ($user->getExtendedProperty('is_admin')) {
+            $hasTicketControl = true;
+        } elseif ($ticket->createdByUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->assignedToUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->watchers()) {
+            foreach ($ticket->watchers() as $watcher) {
+                if ($watcher->guid() === $user->guid()) {
+                    $hasTicketControl = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $hasTicketControl) {
+            $response->getBody()->write(
+                $this->twigEnvironment->renderAndMinify(
+                    'account/Unauthorized.twig'
+                )
+            );
+
+            return $response;
         }
 
         $userSelectArray = $this->additionalUserActions->fetchAsSelectArray();

@@ -68,16 +68,6 @@ class TicketViewController
 
         $response = $this->response->withHeader('Content-Type', 'text/html');
 
-        if ($user->getExtendedProperty('is_admin') !== 1) {
-            $response->getBody()->write(
-                $this->twigEnvironment->renderAndMinify(
-                    'account/Unauthorized.twig'
-                )
-            );
-
-            return $response;
-        }
-
         $guid = $request->getAttribute('guid');
 
         if (! $guid) {
@@ -156,28 +146,49 @@ class TicketViewController
             'value' => $this->parsedown->text($ticket->content()),
         ];
 
-        $pageControlButtons = [
-            'new' => [
-                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/new',
-                'content' => 'Set Status "New"',
-            ],
-            'in_progress' => [
-                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/in_progress',
-                'content' => 'Set Status "In Progress"',
-            ],
-            'on_hold' => [
-                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/on_hold',
-                'content' => 'Set Status "On Hold"',
-            ],
-            'resolved' => [
-                'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/resolved',
-                'content' => 'Set Status "Resolved"',
-            ],
-            'edit' => [
-                'href' => '/tickets/ticket/' . $ticket->guid() . '/edit',
-                'content' => 'Edit Ticket',
-            ],
-        ];
+        $pageControlButtons = [];
+
+        $hasTicketControl = false;
+
+        if ($user->getExtendedProperty('is_admin') === 1) {
+            $hasTicketControl = true;
+        } elseif ($ticket->createdByUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->assignedToUser()->guid() === $user->guid()) {
+            $hasTicketControl = true;
+        } elseif ($ticket->watchers()) {
+            foreach ($ticket->watchers() as $watcher) {
+                if ($watcher->guid() === $user->guid()) {
+                    $hasTicketControl = true;
+                    break;
+                }
+            }
+        }
+
+        if ($hasTicketControl) {
+            $pageControlButtons = [
+                'new' => [
+                    'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/new',
+                    'content' => 'Set Status "New"',
+                ],
+                'in_progress' => [
+                    'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/in_progress',
+                    'content' => 'Set Status "In Progress"',
+                ],
+                'on_hold' => [
+                    'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/on_hold',
+                    'content' => 'Set Status "On Hold"',
+                ],
+                'resolved' => [
+                    'href' => '/tickets/ticket/' . $ticket->guid() . '/workflow/resolved',
+                    'content' => 'Set Status "Resolved"',
+                ],
+                'edit' => [
+                    'href' => '/tickets/ticket/' . $ticket->guid() . '/edit',
+                    'content' => 'Edit Ticket',
+                ],
+            ];
+        }
 
         unset($pageControlButtons[$ticket->status()]);
 
@@ -209,6 +220,8 @@ class TicketViewController
                         'displayTimeZoneString' => $user->getExtendedProperty('timezone') ?: date_default_timezone_get(),
                         'currentUserGuid' => $user->guid(),
                         'ticketGuid' => $ticket->guid(),
+                        'hasTicketControl' => $hasTicketControl,
+                        'userIsAdmin' => $user->getExtendedProperty('is_admin') === 1,
                     ],
                 ],
             ])
