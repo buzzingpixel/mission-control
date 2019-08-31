@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace src\app\http\controllers;
 
+use cebe\markdown\GithubMarkdown;
 use corbomite\http\exceptions\Http404Exception;
 use corbomite\twig\TwigEnvironment;
 use corbomite\user\interfaces\UserApiInterface;
@@ -45,6 +46,8 @@ class ViewProjectController
     private $monitoredUrlsApi;
     /** @var PipelineApiInterface */
     private $pipelineApi;
+    /** @var GithubMarkdown */
+    private $githubMarkdown;
 
     public function __construct(
         UserApiInterface $userApi,
@@ -56,7 +59,8 @@ class ViewProjectController
         ReminderApiInterface $reminderApi,
         RequireLoginService $requireLoginService,
         MonitoredUrlsApiInterface $monitoredUrlsApi,
-        PipelineApiInterface $pipelineApi
+        PipelineApiInterface $pipelineApi,
+        GithubMarkdown $githubMarkdown
     ) {
         $this->userApi             = $userApi;
         $this->pingApi             = $pingApi;
@@ -68,6 +72,7 @@ class ViewProjectController
         $this->requireLoginService = $requireLoginService;
         $this->monitoredUrlsApi    = $monitoredUrlsApi;
         $this->pipelineApi         = $pipelineApi;
+        $this->githubMarkdown      = $githubMarkdown;
     }
 
     /** @var bool */
@@ -150,6 +155,7 @@ class ViewProjectController
                 'pageControlButtons' => $pageControlButtons,
                 'controlsHasBorderBottom' => true,
                 'includes' => array_merge(
+                    $this->getKeyValueItems(),
                     $this->getMonitoredUrls(),
                     $this->getPings(),
                     $this->getReminders(),
@@ -160,6 +166,31 @@ class ViewProjectController
         );
 
         return $response;
+    }
+
+    private function getKeyValueItems() : array
+    {
+        $items = $this->projectModel->keyValueItems();
+
+        if (! $items) {
+            return [];
+        }
+
+        $keyValueItems = [];
+
+        foreach ($items as $key => $value) {
+            $keyValueItems[] = [
+                'key' => $key,
+                'value' => $this->githubMarkdown->parse($value),
+            ];
+        }
+
+        return [
+            [
+                'template' => 'includes/KeyValue.twig',
+                'keyValueItems' => $keyValueItems,
+            ],
+        ];
     }
 
     private function getMonitoredUrls() : array
