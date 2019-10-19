@@ -139,7 +139,7 @@ class ViewPipelineJobDetailsController
                     'Description' => $pipelineItemDescription,
                     'Status' => $jobStatus,
                     'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
-                    'Log' => '<pre>' . $jobItem->logContent() . '</pre>',
+                    'Log' => '<pre><code>' . $jobItem->logContent() . '</code></pre>',
                 ],
                 'colorStyledCols' => ['Status' => $jobStyledStatus],
             ];
