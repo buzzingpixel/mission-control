@@ -15,7 +15,9 @@ use src\app\http\services\RequireLoginService;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use Throwable;
 use function date_default_timezone_get;
+use function mb_strlen;
 use function md5;
+use function substr;
 
 class ViewPipelineJobDetailsController
 {
@@ -134,12 +136,22 @@ class ViewPipelineJobDetailsController
                 $pipelineItemDescription = $jobItem->pipelineItem()->description();
             }
 
+            $logContent = $jobItem->logContent();
+
+            if (mb_strlen($logContent) > 100000) {
+                $logContent = substr($logContent, 0, 100000);
+
+                $logContent = "Log truncated...\n\n" . $logContent;
+
+                $logContent .= "\n\n&hellip;";
+            }
+
             $rows[] = [
                 'cols' => [
                     'Description' => $pipelineItemDescription,
                     'Status' => $jobStatus,
                     'Finished At' => $jobItem->finishedAt() ? $jobItem->finishedAt()->format('n/j/Y g:i a') : '',
-                    'Log' => '<pre><code>' . $jobItem->logContent() . '</code></pre>',
+                    'Log' => '<pre><code>' . $logContent . '</code></pre>',
                 ],
                 'colorStyledCols' => ['Status' => $jobStyledStatus],
             ];
