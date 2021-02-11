@@ -25,6 +25,14 @@ class PipelineItemModel implements PipelineItemModelInterface
     }
 
     /** @var string */
+    private $type = 'code';
+
+    public function type(?string $val = null) : string
+    {
+        return $this->type = $val ?? $this->type;
+    }
+
+    /** @var string */
     private $description = '';
 
     public function description(?string $val = null) : string

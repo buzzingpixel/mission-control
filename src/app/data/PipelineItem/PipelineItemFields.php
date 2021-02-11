@@ -10,6 +10,7 @@ namespace src\app\data\PipelineItem;
  * @property mixed $guid binary(16) NOT NULL
  * @property mixed $pipeline_guid binary(16)
  * @property mixed $order int(10,0) NOT NULL
+ * @property mixed $type varchar(255)
  * @property mixed $description varchar(255)
  * @property mixed $script text(65535) NOT NULL
  * @property mixed $run_after_fail tinyint(3,0) NOT NULL

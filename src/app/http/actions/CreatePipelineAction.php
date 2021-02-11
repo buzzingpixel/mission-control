@@ -119,6 +119,8 @@ class CreatePipelineAction
 
             $itemModel = $this->pipelineApi->createPipelineItemModel();
 
+            $itemModel->type($item['type'] ?? 'code');
+
             $itemModel->description($item['description'] ?? '');
 
             $itemModel->script($item['script']);

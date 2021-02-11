@@ -216,6 +216,7 @@ class SavePipelineService
                 'guid' => $item->getGuidAsBytes(),
                 'pipeline_guid' => $model->getGuidAsBytes(),
                 'order' => $order,
+                'type' => $item->type(),
                 'description' => $item->description(),
                 'script' => $item->script(),
                 'run_after_fail' => $item->runAfterFail(),
