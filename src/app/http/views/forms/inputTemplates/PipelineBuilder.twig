@@ -6,6 +6,9 @@
             <script type="text/template" class="JS-PipelineBuilder__InputTemplate">
                 {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' %}
             </script>
+            <script type="text/template" class="JS-PipelineBuilder__InputTemplateSource">
+                {% include 'forms/inputTemplates/PipelineBuilderInputTemplateSource.twig' %}
+            </script>
             <div class="PipelineBuilder__Inner">
                 Use <code>{% verbatim %}{{timestamp}}{% endverbatim %}</code> to get the timestamp the job was added at<br>
                 Use <code>{% verbatim %}{{time "FORMAT_HERE"}} or {{time 'FORMAT_HERE'}}{% endverbatim %}</code> for formatted added at time (PHP DateTime format)<br>
@@ -21,8 +24,11 @@
                     {% endfor %}
                 </div>
                 <div class="PipelineBuilder__AddItemWrapper">
-                    <span class="PipelineBuilder__AddItem JS-PipelineBuilder__AddItem">
-                        {% include 'svg/IconPlus.svg' %}
+                    <span class="PipelineBuilder__AddItem PipelineBuilder__AddItem--Code JS-PipelineBuilder__AddItem">
+                        {% include 'svg/IconCoding.svg' %}
+                    </span>
+                    <span class="PipelineBuilder__AddItem PipelineBuilder__AddItem--Source JS-PipelineBuilder__AddSource">
+                        {% include 'svg/IconYaml.svg' %}
                     </span>
                 </div>
             </div>

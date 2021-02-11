@@ -17,14 +17,15 @@ function runPipelineBuilder(F) {
 
     F.controller.make('PipelineBuilder', {
         templateUniqueId: null,
-        templateHtml: null,
+        templateHtmlCode: null,
+        templateHtmlSource: null,
         $itemsContainer: null,
         sorter: null,
 
         events: {
             'click .JS-PipelineBuilder__AddItem': function() {
                 var self = this;
-                var template = self.templateHtml
+                var template = self.templateHtmlCode
                     .split(self.templateUniqueId)
                     .join(F.uuid.make());
                 var $template = $(template);
@@ -45,6 +46,24 @@ function runPipelineBuilder(F) {
                     });
                 }
             },
+            'click .JS-PipelineBuilder__AddSource': function() {
+                var self = this;
+                var template = self.templateHtmlSource
+                    .split(self.templateUniqueId)
+                    .join(F.uuid.make());
+                var $template = $(template);
+                var select = $template.find('.JS-PipelineBuilder__ServerSelect').get(0);
+
+                self.$itemsContainer.append($template);
+
+                self.sorter.addItems($template);
+
+                if (select) {
+                    F.controller.construct('Select', {
+                        el: select
+                    });
+                }
+            },
             'click .JS-PipelineBuilder__AreaRemove': function(e) {
                 var $el = $(e.currentTarget);
                 var $item = $el.closest('.JS-PipelineBuilder__Area');
@@ -58,11 +77,15 @@ function runPipelineBuilder(F) {
 
             self.$itemsContainer = self.$el.find('.JS-PipelineBuilder__Items');
 
-            self.templateHtml = self.$el
+            self.templateHtmlCode = self.$el
                 .find('.JS-PipelineBuilder__InputTemplate')
                 .html();
 
-            self.templateUniqueId = $(self.templateHtml).data('uniqueId');
+            self.templateHtmlSource = self.$el
+                .find('.JS-PipelineBuilder__InputTemplateSource')
+                .html();
+
+            self.templateUniqueId = $(self.templateHtmlCode).data('uniqueId');
 
             self.setUpSorting();
 

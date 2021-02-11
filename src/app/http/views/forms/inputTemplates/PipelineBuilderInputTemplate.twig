@@ -11,6 +11,7 @@
     {% if uuid %}
         <input type="hidden" name="{{ name }}[{{ uniqueId }}][uuid]" value="{{ uuid }}">
     {% endif %}
+    <input type="hidden" name="{{ name }}[{{ uniqueId }}][type]" value="code">
     <div class="PipelineBuilder__AreaInner">
         <div class="PipelineBuilder__AreaControls">
             <span class="PipelineBuilder__AreaControlsDraggerWrap JS-PipelineBuilder__Dragger">

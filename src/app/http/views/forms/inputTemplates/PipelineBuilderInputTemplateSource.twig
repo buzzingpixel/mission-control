@@ -1,0 +1,74 @@
+{% set rows = rows|default('10') %}
+{% set uniqueId = createUuidV4() %}
+{% set uuid = uuid|default('') %}
+{% set description = description|default('') %}
+{% set script = script|default('') %}
+{% set runAfterFail = runAfterFail|default('') %}
+{% set serverGuids = serverGuids|default([]) %}
+
+{% spaceless %}
+    <div class="PipelineBuilder__Area JS-PipelineBuilder__Area" data-unique-id="{{ uniqueId }}">
+        {% if uuid %}
+            <input type="hidden" name="{{ name }}[{{ uniqueId }}][uuid]" value="{{ uuid }}">
+        {% endif %}
+        <input type="hidden" name="{{ name }}[{{ uniqueId }}][type]" value="source">
+        <div class="PipelineBuilder__AreaInner">
+            <div class="PipelineBuilder__AreaControls">
+            <span class="PipelineBuilder__AreaControlsDraggerWrap JS-PipelineBuilder__Dragger">
+                <span class="PipelineBuilder__AreaControlsDragger">
+                    {% include 'svg/IconSixDots.svg' %}
+                </span>
+            </span>
+                <span class="PipelineBuilder__AreaControlsRemove JS-PipelineBuilder__AreaRemove">
+                {% include 'svg/IconClose.svg' %}
+            </span>
+            </div>
+            <div class="PipelineBuilder__DescriptionWrapper">
+                <label for="{{ name }}[{{ uniqueId }}][description]" class="label">
+                    Description <small>(optional)</small>
+                </label>
+                <input
+                    type="text"
+                    name="{{ name }}[{{ uniqueId }}][description]"
+                    id="{{ name }}[{{ uniqueId }}][description]"
+                    class="input"
+                    value="{{ description }}"
+                >
+            </div>
+            <div class="PipelineBuilder__DescriptionWrapper">
+                <label for="{{ name }}[{{ uniqueId }}][script]" class="label">
+                    Yaml source file
+                </label>
+                <input
+                    type="text"
+                    name="{{ name }}[{{ uniqueId }}][script]"
+                    id="{{ name }}[{{ uniqueId }}][script]"
+                    class="input"
+                    value="{{ description }}"
+                >
+            </div>
+            <div class="PipelineBuilder__WhichServer">
+                <label for="{{ name }}[{{ uniqueId }}][servers]" class="label">
+                    Run on servers
+                </label>
+                <select
+                    name="{{ name }}[{{ uniqueId }}][servers][]"
+                    id="{{ name }}[{{ uniqueId }}][servers]"
+                    class="JS-PipelineBuilder__ServerSelect"
+                    multiple
+                >
+                    {% for key,val in serverArray %}
+                        <option
+                            value="{{ key }}"
+                            {% if key in serverGuids %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ val|smartypants }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+{% endspaceless %}
