@@ -14,13 +14,26 @@
                 Use <code>{% verbatim %}{{time "FORMAT_HERE"}} or {{time 'FORMAT_HERE'}}{% endverbatim %}</code> for formatted added at time (PHP DateTime format)<br>
                 <div class="PipelineBuilder__Items JS-PipelineBuilder__Items">
                     {% for pipelineItem in pipelineItems %}
-                        {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' with {
-                            uuid: pipelineItem.uuid,
-                            description: pipelineItem.description,
-                            script: pipelineItem.script,
-                            runAfterFail: pipelineItem.runAfterFail,
-                            serverGuids: pipelineItem.serverGuids,
-                        } %}
+                        {% switch pipelineItem.type %}
+                            {% case 'code' %}
+                                {% include 'forms/inputTemplates/PipelineBuilderInputTemplate.twig' with {
+                                    uuid: pipelineItem.uuid,
+                                    description: pipelineItem.description,
+                                    script: pipelineItem.script,
+                                    runAfterFail: pipelineItem.runAfterFail,
+                                    serverGuids: pipelineItem.serverGuids,
+                                } %}
+                            {% case 'source' %}
+                                {% include 'forms/inputTemplates/PipelineBuilderInputTemplateSource.twig' with {
+                                    uuid: pipelineItem.uuid,
+                                    description: pipelineItem.description,
+                                    script: pipelineItem.script,
+                                    runAfterFail: pipelineItem.runAfterFail,
+                                    serverGuids: pipelineItem.serverGuids,
+                                } %}
+                            {% default %}
+                                TODO: {{ pipelineItem.type }}
+                        {% endswitch %}
                     {% endfor %}
                 </div>
                 <div class="PipelineBuilder__AddItemWrapper">

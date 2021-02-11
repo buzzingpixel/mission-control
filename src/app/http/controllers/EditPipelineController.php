@@ -130,6 +130,7 @@ class EditPipelineController
 
             $pipelineItems[] = [
                 'uuid' => $item->guid(),
+                'type' => $item->type(),
                 'description' => $item->description(),
                 'script' => $item->script(),
                 'runAfterFail' => $item->runAfterFail(),
