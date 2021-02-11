@@ -70,6 +70,8 @@ class PipelineItemRecordModelTransformer
 
         $itemModel->pipeline($pipelineModel);
 
+        $itemModel->type($itemRecord->type);
+
         $itemModel->description($itemRecord->description);
 
         $itemModel->script($itemRecord->script);
