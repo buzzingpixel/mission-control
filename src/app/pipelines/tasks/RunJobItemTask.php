@@ -493,7 +493,7 @@ class RunJobItemTask
                 } else {
                     $serverSsh = $this->getConnection->get($serverModel);
 
-                    $this->activeServerConnections[$server->slug()] = $serverSsh;
+                    $this->activeServerConnections[$serverModel->slug()] = $serverSsh;
                 }
 
                 $logContent .= 'Running on ' .
