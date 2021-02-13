@@ -123,6 +123,28 @@ class RunJobItemTask
             }
 
             if (! $failureCondition) {
+                if (! $job->hasStarted()) {
+                    foreach ($this->sendNotificationAdapters as $adapter) {
+                        $p = $job->pipeline();
+
+                        $msg = $p->title() . ' has started running';
+
+                        $adapter->send($msg, $msg, [
+                            'status' => 'info',
+                            'urls' => [
+                                [
+                                    'content' => 'View Job Details',
+                                    'href' => getenv('SITE_URL') .
+                                        '/pipelines/view/' .
+                                        $p->slug() .
+                                        '/job-details/' .
+                                        $job->guid(),
+                                ],
+                            ],
+                        ]);
+                    }
+                }
+
                 $job->hasStarted(true);
 
                 $this->pipelineApi->saveJob($job);

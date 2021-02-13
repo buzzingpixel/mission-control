@@ -46,6 +46,8 @@ class SlackNotificationAdapter implements SendNotificationAdapterInterface
                 $attachmentColor = '#3c763d';
             } elseif ($context['status'] === 'bad') {
                 $attachmentColor = '#a94442';
+            } elseif ($context['status'] === 'info') {
+                $attachmentColor = '#1a7fba';
             }
         }
 
