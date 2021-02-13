@@ -71,11 +71,13 @@ class CreatePipelineAction
             throw new Http404Exception();
         }
 
-        $title              = trim($this->requestHelper->post('title'));
-        $description        = trim($this->requestHelper->post('description'));
-        $projectGuid        = trim($this->requestHelper->post('project_guid'));
-        $runBeforeEveryItem = trim($this->requestHelper->post('run_before_every_item'));
-        $items              = $this->requestHelper->post('pipeline_items');
+        $title                 = trim($this->requestHelper->post('title'));
+        $description           = trim($this->requestHelper->post('description'));
+        $enableWebhook         = $this->requestHelper->post('enable_webhook') === 'true';
+        $webhookCheckForBranch = trim($this->requestHelper->post('webhook_check_for_branch'));
+        $projectGuid           = trim($this->requestHelper->post('project_guid'));
+        $runBeforeEveryItem    = trim($this->requestHelper->post('run_before_every_item'));
+        $items                 = $this->requestHelper->post('pipeline_items');
 
         $items = is_array($items) ? $items : [];
 
@@ -104,6 +106,10 @@ class CreatePipelineAction
         $model->title($title);
 
         $model->description($description);
+
+        $model->enableWebhook($enableWebhook);
+
+        $model->webhookCheckForBranch($webhookCheckForBranch);
 
         $model->projectGuid($projectGuid);
 

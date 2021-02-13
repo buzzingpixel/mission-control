@@ -189,6 +189,19 @@ class EditPipelineController
                                 'fieldsetStyle' => 'position: relative; z-index: 999',
                             ],
                             [
+                                'template' => 'Checkbox',
+                                'name' => 'enable_webhook',
+                                'label' => 'Enable Webhook',
+                                'value' => $model->enableWebhook(),
+                            ],
+                            [
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'webhook_check_for_branch',
+                                'label' => 'Webhook Check For Branch',
+                                'value' => $model->webhookCheckForBranch(),
+                            ],
+                            [
                                 'template' => 'TextArea',
                                 'codeEditor' => true,
                                 'name' => 'run_before_every_item',

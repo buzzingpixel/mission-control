@@ -28,6 +28,22 @@ class PipelineModel implements PipelineModelInterface
         return $this->secretId = $val ?? $this->secretId;
     }
 
+    /** @var bool */
+    private $enableWebhook = true;
+
+    public function enableWebhook(?bool $val = null) : bool
+    {
+        return $this->enableWebhook = $val ?? $this->enableWebhook;
+    }
+
+    /** @var string */
+    private $webhookCheckForBranch = '';
+
+    public function webhookCheckForBranch(?string $val = null) : string
+    {
+        return $this->webhookCheckForBranch = $val ?? $this->webhookCheckForBranch;
+    }
+
     /** @var string */
     private $runBeforeEveryItem = '';
 

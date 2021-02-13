@@ -117,6 +117,17 @@ class CreatePipelineController
                                 'fieldsetStyle' => 'position: relative; z-index: 999',
                             ],
                             [
+                                'template' => 'Checkbox',
+                                'name' => 'enable_webhook',
+                                'label' => 'Enable Webhook',
+                            ],
+                            [
+                                'template' => 'Text',
+                                'type' => 'text',
+                                'name' => 'webhook_check_for_branch',
+                                'label' => 'Webhook Check For Branch'
+                            ],
+                            [
                                 'template' => 'TextArea',
                                 'codeEditor' => true,
                                 'name' => 'run_before_every_item',

@@ -67,6 +67,10 @@ class PipelineRecordModelTransformer
 
         $pipeline->description($pipelineRecord->description);
 
+        $pipeline->enableWebhook($pipelineRecord->enable_webhook === 1 || $pipelineRecord->enable_webhook === '1');
+
+        $pipeline->webhookCheckForBranch($pipelineRecord->webhook_check_for_branch);
+
         $pipeline->secretId($pipelineRecord->secret_id);
 
         $pipeline->runBeforeEveryItem($pipelineRecord->run_before_every_item);

@@ -21,6 +21,16 @@ interface PipelineModelInterface extends StandardModelInterface
     /**
      * Returns the value. Sets value if incoming argument is set
      */
+    public function enableWebhook(?bool $val = null) : bool;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     */
+    public function webhookCheckForBranch(?string $val = null) : string;
+
+    /**
+     * Returns the value. Sets value if incoming argument is set
+     */
     public function runBeforeEveryItem(?string $val = null) : string;
 
     /**

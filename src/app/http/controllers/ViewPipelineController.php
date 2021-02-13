@@ -122,6 +122,22 @@ class ViewPipelineController
             ];
         }
 
+        $innerComponentsHtml = '';
+
+        if ($model->enableWebhook()) {
+            $innerComponentsHtml = $this->twigEnvironment->renderAndMinify(
+                'components/UrlTrigger.twig',
+                [
+                    'label' => 'Webhook Trigger',
+                    'value' => getenv('SITE_URL') . '/pipelines/webhook/trigger/' . $model->guid(),
+                ]
+            );
+        }
+
+        $innerComponentsHtml .= ($this->renderPipelineInnerComponents)(
+            $model
+        );
+
         $response->getBody()->write(
             $this->twigEnvironment->renderAndMinify('StandardPage.twig', [
                 'notification' => $notification,
@@ -130,9 +146,7 @@ class ViewPipelineController
                 'title' => $model->title(),
                 'subTitle' => $model->description(),
                 'pageControlButtons' => $pageControlButtons,
-                'innerComponentsHtml' => ($this->renderPipelineInnerComponents)(
-                    $model
-                ),
+                'innerComponentsHtml' => $innerComponentsHtml,
                 'ajaxInnerRefreshUrl' => $activeJob ? '/pipelines/view/' . $model->slug() : null,
             ])
         );
