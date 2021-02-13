@@ -70,6 +70,8 @@ class RunJobItemTask
 
         $exception = null;
 
+        $jobItem = null;
+
         try {
             $jobItemGuid = $context['jobItemGuid'] ?? '';
 
@@ -102,8 +104,6 @@ class RunJobItemTask
             );
 
             $job = $this->pipelineApi->fetchOneJob($queryModel);
-
-            $jobItem = null;
 
             foreach ($job->pipelineJobItems() as $jobItemLoop) {
                 if ($jobItemLoop->guid() !== $jobItemGuid) {
@@ -181,6 +181,19 @@ class RunJobItemTask
 
             if (isset($jobItem)) {
                 $jobItem->hasFailed(true);
+
+                $logContent = $jobItem->logContent();
+
+                $logContent .= PHP_EOL . PHP_EOL .
+                    '========================' . PHP_EOL . PHP_EOL;
+
+                $logContent .= 'An error occurred while running this step';
+
+                $logContent .= ". Details: \n\n";
+
+                $logContent .= $e->getMessage();
+
+                $jobItem->logContent($logContent);
             }
 
             if (isset($job)) {
@@ -469,7 +482,9 @@ class RunJobItemTask
 
                 $this->pipelineApi->saveJob($jobItem->pipelineJob());
 
-                $logContent .= (string) $serverSsh->exec($script);
+                $results = (string) $serverSsh->exec($script);
+
+                $logContent .= $results;
 
                 $jobItem->logContent($logContent);
 
@@ -481,7 +496,7 @@ class RunJobItemTask
                     continue;
                 }
 
-                throw new LogicException($jobItem->logContent());
+                throw new LogicException($results);
             }
         }
     }
@@ -550,9 +565,11 @@ class RunJobItemTask
 
         $this->pipelineApi->saveJob($jobItem->pipelineJob());
 
-        $logContent .= (string) $ssh->exec(
+        $results = (string) $ssh->exec(
             $jobItem->getPreparedScriptForExecution()
         );
+
+        $logContent .= $results;
 
         $jobItem->logContent($logContent);
 
@@ -564,6 +581,6 @@ class RunJobItemTask
             return;
         }
 
-        throw new LogicException($jobItem->logContent());
+        throw new LogicException($logContent);
     }
 }

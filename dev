@@ -53,14 +53,14 @@ if [[ "${cmd}" = "up" ]] || [[ "${cmd}" = "run" ]]; then
     touch .env.override;
     docker kill node-mission-control;
     docker-compose -f docker-compose.yml -p mission-control up -d;
-    docker exec -it --user root --workdir /app php-mission-control bash -c "cd /app && composer install";
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/*";
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/phpmd/phpmd/src/bin/*";
-    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/squizlabs/php_codesniffer/bin/*";
-    docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up";
-    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run";
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn";
-    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "cd /app && composer install";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/bin/*";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/phpmd/phpmd/src/bin/*";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "chmod +x /app/vendor/squizlabs/php_codesniffer/bin/*";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "php app migrate/up";
+#    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run";
+#    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn";
+#    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only";
 fi
 
 if [[ "${cmd}" = "watch" ]]; then
@@ -75,6 +75,9 @@ fi
 
 if [[ "${cmd}" = "down" ]]; then
     valid=true;
+    docker kill php-queue-runner-mission-control;
+    docker kill utility-mission-control;
+    docker kill node-mission-control;
     docker-compose -f docker-compose.yml -p mission-control down;
 fi
 
