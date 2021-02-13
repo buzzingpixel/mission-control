@@ -101,6 +101,6 @@ class PipelineJobItemModel implements PipelineJobItemModelInterface
             );
         }
 
-        return $preparedString;
+        return trim($preparedString);
     }
 }

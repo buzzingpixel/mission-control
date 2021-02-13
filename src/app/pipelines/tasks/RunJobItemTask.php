@@ -37,6 +37,8 @@ class RunJobItemTask
     /** @var SendNotificationAdapterInterface[] */
     private $sendNotificationAdapters;
 
+    private $activeServerConnections = [];
+
     /**
      * @param SendNotificationAdapterInterface[] $sendNotificationAdapters
      */
@@ -318,7 +320,13 @@ class RunJobItemTask
             'cat ' . $jobItem->pipelineItem()->script()
         );
 
-        $ssh = $this->getConnection->get($server);
+        if (isset($this->activeServerConnections[$server->slug()])) {
+            $ssh = $this->activeServerConnections[$server->slug()];
+        } else {
+            $ssh = $this->getConnection->get($server);
+
+            $this->activeServerConnections[$server->slug()] = $ssh;
+        }
 
         $logContent = $jobItem->logContent();
 
@@ -328,8 +336,8 @@ class RunJobItemTask
         }
 
         $logContent .= 'Running on ' . $server->title() . PHP_EOL .
-            'Script:' .
-            $jobItem->getPreparedScriptForExecution() . PHP_EOL;
+            'Script:' . PHP_EOL . '```' . PHP_EOL .
+            $jobItem->getPreparedScriptForExecution() . PHP_EOL . '```' . PHP_EOL;
 
         $jobItem->logContent($logContent);
 
@@ -445,11 +453,17 @@ class RunJobItemTask
             }
 
             foreach ($serverModels as $serverModel) {
-                $serverSsh = $this->getConnection->get($serverModel);
+                if (isset($this->activeServerConnections[$serverModel->slug()])) {
+                    $serverSsh = $this->activeServerConnections[$serverModel->slug()];
+                } else {
+                    $serverSsh = $this->getConnection->get($serverModel);
+
+                    $this->activeServerConnections[$server->slug()] = $serverSsh;
+                }
 
                 $logContent .= 'Running on ' .
-                    $serverModel->title() . PHP_EOL . 'Script: ' .
-                    $script . PHP_EOL;
+                    $serverModel->title() . PHP_EOL . 'Script: ' . PHP_EOL . '```' . PHP_EOL .
+                    $script . PHP_EOL . '```' . PHP_EOL;
 
                 $jobItem->logContent($logContent);
 
@@ -506,14 +520,20 @@ class RunJobItemTask
             );
         }
 
-        return $preparedString;
+        return trim($preparedString);
     }
 
     private function runCode(
         PipelineJobItemModelInterface $jobItem,
         ServerModelInterface $server
     ) {
-        $ssh = $this->getConnection->get($server);
+        if (isset($this->activeServerConnections[$server->slug()])) {
+            $ssh = $this->activeServerConnections[$server->slug()];
+        } else {
+            $ssh = $this->getConnection->get($server);
+
+            $this->activeServerConnections[$server->slug()] = $ssh;
+        }
 
         $logContent = $jobItem->logContent();
 
@@ -523,8 +543,8 @@ class RunJobItemTask
         }
 
         $logContent .= 'Running on ' . $server->title() . PHP_EOL .
-            'Script:' .
-            $jobItem->getPreparedScriptForExecution() . PHP_EOL;
+            'Script:' . PHP_EOL . '```' . PHP_EOL .
+            $jobItem->getPreparedScriptForExecution() . PHP_EOL . '```' . PHP_EOL;
 
         $jobItem->logContent($logContent);
 
