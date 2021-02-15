@@ -557,6 +557,12 @@ class RunJobItemTask
             );
         }
 
+        $preparedString = preg_replace(
+            "/\r|\n/",
+            PHP_EOL,
+            $preparedString
+        );
+
         return trim($preparedString);
     }
 
