@@ -125,7 +125,7 @@ class CreatePipelineController
                                 'template' => 'Text',
                                 'type' => 'text',
                                 'name' => 'webhook_check_for_branch',
-                                'label' => 'Webhook Check For Branch'
+                                'label' => 'Check for Branch in Payload (Post Request Only)'
                             ],
                             [
                                 'template' => 'TextArea',
