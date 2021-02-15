@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use src\app\pipelines\interfaces\PipelineApiInterface;
 use Throwable;
 
-class PipelineWebhookTriggerController
+class PipelineWebhookTriggerPostController
 {
     /** @var ResponseInterface */
     private $response;

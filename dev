@@ -36,6 +36,7 @@ valid=false;
 if [[ -z "${cmd}" ]]; then
     valid=true;
     printf "${Green}The following commands are available:\n${Yellow}";
+    printf "  ./dev ngrok";
     printf "  ./dev up\n";
     printf "  ./dev watch\n";
     printf "  ./dev build\n";
@@ -61,6 +62,10 @@ if [[ "${cmd}" = "up" ]] || [[ "${cmd}" = "run" ]]; then
 #    docker exec -it --user root --workdir /app php-mission-control bash -c "php app seed/run";
 #    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn";
 #    docker exec -it --user root --workdir /app node-mission-control bash -c "yarn run fab --build-only";
+fi
+
+if [[ "${cmd}" = "ngrok" ]]; then
+    ngrok http -region=us -hostname=mission-control.ngrok.io 7783;
 fi
 
 if [[ "${cmd}" = "watch" ]]; then

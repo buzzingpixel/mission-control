@@ -35,7 +35,8 @@ use src\app\http\controllers\PasswordResetController;
 use src\app\http\controllers\PingCheckinController;
 use src\app\http\controllers\PingIndexController;
 use src\app\http\controllers\PipelineIndexController;
-use src\app\http\controllers\PipelineWebhookTriggerController;
+use src\app\http\controllers\PipelineWebhookTriggerGetController;
+use src\app\http\controllers\PipelineWebhookTriggerPostController;
 use src\app\http\controllers\ProjectsIndexController;
 use src\app\http\controllers\RemindersIndexController;
 use src\app\http\controllers\RunPipelineController;
@@ -118,8 +119,8 @@ $r->addRoute(['GET', 'POST'], '/pipelines/view/{slug}/job-details/{guid}/badge',
 $r->addRoute(['GET', 'POST'], '/pipelines/create', CreatePipelineController::class);
 $r->addRoute(['GET', 'POST'], '/pipelines/edit/{slug}', EditPipelineController::class);
 $r->get('/pipelines/run/{slug}', RunPipelineController::class);
-$r->get('/pipelines/webhook/trigger/{guid}', PipelineWebhookTriggerController::class);
-$r->post('/pipelines/webhook/trigger/{guid}', PipelineWebhookTriggerController::class);
+$r->get('/pipelines/webhook/trigger/{guid}', PipelineWebhookTriggerGetController::class);
+$r->post('/pipelines/webhook/trigger/{guid}', PipelineWebhookTriggerPostController::class);
 
 // Admin
 $r->addRoute(['GET', 'POST'], '/admin', AdminController::class);
