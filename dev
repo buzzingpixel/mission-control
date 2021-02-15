@@ -65,6 +65,7 @@ if [[ "${cmd}" = "up" ]] || [[ "${cmd}" = "run" ]]; then
 fi
 
 if [[ "${cmd}" = "ngrok" ]]; then
+    valid=true;
     ngrok http -region=us -hostname=mission-control.ngrok.io 7783;
 fi
 
